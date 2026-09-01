@@ -1,0 +1,30 @@
+# Node dependencies
+/Backend/node_modules
+/frontend/node_modules
+
+# Build outputs
+/frontend/build
+/Backend/dist
+
+# Uploaded files
+/Backend/uploads
+
+# Environment variables
+.env
+/Backend/.env
+/frontend/.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS & Editor files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Testing coverage
+/frontend/coverage
+/Backend/coverage
