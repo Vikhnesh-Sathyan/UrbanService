@@ -14,10 +14,3 @@ Backend: Node.js, Express.js
 Database: MongoDB (Mongoose)
 Payments: Stripe
 
-⚙️ Setup
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
-# Install backend
-cd backend && npm install && npm start
-# Install frontend
-cd frontend && npm install && npm start
