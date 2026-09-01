@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "./UserDashboard.css";
+import "../../styles/UserDashboard.css";
 
 function UserServices() {
   const [services, setServices] = useState([]);

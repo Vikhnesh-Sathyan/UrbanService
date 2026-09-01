@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaHome, FaSignInAlt, FaUserPlus } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./Homepage.css";
+import "../../styles/Homepage.css";
 import { Services } from "./Services";
 import AboutUs from "./AboutUs";
 import Footer from "./Footer";

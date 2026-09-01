@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
-import "./Services.css";
+import "../../styles/Services.css";
 
 const categories = [
   {

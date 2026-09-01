@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./ProviderDashboard.css";
+import "../../styles/ProviderDashboard.css";
 
 function ProviderDashboard() {
   const [service, setService] = useState({

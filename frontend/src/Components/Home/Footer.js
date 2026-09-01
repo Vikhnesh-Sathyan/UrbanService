@@ -10,7 +10,7 @@ import {
   FaMapMarkerAlt,
   FaArrowRight,
 } from "react-icons/fa";
-import "./Footer.css";
+import "../../styles/Footer.css";
 
 function Footer() {
   const currentYear = new Date().getFullYear();

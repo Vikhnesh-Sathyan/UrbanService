@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { categories } from "./Services";
 import PaymentForm from '../Payment/PaymentForm';
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./ServiceDetails.css";
+import "../../styles/ServiceDetails.css";
 
 const serviceDetails = {
   "womens-salon": {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { FaUser, FaEnvelope, FaLock, FaUserTag } from "react-icons/fa";
-import "./Register.css";
+import "../../styles/Register.css";
 
 function Register() {
   const [name, setName] = useState("");
