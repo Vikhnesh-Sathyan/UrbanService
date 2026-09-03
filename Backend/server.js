@@ -8,6 +8,7 @@ const path = require("path");
 // Import Routes
 const authRoutes = require("./Routes/AuthRoutes");
 const serviceRoutes = require("./Routes/ServiceRoutes");
+const bookingRoutes = require("./Routes/bookingRoutes");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/services", serviceRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // Connect to MongoDB and start server
 const PORT = process.env.PORT || 5000;
