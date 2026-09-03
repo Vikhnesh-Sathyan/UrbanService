@@ -12,7 +12,7 @@ function Register() {
   const handleRegister = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/api/register", { name, email, password, role })
+      .post("http://localhost:5000/api/auth/register", { name, email, password, role })
       .then(() => alert("Registered successfully"))
       .catch(() => alert("Registration failed"));
   };
