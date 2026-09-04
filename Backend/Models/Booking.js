@@ -14,6 +14,12 @@ const bookingSchema = new mongoose.Schema(
       required: true,
     },
 
+    provider: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
     phone: {
       type: String,
       required: true,
@@ -36,7 +42,14 @@ const bookingSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["pending", "confirmed", "completed", "cancelled"],
+      enum: [
+        "pending",
+        "accepted",
+        "rejected",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
       default: "pending",
     },
   },
