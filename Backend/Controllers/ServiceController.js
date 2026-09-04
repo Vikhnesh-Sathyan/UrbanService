@@ -8,7 +8,6 @@ const addService = async (req, res) => {
       price,
       description,
       category,
-      addedBy,
       detailedDescription,
     } = req.body;
 
@@ -20,8 +19,8 @@ const addService = async (req, res) => {
       description,
       category,
       image,
-      addedBy,
       detailedDescription,
+      provider: req.user._id, // Assuming the user is authenticated and their ID is available in req.user
     });
 
     await newService.save();
@@ -125,16 +124,32 @@ const approveService = async (req, res) => {
 // Update Service
 const updateService = async (req, res) => {
   try {
+    const service = await Service.findById(req.params.id);
+
+    if (!service) {
+      return res.status(404).json({
+        message: "Service not found",
+      });
+    }
+
+    // Provider can update only their own service
+    if (
+      req.user.role === "provider" &&
+      service.provider.toString() !== req.user.id
+    ) {
+      return res.status(403).json({
+        message: "You can update only your own services",
+      });
+    }
+
     const updateFields = {
       name: req.body.name,
       price: req.body.price,
       description: req.body.description,
       category: req.body.category,
-      addedBy: req.body.addedBy,
       detailedDescription: req.body.detailedDescription,
     };
 
-    // Add new image only if uploaded
     if (req.file) {
       updateFields.image = req.file.filename;
     }
@@ -145,17 +160,13 @@ const updateService = async (req, res) => {
       { new: true }
     );
 
-    if (!updatedService) {
-      return res.status(404).json({
-        message: "Service not found",
-      });
-    }
-
     res.status(200).json({
       message: "Service updated successfully",
       service: updatedService,
     });
   } catch (error) {
+    console.error("Update service error:", error);
+
     res.status(500).json({
       message: "Failed to update service",
     });
@@ -165,20 +176,32 @@ const updateService = async (req, res) => {
 // Delete Service
 const deleteService = async (req, res) => {
   try {
-    const deletedService = await Service.findByIdAndDelete(
-      req.params.id
-    );
+    const service = await Service.findById(req.params.id);
 
-    if (!deletedService) {
+    if (!service) {
       return res.status(404).json({
         message: "Service not found",
       });
     }
 
+    // Provider can delete only their own service
+    if (
+      req.user.role === "provider" &&
+      service.provider.toString() !== req.user.id
+    ) {
+      return res.status(403).json({
+        message: "You can delete only your own services",
+      });
+    }
+
+    await service.deleteOne();
+
     res.status(200).json({
       message: "Service deleted successfully",
     });
   } catch (error) {
+    console.error("Delete service error:", error);
+
     res.status(500).json({
       message: "Failed to delete service",
     });

@@ -2,6 +2,9 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 
+const authMiddleware = require("../Middleware/authMiddleware");
+const roleMiddleware = require("../Middleware/roleMiddleware");
+
 const {
   addService,
   getServices,
@@ -13,6 +16,8 @@ const {
 } = require("../Controllers/ServiceController");
 
 const router = express.Router();
+
+
 
 // Multer configuration
 const storage = multer.diskStorage({
@@ -28,26 +33,50 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Routes
+// Provider can add a service
+router.post(
+  "/add",
+  authMiddleware,
+  roleMiddleware("provider"),
+  upload.single("image"),
+  addService
+);
 
-// Add service
-router.post("/add", upload.single("image"), addService);
-
-// Get all approved services
+// Anyone can view approved services
 router.get("/", getServices);
 
-// Get pending services
-router.get("/pending", getPendingServices);
+// Admin can view pending services
+router.get(
+  "/pending",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getPendingServices
+);
 
-// Approve service
-router.patch("/:id/approve", approveService);
+// Admin can approve services
+router.patch(
+  "/:id/approve",
+  authMiddleware,
+  roleMiddleware("admin"),
+  approveService
+);
 
-// Update service
-router.put("/:id", upload.single("image"), updateService);
+// Provider or Admin can update
+router.put(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("provider", "admin"),
+  upload.single("image"),
+  updateService
+);
 
-// Delete service
-router.delete("/:id", deleteService);
+// Provider or Admin can delete
+router.delete(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("provider", "admin"),
+  deleteService
+);
 
-// Get single service
+// Anyone can view one service
 router.get("/:id", getServiceById);
-
-module.exports = router;
