@@ -20,7 +20,9 @@ const addService = async (req, res) => {
       category,
       image,
       detailedDescription,
-      provider: req.user._id, // Assuming the user is authenticated and their ID is available in req.user
+
+      // Store the logged-in provider's ID
+      provider: req.user.id,
     });
 
     await newService.save();
@@ -37,6 +39,7 @@ const addService = async (req, res) => {
     });
   }
 };
+
 
 // Get All Approved Services
 const getServices = async (req, res) => {
@@ -61,6 +64,7 @@ const getServices = async (req, res) => {
   }
 };
 
+
 // Get Single Service
 const getServiceById = async (req, res) => {
   try {
@@ -80,6 +84,7 @@ const getServiceById = async (req, res) => {
   }
 };
 
+
 // Get Pending Services
 const getPendingServices = async (req, res) => {
   try {
@@ -95,6 +100,7 @@ const getPendingServices = async (req, res) => {
   }
 };
 
+
 // Approve Service
 const approveService = async (req, res) => {
   try {
@@ -106,6 +112,7 @@ const approveService = async (req, res) => {
       });
     }
 
+    // Only pending services can be approved
     if (service.status !== "pending") {
       return res.status(400).json({
         message: "Only pending services can be approved",
@@ -113,6 +120,8 @@ const approveService = async (req, res) => {
     }
 
     service.status = "approved";
+
+    // Clear previous admin comment
     service.adminComment = "";
 
     await service.save();
@@ -130,6 +139,8 @@ const approveService = async (req, res) => {
   }
 };
 
+
+// Request Changes
 const requestChanges = async (req, res) => {
   try {
     const { adminComment } = req.body;
@@ -148,6 +159,7 @@ const requestChanges = async (req, res) => {
       });
     }
 
+    // Changes can only be requested for pending services
     if (service.status !== "pending") {
       return res.status(400).json({
         message: "Changes can only be requested for pending services",
@@ -172,6 +184,8 @@ const requestChanges = async (req, res) => {
   }
 };
 
+
+// Reject Service
 const rejectService = async (req, res) => {
   try {
     const { adminComment } = req.body;
@@ -190,6 +204,7 @@ const rejectService = async (req, res) => {
       });
     }
 
+    // Only pending services can be rejected
     if (service.status !== "pending") {
       return res.status(400).json({
         message: "Only pending services can be rejected",
@@ -213,6 +228,7 @@ const rejectService = async (req, res) => {
     });
   }
 };
+
 
 // Update Service
 const updateService = async (req, res) => {
@@ -266,6 +282,7 @@ const updateService = async (req, res) => {
   }
 };
 
+
 // Delete Service
 const deleteService = async (req, res) => {
   try {
@@ -300,6 +317,7 @@ const deleteService = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   addService,

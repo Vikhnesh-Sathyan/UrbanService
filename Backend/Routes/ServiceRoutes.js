@@ -19,9 +19,8 @@ const {
 
 const router = express.Router();
 
+// ==================== MULTER CONFIGURATION ====================
 
-
-// Multer configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -34,7 +33,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Routes
+// ==================== PROVIDER ROUTES ====================
+
 // Provider can add a service
 router.post(
   "/add",
@@ -44,8 +44,24 @@ router.post(
   addService
 );
 
-// Anyone can view approved services
-router.get("/", getServices);
+// Provider or Admin can update a service
+router.put(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("provider", "admin"),
+  upload.single("image"),
+  updateService
+);
+
+// Provider or Admin can delete a service
+router.delete(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("provider", "admin"),
+  deleteService
+);
+
+// ==================== ADMIN ROUTES ====================
 
 // Admin can view pending services
 router.get(
@@ -55,7 +71,7 @@ router.get(
   getPendingServices
 );
 
-// Admin can approve services
+// Admin can approve service
 router.patch(
   "/:id/approve",
   authMiddleware,
@@ -63,40 +79,7 @@ router.patch(
   approveService
 );
 
-// Provider or Admin can update
-router.put(
-  "/:id",
-  authMiddleware,
-  roleMiddleware("provider", "admin"),
-  upload.single("image"),
-  updateService
-);
-
-// Provider or Admin can delete
-router.delete(
-  "/:id",
-  authMiddleware,
-  roleMiddleware("provider", "admin"),
-  deleteService
-);
-
-// Admin - View pending services
-router.get(
-  "/pending",
-  authMiddleware,
-  roleMiddleware("admin"),
-  getPendingServices
-);
-
-// Admin - Approve service
-router.patch(
-  "/:id/approve",
-  authMiddleware,
-  roleMiddleware("admin"),
-  approveService
-);
-
-// Admin - Request changes
+// Admin can request changes
 router.patch(
   "/:id/request-changes",
   authMiddleware,
@@ -104,13 +87,18 @@ router.patch(
   requestChanges
 );
 
-// Admin - Reject service
+// Admin can reject service
 router.patch(
   "/:id/reject",
   authMiddleware,
   roleMiddleware("admin"),
   rejectService
 );
+
+// ==================== PUBLIC ROUTES ====================
+
+// Anyone can view approved services
+router.get("/", getServices);
 
 // Anyone can view one service
 router.get("/:id", getServiceById);
