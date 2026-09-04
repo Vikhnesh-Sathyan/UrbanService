@@ -11,6 +11,8 @@ const {
   getServiceById,
   getPendingServices,
   approveService,
+  requestChanges,
+  rejectService,
   updateService,
   deleteService,
 } = require("../Controllers/ServiceController");
@@ -78,5 +80,39 @@ router.delete(
   deleteService
 );
 
+// Admin - View pending services
+router.get(
+  "/pending",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getPendingServices
+);
+
+// Admin - Approve service
+router.patch(
+  "/:id/approve",
+  authMiddleware,
+  roleMiddleware("admin"),
+  approveService
+);
+
+// Admin - Request changes
+router.patch(
+  "/:id/request-changes",
+  authMiddleware,
+  roleMiddleware("admin"),
+  requestChanges
+);
+
+// Admin - Reject service
+router.patch(
+  "/:id/reject",
+  authMiddleware,
+  roleMiddleware("admin"),
+  rejectService
+);
+
 // Anyone can view one service
 router.get("/:id", getServiceById);
+
+module.exports = router;

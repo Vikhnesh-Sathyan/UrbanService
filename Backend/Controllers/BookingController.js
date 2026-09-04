@@ -52,9 +52,9 @@ const createBooking = async (req, res) => {
 const getMyBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({
-      user: req.user.id,
+      user: req.user.id,//Show me the bookings made by the currently logged-in customer
     })
-      .populate("service")
+      .populate("service")//Use the service ID stored in the booking to get the related service details.
       .sort({ createdAt: -1 });
 
     res.status(200).json(bookings);
@@ -70,11 +70,13 @@ const getMyBookings = async (req, res) => {
 
 // Cancel Booking
 const cancelBooking = async (req, res) => {
-  try {
-    const booking = await Booking.findOne({
-      _id: req.params.id,
-      user: req.user.id,
-    });
+ try {
+  // Find the booking using the booking ID from the URL
+  // and make sure it belongs to the currently logged-in user
+  const booking = await Booking.findOne({
+    _id: req.params.id,     // Which booking?
+    user: req.user.id,      // Who owns the booking?
+  });
 
     if (!booking) {
       return res.status(404).json({
@@ -125,9 +127,126 @@ const getProviderBookings = async (req, res) => {
   }
 };
 
+const acceptBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findOne({
+      _id: req.params.id,
+      provider: req.user.id,
+    });
+
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
+    if (booking.status !== "pending") {
+      return res.status(400).json({
+        message: "Only pending bookings can be accepted",
+      });
+    }
+
+    booking.status = "accepted";
+
+    await booking.save();
+
+    res.status(200).json({
+      message: "Booking accepted successfully",
+      booking,
+    });
+  } catch (error) {
+    console.error("Accept booking error:", error);
+
+    res.status(500).json({
+      message: "Failed to accept booking",
+    });
+  }
+};
+const rejectBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findOne({
+      _id: req.params.id,
+      provider: req.user.id,
+    });
+
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
+    if (booking.status !== "pending") {
+      return res.status(400).json({
+        message: "Only pending bookings can be rejected",
+      });
+    }
+
+    booking.status = "rejected";
+
+    await booking.save();
+
+    res.status(200).json({
+      message: "Booking rejected",
+      booking,
+    });
+  } catch (error) {
+    console.error("Reject booking error:", error);
+
+    res.status(500).json({
+      message: "Failed to reject booking",
+    });
+  }
+};
+const updateBookingStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    const allowedStatuses = [
+      "accepted",
+      "in_progress",
+      "completed",
+    ];
+
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({
+        message: "Invalid booking status",
+      });
+    }
+
+    const booking = await Booking.findOne({
+      _id: req.params.id,
+      provider: req.user.id,
+    });
+
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
+    booking.status = status;
+
+    await booking.save();
+
+    res.status(200).json({
+      message: "Booking status updated successfully",
+      booking,
+    });
+  } catch (error) {
+    console.error("Update booking status error:", error);
+
+    res.status(500).json({
+      message: "Failed to update booking status",
+    });
+  }
+};
 
 module.exports = {
   createBooking,
   getMyBookings,
   cancelBooking,
+  getProviderBookings,
+  acceptBooking,
+  rejectBooking,
+  updateBookingStatus,
 };

@@ -98,11 +98,7 @@ const getPendingServices = async (req, res) => {
 // Approve Service
 const approveService = async (req, res) => {
   try {
-    const service = await Service.findByIdAndUpdate(
-      req.params.id,
-      { status: "approved" },
-      { new: true }
-    );
+    const service = await Service.findById(req.params.id);
 
     if (!service) {
       return res.status(404).json({
@@ -110,13 +106,110 @@ const approveService = async (req, res) => {
       });
     }
 
+    if (service.status !== "pending") {
+      return res.status(400).json({
+        message: "Only pending services can be approved",
+      });
+    }
+
+    service.status = "approved";
+    service.adminComment = "";
+
+    await service.save();
+
     res.status(200).json({
       message: "Service approved successfully",
       service,
     });
   } catch (error) {
+    console.error("Approve service error:", error);
+
     res.status(500).json({
-      message: "Approval failed",
+      message: "Failed to approve service",
+    });
+  }
+};
+
+const requestChanges = async (req, res) => {
+  try {
+    const { adminComment } = req.body;
+
+    if (!adminComment || adminComment.trim() === "") {
+      return res.status(400).json({
+        message: "Admin comment is required",
+      });
+    }
+
+    const service = await Service.findById(req.params.id);
+
+    if (!service) {
+      return res.status(404).json({
+        message: "Service not found",
+      });
+    }
+
+    if (service.status !== "pending") {
+      return res.status(400).json({
+        message: "Changes can only be requested for pending services",
+      });
+    }
+
+    service.status = "changes_requested";
+    service.adminComment = adminComment;
+
+    await service.save();
+
+    res.status(200).json({
+      message: "Changes requested successfully",
+      service,
+    });
+  } catch (error) {
+    console.error("Request changes error:", error);
+
+    res.status(500).json({
+      message: "Failed to request changes",
+    });
+  }
+};
+
+const rejectService = async (req, res) => {
+  try {
+    const { adminComment } = req.body;
+
+    if (!adminComment || adminComment.trim() === "") {
+      return res.status(400).json({
+        message: "Rejection reason is required",
+      });
+    }
+
+    const service = await Service.findById(req.params.id);
+
+    if (!service) {
+      return res.status(404).json({
+        message: "Service not found",
+      });
+    }
+
+    if (service.status !== "pending") {
+      return res.status(400).json({
+        message: "Only pending services can be rejected",
+      });
+    }
+
+    service.status = "rejected";
+    service.adminComment = adminComment;
+
+    await service.save();
+
+    res.status(200).json({
+      message: "Service rejected",
+      service,
+    });
+  } catch (error) {
+    console.error("Reject service error:", error);
+
+    res.status(500).json({
+      message: "Failed to reject service",
     });
   }
 };
@@ -214,6 +307,8 @@ module.exports = {
   getServiceById,
   getPendingServices,
   approveService,
+  requestChanges,
+  rejectService,
   updateService,
   deleteService,
 };

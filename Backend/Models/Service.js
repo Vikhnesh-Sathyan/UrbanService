@@ -10,8 +10,19 @@ const serviceSchema = new mongoose.Schema({
   description: String,
   category: String,
   image: String,
-  status: { type: String, default: "pending" },
-
+status: {
+  type: String,
+  enum: [
+    "pending",
+    "approved",
+    "changes_requested",
+    "rejected",
+  ],
+  default: "pending",
+},adminComment: {
+  type: String,
+  default: "",
+},
   detailedDescription: String,
 
  // Stores the ID of the provider who created this service.

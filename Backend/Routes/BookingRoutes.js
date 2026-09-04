@@ -4,23 +4,80 @@ const {
   createBooking,
   getMyBookings,
   cancelBooking,
+  getProviderBookings,
+  acceptBooking,
+  rejectBooking,
+  updateBookingStatus,
 } = require("../Controllers/BookingController");
 
-const authMiddleware = require("../Middleware/AuthMiddleware");
+const authMiddleware = require("../Middleware/authMiddleware");
+const roleMiddleware = require("../Middleware/roleMiddleware");
 
 const router = express.Router();
 
 
-// Create Booking
-router.post("/", authMiddleware, createBooking);
+// CUSTOMER ROUTES
+
+// Create booking
+router.post(
+  "/",
+  authMiddleware,
+  roleMiddleware("user"),
+  createBooking
+);
+
+// Get logged-in customer's bookings
+router.get(
+  "/my-bookings",
+  authMiddleware,
+  roleMiddleware("user"),
+  getMyBookings
+);
+
+// Cancel booking
+router.patch(
+  "/:id/cancel",
+  authMiddleware,
+  roleMiddleware("user"),
+  cancelBooking
+);
 
 
-// Get Logged-in User's Bookings
-router.get("/my-bookings", authMiddleware, getMyBookings);
 
+// PROVIDER ROUTES
 
-// Cancel Booking
-router.patch("/:id/cancel", authMiddleware, cancelBooking);
+// Get provider booking requests
+router.get(
+  "/provider/requests",
+  authMiddleware,
+  roleMiddleware("provider"),
+  getProviderBookings
+);
 
+// Accept booking
+router.patch(
+  "/:id/accept",
+  authMiddleware,
+  roleMiddleware("provider"),
+  acceptBooking
+);
+
+// Reject booking
+router.patch(
+  "/:id/reject",
+  authMiddleware,
+  roleMiddleware("provider"),
+  rejectBooking
+);
+
+// Update job status
+router.patch(
+  "/:id/status",
+  authMiddleware,
+  roleMiddleware("provider"),
+  updateBookingStatus
+);
 
 module.exports = router;
+
+

@@ -8,7 +8,7 @@ const path = require("path");
 // Import Routes
 const authRoutes = require("./Routes/AuthRoutes");
 const serviceRoutes = require("./Routes/ServiceRoutes");
-const bookingRoutes = require("./Routes/bookingRoutes");
+const bookingRoutes = require("./Routes/BookingRoutes");
 
 const app = express();
 
