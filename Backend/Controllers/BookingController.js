@@ -130,13 +130,11 @@ const getMyBookings = async (req, res) => {
 
 // Cancel Booking
 const cancelBooking = async (req, res) => {
- try {
-  // Find the booking using the booking ID from the URL
-  // and make sure it belongs to the currently logged-in user
-  const booking = await Booking.findOne({
-    _id: req.params.id,     // Which booking?
-    user: req.user.id,      // Who owns the booking?
-  });
+  try {
+    const booking = await Booking.findOne({
+      _id: req.params.id,
+      user: req.user.id,
+    });
 
     if (!booking) {
       return res.status(404).json({
@@ -144,10 +142,11 @@ const cancelBooking = async (req, res) => {
       });
     }
 
-    // Prevent cancelling completed bookings
-    if (booking.status === "completed") {
+    const cancellableStatuses = ["pending", "accepted"];
+
+    if (!cancellableStatuses.includes(booking.status)) {
       return res.status(400).json({
-        message: "Completed booking cannot be cancelled",
+        message: `Booking cannot be cancelled when status is ${booking.status}`,
       });
     }
 
@@ -159,6 +158,7 @@ const cancelBooking = async (req, res) => {
       message: "Booking cancelled successfully",
       booking,
     });
+
   } catch (error) {
     console.error("Cancel booking error:", error);
 
@@ -257,6 +257,7 @@ const rejectBooking = async (req, res) => {
     });
   }
 };
+
 const updateBookingStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -267,12 +268,14 @@ const updateBookingStatus = async (req, res) => {
       "completed",
     ];
 
+    // Validate requested status
     if (!allowedStatuses.includes(status)) {
       return res.status(400).json({
         message: "Invalid booking status",
       });
     }
 
+    // Find provider's booking
     const booking = await Booking.findOne({
       _id: req.params.id,
       provider: req.user.id,
@@ -284,6 +287,27 @@ const updateBookingStatus = async (req, res) => {
       });
     }
 
+    // Current status
+    const currentStatus = booking.status;
+
+    // Allowed status transitions
+    const allowedTransitions = {
+      pending: ["accepted"],
+      accepted: ["in_progress"],
+      in_progress: ["completed"],
+      rejected: [],
+      completed: [],
+      cancelled: [],
+    };
+
+    // Check whether transition is allowed
+    if (!allowedTransitions[currentStatus].includes(status)) {
+      return res.status(400).json({
+        message: `Cannot change booking status from ${currentStatus} to ${status}`,
+      });
+    }
+
+    // Update status
     booking.status = status;
 
     await booking.save();
@@ -292,6 +316,7 @@ const updateBookingStatus = async (req, res) => {
       message: "Booking status updated successfully",
       booking,
     });
+
   } catch (error) {
     console.error("Update booking status error:", error);
 
