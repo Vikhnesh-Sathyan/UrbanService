@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 
-const authMiddleware = require("../Middleware/authMiddleware");
+const authMiddleware = require("../Middleware/AuthMiddleware");
 const roleMiddleware = require("../Middleware/roleMiddleware");
 
 const {
