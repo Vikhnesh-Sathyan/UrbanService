@@ -61,6 +61,12 @@ router.delete(
   deleteService
 );
 
+router.patch(
+  "/:id/resubmit",
+  authMiddleware,
+  roleMiddleware("provider"),
+  resubmitService
+);
 // ==================== ADMIN ROUTES ====================
 
 // Admin can view pending services

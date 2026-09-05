@@ -318,6 +318,49 @@ const deleteService = async (req, res) => {
   }
 };
 
+const resubmitService = async (req, res) => {
+  try {
+    const service = await Service.findById(req.params.id);
+
+    if (!service) {
+      return res.status(404).json({
+        message: "Service not found",
+      });
+    }
+
+    // Only the provider who owns the service can resubmit it
+    if (
+      service.provider.toString() !== req.user.id
+    ) {
+      return res.status(403).json({
+        message: "You can resubmit only your own service",
+      });
+    }
+
+    // Only services requiring changes can be resubmitted
+    if (service.status !== "changes_requested") {
+      return res.status(400).json({
+        message: "Only services with requested changes can be resubmitted",
+      });
+    }
+
+    service.status = "pending";
+    service.adminComment = "";
+
+    await service.save();
+
+    res.status(200).json({
+      message: "Service resubmitted successfully",
+      service,
+    });
+  } catch (error) {
+    console.error("Resubmit service error:", error);
+
+    res.status(500).json({
+      message: "Failed to resubmit service",
+    });
+  }
+};
 
 module.exports = {
   addService,
@@ -329,4 +372,5 @@ module.exports = {
   rejectService,
   updateService,
   deleteService,
+  resubmitService
 };
