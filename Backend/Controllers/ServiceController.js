@@ -44,26 +44,151 @@ const addService = async (req, res) => {
 // Get All Approved Services
 const getServices = async (req, res) => {
   try {
-    const { category } = req.query;
+    const {
+      search,
+      category,
+      minPrice,
+      maxPrice,
+      minRating,
+      sort,
+    } = req.query;
 
-    const query = {
+    // Build service filter
+    const serviceMatch = {
       status: "approved",
     };
 
-    if (category) {
-      query.category = category;
+    // Search by service name
+    if (search) {
+      serviceMatch.name = {
+        $regex: search,
+        $options: "i",
+      };
     }
 
-    const services = await Service.find(query);
+    // Filter by category
+    if (category) {
+      serviceMatch.category = category;
+    }
 
-    res.status(200).json(services);
+    // Filter by price
+    if (minPrice || maxPrice) {
+      serviceMatch.price = {};
+
+      if (minPrice) {
+        serviceMatch.price.$gte = Number(minPrice);
+      }
+
+      if (maxPrice) {
+        serviceMatch.price.$lte = Number(maxPrice);
+      }
+    }
+
+    const services = await Service.aggregate([
+      // 1. Filter services
+      {
+        $match: serviceMatch,
+      },
+
+      // 2. Get reviews
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "service",
+          as: "reviews",
+        },
+      },
+
+      // 3. Calculate rating
+      {
+        $addFields: {
+          averageRating: {
+            $cond: [
+              { $gt: [{ $size: "$reviews" }, 0] },
+              {
+                $round: [
+                  {
+                    $avg: "$reviews.rating",
+                  },
+                  1,
+                ],
+              },
+              0,
+            ],
+          },
+
+          totalReviews: {
+            $size: "$reviews",
+          },
+        },
+      },
+
+      // 4. Filter by rating
+      ...(minRating
+        ? [
+            {
+              $match: {
+                averageRating: {
+                  $gte: Number(minRating),
+                },
+              },
+            },
+          ]
+        : []),
+
+      // 5. Remove reviews from response
+      {
+        $project: {
+          reviews: 0,
+        },
+      },
+
+      // 6. Sorting
+      ...(sort === "rating"
+        ? [
+            {
+              $sort: {
+                averageRating: -1,
+              },
+            },
+          ]
+        : sort === "price_low"
+        ? [
+            {
+              $sort: {
+                price: 1,
+              },
+            },
+          ]
+        : sort === "price_high"
+        ? [
+            {
+              $sort: {
+                price: -1,
+              },
+            },
+          ]
+        : [
+            {
+              $sort: {
+                createdAt: -1,
+              },
+            },
+          ]),
+    ]);
+
+    res.status(200).json({
+      services,
+    });
   } catch (error) {
+    console.error("Get services error:", error);
+
     res.status(500).json({
       message: "Failed to fetch services",
     });
   }
 };
-
 
 // Get Single Service
 const getServiceById = async (req, res) => {
