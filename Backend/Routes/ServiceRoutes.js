@@ -15,6 +15,7 @@ const {
   rejectService,
   updateService,
   deleteService,
+  resubmitService
 } = require("../Controllers/ServiceController");
 
 const router = express.Router();
@@ -67,6 +68,7 @@ router.patch(
   roleMiddleware("provider"),
   resubmitService
 );
+
 // ==================== ADMIN ROUTES ====================
 
 // Admin can view pending services

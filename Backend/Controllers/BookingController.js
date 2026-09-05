@@ -1,3 +1,4 @@
+// Create Booking
 const Booking = require("../Models/Booking");
 const Service = require("../Models/Service");
 
@@ -6,13 +7,34 @@ const createBooking = async (req, res) => {
   try {
     const { service, phone, date, time, notes } = req.body;
 
+    // 1. Validate required fields
     if (!service || !phone || !date || !time) {
       return res.status(400).json({
         message: "Service, phone, date and time are required",
       });
     }
 
-    // Find selected service
+    // 2. Validate booking date
+    const selectedDate = new Date(date);
+
+    if (isNaN(selectedDate.getTime())) {
+      return res.status(400).json({
+        message: "Invalid booking date",
+      });
+    }
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      return res.status(400).json({
+        message: "Booking date cannot be in the past",
+      });
+    }
+
+    // 3. Find selected service
     const selectedService = await Service.findById(service);
 
     if (!selectedService) {
@@ -21,7 +43,44 @@ const createBooking = async (req, res) => {
       });
     }
 
-    // Create booking
+    // 4. Only approved services can be booked
+    if (selectedService.status !== "approved") {
+      return res.status(400).json({
+        message: "This service is not available for booking",
+      });
+    }
+
+    // 5. Make sure service has a provider
+    if (!selectedService.provider) {
+      return res.status(400).json({
+        message: "This service does not have a provider",
+      });
+    }
+
+    // 6. Prevent provider from booking their own service
+    if (selectedService.provider.toString() === req.user.id) {
+      return res.status(400).json({
+        message: "You cannot book your own service",
+      });
+    }
+
+    // 7. Check whether the time slot is already booked
+    const existingBooking = await Booking.findOne({
+      provider: selectedService.provider,
+      date,
+      time,
+      status: {
+        $in: ["pending", "accepted", "in_progress"],
+      },
+    });
+
+    if (existingBooking) {
+      return res.status(409).json({
+        message: "This time slot is already booked",
+      });
+    }
+
+    // 8. Create booking
     const booking = new Booking({
       user: req.user.id,
       service: selectedService._id,
@@ -29,7 +88,7 @@ const createBooking = async (req, res) => {
       phone,
       date,
       time,
-      notes,
+      notes: notes || "",
     });
 
     await booking.save();
@@ -38,6 +97,7 @@ const createBooking = async (req, res) => {
       message: "Booking created successfully",
       booking,
     });
+
   } catch (error) {
     console.error("Create booking error:", error);
 
