@@ -1,6 +1,9 @@
 const Service = require("../Models/Service");
 
-// Add Service
+// =====================================================
+// ADD SERVICE
+// =====================================================
+
 const addService = async (req, res) => {
   try {
     const {
@@ -21,7 +24,7 @@ const addService = async (req, res) => {
       image,
       detailedDescription,
 
-      // Store the logged-in provider's ID
+      // Logged-in provider's ID
       provider: req.user.id,
     });
 
@@ -40,8 +43,11 @@ const addService = async (req, res) => {
   }
 };
 
+// =====================================================
+// GET ALL APPROVED SERVICES
+// Search + Filter + Rating + Sorting + Pagination
+// =====================================================
 
-// Get All Approved Services
 const getServices = async (req, res) => {
   try {
     const {
@@ -55,51 +61,114 @@ const getServices = async (req, res) => {
       limit = 10,
     } = req.query;
 
+    // -------------------------------------------------
     // Pagination validation
+    // -------------------------------------------------
+
     const currentPage = Math.max(Number(page) || 1, 1);
-    const itemsPerPage = Math.min(Math.max(Number(limit) || 10, 1), 50);
+
+    const itemsPerPage = Math.min(
+      Math.max(Number(limit) || 10, 1),
+      50
+    );
 
     const skip = (currentPage - 1) * itemsPerPage;
 
+    // -------------------------------------------------
+    // Price validation
+    // -------------------------------------------------
+
+    const minimumPrice =
+      minPrice !== undefined ? Number(minPrice) : null;
+
+    const maximumPrice =
+      maxPrice !== undefined ? Number(maxPrice) : null;
+
+    if (
+      (minimumPrice !== null && !Number.isFinite(minimumPrice)) ||
+      (maximumPrice !== null && !Number.isFinite(maximumPrice))
+    ) {
+      return res.status(400).json({
+        message: "Invalid price filter",
+      });
+    }
+
+    if (
+      minimumPrice !== null &&
+      maximumPrice !== null &&
+      minimumPrice > maximumPrice
+    ) {
+      return res.status(400).json({
+        message: "Minimum price cannot be greater than maximum price",
+      });
+    }
+
+    // -------------------------------------------------
+    // Rating validation
+    // -------------------------------------------------
+
+    const minimumRating =
+      minRating !== undefined ? Number(minRating) : null;
+
+    if (
+      minimumRating !== null &&
+      (!Number.isFinite(minimumRating) ||
+        minimumRating < 0 ||
+        minimumRating > 5)
+    ) {
+      return res.status(400).json({
+        message: "Minimum rating must be between 0 and 5",
+      });
+    }
+
+    // -------------------------------------------------
     // Build service filter
+    // -------------------------------------------------
+
     const serviceMatch = {
       status: "approved",
     };
 
-    // Search
-    if (search) {
+    // Search by service name
+    if (search && search.trim() !== "") {
       serviceMatch.name = {
-        $regex: search,
+        $regex: search.trim(),
         $options: "i",
       };
     }
 
-    // Category
-    if (category) {
-      serviceMatch.category = category;
+    // Filter by category
+    if (category && category.trim() !== "") {
+      serviceMatch.category = category.trim();
     }
 
-    // Price
-    if (minPrice || maxPrice) {
+    // Filter by price
+    if (
+      minimumPrice !== null ||
+      maximumPrice !== null
+    ) {
       serviceMatch.price = {};
 
-      if (minPrice) {
-        serviceMatch.price.$gte = Number(minPrice);
+      if (minimumPrice !== null) {
+        serviceMatch.price.$gte = minimumPrice;
       }
 
-      if (maxPrice) {
-        serviceMatch.price.$lte = Number(maxPrice);
+      if (maximumPrice !== null) {
+        serviceMatch.price.$lte = maximumPrice;
       }
     }
 
-    // Aggregation
-    const services = await Service.aggregate([
+    // =================================================
+    // AGGREGATION
+    // =================================================
+
+    const aggregationPipeline = [
       // 1. Only approved services
       {
         $match: serviceMatch,
       },
 
-      // 2. Get reviews
+      // 2. Get reviews for each service
       {
         $lookup: {
           from: "reviews",
@@ -109,12 +178,17 @@ const getServices = async (req, res) => {
         },
       },
 
-      // 3. Calculate rating
+      // 3. Calculate rating and review count
       {
         $addFields: {
           averageRating: {
             $cond: [
-              { $gt: [{ $size: "$reviews" }, 0] },
+              {
+                $gt: [
+                  { $size: "$reviews" },
+                  0,
+                ],
+              },
               {
                 $round: [
                   {
@@ -132,72 +206,152 @@ const getServices = async (req, res) => {
           },
         },
       },
+    ];
 
-      // 4. Rating filter
-      ...(minRating
-        ? [
-            {
-              $match: {
-                averageRating: {
-                  $gte: Number(minRating),
-                },
-              },
-            },
-          ]
-        : []),
+    // -------------------------------------------------
+    // Minimum rating filter
+    // -------------------------------------------------
 
-      // 5. Remove reviews array
-      {
-        $project: {
-          reviews: 0,
+    if (minimumRating !== null) {
+      aggregationPipeline.push({
+        $match: {
+          averageRating: {
+            $gte: minimumRating,
+          },
         },
+      });
+    }
+
+    // -------------------------------------------------
+    // Remove reviews array
+    // -------------------------------------------------
+
+    aggregationPipeline.push({
+      $project: {
+        reviews: 0,
       },
+    });
 
-      // 6. Sorting
-      ...(sort === "rating"
-        ? [
-            {
-              $sort: {
-                averageRating: -1,
-              },
-            },
-          ]
-        : sort === "price_low"
-        ? [
-            {
-              $sort: {
-                price: 1,
-              },
-            },
-          ]
-        : sort === "price_high"
-        ? [
-            {
-              $sort: {
-                price: -1,
-              },
-            },
-          ]
-        : [
-            {
-              $sort: {
-                createdAt: -1,
-              },
-            },
-          ]),
+    // -------------------------------------------------
+    // Sorting
+    // -------------------------------------------------
 
-      // 7. Pagination
+    if (sort === "rating") {
+      aggregationPipeline.push({
+        $sort: {
+          averageRating: -1,
+        },
+      });
+    } else if (sort === "price_low") {
+      aggregationPipeline.push({
+        $sort: {
+          price: 1,
+        },
+      });
+    } else if (sort === "price_high") {
+      aggregationPipeline.push({
+        $sort: {
+          price: -1,
+        },
+      });
+    } else {
+      // Default: newest first
+      aggregationPipeline.push({
+        $sort: {
+          createdAt: -1,
+        },
+      });
+    }
+
+    // -------------------------------------------------
+    // Pagination
+    // -------------------------------------------------
+
+    aggregationPipeline.push(
       {
         $skip: skip,
       },
-
       {
         $limit: itemsPerPage,
-      },
-    ]);
+      }
+    );
 
-    // Count total matching services
-    const totalServices = await Service.countDocuments(serviceMatch);
+    // -------------------------------------------------
+    // Execute aggregation
+    // -------------------------------------------------
+
+    const services = await Service.aggregate(
+      aggregationPipeline
+    );
+
+    // =================================================
+    // COUNT TOTAL MATCHING SERVICES
+    // =================================================
+
+    // Important:
+    // Use the same rating logic so pagination remains correct.
+
+    let totalServices;
+
+    if (minimumRating !== null) {
+      const countResult = await Service.aggregate([
+        {
+          $match: serviceMatch,
+        },
+
+        {
+          $lookup: {
+            from: "reviews",
+            localField: "_id",
+            foreignField: "service",
+            as: "reviews",
+          },
+        },
+
+        {
+          $addFields: {
+            averageRating: {
+              $cond: [
+                {
+                  $gt: [
+                    { $size: "$reviews" },
+                    0,
+                  ],
+                },
+                {
+                  $avg: "$reviews.rating",
+                },
+                0,
+              ],
+            },
+          },
+        },
+
+        {
+          $match: {
+            averageRating: {
+              $gte: minimumRating,
+            },
+          },
+        },
+
+        {
+          $count: "total",
+        },
+      ]);
+
+      totalServices =
+        countResult.length > 0
+          ? countResult[0].total
+          : 0;
+    } else {
+      totalServices =
+        await Service.countDocuments(serviceMatch);
+    }
+
+    // -------------------------------------------------
+    // Pagination information
+    // -------------------------------------------------
 
     const totalPages = Math.ceil(
       totalServices / itemsPerPage
@@ -215,7 +369,6 @@ const getServices = async (req, res) => {
         hasPreviousPage: currentPage > 1,
       },
     });
-
   } catch (error) {
     console.error("Get services error:", error);
 
@@ -225,10 +378,15 @@ const getServices = async (req, res) => {
   }
 };
 
-// Get Single Service
+// =====================================================
+// GET SINGLE SERVICE
+// =====================================================
+
 const getServiceById = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id);
+    const service = await Service.findById(
+      req.params.id
+    );
 
     if (!service) {
       return res.status(404).json({
@@ -238,14 +396,18 @@ const getServiceById = async (req, res) => {
 
     res.status(200).json(service);
   } catch (error) {
+    console.error("Get service error:", error);
+
     res.status(500).json({
       message: "Failed to fetch service",
     });
   }
 };
 
+// =====================================================
+// GET PENDING SERVICES
+// =====================================================
 
-// Get Pending Services
 const getPendingServices = async (req, res) => {
   try {
     const services = await Service.find({
@@ -254,17 +416,26 @@ const getPendingServices = async (req, res) => {
 
     res.status(200).json(services);
   } catch (error) {
+    console.error(
+      "Get pending services error:",
+      error
+    );
+
     res.status(500).json({
       message: "Failed to fetch pending services",
     });
   }
 };
 
+// =====================================================
+// APPROVE SERVICE
+// =====================================================
 
-// Approve Service
 const approveService = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id);
+    const service = await Service.findById(
+      req.params.id
+    );
 
     if (!service) {
       return res.status(404).json({
@@ -275,7 +446,8 @@ const approveService = async (req, res) => {
     // Only pending services can be approved
     if (service.status !== "pending") {
       return res.status(400).json({
-        message: "Only pending services can be approved",
+        message:
+          "Only pending services can be approved",
       });
     }
 
@@ -291,7 +463,10 @@ const approveService = async (req, res) => {
       service,
     });
   } catch (error) {
-    console.error("Approve service error:", error);
+    console.error(
+      "Approve service error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to approve service",
@@ -299,19 +474,26 @@ const approveService = async (req, res) => {
   }
 };
 
+// =====================================================
+// REQUEST CHANGES
+// =====================================================
 
-// Request Changes
 const requestChanges = async (req, res) => {
   try {
     const { adminComment } = req.body;
 
-    if (!adminComment || adminComment.trim() === "") {
+    if (
+      !adminComment ||
+      adminComment.trim() === ""
+    ) {
       return res.status(400).json({
         message: "Admin comment is required",
       });
     }
 
-    const service = await Service.findById(req.params.id);
+    const service = await Service.findById(
+      req.params.id
+    );
 
     if (!service) {
       return res.status(404).json({
@@ -319,15 +501,16 @@ const requestChanges = async (req, res) => {
       });
     }
 
-    // Changes can only be requested for pending services
+    // Only pending services can receive change requests
     if (service.status !== "pending") {
       return res.status(400).json({
-        message: "Changes can only be requested for pending services",
+        message:
+          "Changes can only be requested for pending services",
       });
     }
 
     service.status = "changes_requested";
-    service.adminComment = adminComment;
+    service.adminComment = adminComment.trim();
 
     await service.save();
 
@@ -336,7 +519,10 @@ const requestChanges = async (req, res) => {
       service,
     });
   } catch (error) {
-    console.error("Request changes error:", error);
+    console.error(
+      "Request changes error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to request changes",
@@ -344,19 +530,26 @@ const requestChanges = async (req, res) => {
   }
 };
 
+// =====================================================
+// REJECT SERVICE
+// =====================================================
 
-// Reject Service
 const rejectService = async (req, res) => {
   try {
     const { adminComment } = req.body;
 
-    if (!adminComment || adminComment.trim() === "") {
+    if (
+      !adminComment ||
+      adminComment.trim() === ""
+    ) {
       return res.status(400).json({
         message: "Rejection reason is required",
       });
     }
 
-    const service = await Service.findById(req.params.id);
+    const service = await Service.findById(
+      req.params.id
+    );
 
     if (!service) {
       return res.status(404).json({
@@ -367,12 +560,13 @@ const rejectService = async (req, res) => {
     // Only pending services can be rejected
     if (service.status !== "pending") {
       return res.status(400).json({
-        message: "Only pending services can be rejected",
+        message:
+          "Only pending services can be rejected",
       });
     }
 
     service.status = "rejected";
-    service.adminComment = adminComment;
+    service.adminComment = adminComment.trim();
 
     await service.save();
 
@@ -381,7 +575,10 @@ const rejectService = async (req, res) => {
       service,
     });
   } catch (error) {
-    console.error("Reject service error:", error);
+    console.error(
+      "Reject service error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to reject service",
@@ -389,11 +586,15 @@ const rejectService = async (req, res) => {
   }
 };
 
+// =====================================================
+// UPDATE SERVICE
+// =====================================================
 
-// Update Service
 const updateService = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id);
+    const service = await Service.findById(
+      req.params.id
+    );
 
     if (!service) {
       return res.status(404).json({
@@ -402,12 +603,14 @@ const updateService = async (req, res) => {
     }
 
     // Provider can update only their own service
+    // Admin can update any service
     if (
       req.user.role === "provider" &&
       service.provider.toString() !== req.user.id
     ) {
       return res.status(403).json({
-        message: "You can update only your own services",
+        message:
+          "You can update only your own services",
       });
     }
 
@@ -416,25 +619,34 @@ const updateService = async (req, res) => {
       price: req.body.price,
       description: req.body.description,
       category: req.body.category,
-      detailedDescription: req.body.detailedDescription,
+      detailedDescription:
+        req.body.detailedDescription,
     };
 
+    // Update image only if a new image was uploaded
     if (req.file) {
       updateFields.image = req.file.filename;
     }
 
-    const updatedService = await Service.findByIdAndUpdate(
-      req.params.id,
-      updateFields,
-      { new: true }
-    );
+    const updatedService =
+      await Service.findByIdAndUpdate(
+        req.params.id,
+        updateFields,
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
 
     res.status(200).json({
       message: "Service updated successfully",
       service: updatedService,
     });
   } catch (error) {
-    console.error("Update service error:", error);
+    console.error(
+      "Update service error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to update service",
@@ -442,11 +654,15 @@ const updateService = async (req, res) => {
   }
 };
 
+// =====================================================
+// DELETE SERVICE
+// =====================================================
 
-// Delete Service
 const deleteService = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id);
+    const service = await Service.findById(
+      req.params.id
+    );
 
     if (!service) {
       return res.status(404).json({
@@ -455,12 +671,14 @@ const deleteService = async (req, res) => {
     }
 
     // Provider can delete only their own service
+    // Admin can delete any service
     if (
       req.user.role === "provider" &&
       service.provider.toString() !== req.user.id
     ) {
       return res.status(403).json({
-        message: "You can delete only your own services",
+        message:
+          "You can delete only your own service",
       });
     }
 
@@ -470,7 +688,10 @@ const deleteService = async (req, res) => {
       message: "Service deleted successfully",
     });
   } catch (error) {
-    console.error("Delete service error:", error);
+    console.error(
+      "Delete service error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to delete service",
@@ -478,9 +699,15 @@ const deleteService = async (req, res) => {
   }
 };
 
+// =====================================================
+// RESUBMIT SERVICE
+// =====================================================
+
 const resubmitService = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id);
+    const service = await Service.findById(
+      req.params.id
+    );
 
     if (!service) {
       return res.status(404).json({
@@ -488,19 +715,24 @@ const resubmitService = async (req, res) => {
       });
     }
 
-    // Only the provider who owns the service can resubmit it
+    // Only the owner provider can resubmit
     if (
       service.provider.toString() !== req.user.id
     ) {
       return res.status(403).json({
-        message: "You can resubmit only your own service",
+        message:
+          "You can resubmit only your own service",
       });
     }
 
-    // Only services requiring changes can be resubmitted
-    if (service.status !== "changes_requested") {
+    // Only services with requested changes
+    // can be resubmitted
+    if (
+      service.status !== "changes_requested"
+    ) {
       return res.status(400).json({
-        message: "Only services with requested changes can be resubmitted",
+        message:
+          "Only services with requested changes can be resubmitted",
       });
     }
 
@@ -514,13 +746,20 @@ const resubmitService = async (req, res) => {
       service,
     });
   } catch (error) {
-    console.error("Resubmit service error:", error);
+    console.error(
+      "Resubmit service error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to resubmit service",
     });
   }
 };
+
+// =====================================================
+// EXPORT
+// =====================================================
 
 module.exports = {
   addService,
@@ -532,5 +771,5 @@ module.exports = {
   rejectService,
   updateService,
   deleteService,
-  resubmitService
+  resubmitService,
 };
