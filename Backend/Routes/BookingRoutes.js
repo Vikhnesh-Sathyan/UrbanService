@@ -4,6 +4,7 @@ const {
   createBooking,
   getMyBookings,
   cancelBooking,
+  rescheduleBooking,
   getProviderBookings,
   acceptBooking,
   rejectBooking,
@@ -15,8 +16,9 @@ const roleMiddleware = require("../Middleware/roleMiddleware");
 
 const router = express.Router();
 
-
+// ===============================
 // CUSTOMER ROUTES
+// ===============================
 
 // Create booking
 router.post(
@@ -26,7 +28,7 @@ router.post(
   createBooking
 );
 
-// Get logged-in customer's bookings
+// Get customer's bookings
 router.get(
   "/my-bookings",
   authMiddleware,
@@ -42,9 +44,17 @@ router.patch(
   cancelBooking
 );
 
+// Reschedule booking
+router.put(
+  "/:id/reschedule",
+  authMiddleware,
+  roleMiddleware("user"),
+  rescheduleBooking
+);
 
-
+// ===============================
 // PROVIDER ROUTES
+// ===============================
 
 // Get provider booking requests
 router.get(
@@ -70,7 +80,7 @@ router.patch(
   rejectBooking
 );
 
-// Update job status
+// Update booking status
 router.patch(
   "/:id/status",
   authMiddleware,
@@ -79,5 +89,3 @@ router.patch(
 );
 
 module.exports = router;
-
-
