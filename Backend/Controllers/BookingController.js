@@ -8,7 +8,13 @@ const User = require("../Models/User");
 
 const createBooking = async (req, res) => {
   try {
-    const { service, phone, date, time, notes } = req.body;
+    const {
+      service,
+      phone,
+      date,
+      time,
+      notes,
+    } = req.body;
 
     // 1. Validate required fields
     if (!service || !phone || !date || !time) {
@@ -26,22 +32,26 @@ const createBooking = async (req, res) => {
       });
     }
 
+    // Remove time from date comparison
     const today = new Date();
 
     today.setHours(0, 0, 0, 0);
     selectedDate.setHours(0, 0, 0, 0);
 
+    // Prevent past dates
     if (selectedDate < today) {
       return res.status(400).json({
         message: "Booking date cannot be in the past",
       });
     }
 
+    // =================================================
+    // FIND SERVICE
+    // =================================================
+
     // 3. Find selected service
     const selectedService = await Service.findById(service);
 
-    // IMPORTANT:
-    // Check service exists BEFORE accessing selectedService.provider
     if (!selectedService) {
       return res.status(404).json({
         message: "Service not found",
@@ -62,8 +72,15 @@ const createBooking = async (req, res) => {
       });
     }
 
+    // =================================================
+    // FIND PROVIDER
+    // =================================================
+
     // 6. Find provider
-    const provider = await User.findById(selectedService.provider);
+    const provider = await User.findOne({
+      _id: selectedService.provider,
+      role: "provider",
+    });
 
     if (!provider) {
       return res.status(404).json({
@@ -71,8 +88,15 @@ const createBooking = async (req, res) => {
       });
     }
 
-    // 7. Prevent provider from booking their own service
-    if (selectedService.provider.toString() === req.user.id) {
+    // =================================================
+    // PREVENT SELF BOOKING
+    // =================================================
+
+    // 7. Provider cannot book own service
+    if (
+      selectedService.provider.toString() ===
+      req.user.id.toString()
+    ) {
       return res.status(400).json({
         message: "You cannot book your own service",
       });
@@ -82,33 +106,50 @@ const createBooking = async (req, res) => {
     // PROVIDER AVAILABILITY
     // =================================================
 
-    // 8. Get booking day
+    // 8. Check availability configuration
+    if (
+      !provider.availability ||
+      !provider.availability.days ||
+      provider.availability.days.length === 0
+    ) {
+      return res.status(400).json({
+        message: "Provider availability is not configured",
+      });
+    }
+
+    // 9. Get booking day
     const dayNames = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
 
     const bookingDay = dayNames[selectedDate.getDay()];
 
-    // 9. Check provider working days
+    // 10. Check working day
     if (
-      !provider.availability ||
-      !provider.availability.days ||
-      !provider.availability.days.includes(bookingDay)
+      !provider.availability.days.includes(
+        bookingDay
+      )
     ) {
       return res.status(400).json({
         message: `Provider is not available on ${bookingDay}`,
       });
     }
 
-    // 10. Check working hours
-    const startTime = provider.availability.startTime;
-    const endTime = provider.availability.endTime;
+    // =================================================
+    // VALIDATE BOOKING TIME
+    // =================================================
+
+    const startTime =
+      provider.availability.startTime;
+
+    const endTime =
+      provider.availability.endTime;
 
     if (!startTime || !endTime) {
       return res.status(400).json({
@@ -116,8 +157,57 @@ const createBooking = async (req, res) => {
       });
     }
 
-    // Time must be in HH:mm format
-    if (time < startTime || time >= endTime) {
+    // Validate HH:mm format
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+    if (!timeRegex.test(time)) {
+      return res.status(400).json({
+        message: "Invalid booking time format. Use HH:mm",
+      });
+    }
+
+    if (!timeRegex.test(startTime)) {
+      return res.status(400).json({
+        message: "Provider start time is invalid",
+      });
+    }
+
+    if (!timeRegex.test(endTime)) {
+      return res.status(400).json({
+        message: "Provider end time is invalid",
+      });
+    }
+
+    // Convert time to minutes
+    const convertToMinutes = (timeValue) => {
+      const [hours, minutes] =
+        timeValue.split(":").map(Number);
+
+      return hours * 60 + minutes;
+    };
+
+    const bookingMinutes =
+      convertToMinutes(time);
+
+    const startMinutes =
+      convertToMinutes(startTime);
+
+    const endMinutes =
+      convertToMinutes(endTime);
+
+    // Make sure provider schedule itself is valid
+    if (startMinutes >= endMinutes) {
+      return res.status(400).json({
+        message:
+          "Provider availability time configuration is invalid",
+      });
+    }
+
+    // Check booking time
+    if (
+      bookingMinutes < startMinutes ||
+      bookingMinutes >= endMinutes
+    ) {
       return res.status(400).json({
         message: `Provider is available only between ${startTime} and ${endTime}`,
       });
@@ -127,13 +217,18 @@ const createBooking = async (req, res) => {
     // DUPLICATE TIME SLOT
     // =================================================
 
-    // 11. Check whether provider is already booked
+    // 11. Check whether provider already has
+    // an active booking for this date/time
     const existingBooking = await Booking.findOne({
       provider: selectedService.provider,
-      date,
-      time,
+      date: date,
+      time: time,
       status: {
-        $in: ["pending", "accepted", "in_progress"],
+        $in: [
+          "pending",
+          "accepted",
+          "in_progress",
+        ],
       },
     });
 
@@ -160,13 +255,20 @@ const createBooking = async (req, res) => {
 
     await booking.save();
 
+    // =================================================
+    // RESPONSE
+    // =================================================
+
     res.status(201).json({
       message: "Booking created successfully",
       booking,
     });
 
   } catch (error) {
-    console.error("Create booking error:", error);
+    console.error(
+      "Create booking error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to create booking",
@@ -192,14 +294,19 @@ const getMyBookings = async (req, res) => {
         "provider",
         "name email"
       )
-      .sort({ createdAt: -1 });
+      .sort({
+        createdAt: -1,
+      });
 
     res.status(200).json({
       bookings,
     });
 
   } catch (error) {
-    console.error("Get bookings error:", error);
+    console.error(
+      "Get bookings error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to fetch bookings",
@@ -225,13 +332,17 @@ const cancelBooking = async (req, res) => {
       });
     }
 
-    // Customer can cancel only these statuses
+    // Customer can cancel only pending/accepted bookings
     const cancellableStatuses = [
       "pending",
       "accepted",
     ];
 
-    if (!cancellableStatuses.includes(booking.status)) {
+    if (
+      !cancellableStatuses.includes(
+        booking.status
+      )
+    ) {
       return res.status(400).json({
         message: `Booking cannot be cancelled when status is ${booking.status}`,
       });
@@ -247,7 +358,10 @@ const cancelBooking = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Cancel booking error:", error);
+    console.error(
+      "Cancel booking error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to cancel booking",
@@ -273,14 +387,19 @@ const getProviderBookings = async (req, res) => {
         "service",
         "name price category image"
       )
-      .sort({ createdAt: -1 });
+      .sort({
+        createdAt: -1,
+      });
 
     res.status(200).json({
       bookings,
     });
 
   } catch (error) {
-    console.error("Provider bookings error:", error);
+    console.error(
+      "Provider bookings error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to fetch provider bookings",
@@ -308,7 +427,8 @@ const acceptBooking = async (req, res) => {
 
     if (booking.status !== "pending") {
       return res.status(400).json({
-        message: "Only pending bookings can be accepted",
+        message:
+          "Only pending bookings can be accepted",
       });
     }
 
@@ -317,15 +437,20 @@ const acceptBooking = async (req, res) => {
     await booking.save();
 
     res.status(200).json({
-      message: "Booking accepted successfully",
+      message:
+        "Booking accepted successfully",
       booking,
     });
 
   } catch (error) {
-    console.error("Accept booking error:", error);
+    console.error(
+      "Accept booking error:",
+      error
+    );
 
     res.status(500).json({
-      message: "Failed to accept booking",
+      message:
+        "Failed to accept booking",
     });
   }
 };
@@ -350,7 +475,8 @@ const rejectBooking = async (req, res) => {
 
     if (booking.status !== "pending") {
       return res.status(400).json({
-        message: "Only pending bookings can be rejected",
+        message:
+          "Only pending bookings can be rejected",
       });
     }
 
@@ -364,10 +490,14 @@ const rejectBooking = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Reject booking error:", error);
+    console.error(
+      "Reject booking error:",
+      error
+    );
 
     res.status(500).json({
-      message: "Failed to reject booking",
+      message:
+        "Failed to reject booking",
     });
   }
 };
@@ -420,7 +550,12 @@ const updateBookingStatus = async (req, res) => {
     };
 
     // 5. Check transition
-    if (!allowedTransitions[currentStatus].includes(status)) {
+    if (
+      !allowedTransitions[currentStatus] ||
+      !allowedTransitions[currentStatus].includes(
+        status
+      )
+    ) {
       return res.status(400).json({
         message: `Cannot change booking status from ${currentStatus} to ${status}`,
       });
@@ -432,15 +567,20 @@ const updateBookingStatus = async (req, res) => {
     await booking.save();
 
     res.status(200).json({
-      message: "Booking status updated successfully",
+      message:
+        "Booking status updated successfully",
       booking,
     });
 
   } catch (error) {
-    console.error("Update booking status error:", error);
+    console.error(
+      "Update booking status error:",
+      error
+    );
 
     res.status(500).json({
-      message: "Failed to update booking status",
+      message:
+        "Failed to update booking status",
     });
   }
 };
