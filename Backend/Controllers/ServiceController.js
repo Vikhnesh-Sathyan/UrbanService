@@ -51,14 +51,22 @@ const getServices = async (req, res) => {
       maxPrice,
       minRating,
       sort,
+      page = 1,
+      limit = 10,
     } = req.query;
+
+    // Pagination validation
+    const currentPage = Math.max(Number(page) || 1, 1);
+    const itemsPerPage = Math.min(Math.max(Number(limit) || 10, 1), 50);
+
+    const skip = (currentPage - 1) * itemsPerPage;
 
     // Build service filter
     const serviceMatch = {
       status: "approved",
     };
 
-    // Search by service name
+    // Search
     if (search) {
       serviceMatch.name = {
         $regex: search,
@@ -66,12 +74,12 @@ const getServices = async (req, res) => {
       };
     }
 
-    // Filter by category
+    // Category
     if (category) {
       serviceMatch.category = category;
     }
 
-    // Filter by price
+    // Price
     if (minPrice || maxPrice) {
       serviceMatch.price = {};
 
@@ -84,8 +92,9 @@ const getServices = async (req, res) => {
       }
     }
 
+    // Aggregation
     const services = await Service.aggregate([
-      // 1. Filter services
+      // 1. Only approved services
       {
         $match: serviceMatch,
       },
@@ -124,7 +133,7 @@ const getServices = async (req, res) => {
         },
       },
 
-      // 4. Filter by rating
+      // 4. Rating filter
       ...(minRating
         ? [
             {
@@ -137,7 +146,7 @@ const getServices = async (req, res) => {
           ]
         : []),
 
-      // 5. Remove reviews from response
+      // 5. Remove reviews array
       {
         $project: {
           reviews: 0,
@@ -176,11 +185,37 @@ const getServices = async (req, res) => {
               },
             },
           ]),
+
+      // 7. Pagination
+      {
+        $skip: skip,
+      },
+
+      {
+        $limit: itemsPerPage,
+      },
     ]);
+
+    // Count total matching services
+    const totalServices = await Service.countDocuments(serviceMatch);
+
+    const totalPages = Math.ceil(
+      totalServices / itemsPerPage
+    );
 
     res.status(200).json({
       services,
+
+      pagination: {
+        page: currentPage,
+        limit: itemsPerPage,
+        totalServices,
+        totalPages,
+        hasNextPage: currentPage < totalPages,
+        hasPreviousPage: currentPage > 1,
+      },
     });
+
   } catch (error) {
     console.error("Get services error:", error);
 
