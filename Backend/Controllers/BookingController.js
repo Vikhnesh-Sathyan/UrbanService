@@ -173,7 +173,8 @@ const createBooking = async (req, res) => {
       });
     }
 
-    // Check duplicate booking slot
+    // Check duplicate booking slot Finds one matching document. If nothing is found, it returns null.
+    
     const existingBooking = await Booking.findOne({
       provider: selectedService.provider,
       date: date,
