@@ -61,3 +61,21 @@ export const updateBookingStatus = async (
 
   return response.data;
 };
+
+export const rescheduleBooking = async (
+  bookingId,
+  date,
+  time
+) => {
+  const response = await axios.put(
+    `${API}/${bookingId}/reschedule`,
+    {
+      date,
+      time,
+    },
+    getAuthConfig()
+  );
+
+  return response.data;
+};
+
