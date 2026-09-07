@@ -1,6 +1,12 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaArrowRight } from "react-icons/fa";
+import {
+  FaHome,
+  FaTools,
+  FaSignInAlt,
+  FaArrowRight,
+} from "react-icons/fa";
 import "../../styles/Navbar.css";
 
 function Navbar() {
@@ -16,20 +22,27 @@ function Navbar() {
         {/* Navigation */}
         <div className="home-navbar-links">
 
+          {/* Home */}
           <Link to="/" className="home-navbar-link">
-            Home
+            <FaHome className="navbar-icon home-icon" />
+            <span>Home</span>
           </Link>
 
+          {/* Services */}
           <Link to="/services" className="home-navbar-link">
-            Services
+            <FaTools className="navbar-icon services-icon" />
+            <span>Services</span>
           </Link>
 
+          {/* Login */}
           <Link to="/login" className="home-navbar-link">
-            Login
+            <FaSignInAlt className="navbar-icon login-icon" />
+            <span>Login</span>
           </Link>
 
+          {/* Get Started */}
           <Link to="/register" className="home-navbar-register">
-            Get Started
+            <span>Get Started</span>
             <FaArrowRight className="home-navbar-arrow" />
           </Link>
 

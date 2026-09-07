@@ -1,0 +1,572 @@
+/* =================================
+   HOW IT WORKS
+================================= */
+
+.how-it-works-section {
+  width: 100%;
+  min-height: 700px;
+
+  position: relative;
+
+  padding: 120px 70px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(99, 102, 241, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(139, 92, 246, 0.08),
+      transparent 28%
+    ),
+    #f8fafc;
+}
+
+
+/* =================================
+   BACKGROUND CIRCLES
+================================= */
+
+.how-bg-circle {
+  position: absolute;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  filter: blur(2px);
+
+  animation: floatingCircle 7s ease-in-out infinite;
+}
+
+
+.how-bg-circle-one {
+  width: 260px;
+  height: 260px;
+
+  top: -120px;
+  left: -100px;
+
+  background: rgba(99, 102, 241, 0.08);
+}
+
+
+.how-bg-circle-two {
+  width: 300px;
+  height: 300px;
+
+  right: -140px;
+  bottom: -130px;
+
+  background: rgba(139, 92, 246, 0.08);
+
+  animation-delay: 2s;
+}
+
+
+@keyframes floatingCircle {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(20px);
+  }
+}
+
+
+/* =================================
+   HEADING
+================================= */
+
+.how-it-works-heading {
+  max-width: 750px;
+
+  margin: 0 auto 80px;
+
+  text-align: center;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+
+.how-label {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+
+  color: #6366f1;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+
+.how-label span {
+  width: 25px;
+  height: 1px;
+
+  background: #a5b4fc;
+}
+
+
+.how-it-works-heading h2 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 48px;
+
+  line-height: 1.12;
+
+  font-weight: 850;
+
+  letter-spacing: -1.8px;
+}
+
+
+.how-it-works-heading h2 span {
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+.how-it-works-heading p {
+  max-width: 600px;
+
+  margin: 22px auto 0;
+
+  color: #6b7280;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+}
+
+
+/* =================================
+   STEPS WRAPPER
+================================= */
+
+.steps-wrapper {
+  max-width: 1250px;
+
+  margin: 0 auto;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+
+/* =================================
+   CONNECTING LINE
+================================= */
+
+.steps-line {
+  position: absolute;
+
+  top: 110px;
+
+  left: 16%;
+
+  right: 16%;
+
+  height: 2px;
+
+  background: #e0e7ff;
+
+  overflow: hidden;
+}
+
+
+.steps-line-progress {
+  width: 100%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    #6366f1,
+    #8b5cf6,
+    #10b981
+  );
+
+  transform: translateX(-100%);
+
+  animation: lineProgress 3s ease-in-out infinite;
+}
+
+
+@keyframes lineProgress {
+
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+
+/* =================================
+   CONTAINER
+================================= */
+
+.steps-container {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 18px;
+}
+
+
+/* =================================
+   STEP CARD
+================================= */
+
+.premium-step {
+  width: 350px;
+  min-height: 330px;
+
+  padding: 38px 32px 30px;
+
+  position: relative;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  border: 1px solid rgba(226, 232, 240, 0.9);
+
+  border-radius: 24px;
+
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 15px 45px rgba(15, 23, 42, 0.07);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+
+.premium-step::before {
+  content: "";
+
+  position: absolute;
+
+  width: 150px;
+  height: 150px;
+
+  top: -70px;
+  right: -70px;
+
+  border-radius: 50%;
+
+  background: var(--step-glow);
+
+  opacity: 0.35;
+
+  transition: transform 0.4s ease;
+}
+
+
+.premium-step:hover {
+  transform: translateY(-12px);
+
+  box-shadow:
+    0 25px 60px rgba(15, 23, 42, 0.13);
+
+  border-color: var(--step-border);
+}
+
+
+.premium-step:hover::before {
+  transform: scale(1.5);
+}
+
+
+/* =================================
+   COLORS
+================================= */
+
+.step-blue {
+  --step-color: #0284c7;
+  --step-bg: #e0f2fe;
+  --step-border: #bae6fd;
+  --step-glow: #7dd3fc;
+}
+
+
+.step-purple {
+  --step-color: #7c3aed;
+  --step-bg: #ede9fe;
+  --step-border: #ddd6fe;
+  --step-glow: #c4b5fd;
+}
+
+
+.step-green {
+  --step-color: #16a34a;
+  --step-bg: #dcfce7;
+  --step-border: #bbf7d0;
+  --step-glow: #86efac;
+}
+
+
+/* =================================
+   NUMBER
+================================= */
+
+.step-number {
+  position: absolute;
+
+  top: 22px;
+  right: 26px;
+
+  color: #cbd5e1;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+
+/* =================================
+   ICON
+================================= */
+
+.premium-step-icon {
+  width: 72px;
+  height: 72px;
+
+  margin-bottom: 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background: var(--step-bg);
+
+  color: var(--step-color);
+
+  font-size: 28px;
+
+  position: relative;
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+
+.premium-step:hover .premium-step-icon {
+  transform: rotate(-5deg) scale(1.08);
+
+  box-shadow:
+    0 10px 25px var(--step-glow);
+}
+
+
+/* =================================
+   CONTENT
+================================= */
+
+.premium-step-content h3 {
+  margin: 0 0 12px;
+
+  color: #111827;
+
+  font-size: 21px;
+
+  font-weight: 800;
+}
+
+
+.premium-step-content p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  line-height: 1.75;
+}
+
+
+/* =================================
+   INDICATOR
+================================= */
+
+.step-indicator {
+  position: absolute;
+
+  bottom: 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+
+.step-indicator span {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--step-color);
+}
+
+
+/* =================================
+   ARROW
+================================= */
+
+.premium-step-arrow {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  color: #818cf8;
+
+  font-size: 13px;
+
+  box-shadow:
+    0 8px 20px rgba(15, 23, 42, 0.07);
+
+  z-index: 3;
+
+  animation: arrowPulse 2s ease-in-out infinite;
+}
+
+
+.premium-step-arrow:nth-of-type(2) {
+  animation-delay: 0.5s;
+}
+
+
+@keyframes arrowPulse {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 1100px) {
+
+  .how-it-works-section {
+    padding: 100px 40px;
+  }
+
+  .steps-container {
+    flex-direction: column;
+  }
+
+  .steps-line {
+    display: none;
+  }
+
+  .premium-step {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .premium-step-arrow {
+    transform: rotate(90deg);
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .how-it-works-section {
+    padding: 80px 20px;
+  }
+
+  .how-it-works-heading h2 {
+    font-size: 34px;
+  }
+
+  .how-it-works-heading p {
+    font-size: 14px;
+  }
+
+  .premium-step {
+    min-height: 300px;
+
+    padding: 30px 25px;
+  }
+
+}

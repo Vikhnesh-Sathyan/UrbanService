@@ -6,7 +6,6 @@ import Homepage from "./Components/Home/Homepage";
 import AdminDashboard from "./Components/Dashboard/AdminDashboard";
 import ProviderDashboard from "./Components/Dashboard/ProviderDashboard";
 import UserDashboard from "./Components/Dashboard/UserDashboard";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import BookService from "./Components/Customer/BookService";
 import ServiceDetails from './Components/Customer/ServiceDetails';
 import StripeProvider from './Components/Payment/StripeProvider';
