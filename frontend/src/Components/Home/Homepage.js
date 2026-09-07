@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import Hero from "./Hero";
 import Services from "./Services";
 import HowItWorks from "./HowItWorks";
+import WhyChooseUs from "./WhyChooseUs";
 
 
 function Homepage() {
@@ -15,6 +16,8 @@ function Homepage() {
       <Services />
 
       <HowItWorks />
+
+      <WhyChooseUs />
 
     </div>
   );

@@ -1,0 +1,607 @@
+/* =========================================
+   WHY CHOOSE US
+   DYNAMIC SAAS / MOVING TRACK STYLE
+========================================= */
+
+.why-section {
+  position: relative;
+  padding: 110px 8%;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+
+/* =========================================
+   HEADING
+========================================= */
+
+.why-heading {
+  position: relative;
+  z-index: 2;
+
+  max-width: 1150px;
+  margin: 0 auto 55px;
+
+  display: grid;
+  grid-template-columns: 300px 1fr 400px;
+
+  align-items: center;
+
+  gap: 40px;
+}
+
+
+/* =========================================
+   WHY CHOOSE US LABEL
+========================================= */
+
+.why-label {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  width: fit-content;
+
+  padding-left: 28px;
+
+  color: #111827;
+
+  font-size: 20px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+
+/* Purple vertical marker */
+
+.why-label::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  width: 5px;
+  height: 42px;
+
+  border-radius: 10px;
+
+  background: #7c3aed;
+}
+
+
+/* =========================================
+   MAIN TITLE
+========================================= */
+
+.why-heading h2 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: clamp(32px, 3.5vw, 46px);
+
+  line-height: 1.08;
+
+  font-weight: 800;
+
+  letter-spacing: -2px;
+}
+
+.why-heading h2 span {
+  color: #7c3aed;
+}
+
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.why-heading p {
+  max-width: 400px;
+
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+
+/* =========================================
+   FEATURES TRACK
+========================================= */
+
+.why-features {
+  position: relative;
+  z-index: 1;
+
+  max-width: 1150px;
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+
+/* =========================================
+   VERTICAL TRACK
+========================================= */
+
+.why-features::before {
+  content: "";
+
+  position: absolute;
+
+  left: 55px;
+
+  top: 0;
+  bottom: 0;
+
+  width: 1px;
+
+  background: #e5e7eb;
+}
+
+
+/* =========================================
+   MOVING PURPLE INDICATOR
+========================================= */
+
+.why-features::after {
+  content: "";
+
+  position: absolute;
+
+  left: 54px;
+
+  top: 0;
+
+  width: 3px;
+  height: 90px;
+
+  background: #7c3aed;
+
+  border-radius: 5px;
+
+  animation: whyTrackMove 5s ease-in-out infinite;
+}
+
+
+/* Moving animation */
+
+@keyframes whyTrackMove {
+
+  0% {
+    top: 0;
+  }
+
+  25% {
+    top: 25%;
+  }
+
+  50% {
+    top: 50%;
+  }
+
+  75% {
+    top: 75%;
+  }
+
+  100% {
+    top: 0;
+  }
+
+}
+
+
+/* =========================================
+   FEATURE ITEM
+========================================= */
+
+.why-feature {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns: 110px 1fr auto;
+
+  align-items: center;
+
+  min-height: 145px;
+
+  padding: 25px 35px 25px 0;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  transition:
+    background 0.35s ease,
+    padding 0.35s ease;
+}
+
+
+/* =========================================
+   ICON
+========================================= */
+
+.why-feature-icon {
+  position: relative;
+
+  z-index: 3;
+
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 30px;
+
+  border-radius: 15px;
+
+  background: var(--feature-bg);
+
+  color: var(--feature-color);
+
+  font-size: 18px;
+
+  border: 4px solid #ffffff;
+
+  box-shadow:
+    0 0 0 1px #e5e7eb;
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+
+/* =========================================
+   FEATURE CONTENT
+========================================= */
+
+.why-feature h3 {
+  margin: 0 0 7px;
+
+  color: #111827;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  letter-spacing: -0.4px;
+
+  transition: color 0.3s ease;
+}
+
+.why-feature p {
+  max-width: 650px;
+
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================
+   HOVER EFFECT
+========================================= */
+
+.why-feature:hover {
+  padding-left: 15px;
+
+  background: #fafafa;
+}
+
+.why-feature:hover .why-feature-icon {
+  transform: scale(1.12);
+
+  box-shadow:
+    0 0 0 1px var(--feature-color),
+    0 12px 30px var(--feature-shadow);
+}
+
+.why-feature:hover h3 {
+  color: var(--feature-color);
+}
+
+
+/* =========================================
+   FEATURE ACTIVE LINE
+========================================= */
+
+.why-feature-line {
+  width: 0;
+
+  height: 2px;
+
+  background: var(--feature-color);
+
+  transition: width 0.35s ease;
+}
+
+.why-feature:hover .why-feature-line {
+  width: 55px;
+}
+
+
+/* =========================================
+   FEATURE COLORS
+========================================= */
+
+.why-blue {
+  --feature-color: #2563eb;
+  --feature-bg: #eff6ff;
+  --feature-shadow: rgba(37, 99, 235, 0.18);
+}
+
+.why-orange {
+  --feature-color: #ea580c;
+  --feature-bg: #fff7ed;
+  --feature-shadow: rgba(234, 88, 12, 0.18);
+}
+
+.why-green {
+  --feature-color: #059669;
+  --feature-bg: #ecfdf5;
+  --feature-shadow: rgba(5, 150, 105, 0.18);
+}
+
+.why-purple {
+  --feature-color: #7c3aed;
+  --feature-bg: #f5f3ff;
+  --feature-shadow: rgba(124, 58, 237, 0.18);
+}
+
+
+/* =========================================
+   BOTTOM
+========================================= */
+
+.why-bottom {
+  max-width: 1150px;
+
+  margin: 45px auto 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+.why-bottom span {
+  flex: 1;
+
+  height: 1px;
+
+  background: #e5e7eb;
+}
+
+.why-bottom p {
+  margin: 0;
+
+  color: #9ca3af;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.7px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+
+  .why-section {
+    padding: 90px 6%;
+  }
+
+  .why-heading {
+    grid-template-columns: 220px 1fr;
+
+    gap: 25px;
+  }
+
+  .why-heading p {
+    grid-column: 2;
+
+    max-width: 600px;
+  }
+
+}
+
+
+/* =========================================
+   TABLET - FEATURES
+========================================= */
+
+@media (max-width: 900px) {
+
+  .why-heading {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 20px;
+
+    margin-bottom: 45px;
+  }
+
+  .why-heading p {
+    max-width: 600px;
+  }
+
+  .why-feature {
+    grid-template-columns: 90px 1fr auto;
+  }
+
+  .why-features::before {
+    left: 45px;
+  }
+
+  .why-features::after {
+    left: 44px;
+  }
+
+  .why-feature-icon {
+    margin-left: 20px;
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .why-section {
+    padding: 70px 20px;
+  }
+
+
+  /* Heading */
+
+  .why-heading {
+    margin-bottom: 35px;
+
+    gap: 22px;
+  }
+
+  .why-label {
+    font-size: 16px;
+
+    letter-spacing: 1.5px;
+
+    padding-left: 22px;
+  }
+
+  .why-label::before {
+    width: 4px;
+
+    height: 34px;
+  }
+
+  .why-heading h2 {
+    font-size: 34px;
+
+    letter-spacing: -1.5px;
+  }
+
+  .why-heading p {
+    font-size: 13px;
+
+    line-height: 1.7;
+  }
+
+
+  /* Feature track */
+
+  .why-features::before {
+    left: 30px;
+  }
+
+  .why-features::after {
+    left: 29px;
+
+    height: 70px;
+  }
+
+
+  /* Feature */
+
+  .why-feature {
+    grid-template-columns: 65px 1fr;
+
+    min-height: 135px;
+
+    padding: 22px 5px;
+  }
+
+
+  /* Icon */
+
+  .why-feature-icon {
+    width: 42px;
+    height: 42px;
+
+    margin-left: 9px;
+
+    font-size: 15px;
+  }
+
+
+  /* Content */
+
+  .why-feature h3 {
+    font-size: 17px;
+  }
+
+  .why-feature p {
+    font-size: 12px;
+
+    line-height: 1.65;
+  }
+
+
+  /* Hide hover line on mobile */
+
+  .why-feature-line {
+    display: none;
+  }
+
+
+  /* Bottom */
+
+  .why-bottom {
+    margin-top: 35px;
+
+    gap: 10px;
+  }
+
+  .why-bottom p {
+    font-size: 9px;
+  }
+
+}
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .why-features::after,
+  .why-feature,
+  .why-feature-icon,
+  .why-feature-line {
+    animation: none;
+
+    transition: none;
+  }
+
+}

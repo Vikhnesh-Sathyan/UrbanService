@@ -1,361 +1,790 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+import {
+  FaHome,
+  FaTools,
+  FaCalendarAlt,
+  FaBriefcase,
+  FaCheckCircle,
+  FaClock,
+  FaMoneyBillWave,
+  FaStar,
+  FaUser,
+  FaSignOutAlt,
+  FaBell,
+  FaArrowUp,
+  FaArrowRight,
+  FaPlus,
+  FaMapMarkerAlt,
+  FaChevronRight,
+} from "react-icons/fa";
+
 import "../../styles/ProviderDashboard.css";
 
-function ProviderDashboard() {
-  const [service, setService] = useState({
-    name: "",
-    price: "",
-    description: "",
-    category: "",
-    tag: "",
-    addedBy: "provider@gmail.com",
-  });
-  const [imageFile, setImageFile] = useState(null);
-  const [services, setServices] = useState([]);
-  const [serviceToEdit, setServiceToEdit] = useState(null);
-  const [showForm, setShowForm] = useState(false);
+const ProviderDashboard = () => {
+  const navigate = useNavigate();
 
-  const [categories, setCategories] = useState([
-    "Women's Salon & Spa",
-    "Men's Salon & Massage",
-    "AC & Appliance Repair",
-    "Cleaning & Pest Control",
-    "Electrician, Plumber & Carpenter",
-    "Native Water Purifier",
-    "Walls & Rooms Painting",
-    "Wall Panels"
-  ]);
-  const [newCategory, setNewCategory] = useState("");
+  // =====================================================
+  // REQUIRED PROVIDER MODULES
+  // =====================================================
 
-  const tags = ["New", "Popular", "Offer"];
+  const modules = [
+    {
+      title: "My Services",
+      description: "Add and manage the services you provide.",
+      icon: <FaTools />,
+      path: "/provider/services",
+    },
+    {
+      title: "Booking Requests",
+      description: "View and respond to customer booking requests.",
+      icon: <FaCalendarAlt />,
+      path: "/provider/bookings",
+      badge: "6",
+    },
+    {
+      title: "Active Jobs",
+      description: "Manage services that are currently in progress.",
+      icon: <FaBriefcase />,
+      path: "/provider/active-jobs",
+    },
+    {
+      title: "Completed Jobs",
+      description: "View your completed service bookings.",
+      icon: <FaCheckCircle />,
+      path: "/provider/completed-jobs",
+    },
+    {
+      title: "Availability",
+      description: "Set your working days and working hours.",
+      icon: <FaClock />,
+      path: "/provider/availability",
+    },
+    {
+      title: "Earnings",
+      description: "View your earnings and payment history.",
+      icon: <FaMoneyBillWave />,
+      path: "/provider/earnings",
+    },
+    {
+      title: "Reviews",
+      description: "View ratings and customer reviews.",
+      icon: <FaStar />,
+      path: "/provider/reviews",
+    },
+    {
+      title: "Profile",
+      description: "Manage your professional profile.",
+      icon: <FaUser />,
+      path: "/provider/profile",
+    },
+  ];
 
-  useEffect(() => {
-    fetchServices();
-  }, []);
+  // =====================================================
+  // DASHBOARD STATS
+  // =====================================================
 
-  const fetchServices = () => {
-    axios.get("http://localhost:5000/api/services")
-      .then(res => setServices(res.data))
-      .catch(err => console.log("Fetch error", err));
+  const stats = [
+    {
+      title: "Active Services",
+      value: "12",
+      change: "+2 this month",
+      icon: <FaTools />,
+      className: "indigo",
+    },
+    {
+      title: "Total Bookings",
+      value: "28",
+      change: "+12% this month",
+      icon: <FaCalendarAlt />,
+      className: "blue",
+    },
+    {
+      title: "Pending Requests",
+      value: "06",
+      change: "Needs attention",
+      icon: <FaClock />,
+      className: "orange",
+    },
+    {
+      title: "Total Earnings",
+      value: "₹24,500",
+      change: "+18% this month",
+      icon: <FaMoneyBillWave />,
+      className: "green",
+    },
+  ];
+
+  // =====================================================
+  // RECENT BOOKINGS
+  // =====================================================
+
+  const bookings = [
+    {
+      customer: "Rahul Kumar",
+      service: "Plumbing Service",
+      date: "Sep 07, 2026",
+      time: "10:00 AM",
+      status: "Pending",
+    },
+    {
+      customer: "Anu Thomas",
+      service: "Home Cleaning",
+      date: "Sep 07, 2026",
+      time: "02:00 PM",
+      status: "Confirmed",
+    },
+    {
+      customer: "Arjun Raj",
+      service: "AC Repair",
+      date: "Sep 08, 2026",
+      time: "11:30 AM",
+      status: "Pending",
+    },
+    {
+      customer: "Meera Nair",
+      service: "Salon Service",
+      date: "Sep 08, 2026",
+      time: "04:00 PM",
+      status: "Confirmed",
+    },
+  ];
+
+  // =====================================================
+  // LOGOUT
+  // =====================================================
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
   };
-
-  const editService = (service) => {
-    setService({
-      name: service.name,
-      price: service.price,
-      description: service.description,
-      category: service.category,
-      tag: service.tag || "",
-      addedBy: service.addedBy,
-    });
-    setServiceToEdit(service);
-    setShowForm(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const deleteService = (id) => {
-    if (!window.confirm("Delete this service? This cannot be undone.")) return;
-    axios
-      .delete(`http://localhost:5000/api/delete-service/${id}`)
-      .then((res) => {
-        alert(res.data?.message || "Service deleted");
-        fetchServices();
-      })
-      .catch((err) => {
-        console.error("Delete service error:", err);
-        const message =
-          err.response?.data?.message || "Error deleting service";
-        alert(message);
-      });
-  };
-
-  const handleChange = (e) => {
-    setService({ ...service, [e.target.name]: e.target.value });
-  };
-
-  const handleFileChange = (e) => {
-    setImageFile(e.target.files[0]);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    for (let key in service) formData.append(key, service[key]);
-    if (imageFile) formData.append("image", imageFile);
-
-    if (serviceToEdit) {
-      axios.put(`http://localhost:5000/api/update-service/${serviceToEdit._id}`, formData)
-        .then((res) => {
-          alert(res.data.message);
-          resetForm();
-          fetchServices();
-        })
-        .catch(() => alert("Error updating service"));
-    } else {
-      axios.post("http://localhost:5000/api/add-service", formData)
-        .then((res) => {
-          alert(res.data.message);
-          resetForm();
-          fetchServices();
-        })
-        .catch(() => alert("Error adding service"));
-    }
-  };
-
-  const resetForm = () => {
-    setService({
-      name: "",
-      price: "",
-      description: "",
-      category: "",
-      tag: "",
-      addedBy: "provider@gmail.com",
-    });
-    setImageFile(null);
-    setServiceToEdit(null);
-    setShowForm(false);
-  };
-
-  const addCategory = () => {
-    if (newCategory.trim() !== "") {
-      setCategories([...categories, newCategory]);
-      setNewCategory("");
-    }
-  };
-
-  // Group services by category
-  const groupedServices = services.reduce((groups, service) => {
-    const category = service.category || "Uncategorized";
-    if (!groups[category]) {
-      groups[category] = [];
-    }
-    groups[category].push(service);
-    return groups;
-  }, {});
-
-  // Calculate stats
-  const totalServices = services.length;
-  const totalCategories = Object.keys(groupedServices).length;
-  const popularServices = services.filter(s => s.tag === "Popular").length;
-  const newServices = services.filter(s => s.tag === "New").length;
 
   return (
     <div className="provider-dashboard">
-      <div className="dashboard-header">
-        <div className="header-content">
-          <h1>Provider Dashboard</h1>
-          <p>Manage your services and grow your business</p>
-        </div>
-      </div>
 
-      {/* Stats Cards */}
-      <div className="stats-grid">
-        <div className="stat-card stat-primary">
-          <div className="stat-icon">📦</div>
-          <div className="stat-info">
-            <h3>{totalServices}</h3>
-            <p>Total Services</p>
-          </div>
-        </div>
-        <div className="stat-card stat-success">
-          <div className="stat-icon">📂</div>
-          <div className="stat-info">
-            <h3>{totalCategories}</h3>
-            <p>Categories</p>
-          </div>
-        </div>
-        <div className="stat-card stat-warning">
-          <div className="stat-icon">🔥</div>
-          <div className="stat-info">
-            <h3>{popularServices}</h3>
-            <p>Popular Services</p>
-          </div>
-        </div>
-        <div className="stat-card stat-info">
-          <div className="stat-icon">✨</div>
-          <div className="stat-info">
-            <h3>{newServices}</h3>
-            <p>New Services</p>
-          </div>
-        </div>
-      </div>
+      {/* =================================================
+          SIDEBAR
+      ================================================= */}
 
-      {/* Add Service Button */}
-      {!showForm && (
-        <div className="action-bar">
-          <button className="btn-primary" onClick={() => setShowForm(true)}>
-            <span>➕</span> Add New Service
+      <aside className="provider-sidebar">
+
+        {/* BRAND */}
+
+        <div className="provider-brand">
+
+          <div className="provider-brand-mark">
+            U
+          </div>
+
+          <div className="provider-brand-name">
+            <strong>Urban</strong>
+            <span>Services</span>
+          </div>
+
+        </div>
+
+
+        {/* MAIN MENU */}
+
+        <div className="sidebar-section-title">
+          MAIN MENU
+        </div>
+
+        <nav className="provider-nav">
+
+          {/* OVERVIEW */}
+
+          <button
+            className="provider-nav-item active"
+            onClick={() => navigate("/provider/dashboard")}
+          >
+            <FaHome />
+            <span>Overview</span>
           </button>
-        </div>
-      )}
 
-      {/* Service Form */}
-      {showForm && (
-        <div className="form-container">
-          <div className="form-header">
-            <h2>{serviceToEdit ? "✏️ Edit Service" : "➕ Add New Service"}</h2>
-            <button className="btn-close" onClick={resetForm}>✕</button>
-          </div>
-          <form onSubmit={handleSubmit} encType="multipart/form-data" className="service-form">
-            <div className="form-row">
-              <div className="form-group">
-                <label>Service Name</label>
-                <input 
-                  type="text" 
-                  name="name" 
-                  placeholder="Enter service name" 
-                  value={service.name} 
-                  onChange={handleChange} 
-                  required 
-                />
-              </div>
-              <div className="form-group">
-                <label>Price (₹)</label>
-                <input 
-                  type="number" 
-                  name="price" 
-                  placeholder="Enter price" 
-                  value={service.price} 
-                  onChange={handleChange} 
-                  required 
-                />
-              </div>
-            </div>
 
-            <div className="form-group">
-              <label>Description</label>
-              <textarea 
-                name="description" 
-                placeholder="Describe your service..." 
-                value={service.description} 
-                onChange={handleChange} 
-                rows="4"
-                required 
-              />
-            </div>
+          {/* REQUIRED MODULES */}
 
-            <div className="form-row">
-              <div className="form-group">
-                <label>Category</label>
-                <select name="category" value={service.category} onChange={handleChange} required>
-                  <option value="">-- Select Category --</option>
-                  {categories.map((cat, i) => (
-                    <option key={i} value={cat}>{cat}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Tag</label>
-                <select name="tag" value={service.tag} onChange={handleChange}>
-                  <option value="">-- Optional Tag --</option>
-                  {tags.map((tag, i) => (
-                    <option key={i} value={tag}>{tag}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+          {modules.slice(0, 5).map((module) => (
 
-            <div className="form-group">
-              <label>Add New Category</label>
-              <div className="category-add">
-                <input
-                  type="text"
-                  placeholder="Enter new category name"
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                />
-                <button type="button" onClick={addCategory} className="btn-add-category">
-                  Add
-                </button>
-              </div>
-            </div>
+            <button
+              key={module.title}
+              className="provider-nav-item"
+              onClick={() => navigate(module.path)}
+            >
+              {module.icon}
 
-            <div className="form-group">
-              <label>Service Image</label>
-              <div className="file-upload">
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleFileChange}
-                  id="image-upload"
-                />
-                <label htmlFor="image-upload" className="file-label">
-                  {imageFile ? `📷 ${imageFile.name}` : "📁 Choose Image"}
-                </label>
-              </div>
-            </div>
+              <span>
+                {module.title}
+              </span>
 
-            <div className="form-actions">
-              <button type="submit" className="btn-submit">
-                {serviceToEdit ? "✏️ Update Service" : "➕ Add Service"}
-              </button>
-              <button type="button" onClick={resetForm} className="btn-cancel">
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* Services List */}
-      <div className="services-section">
-        <div className="section-header">
-          <h2>📑 Your Services</h2>
-          <p>Manage and organize your services by category</p>
-        </div>
-
-        {Object.keys(groupedServices).length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-icon">📭</div>
-            <h3>No services yet</h3>
-            <p>Start by adding your first service!</p>
-            <button className="btn-primary" onClick={() => setShowForm(true)}>
-              Add Service
+              {module.badge && (
+                <small>
+                  {module.badge}
+                </small>
+              )}
             </button>
+
+          ))}
+
+
+          {/* BUSINESS */}
+
+          <div className="sidebar-section-title second">
+            BUSINESS
           </div>
-        ) : (
-          Object.keys(groupedServices).map((category, index) => (
-            <div key={index} className="category-section">
-              <div className="category-header">
-                <h3>📂 {category}</h3>
-                <span className="service-count">{groupedServices[category].length} services</span>
+
+
+          {modules.slice(5, 7).map((module) => (
+
+            <button
+              key={module.title}
+              className="provider-nav-item"
+              onClick={() => navigate(module.path)}
+            >
+              {module.icon}
+
+              <span>
+                {module.title}
+              </span>
+
+            </button>
+
+          ))}
+
+        </nav>
+
+
+        {/* SIDEBAR BOTTOM */}
+
+        <div className="sidebar-bottom">
+
+          {/* PROFILE */}
+
+          <button
+            className="provider-nav-item"
+            onClick={() => navigate("/provider/profile")}
+          >
+            <FaUser />
+            <span>Profile</span>
+          </button>
+
+
+          {/* LOGOUT */}
+
+          <button
+            className="provider-logout"
+            onClick={handleLogout}
+          >
+            <FaSignOutAlt />
+            <span>Logout</span>
+          </button>
+
+        </div>
+
+      </aside>
+
+
+      {/* =================================================
+          MAIN CONTENT
+      ================================================= */}
+
+      <main className="provider-main">
+
+        {/* TOPBAR */}
+
+        <header className="provider-topbar">
+
+          <div>
+
+            <span className="topbar-page-label">
+              PROVIDER PORTAL
+            </span>
+
+            <h1>
+              Dashboard
+            </h1>
+
+          </div>
+
+
+          <div className="topbar-actions">
+
+            <button className="notification-button">
+              <FaBell />
+              <span className="notification-dot"></span>
+            </button>
+
+
+            <div className="provider-profile">
+
+              <div className="profile-avatar">
+                V
               </div>
-              <div className="services-grid">
-                {groupedServices[category].map((s) => (
-                  <div key={s._id} className="service-card">
-                    {s.image && (
-                      <div className="service-image-wrapper">
-                        <img 
-                          src={`http://localhost:5000/uploads/${s.image}`} 
-                          alt={s.name}
-                          className="service-image"
-                        />
-                        {s.tag && <span className={`service-tag tag-${s.tag.toLowerCase()}`}>{s.tag}</span>}
-                      </div>
-                    )}
-                    <div className="service-content">
-                      <h4>{s.name}</h4>
-                      <p className="service-price">₹{s.price}</p>
-                      <p className="service-description">{s.description}</p>
-                      <div className="service-actions">
-                        <button onClick={() => editService(s)} className="btn-edit">
-                          ✏️ Edit
-                        </button>
-                        <button onClick={() => deleteService(s._id)} className="btn-delete">
-                          🗑️ Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+
+              <div className="profile-details">
+                <strong>
+                  Provider
+                </strong>
+
+                <small>
+                  Service Provider
+                </small>
               </div>
+
             </div>
-          ))
-        )}
-      </div>
+
+          </div>
+
+        </header>
+
+
+        {/* =================================================
+            WELCOME
+        ================================================= */}
+
+        <section className="dashboard-welcome">
+
+          <div>
+
+            <p className="welcome-label">
+              GOOD EVENING
+            </p>
+
+            <h2>
+              Welcome back, <span>Provider</span>
+            </h2>
+
+            <p>
+              Here's what's happening with your services today.
+            </p>
+
+          </div>
+
+
+          <button
+            className="add-service-button"
+            onClick={() => navigate("/provider/services")}
+          >
+            <FaPlus />
+            Add New Service
+          </button>
+
+        </section>
+
+
+        {/* =================================================
+            STATS
+        ================================================= */}
+
+        <section className="dashboard-stats">
+
+          {stats.map((stat) => (
+
+            <div
+              className={`dashboard-stat-card ${stat.className}`}
+              key={stat.title}
+            >
+
+              <div className="stat-top">
+
+                <div className="stat-icon">
+                  {stat.icon}
+                </div>
+
+                <span className="stat-change">
+                  {stat.change.includes("%") && (
+                    <FaArrowUp />
+                  )}
+
+                  {stat.change}
+                </span>
+
+              </div>
+
+
+              <div className="stat-value">
+                {stat.value}
+              </div>
+
+
+              <div className="stat-title">
+                {stat.title}
+              </div>
+
+            </div>
+
+          ))}
+
+        </section>
+
+
+        {/* =================================================
+            RECENT BOOKINGS
+        ================================================= */}
+
+        <section className="dashboard-panel">
+
+          <div className="panel-header">
+
+            <div>
+              <h3>
+                Recent Booking Requests
+              </h3>
+
+              <p>
+                Manage your latest customer requests.
+              </p>
+            </div>
+
+
+            <button
+              className="view-all-button"
+              onClick={() => navigate("/provider/bookings")}
+            >
+              View All
+              <FaArrowRight />
+            </button>
+
+          </div>
+
+
+          <div className="booking-table">
+
+            <div className="booking-table-header">
+              <span>Customer</span>
+              <span>Service</span>
+              <span>Date & Time</span>
+              <span>Status</span>
+              <span></span>
+            </div>
+
+
+            {bookings.map((booking, index) => (
+
+              <div
+                className="booking-row"
+                key={index}
+              >
+
+                <div className="customer-cell">
+
+                  <div className="customer-avatar">
+                    {booking.customer.charAt(0)}
+                  </div>
+
+                  <strong>
+                    {booking.customer}
+                  </strong>
+
+                </div>
+
+
+                <span className="service-name">
+                  {booking.service}
+                </span>
+
+
+                <div className="booking-date">
+
+                  <strong>
+                    {booking.date}
+                  </strong>
+
+                  <small>
+                    {booking.time}
+                  </small>
+
+                </div>
+
+
+                <span
+                  className={`booking-status ${booking.status.toLowerCase()}`}
+                >
+                  <i></i>
+                  {booking.status}
+                </span>
+
+
+                <button
+                  className="booking-arrow"
+                  onClick={() => navigate("/provider/bookings")}
+                >
+                  <FaArrowRight />
+                </button>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </section>
+
+
+        {/* =================================================
+            BOTTOM AREA
+        ================================================= */}
+
+        <section className="dashboard-bottom-grid">
+
+
+          {/* TODAY'S SCHEDULE */}
+
+          <div className="dashboard-panel schedule-panel">
+
+            <div className="panel-header">
+
+              <div>
+
+                <h3>
+                  Today's Schedule
+                </h3>
+
+                <p>
+                  Your upcoming jobs.
+                </p>
+
+              </div>
+
+              <FaCalendarAlt className="panel-icon" />
+
+            </div>
+
+
+            <div className="schedule-item">
+
+              <div className="schedule-time">
+                <strong>10:00</strong>
+                <span>AM</span>
+              </div>
+
+              <div className="schedule-line"></div>
+
+              <div className="schedule-info">
+
+                <strong>
+                  Plumbing Service
+                </strong>
+
+                <span>
+                  Rahul Kumar · Home Visit
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div className="schedule-item">
+
+              <div className="schedule-time">
+                <strong>02:00</strong>
+                <span>PM</span>
+              </div>
+
+              <div className="schedule-line"></div>
+
+              <div className="schedule-info">
+
+                <strong>
+                  Home Cleaning
+                </strong>
+
+                <span>
+                  Anu Thomas · Home Visit
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          {/* QUICK ACTIONS */}
+
+          <div className="dashboard-panel quick-panel">
+
+            <div className="panel-header">
+
+              <div>
+
+                <h3>
+                  Quick Actions
+                </h3>
+
+                <p>
+                  Common provider tasks.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div className="quick-actions">
+
+              <button
+                onClick={() => navigate("/provider/services")}
+              >
+                <FaPlus />
+                <span>Add Service</span>
+                <FaArrowRight />
+              </button>
+
+
+              <button
+                onClick={() => navigate("/provider/bookings")}
+              >
+                <FaCalendarAlt />
+                <span>Manage Bookings</span>
+                <FaArrowRight />
+              </button>
+
+
+              <button
+                onClick={() => navigate("/provider/availability")}
+              >
+                <FaClock />
+                <span>Set Availability</span>
+                <FaArrowRight />
+              </button>
+
+            </div>
+
+          </div>
+
+
+          {/* PROVIDER PERFORMANCE */}
+
+          <div className="dashboard-panel performance-panel">
+
+            <div className="panel-header">
+
+              <div>
+
+                <h3>
+                  Your Performance
+                </h3>
+
+                <p>
+                  This month's overview.
+                </p>
+
+              </div>
+
+              <FaStar className="panel-icon star-panel-icon" />
+
+            </div>
+
+
+            <div className="rating-box">
+
+              <strong>
+                4.8
+              </strong>
+
+              <div>
+                <div className="rating-stars">
+                  ★★★★★
+                </div>
+
+                <span>
+                  Average Rating
+                </span>
+              </div>
+
+            </div>
+
+
+            <div className="performance-item">
+              <span>Completed Jobs</span>
+              <strong>86%</strong>
+            </div>
+
+            <div className="performance-bar">
+              <span></span>
+            </div>
+
+
+            <button
+              className="performance-link"
+              onClick={() => navigate("/provider/reviews")}
+            >
+              View Reviews
+              <FaChevronRight />
+            </button>
+
+          </div>
+
+
+        </section>
+
+
+        {/* =================================================
+            YOUR MODULES
+        ================================================= */}
+
+        <section className="modules-section">
+
+          <div className="modules-heading">
+
+            <div>
+              <span>
+                PROVIDER TOOLS
+              </span>
+
+              <h3>
+                Manage Your Business
+              </h3>
+            </div>
+
+          </div>
+
+
+          <div className="dashboard-module-grid">
+
+            {modules.map((module) => (
+
+              <button
+                className="dashboard-module"
+                key={module.title}
+                onClick={() => navigate(module.path)}
+              >
+
+                <div className="dashboard-module-icon">
+                  {module.icon}
+                </div>
+
+                <div className="dashboard-module-content">
+
+                  <strong>
+                    {module.title}
+                  </strong>
+
+                  <span>
+                    {module.description}
+                  </span>
+
+                </div>
+
+                <FaArrowRight className="module-arrow" />
+
+              </button>
+
+            ))}
+
+          </div>
+
+        </section>
+
+      </main>
+
     </div>
   );
-}
+};
 
 export default ProviderDashboard;
