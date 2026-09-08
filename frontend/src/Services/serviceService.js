@@ -19,7 +19,17 @@ export const getMyServices = async () => {
     getAuthConfig()
   );
 
-  return response.data;
+  console.log("GET MY SERVICES RESPONSE:", response.data);
+
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+
+  if (Array.isArray(response.data?.services)) {
+    return response.data.services;
+  }
+
+  return [];
 };
 
 // Add service

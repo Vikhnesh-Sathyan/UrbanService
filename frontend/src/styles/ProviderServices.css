@@ -1,0 +1,495 @@
+/* =====================================================
+   PROVIDER SERVICES PAGE
+===================================================== */
+
+.provider-services-page {
+  min-height: 100vh;
+  padding: 40px;
+  background: #f6f8fc;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.services-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.services-page-header h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.services-page-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger {
+  border: none;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-primary {
+  background: #111827;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background: #d1d5db;
+}
+
+.btn-success {
+  background: #16a34a;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #15803d;
+}
+
+.btn-danger {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.btn-danger:hover {
+  background: #fecaca;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* =====================================================
+   ALERT
+===================================================== */
+
+.alert {
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+.alert-danger {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+
+/* =====================================================
+   SERVICE FORM
+===================================================== */
+
+.service-form-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 35px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.form-header h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #111827;
+}
+
+.btn-close {
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  color: #6b7280;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.btn-close:hover {
+  color: #111827;
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.service-form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+  color: #111827;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #111827;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 5px;
+}
+
+
+/* =====================================================
+   SERVICES LIST
+===================================================== */
+
+.services-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+
+/* =====================================================
+   SERVICE CARD
+===================================================== */
+
+.provider-service-card {
+  overflow: hidden;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+  transition: 0.25s ease;
+}
+
+.provider-service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.09);
+}
+
+
+/* =====================================================
+   SERVICE IMAGE
+===================================================== */
+
+.service-image {
+  display: block;
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  background: #f3f4f6;
+}
+
+
+/* =====================================================
+   SERVICE CONTENT
+===================================================== */
+
+.service-card-content {
+  padding: 22px;
+}
+
+.service-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.service-card-top h2 {
+  margin: 0 0 5px;
+  font-size: 21px;
+  color: #111827;
+}
+
+.service-category {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.service-card-content > p {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 15px 0;
+}
+
+.service-card-content h3 {
+  margin: 0 0 18px;
+  font-size: 22px;
+  color: #111827;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.service-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.status-approved {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status-changes {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-default {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+
+/* =====================================================
+   ADMIN FEEDBACK
+===================================================== */
+
+.admin-feedback {
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin: 15px 0;
+  font-size: 13px;
+}
+
+.admin-feedback strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.admin-feedback p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.changes-feedback {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+.rejection-feedback {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+
+/* =====================================================
+   SERVICE INFO
+===================================================== */
+
+.service-info {
+  padding: 12px 14px;
+  margin: 15px 0;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  color: #4b5563;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* =====================================================
+   SERVICE ACTIONS
+===================================================== */
+
+.service-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 5px;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty-state {
+  grid-column: 1 / -1;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: white;
+  border: 1px dashed #d1d5db;
+  border-radius: 18px;
+  padding: 40px;
+}
+
+.empty-state h2 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 24px;
+}
+
+.empty-state p {
+  margin: 0 0 20px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.provider-services-page > p {
+  color: #6b7280;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+  .provider-services-page {
+    padding: 25px;
+  }
+
+  .services-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .provider-services-page {
+    padding: 18px;
+  }
+
+  .services-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .services-page-header h1 {
+    font-size: 28px;
+  }
+
+  .services-page-header .btn-primary {
+    width: 100%;
+  }
+
+  .service-form-card {
+    padding: 20px;
+  }
+
+  .service-card-top {
+    flex-direction: column;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .service-actions button {
+    flex: 1;
+  }
+}

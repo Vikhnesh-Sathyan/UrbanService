@@ -785,6 +785,7 @@ module.exports = {
   addService,
   getServices,
   getServiceById,
+  getProviderServices,
   getPendingServices,
   approveService,
   requestChanges,

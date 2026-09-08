@@ -8,6 +8,8 @@ import {
   resubmitService,
 } from "../../Services/serviceService";
 
+import "../../styles/ProviderServices.css";
+
 const ProviderServicesPage = () => {
   const [services, setServices] = useState([]);
 
@@ -34,24 +36,29 @@ const ProviderServicesPage = () => {
   // ---------------------------------------
 
   const loadServices = async () => {
-    try {
-      setLoading(true);
-      setError("");
+  try {
+    setLoading(true);
+    setError("");
 
-      const data = await getMyServices();
+    const data = await getMyServices();
 
-      setServices(data.services || []);
-    } catch (err) {
-      console.error("Fetch provider services error:", err);
+    console.log("MY SERVICES:", data);
 
-      setError(
-        err.response?.data?.message ||
-          "Failed to load your services"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    setServices(data);
+
+  } catch (err) {
+    console.error("Fetch provider services error:", err);
+
+    setServices([]);
+
+    setError(
+      err.response?.data?.message ||
+      "Failed to load your services"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     loadServices();

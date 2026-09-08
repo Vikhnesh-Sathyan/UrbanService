@@ -9,6 +9,7 @@ const {
   addService,
   getServices,
   getServiceById,
+  getProviderServices,
   getPendingServices,
   approveService,
   requestChanges,

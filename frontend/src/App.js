@@ -15,6 +15,7 @@ import UserDashboard from "./Components/Dashboard/UserDashboard";
 
 // Provider
 import ProviderBookingsPage from "./Components/Provider/ProviderBookingsPage";
+import ProviderServicesPage from "./Components/Provider/ProviderServicesPage";  
 
 // Customer
 import BookService from "./Components/Customer/BookService";
@@ -53,12 +54,19 @@ function App() {
           />
 
           {/* ================= PROVIDER ================= */}
+
+          <Route
+            path="/provider/services"
+            element={<ProviderServicesPage />}
+          />
+
           <Route
             path="/provider/bookings"
             element={<ProviderBookingsPage />}
           />
 
           {/* ================= CUSTOMER ================= */}
+
           <Route
             path="/book-service/:id"
             element={<BookService />}
