@@ -5,7 +5,7 @@ import {
   acceptBooking,
   rejectBooking,
   updateBookingStatus,
-} from "src/services/bookingService";
+} from "../../Services/bookingService";
 
 const ProviderBookingsPage = () => {
   const [bookings, setBookings] = useState([]);

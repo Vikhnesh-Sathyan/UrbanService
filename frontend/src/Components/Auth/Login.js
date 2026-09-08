@@ -29,13 +29,13 @@ function Login() {
 
       switch (data.user.role) {
         case "admin":
-          navigate("/AdminDashboard");
+          navigate("/admin/dashboard");
           break;
         case "provider":
-          navigate("/ProviderDashboard");
+          navigate("/provider/dashboard");
           break;
         case "user":
-          navigate("/UserDashboard");
+          navigate("/user/dashboard");
           break;
         default:
           navigate("/dashboard");

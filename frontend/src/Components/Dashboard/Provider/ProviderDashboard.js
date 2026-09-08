@@ -5,9 +5,12 @@ import "../../../styles/ProviderDashboard.css";
 
 import { getProviderBookings } from "../../../Services/bookingService";
 
+import { useNavigate } from "react-router-dom";
+
 const ProviderDashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Fetch provider bookings
   const loadBookings = async () => {
@@ -162,7 +165,10 @@ const ProviderDashboard = () => {
                 </p>
               </div>
 
-              <button className="view-all-button">
+              <button 
+                className="view-all-button"
+                onClick={() => navigate("/provider/bookings")}
+            >
                 View All →
               </button>
 
