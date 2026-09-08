@@ -13,6 +13,10 @@ const getAuthConfig = () => {
 };
 
 
+// ==========================================
+// PROVIDER BOOKINGS
+// ==========================================
+
 // Get provider bookings
 export const getProviderBookings = async () => {
   const response = await axios.get(
@@ -62,6 +66,8 @@ export const updateBookingStatus = async (
   return response.data;
 };
 
+
+// Reschedule booking
 export const rescheduleBooking = async (
   bookingId,
   date,
@@ -79,3 +85,17 @@ export const rescheduleBooking = async (
   return response.data;
 };
 
+
+// ==========================================
+// ADMIN BOOKINGS
+// ==========================================
+
+// Get all bookings
+export const getAllBookings = async () => {
+  const response = await axios.get(
+    `${API}/admin/all`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

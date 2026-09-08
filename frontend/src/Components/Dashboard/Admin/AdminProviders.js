@@ -78,32 +78,54 @@ const AdminProviders = () => {
 
       ) : (
 
-        <div className="admin-providers-grid">
+<div className="admin-providers-grid">
 
-          {providers.map((provider) => (
+  {providers.map((provider) => (
 
-            <div
-              className="admin-provider-card"
-              key={provider._id}
-            >
+    <div
+      className="admin-provider-card"
+      key={provider._id}
+    >
 
-              <h3>
-                {provider.name}
-              </h3>
+      <div className="provider-card-icon">
+        👤
+      </div>
 
-              <p>
-                {provider.email}
-              </p>
+      <div className="provider-card-info">
 
-              <span>
-                Provider
-              </span>
+        <h3>
+          {provider.name}
+        </h3>
 
-            </div>
+        <p>
+          {provider.email}
+        </p>
 
-          ))}
+        <span className="provider-role">
+          Provider
+        </span>
 
-        </div>
+      </div>
+
+      <div className="provider-card-actions">
+
+        <button
+          type="button"
+          className="provider-view-btn"
+          onClick={() =>
+            alert(`Provider: ${provider.name}`)
+          }
+        >
+          View
+        </button>
+
+      </div>
+
+    </div>
+
+  ))}
+
+</div>
 
       )}
 

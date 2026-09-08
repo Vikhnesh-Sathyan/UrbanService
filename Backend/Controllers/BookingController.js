@@ -693,6 +693,42 @@ const rescheduleBooking = async (req, res) => {
 };
 
 // ===============================
+// GET ALL BOOKINGS - ADMIN
+// ===============================
+const getAllBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find()
+      .populate(
+        "user",
+        "name email"
+      )
+      .populate(
+        "service",
+        "name price category image"
+      )
+      .populate(
+        "provider",
+        "name email"
+      )
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      bookings,
+    });
+
+  } catch (error) {
+    console.error(
+      "Get all bookings error:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Failed to fetch bookings",
+    });
+  }
+};
+
+// ===============================
 // EXPORTS
 // ===============================
 module.exports = {
@@ -704,4 +740,5 @@ module.exports = {
   acceptBooking,
   rejectBooking,
   updateBookingStatus,
+  getAllBookings,
 };

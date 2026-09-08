@@ -88,4 +88,12 @@ router.patch(
   updateBookingStatus
 );
 
+// Get all bookings (Admin)
+router.get(
+  "/admin",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getAllBookings
+);
+
 module.exports = router;

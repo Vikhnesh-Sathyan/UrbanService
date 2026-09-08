@@ -372,13 +372,6 @@
 
 }
 
-@media (max-width: 750px) {
-
-  .admin-services-grid {
-    grid-template-columns: 1fr;
-  }
-
-}
 
 @media (max-width: 500px) {
 
@@ -397,6 +390,146 @@
   }
 
 }
+
+
+/* ========================================
+   ADMIN PROVIDERS
+======================================== */
+
+.admin-providers-section {
+  margin-top: 25px;
+  background: #ffffff;
+  border: 1px solid #e8eaf0;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+}
+
+.admin-section-header {
+  margin-bottom: 25px;
+}
+
+.admin-section-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.admin-section-header p {
+  margin: 6px 0 0;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* Provider cards */
+
+.admin-providers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.admin-provider-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 22px;
+
+  background: #ffffff;
+  border: 1px solid #e8eaf0;
+  border-radius: 15px;
+
+  transition: 0.2s ease;
+}
+
+.admin-provider-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* Provider icon */
+
+.provider-card-icon {
+  width: 50px;
+  height: 50px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #eef0ff;
+
+  font-size: 22px;
+}
+
+/* Provider information */
+
+.provider-card-info {
+  flex: 1;
+}
+
+.provider-card-info h3 {
+  margin: 0 0 5px;
+  font-size: 17px;
+}
+
+.provider-card-info p {
+  margin: 0 0 8px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* Provider role */
+
+.provider-role {
+  display: inline-block;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  background: #ecfdf5;
+  color: #059669;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* View button */
+
+.provider-card-actions {
+  flex-shrink: 0;
+}
+
+.provider-view-btn {
+  padding: 9px 16px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #111827;
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.provider-view-btn:hover {
+  background: #374151;
+}
+
+
+
+
+
+
 /* ========================================
    RESPONSIVE
 ======================================== */
@@ -425,6 +558,41 @@
 
   .admin-welcome h1 {
     font-size: 24px;
+  }
+
+}
+
+@media (max-width: 750px) {
+
+  .admin-services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-providers-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 500px) {
+
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-services-panel,
+  .admin-providers-section {
+    padding: 18px;
+  }
+
+  .admin-panel-header {
+    align-items: flex-start;
+    gap: 10px;
+    flex-direction: column;
+  }
+
+  .admin-provider-card {
+    padding: 18px;
   }
 
 }

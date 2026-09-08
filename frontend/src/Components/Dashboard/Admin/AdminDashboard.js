@@ -5,6 +5,7 @@ import AdminNavbar from "./AdminNavbar";
 import AdminServiceApprovals from "./AdminServiceApprovals";
 import AdminStats from "./AdminStats";
 import Adminproviders from "./AdminProviders";
+import AdminBookings from "./AdminBookings";
 
 import "../../../styles/AdminDashboard.css";
 
@@ -48,6 +49,11 @@ const AdminDashboard = () => {
 
           {/* Providers Module */}
           <Adminproviders />
+
+          {/* Bookings Module */}
+          <AdminBookings />
+
+
 
         </section>
 
