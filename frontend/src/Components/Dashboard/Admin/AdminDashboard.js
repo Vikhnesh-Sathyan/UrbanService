@@ -3,6 +3,8 @@ import React from "react";
 import AdminSidebar from "./AdminSidebar";
 import AdminNavbar from "./AdminNavbar";
 import AdminServiceApprovals from "./AdminServiceApprovals";
+import AdminStats from "./AdminStats";
+import Adminproviders from "./AdminProviders";
 
 import "../../../styles/AdminDashboard.css";
 
@@ -38,8 +40,14 @@ const AdminDashboard = () => {
 
           </div>
 
+          {/* Statistics Module */}
+          <AdminStats />
+
           {/* Service Approval Module */}
           <AdminServiceApprovals />
+
+          {/* Providers Module */}
+          <Adminproviders />
 
         </section>
 

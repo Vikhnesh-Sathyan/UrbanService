@@ -12,6 +12,7 @@ const bookingRoutes = require("./Routes/BookingRoutes");
 const providerRoutes = require("./Routes/providerRoutes");
 const reviewRoutes = require("./Routes/reviewRoutes");
 const availabilityRoutes = require("./Routes/availabilityRoutes");
+const userRoutes = require("./Routes/UserRoutes");
 
 const app = express();
 
@@ -34,6 +35,8 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/providers", providerRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/availability", availabilityRoutes);
+app.use("/api/users", userRoutes);
+
 
 // Connect to MongoDB and start server
 const PORT = process.env.PORT || 5000;
