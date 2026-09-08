@@ -45,6 +45,14 @@ router.post(
   addService
 );
 
+// Provider can view their own services
+router.get(
+  "/my-services",
+  authMiddleware,
+  roleMiddleware("provider"),
+  getProviderServices
+);
+
 // Provider or Admin can update a service
 router.put(
   "/:id",

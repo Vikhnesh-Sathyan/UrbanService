@@ -43,6 +43,26 @@ const addService = async (req, res) => {
   }
 };
 
+
+const getProviderServices = async (req, res) => {
+  try {
+    const services = await Service.find({
+      provider: req.user.id,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      services,
+    });
+
+  } catch (error) {
+    console.error("Get provider services error:", error);
+
+    res.status(500).json({
+      message: "Failed to fetch your services",
+    });
+  }
+};
+
 // =====================================================
 // GET ALL APPROVED SERVICES
 // Search + Filter + Rating + Sorting + Pagination
@@ -772,4 +792,5 @@ module.exports = {
   updateService,
   deleteService,
   resubmitService,
+  getProviderServices,
 };

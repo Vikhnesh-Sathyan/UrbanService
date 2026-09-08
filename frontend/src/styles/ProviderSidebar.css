@@ -1,0 +1,352 @@
+/* =====================================================
+   PROVIDER SIDEBAR
+===================================================== */
+
+.provider-sidebar {
+  width: 250px;
+  height: 100vh;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 28px 16px;
+
+  background: #0d1426;
+
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+
+  color: #f8fafc;
+
+  z-index: 100;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* =====================================================
+   BRAND
+===================================================== */
+
+.provider-brand {
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 0 10px;
+
+  margin-bottom: 42px;
+}
+
+
+.provider-brand-mark {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #818cf8
+  );
+
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 800;
+
+  box-shadow:
+    0 8px 25px rgba(99, 102, 241, 0.25);
+}
+
+
+.provider-brand-name {
+  display: flex;
+  flex-direction: column;
+
+  line-height: 1.05;
+}
+
+
+.provider-brand-name strong {
+  color: #f8fafc;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+
+.provider-brand-name span {
+  margin-top: 4px;
+
+  color: #818cf8;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   SECTION TITLE
+===================================================== */
+
+.sidebar-section-title {
+  padding: 0 12px;
+
+  margin-bottom: 10px;
+
+  color: #64748b;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+.provider-nav {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+.provider-nav-item {
+  width: 100%;
+  min-height: 43px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 0 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: #94a3b8;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.provider-nav-item:hover {
+  background: rgba(255, 255, 255, 0.045);
+
+  color: #f8fafc;
+
+  transform: translateX(2px);
+}
+
+
+/* =====================================================
+   ICON
+===================================================== */
+
+.provider-nav-icon {
+  width: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  transition: color 0.25s ease;
+}
+
+
+.provider-nav-item:hover .provider-nav-icon {
+  color: #a5b4fc;
+}
+
+
+/* =====================================================
+   TEXT
+===================================================== */
+
+.provider-nav-text {
+  flex: 1;
+}
+
+
+/* =====================================================
+   ACTIVE ITEM
+===================================================== */
+
+.provider-nav-item.active {
+  background: rgba(99, 102, 241, 0.14);
+
+  color: #a5b4fc;
+}
+
+
+.provider-nav-item.active .provider-nav-icon {
+  color: #818cf8;
+}
+
+
+/* =====================================================
+   SIDEBAR BOTTOM
+===================================================== */
+
+.sidebar-bottom {
+  margin-top: auto;
+
+  padding-top: 18px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+.provider-logout {
+  width: 100%;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 0 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: #94a3b8;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+
+.provider-logout:hover {
+  background: rgba(239, 68, 68, 0.08);
+
+  color: #f87171;
+}
+
+
+.provider-logout:hover .provider-nav-icon {
+  color: #f87171;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+  .provider-sidebar {
+    width: 220px;
+  }
+}
+
+
+@media (max-width: 800px) {
+  .provider-sidebar {
+    width: 200px;
+  }
+}
+
+
+@media (max-width: 650px) {
+  .provider-sidebar {
+    width: 100%;
+
+    height: auto;
+
+    position: relative;
+
+    padding: 16px;
+
+    border-right: none;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .provider-brand {
+    margin-bottom: 20px;
+  }
+
+  .provider-nav {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 5px;
+  }
+
+  .sidebar-bottom {
+    margin-top: 15px;
+  }
+}
+
+
+@media (max-width: 450px) {
+  .provider-nav {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,160 @@
+.provider-navbar {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 42px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  background: #080d1b;
+}
+
+/* TITLE */
+
+.navbar-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-title span {
+  color: #6366f1;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.navbar-title h1 {
+  margin: 5px 0 0;
+
+  color: #f8fafc;
+
+  font-size: 22px;
+  font-weight: 750;
+}
+
+/* ACTIONS */
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+/* NOTIFICATION */
+
+.notification-button {
+  width: 38px;
+  height: 38px;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  color: #94a3b8;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.notification-button:hover {
+  color: #f8fafc;
+  border-color: rgba(129, 140, 248, 0.4);
+}
+
+.notification-dot {
+  width: 6px;
+  height: 6px;
+
+  position: absolute;
+
+  top: 8px;
+  right: 8px;
+
+  border-radius: 50%;
+
+  background: #6366f1;
+}
+
+/* PROFILE */
+
+.provider-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-avatar {
+  width: 37px;
+  height: 37px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #4f46e5
+  );
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-details strong {
+  color: #e2e8f0;
+  font-size: 12px;
+}
+
+.profile-details small {
+  margin-top: 3px;
+
+  color: #64748b;
+  font-size: 10px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 700px) {
+
+  .provider-navbar {
+    height: 75px;
+    padding: 0 16px;
+  }
+
+  .profile-details {
+    display: none;
+  }
+
+  .navbar-actions {
+    gap: 8px;
+  }
+
+}
+
+@media (max-width: 450px) {
+
+  .navbar-title h1 {
+    font-size: 19px;
+  }
+
+}

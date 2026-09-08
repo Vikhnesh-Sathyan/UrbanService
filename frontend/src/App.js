@@ -4,7 +4,7 @@ import Login from "./Components/Auth/Login";
 import Register from "./Components/Auth/Register";
 import Homepage from "./Components/Home/Homepage";
 import AdminDashboard from "./Components/Dashboard/AdminDashboard";
-import ProviderDashboard from "./Components/Dashboard/ProviderDashboard";
+import ProviderDashboard from "./Components/Dashboard/Provider/ProviderDashboard";
 import UserDashboard from "./Components/Dashboard/UserDashboard";
 import BookService from "./Components/Customer/BookService";
 import ServiceDetails from './Components/Customer/ServiceDetails';
