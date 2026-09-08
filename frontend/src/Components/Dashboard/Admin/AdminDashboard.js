@@ -25,6 +25,7 @@ const AdminDashboard = () => {
         {/* Dashboard Content */}
         <section className="admin-dashboard-content">
 
+          {/* Welcome */}
           <div className="admin-welcome">
 
             <span className="admin-label">
@@ -41,19 +42,17 @@ const AdminDashboard = () => {
 
           </div>
 
-          {/* Statistics Module */}
+          {/* Statistics */}
           <AdminStats />
 
-          {/* Service Approval Module */}
+          {/* Service Approvals */}
           <AdminServiceApprovals />
 
-          {/* Providers Module */}
+          {/* Providers */}
           <Adminproviders />
 
-          {/* Bookings Module */}
+          {/* Bookings */}
           <AdminBookings />
-
-
 
         </section>
 

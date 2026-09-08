@@ -4,8 +4,21 @@ import axios from "axios";
 const API = "http://localhost:5000/api/services";
 
 const AdminServiceApprovals = () => {
+  // ========================================
+  // STATE
+  // ========================================
+
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Reject form state
+  const [showRejectForm, setShowRejectForm] = useState(false);
+  const [rejectServiceId, setRejectServiceId] = useState(null);
+  const [rejectionReason, setRejectionReason] = useState("");
+
+  // ========================================
+  // AUTH CONFIG
+  // ========================================
 
   const token = localStorage.getItem("token");
 
@@ -28,7 +41,10 @@ const AdminServiceApprovals = () => {
         authConfig
       );
 
-      console.log("PENDING SERVICES:", response.data);
+      console.log(
+        "PENDING SERVICES:",
+        response.data
+      );
 
       setServices(
         Array.isArray(response.data)
@@ -41,10 +57,17 @@ const AdminServiceApprovals = () => {
         "Failed to load pending services:",
         error
       );
+
+      setServices([]);
+
     } finally {
       setLoading(false);
     }
   };
+
+  // ========================================
+  // LOAD ON PAGE OPEN
+  // ========================================
 
   useEffect(() => {
     loadPendingServices();
@@ -62,9 +85,11 @@ const AdminServiceApprovals = () => {
         authConfig
       );
 
-      alert("Service approved successfully.");
+      alert(
+        "Service approved successfully."
+      );
 
-      loadPendingServices();
+      await loadPendingServices();
 
     } catch (error) {
       console.error(
@@ -80,30 +105,61 @@ const AdminServiceApprovals = () => {
   };
 
   // ========================================
+  // OPEN REJECT FORM
+  // ========================================
+
+  const openRejectForm = (serviceId) => {
+    setRejectServiceId(serviceId);
+    setRejectionReason("");
+    setShowRejectForm(true);
+  };
+
+  // ========================================
+  // CLOSE REJECT FORM
+  // ========================================
+
+  const closeRejectForm = () => {
+    setShowRejectForm(false);
+    setRejectServiceId(null);
+    setRejectionReason("");
+  };
+
+  // ========================================
   // REJECT SERVICE
   // ========================================
 
-  const handleReject = async (serviceId) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to reject this service?"
-    );
+  const handleReject = async () => {
 
-    if (!confirmed) {
+    // Validate reason
+    if (!rejectionReason.trim()) {
+      alert(
+        "Please enter a rejection reason."
+      );
       return;
     }
 
     try {
-      await axios.patch(
-        `${API}/${serviceId}/reject`,
-        {},
-        authConfig
+
+     await axios.patch(
+  `${API}/${rejectServiceId}/reject`,
+  {
+    adminComment: rejectionReason.trim(),
+  },
+  authConfig
+);
+
+      alert(
+        "Service rejected successfully."
       );
 
-      alert("Service rejected successfully.");
+      // Close form
+      closeRejectForm();
 
-      loadPendingServices();
+      // Reload pending services
+      await loadPendingServices();
 
     } catch (error) {
+
       console.error(
         "Reject service error:",
         error
@@ -123,8 +179,15 @@ const AdminServiceApprovals = () => {
   if (loading) {
     return (
       <div className="admin-page-content">
-        <h1>Service Approvals</h1>
-        <p>Loading pending services...</p>
+
+        <h1>
+          Service Approvals
+        </h1>
+
+        <p>
+          Loading pending services...
+        </p>
+
       </div>
     );
   }
@@ -136,11 +199,14 @@ const AdminServiceApprovals = () => {
   return (
     <div className="admin-page-content">
 
-      {/* HEADER */}
+      {/* ========================================
+          HEADER
+      ======================================== */}
 
       <div className="admin-page-header">
 
         <div>
+
           <span className="admin-label">
             SERVICE MANAGEMENT
           </span>
@@ -150,8 +216,10 @@ const AdminServiceApprovals = () => {
           </h1>
 
           <p>
-            Review and manage services submitted by providers.
+            Review and manage services
+            submitted by providers.
           </p>
+
         </div>
 
         <span className="pending-count">
@@ -160,7 +228,85 @@ const AdminServiceApprovals = () => {
 
       </div>
 
-      {/* NO SERVICES */}
+      {/* ========================================
+          REJECT FORM
+      ======================================== */}
+
+      {showRejectForm && (
+
+        <div className="reject-form-card">
+
+          <div className="reject-form-header">
+
+            <div>
+
+              <h2>
+                Reject Service
+              </h2>
+
+              <p>
+                Please provide a reason for
+                rejecting this service.
+              </p>
+
+            </div>
+
+            <button
+              type="button"
+              className="btn-close"
+              onClick={closeRejectForm}
+            >
+              ×
+            </button>
+
+          </div>
+
+          <div className="form-group">
+
+            <label>
+              Rejection Reason
+            </label>
+
+            <textarea
+              value={rejectionReason}
+              onChange={(e) =>
+                setRejectionReason(
+                  e.target.value
+                )
+              }
+              placeholder="Example: Please provide more details about the service."
+              rows="4"
+            />
+
+          </div>
+
+          <div className="reject-form-actions">
+
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={closeRejectForm}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              className="admin-reject-btn"
+              onClick={handleReject}
+            >
+              ✕ Reject Service
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {/* ========================================
+          NO SERVICES
+      ======================================== */}
 
       {services.length === 0 ? (
 
@@ -175,14 +321,17 @@ const AdminServiceApprovals = () => {
           </h2>
 
           <p>
-            No services are currently waiting for approval.
+            No services are currently
+            waiting for approval.
           </p>
 
         </div>
 
       ) : (
 
-        /* SERVICES */
+        /* ========================================
+           SERVICES
+        ======================================== */
 
         <div className="admin-services-grid">
 
@@ -193,7 +342,9 @@ const AdminServiceApprovals = () => {
               key={service._id}
             >
 
-              {/* IMAGE */}
+              {/* ========================================
+                  IMAGE
+              ======================================== */}
 
               {service.image ? (
 
@@ -211,9 +362,13 @@ const AdminServiceApprovals = () => {
 
               )}
 
-              {/* CONTENT */}
+              {/* ========================================
+                  CONTENT
+              ======================================== */}
 
               <div className="admin-service-content">
+
+                {/* SERVICE TOP */}
 
                 <div className="admin-service-top">
 
@@ -235,9 +390,13 @@ const AdminServiceApprovals = () => {
 
                 </div>
 
+                {/* DESCRIPTION */}
+
                 <p className="admin-service-description">
                   {service.description}
                 </p>
+
+                {/* PRICE */}
 
                 <h3>
                   ₹{service.price}
@@ -256,25 +415,35 @@ const AdminServiceApprovals = () => {
 
                 </p>
 
-                {/* ACTIONS */}
+                {/* ========================================
+                    ACTIONS
+                ======================================== */}
 
                 <div className="admin-service-actions">
+
+                  {/* APPROVE */}
 
                   <button
                     type="button"
                     className="admin-approve-btn"
                     onClick={() =>
-                      handleApprove(service._id)
+                      handleApprove(
+                        service._id
+                      )
                     }
                   >
                     ✓ Approve
                   </button>
 
+                  {/* REJECT */}
+
                   <button
                     type="button"
                     className="admin-reject-btn"
                     onClick={() =>
-                      handleReject(service._id)
+                      openRejectForm(
+                        service._id
+                      )
                     }
                   >
                     ✕ Reject

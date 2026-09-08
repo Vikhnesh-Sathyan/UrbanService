@@ -9,6 +9,7 @@ const {
   acceptBooking,
   rejectBooking,
   updateBookingStatus,
+  getAllBookings,
 } = require("../Controllers/BookingController");
 
 const authMiddleware = require("../Middleware/AuthMiddleware");

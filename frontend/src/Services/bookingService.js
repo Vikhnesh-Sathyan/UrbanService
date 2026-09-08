@@ -93,7 +93,7 @@ export const rescheduleBooking = async (
 // Get all bookings
 export const getAllBookings = async () => {
   const response = await axios.get(
-    `${API}/admin/all`,
+    `${API}/admin`,
     getAuthConfig()
   );
 
