@@ -1,0 +1,187 @@
+/* ========================================
+   ADMIN SIDEBAR
+======================================== */
+
+.admin-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  width: 250px;
+  height: 100vh;
+
+  background: #ffffff;
+  border-right: 1px solid #e8eaf0;
+
+  display: flex;
+  flex-direction: column;
+
+  z-index: 1000;
+}
+
+
+/* ========================================
+   LOGO
+======================================== */
+
+.admin-sidebar-logo {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 25px 20px;
+
+  border-bottom: 1px solid #f0f1f5;
+}
+
+.admin-logo {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #6366f1;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.admin-sidebar-logo h2 {
+  margin: 0;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.admin-sidebar-logo span {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+
+/* ========================================
+   NAVIGATION
+======================================== */
+
+.admin-sidebar-nav {
+  padding: 25px 15px;
+
+  flex: 1;
+}
+
+.admin-nav-title {
+  margin: 0 10px 12px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1.4px;
+
+  color: #9ca3af;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 12px 14px;
+
+  margin-bottom: 5px;
+
+  border-radius: 10px;
+
+  color: #6b7280;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  transition: all 0.2s ease;
+}
+
+.admin-nav-item:hover {
+  background: #f4f5ff;
+  color: #6366f1;
+}
+
+.admin-nav-item.active {
+  background: #eef0ff;
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.admin-nav-icon {
+  width: 20px;
+
+  display: flex;
+  justify-content: center;
+
+  font-size: 15px;
+}
+
+
+/* ========================================
+   LOGOUT
+======================================== */
+
+.admin-sidebar-bottom {
+  padding: 15px;
+
+  border-top: 1px solid #f0f1f5;
+}
+
+.admin-logout {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 12px 14px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: #6b7280;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.admin-logout:hover {
+  background: #fff1f2;
+  color: #ef4444;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 900px) {
+
+  .admin-sidebar {
+    display: none;
+  }
+
+}

@@ -1,0 +1,136 @@
+/* ========================================
+   ADMIN NAVBAR
+======================================== */
+
+.admin-navbar {
+  height: 75px;
+
+  padding: 0 35px;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e8eaf0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+/* ========================================
+   LEFT
+======================================== */
+
+.admin-navbar-left h2 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.admin-navbar-left p {
+  margin: 4px 0 0;
+
+  font-size: 12px;
+
+  color: #9ca3af;
+}
+
+
+/* ========================================
+   RIGHT
+======================================== */
+
+.admin-navbar-right {
+  display: flex;
+  align-items: center;
+
+  gap: 22px;
+}
+
+
+/* Notification */
+
+.admin-notification {
+  width: 38px;
+  height: 38px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  background: white;
+
+  color: #6b7280;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.admin-notification:hover {
+  background: #f5f6ff;
+  color: #6366f1;
+}
+
+
+/* Profile */
+
+.admin-profile {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.admin-profile-icon {
+  font-size: 35px;
+
+  color: #6366f1;
+}
+
+.admin-profile div {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-profile strong {
+  font-size: 13px;
+
+  color: #111827;
+}
+
+.admin-profile span {
+  margin-top: 2px;
+
+  font-size: 11px;
+
+  color: #9ca3af;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 600px) {
+
+  .admin-navbar {
+    padding: 0 18px;
+  }
+
+  .admin-navbar-left p {
+    display: none;
+  }
+
+  .admin-profile div {
+    display: none;
+  }
+
+}

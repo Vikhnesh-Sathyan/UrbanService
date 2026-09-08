@@ -9,7 +9,7 @@ import Register from "./Components/Auth/Register";
 import Homepage from "./Components/Home/Homepage";
 
 // Dashboards
-import AdminDashboard from "./Components/Dashboard/AdminDashboard";
+import AdminDashboard from "./Components/Dashboard/Admin/AdminDashboard";
 import ProviderDashboard from "./Components/Dashboard/Provider/ProviderDashboard";
 import UserDashboard from "./Components/Dashboard/UserDashboard";
 
