@@ -17,9 +17,9 @@ import UserDashboard from "./Components/Dashboard/UserDashboard";
 import ProviderBookingsPage from "./Components/Services/Provider/ProviderBookingsPage";
 import ProviderServicesPage from "./Components/Services/Provider/ProviderServicesPage";
 
-// Customer
-import BookService from "./Components/Customer/BookService";
-import ServiceDetails from "./Components/Customer/ServiceDetails";
+//Customer
+import ServiceDetails from "./Components/Services/User/ServiceDetails";
+import UserBookService from "./Components/Services/User/UserBookService";
 
 // Payment
 import StripeProvider from "./Components/Payment/StripeProvider";
@@ -68,13 +68,12 @@ function App() {
           {/* ================= CUSTOMER ================= */}
 
           <Route
-            path="/book-service/:id"
-            element={<BookService />}
+             path="/user/services/:serviceId"
+             element={<ServiceDetails />}
           />
-
           <Route
-            path="/service/:serviceId"
-            element={<ServiceDetails />}
+            path="/user/services/:serviceId/book"
+            element={<UserBookService />}
           />
 
         </Routes>

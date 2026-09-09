@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getServices } from "../../../Services/userService";
 
 const UserServicesPage = () => {
+
+    const navigate = useNavigate();
+
 
   // ==========================================
   // STATE
@@ -156,13 +160,14 @@ const UserServicesPage = () => {
 
 
               {/* VIEW BUTTON */}
-
               <button
-                type="button"
+                 type="button"
+               onClick={() =>
+                  navigate(`/user/services/${service._id}`)
+               }
               >
-                View Details
+                          View Details
               </button>
-
             </div>
 
           ))}
