@@ -238,7 +238,6 @@ const ServiceDetails = () => {
     })
   }
 >
-  Book Service
 
         Book Service
       </button>

@@ -18,12 +18,11 @@ const getAuthConfig = () => {
 
 
 // ==========================================
-// CUSTOMER BOOKINGS
+// USER / CUSTOMER BOOKINGS
 // ==========================================
 
 // Create booking
 export const createBooking = async (bookingData) => {
-
   const response = await axios.post(
     `${API}`,
     bookingData,
@@ -34,9 +33,8 @@ export const createBooking = async (bookingData) => {
 };
 
 
-// Get customer's bookings
+// Get logged-in user's bookings
 export const getMyBookings = async () => {
-
   const response = await axios.get(
     `${API}/my-bookings`,
     getAuthConfig()
@@ -48,7 +46,6 @@ export const getMyBookings = async () => {
 
 // Cancel booking
 export const cancelBooking = async (bookingId) => {
-
   const response = await axios.patch(
     `${API}/${bookingId}/cancel`,
     {},
@@ -65,7 +62,6 @@ export const rescheduleBooking = async (
   date,
   time
 ) => {
-
   const response = await axios.put(
     `${API}/${bookingId}/reschedule`,
     {
@@ -83,9 +79,8 @@ export const rescheduleBooking = async (
 // PROVIDER BOOKINGS
 // ==========================================
 
-// Get provider bookings
+// Get provider booking requests
 export const getProviderBookings = async () => {
-
   const response = await axios.get(
     `${API}/provider/requests`,
     getAuthConfig()
@@ -97,7 +92,6 @@ export const getProviderBookings = async () => {
 
 // Accept booking
 export const acceptBooking = async (bookingId) => {
-
   const response = await axios.patch(
     `${API}/${bookingId}/accept`,
     {},
@@ -110,7 +104,6 @@ export const acceptBooking = async (bookingId) => {
 
 // Reject booking
 export const rejectBooking = async (bookingId) => {
-
   const response = await axios.patch(
     `${API}/${bookingId}/reject`,
     {},
@@ -126,7 +119,6 @@ export const updateBookingStatus = async (
   bookingId,
   status
 ) => {
-
   const response = await axios.patch(
     `${API}/${bookingId}/status`,
     {
@@ -145,7 +137,6 @@ export const updateBookingStatus = async (
 
 // Get all bookings
 export const getAllBookings = async () => {
-
   const response = await axios.get(
     `${API}/admin`,
     getAuthConfig()

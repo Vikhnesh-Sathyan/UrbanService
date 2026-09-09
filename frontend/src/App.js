@@ -11,18 +11,21 @@ import Homepage from "./Components/Home/Homepage";
 // Dashboards
 import AdminDashboard from "./Components/Dashboard/Admin/AdminDashboard";
 import ProviderDashboard from "./Components/Dashboard/Provider/ProviderDashboard";
-import UserDashboard from "./Components/Dashboard/UserDashboard";
+import UserDashboard from "./Components/Dashboard/User/UserDashboard";
 
 // Provider
 import ProviderBookingsPage from "./Components/Services/Provider/ProviderBookingsPage";
 import ProviderServicesPage from "./Components/Services/Provider/ProviderServicesPage";
 
 //Customer
-import ServiceDetails from "./Components/Services/User/ServiceDetails";
+import UserServicesPage from "./Components/Services/User/UserServicesPage";
+import UserServiceDetails from "./Components/Services/User/UserServiceDetails";
 import UserBookService from "./Components/Services/User/UserBookService";
+import userBookings from "./Components/Services/User/UserBookings";
 
 // Payment
 import StripeProvider from "./Components/Payment/StripeProvider";
+import UserBookings from "./Components/Services/User/UserBookings";
 
 function App() {
   return (
@@ -67,13 +70,24 @@ function App() {
 
           {/* ================= CUSTOMER ================= */}
 
-          <Route
-             path="/user/services/:serviceId"
-             element={<ServiceDetails />}
+          <Route 
+            path="/user/services"
+            element={<UserServicesPage />}
           />
+
           <Route
             path="/user/services/:serviceId/book"
             element={<UserBookService />}
+          />
+
+          <Route
+            path="/user/bookings"
+            element={<UserBookings />}
+          />
+
+          <Route
+            path="/user/services/:serviceId/details"
+            element={<UserServiceDetails />}
           />
 
         </Routes>
