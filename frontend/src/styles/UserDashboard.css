@@ -1,639 +1,64 @@
 /* ==========================================
-   USER DASHBOARD LAYOUT
+   USER DASHBOARD
 ========================================== */
 
-.user-dashboard-layout {
+.user-dashboard {
   min-height: 100vh;
 
   display: flex;
 
-  background: #f7f8fc;
+  background: #f7f8fa;
 
-  color: #171923;
-
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  color: #202938;
 }
 
 
 /* ==========================================
-   SIDEBAR
+   MAIN AREA
 ========================================== */
 
-.user-sidebar {
-  position: fixed;
-
-  top: 0;
-  left: 0;
-
-  width: 260px;
-  height: 100vh;
-
-  display: flex;
-  flex-direction: column;
-
-  padding: 24px 16px;
-
-  background: #ffffff;
-
-  border-right: 1px solid #e8eaf0;
-
-  z-index: 100;
-
-  transition:
-    transform 0.25s ease;
-}
-
-
-/* ==========================================
-   BRAND
-========================================== */
-
-.user-sidebar-brand {
-  display: flex;
-  align-items: center;
-
-  gap: 11px;
-
-  padding: 5px 10px 25px;
-}
-
-
-.user-brand-mark {
-  width: 38px;
-  height: 38px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 11px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #4f46e5,
-      #7c3aed
-    );
-
-  color: #ffffff;
-
-  font-size: 17px;
-  font-weight: 800;
-
-  box-shadow:
-    0 8px 20px rgba(79, 70, 229, 0.22);
-}
-
-
-.user-brand-text {
-  display: flex;
-  flex-direction: column;
-}
-
-
-.user-brand-text strong {
-  font-size: 16px;
-
-  line-height: 1.1;
-
-  color: #171923;
-}
-
-
-.user-brand-text span {
-  margin-top: 3px;
-
-  font-size: 10px;
-
-  font-weight: 700;
-
-  letter-spacing: 1.3px;
-
-  text-transform: uppercase;
-
-  color: #8a91a3;
-}
-
-
-/* ==========================================
-   SIDEBAR PROFILE
-========================================== */
-
-.user-sidebar-profile {
-  display: flex;
-  align-items: center;
-
-  gap: 11px;
-
-  margin: 0 4px 25px;
-
-  padding: 13px;
-
-  border-radius: 14px;
-
-  background: #f7f8fc;
-
-  border: 1px solid #eef0f5;
-}
-
-
-.user-avatar,
-.user-topbar-avatar {
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background:
-    linear-gradient(
-      135deg,
-      #6366f1,
-      #8b5cf6
-    );
-
-  color: #ffffff;
-
-  font-weight: 700;
-}
-
-
-.user-avatar {
-  width: 38px;
-  height: 38px;
-
-  font-size: 13px;
-}
-
-
-.user-profile-info {
+.user-dashboard-main {
   min-width: 0;
 
-  display: flex;
-  flex-direction: column;
-}
+  flex: 1;
 
-
-.user-profile-info strong {
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  font-size: 13px;
-
-  color: #252936;
-}
-
-
-.user-profile-info span {
-  margin-top: 3px;
-
-  font-size: 10px;
-
-  color: #8c93a4;
-}
-
-
-/* ==========================================
-   NAVIGATION
-========================================== */
-
-.user-sidebar-nav {
-  display: flex;
-  flex-direction: column;
-
-  gap: 5px;
-}
-
-
-.user-nav-label {
-  padding: 0 12px 8px;
-
-  font-size: 9px;
-
-  font-weight: 800;
-
-  letter-spacing: 1.5px;
-
-  color: #a1a7b5;
-}
-
-
-.user-nav-label-spaced {
-  margin-top: 25px;
-}
-
-
-.user-nav-item {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  padding: 12px;
-
-  border: none;
-
-  border-radius: 11px;
-
-  background: transparent;
-
-  color: #737a8d;
-
-  font-size: 13px;
-
-  font-weight: 600;
-
-  text-align: left;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-
-.user-nav-item:hover {
-  background: #f5f6ff;
-
-  color: #4f46e5;
-
-  transform: translateX(2px);
-}
-
-
-.user-nav-item.active {
-  background: #eef0ff;
-
-  color: #4f46e5;
-}
-
-
-.user-nav-icon {
-  width: 22px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 17px;
-
-  font-weight: 500;
-}
-
-
-/* ==========================================
-   SIDEBAR FOOTER
-========================================== */
-
-.user-sidebar-footer {
-  margin-top: auto;
-
-  padding-top: 20px;
-}
-
-
-.user-help-box {
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-
-  margin-bottom: 13px;
-
-  padding: 13px;
-
-  border-radius: 13px;
-
-  background: #f8f8ff;
-
-  border: 1px solid #ececff;
-}
-
-
-.user-help-icon {
-  width: 28px;
-  height: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex-shrink: 0;
-
-  border-radius: 9px;
-
-  background: #ffffff;
-
-  color: #6366f1;
-
-  font-size: 12px;
-
-  font-weight: 800;
-}
-
-
-.user-help-box div {
-  display: flex;
-  flex-direction: column;
-}
-
-
-.user-help-box strong {
-  font-size: 11px;
-
-  color: #353a49;
-}
-
-
-.user-help-box span {
-  margin-top: 2px;
-
-  font-size: 9px;
-
-  color: #969cab;
-}
-
-
-.user-logout-btn {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-
-  padding: 11px 12px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: transparent;
-
-  color: #8b5260;
-
-  font-size: 12px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
-}
-
-
-.user-logout-btn:hover {
-  background: #fff3f4;
-
-  color: #c0394b;
-}
-
-
-.user-logout-btn span {
-  font-size: 17px;
-}
-
-
-/* ==========================================
-   MAIN CONTENT
-========================================== */
-
-.user-main-content {
-  width: calc(100% - 260px);
+  margin-left: 245px;
 
   min-height: 100vh;
 
-  margin-left: 260px;
-}
-
-
-/* ==========================================
-   TOPBAR
-========================================== */
-
-.user-topbar {
-  height: 82px;
-
   display: flex;
-  align-items: center;
-  justify-content: space-between;
 
-  padding: 0 40px;
-
-  background: rgba(255, 255, 255, 0.88);
-
-  border-bottom: 1px solid #e9ebf1;
-
-  backdrop-filter: blur(12px);
-
-  position: sticky;
-  top: 0;
-
-  z-index: 50;
-}
-
-
-.user-topbar-left {
-  display: flex;
-  align-items: center;
-
-  gap: 15px;
-}
-
-
-.user-topbar-label {
-  display: block;
-
-  margin-bottom: 4px;
-
-  font-size: 9px;
-
-  font-weight: 800;
-
-  letter-spacing: 1.5px;
-
-  color: #9aa0ae;
-}
-
-
-.user-topbar h2 {
-  margin: 0;
-
-  font-size: 19px;
-
-  letter-spacing: -0.4px;
-
-  color: #202331;
-}
-
-
-.user-topbar-right {
-  display: flex;
-  align-items: center;
-
-  gap: 20px;
-}
-
-
-/* ==========================================
-   NOTIFICATION
-========================================== */
-
-.user-notification-btn {
-  position: relative;
-
-  width: 38px;
-  height: 38px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid #e8eaf0;
-
-  border-radius: 11px;
-
-  background: #ffffff;
-
-  color: #6f7688;
-
-  font-size: 18px;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-
-.user-notification-btn:hover {
-  background: #f7f7ff;
-
-  border-color: #dfe1ff;
-}
-
-
-.user-notification-btn span {
-  position: absolute;
-
-  top: 8px;
-  right: 8px;
-
-  width: 6px;
-  height: 6px;
-
-  border-radius: 50%;
-
-  background: #6366f1;
-
-  border: 1px solid #ffffff;
-}
-
-
-/* ==========================================
-   TOPBAR USER
-========================================== */
-
-.user-topbar-profile {
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-
-  padding-left: 19px;
-
-  border-left: 1px solid #e7e9ef;
-}
-
-
-.user-topbar-avatar {
-  width: 37px;
-  height: 37px;
-
-  font-size: 12px;
-}
-
-
-.user-topbar-user {
-  display: flex;
   flex-direction: column;
 }
 
 
-.user-topbar-user strong {
-  font-size: 12px;
+/* ==========================================
+   DASHBOARD CONTENT
+========================================== */
 
-  color: #292d3a;
-}
+.user-dashboard-content {
+  flex: 1;
 
+  width: 100%;
 
-.user-topbar-user span {
-  margin-top: 3px;
-
-  font-size: 9px;
-
-  color: #9298a7;
+  overflow-x: hidden;
 }
 
 
 /* ==========================================
-   PAGE CONTENT
+   MOBILE OVERLAY
 ========================================== */
 
-.user-page-content {
-  padding: 35px 40px 50px;
-}
-
-
-/* ==========================================
-   MOBILE MENU
-========================================== */
-
-.user-mobile-menu {
+.user-dashboard-overlay {
   display: none;
 
-  width: 38px;
-  height: 38px;
+  position: fixed;
 
-  align-items: center;
-  justify-content: center;
+  inset: 0;
 
-  border: 1px solid #e5e7ee;
+  z-index: 999;
 
-  border-radius: 10px;
-
-  background: #ffffff;
-
-  color: #52586a;
-
-  font-size: 18px;
-
-  cursor: pointer;
-}
-
-
-/* ==========================================
-   SIDEBAR OVERLAY
-========================================== */
-
-.user-sidebar-overlay {
-  display: none;
+  background: rgba(15, 23, 42, 0.35);
 }
 
 
@@ -641,24 +66,14 @@
    TABLET
 ========================================== */
 
-@media (max-width: 1050px) {
+@media (max-width: 900px) {
 
-  .user-sidebar {
-    width: 230px;
+  .user-dashboard-main {
+    margin-left: 0;
   }
 
-  .user-main-content {
-    width: calc(100% - 230px);
-
-    margin-left: 230px;
-  }
-
-  .user-topbar {
-    padding: 0 25px;
-  }
-
-  .user-page-content {
-    padding: 28px 25px 40px;
+  .user-dashboard-overlay {
+    display: block;
   }
 
 }
@@ -668,111 +83,20 @@
    MOBILE
 ========================================== */
 
-@media (max-width: 800px) {
+@media (max-width: 600px) {
 
-  .user-sidebar {
-    transform: translateX(-100%);
-
-    width: 270px;
-
-    box-shadow:
-      20px 0 50px rgba(15, 23, 42, 0.12);
+  .user-dashboard {
+    min-height: 100vh;
   }
 
-
-  .user-sidebar.user-sidebar-open {
-    transform: translateX(0);
-  }
-
-
-  .user-sidebar-overlay {
-    display: block;
-
-    position: fixed;
-
-    inset: 0;
-
-    background: rgba(15, 23, 42, 0.35);
-
-    backdrop-filter: blur(2px);
-
-    z-index: 90;
-  }
-
-
-  .user-main-content {
+  .user-dashboard-main {
     width: 100%;
 
-    margin-left: 0;
+    min-width: 0;
   }
 
-
-  .user-mobile-menu {
-    display: flex;
-  }
-
-
-  .user-topbar {
-    height: 72px;
-
-    padding: 0 18px;
-  }
-
-
-  .user-page-content {
-    padding: 22px 18px 35px;
-  }
-
-
-  .user-topbar-user {
-    display: none;
-  }
-
-
-  .user-topbar-profile {
-    padding-left: 0;
-
-    border-left: none;
-  }
-
-}
-
-
-/* ==========================================
-   SMALL MOBILE
-========================================== */
-
-@media (max-width: 480px) {
-
-  .user-topbar-label {
-    font-size: 8px;
-  }
-
-
-  .user-topbar h2 {
-    font-size: 17px;
-  }
-
-
-  .user-topbar-right {
-    gap: 10px;
-  }
-
-
-  .user-notification-btn {
-    width: 35px;
-    height: 35px;
-  }
-
-
-  .user-topbar-avatar {
-    width: 34px;
-    height: 34px;
-  }
-
-
-  .user-page-content {
-    padding: 16px 12px 30px;
+  .user-dashboard-content {
+    width: 100%;
   }
 
 }
