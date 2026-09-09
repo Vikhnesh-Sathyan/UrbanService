@@ -247,7 +247,9 @@ const AdminProviders = () => {
             }
           >
 
-            {/* MODAL HEADER */}
+            {/* ========================================
+                MODAL HEADER
+            ======================================== */}
 
             <div className="provider-modal-header">
 
@@ -274,7 +276,9 @@ const AdminProviders = () => {
             </div>
 
 
-            {/* PROVIDER DETAILS */}
+            {/* ========================================
+                PROVIDER DETAILS
+            ======================================== */}
 
             <div className="provider-details">
 
@@ -333,14 +337,24 @@ const AdminProviders = () => {
                   Account Status
                 </span>
 
-                <span className="provider-status-active">
-                  Active
+                <span
+                  className={
+                    selectedProvider.isActive === false
+                      ? "provider-status-inactive"
+                      : "provider-status-active"
+                  }
+                >
+                  {selectedProvider.isActive === false
+                    ? "Inactive"
+                    : "Active"}
                 </span>
 
               </div>
 
 
-              {/* SERVICES */}
+              {/* ========================================
+                  SERVICES
+              ======================================== */}
 
               <div className="provider-services-section">
 
@@ -361,16 +375,79 @@ const AdminProviders = () => {
                         <div
                           className="provider-service-item"
                           key={
-                            service._id ||
-                            index
+                            service._id || index
                           }
                         >
 
-                          {typeof service ===
-                          "string"
-                            ? service
-                            : service.name ||
-                              "Unknown Service"}
+                          {/* SERVICE INFORMATION */}
+
+                          <div className="provider-service-info">
+
+                            <strong>
+                              {service.name ||
+                                "Unknown Service"}
+                            </strong>
+
+                            <span>
+                              ₹{service.price}
+                            </span>
+
+                          </div>
+
+
+                          {/* SERVICE STATUS */}
+
+                          <div className="provider-service-status">
+
+                            <span
+                              className={`provider-service-status-badge ${
+                                service.status || "pending"
+                              }`}
+                            >
+
+                              {service.status ===
+                                "approved" && (
+                                <>
+                                  ✓ Approved
+                                </>
+                              )}
+
+                              {service.status ===
+                                "rejected" && (
+                                <>
+                                  ✕ Rejected
+                                </>
+                              )}
+
+                              {service.status ===
+                                "pending" && (
+                                <>
+                                  ⏳ Pending
+                                </>
+                              )}
+
+                            </span>
+
+                          </div>
+
+
+                          {/* REJECTION REASON */}
+
+                          {service.status ===
+                            "rejected" &&
+                            service.adminComment && (
+
+                              <p className="provider-rejection-reason">
+
+                                <strong>
+                                  Reason:
+                                </strong>{" "}
+
+                                {service.adminComment}
+
+                              </p>
+
+                            )}
 
                         </div>
 
@@ -392,7 +469,9 @@ const AdminProviders = () => {
             </div>
 
 
-            {/* MODAL FOOTER */}
+            {/* ========================================
+                MODAL FOOTER
+            ======================================== */}
 
             <div className="provider-modal-footer">
 
