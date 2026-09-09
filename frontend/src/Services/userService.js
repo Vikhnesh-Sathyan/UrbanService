@@ -16,14 +16,19 @@ const getAuthConfig = () => {
   };
 };
 
+
 // ==========================================
 // GET APPROVED SERVICES
+// Search + Filter + Sort + Pagination
 // ==========================================
 
-export const getServices = async () => {
+export const getServices = async (params = {}) => {
   const response = await axios.get(
     API,
-    getAuthConfig()
+    {
+      ...getAuthConfig(),
+      params,
+    }
   );
 
   console.log(
@@ -31,13 +36,5 @@ export const getServices = async () => {
     response.data
   );
 
-  if (Array.isArray(response.data)) {
-    return response.data;
-  }
-
-  if (Array.isArray(response.data?.services)) {
-    return response.data.services;
-  }
-
-  return [];
+  return response.data;
 };
