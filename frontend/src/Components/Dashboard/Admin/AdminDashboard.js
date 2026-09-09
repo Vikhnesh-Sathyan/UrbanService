@@ -2,10 +2,10 @@ import React from "react";
 
 import AdminSidebar from "./AdminSidebar";
 import AdminNavbar from "./AdminNavbar";
-import AdminServiceApprovals from "./AdminServiceApprovals";
-import AdminStats from "./AdminStats";
-import Adminproviders from "./AdminProviders";
-import AdminBookings from "./AdminBookings";
+import AdminServiceApprovals from "../../Services/Admin/AdminServiceApprovals";
+import AdminStats from "../../Services/Admin/AdminStats";
+import Adminproviders from "../../Services/Admin/AdminProviders";
+import AdminBookings from "../../Services/Admin/AdminBookings";
 
 import "../../../styles/AdminDashboard.css";
 

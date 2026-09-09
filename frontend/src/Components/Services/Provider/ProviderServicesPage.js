@@ -6,9 +6,9 @@ import {
   updateService,
   deleteService,
   resubmitService,
-} from "../../Services/serviceService";
+} from "../../../Services/serviceService";
 
-import "../../styles/ProviderServices.css";
+import "../../../styles/ProviderServices.css";
 
 const ProviderServicesPage = () => {
   const [services, setServices] = useState([]);
