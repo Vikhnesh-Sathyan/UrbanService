@@ -182,51 +182,69 @@ const getServices = async (req, res) => {
     // AGGREGATION
     // =================================================
 
-    const aggregationPipeline = [
-      // 1. Only approved services
-      {
-        $match: serviceMatch,
-      },
+ const aggregationPipeline = [
+  // 1. Only approved services
+  {
+    $match: serviceMatch,
+  },
 
-      // 2. Get reviews for each service
-      {
-        $lookup: {
-          from: "reviews",
-          localField: "_id",
-          foreignField: "service",
-          as: "reviews",
-        },
-      },
+  // 2. Get reviews
+  {
+    $lookup: {
+      from: "reviews",
+      localField: "_id",
+      foreignField: "service",
+      as: "reviews",
+    },
+  },
 
-      // 3. Calculate rating and review count
-      {
-        $addFields: {
-          averageRating: {
-            $cond: [
-              {
-                $gt: [
-                  { $size: "$reviews" },
-                  0,
-                ],
-              },
-              {
-                $round: [
-                  {
-                    $avg: "$reviews.rating",
-                  },
-                  1,
-                ],
-              },
+  // 3. Get provider
+  {
+    $lookup: {
+      from: "users",
+      localField: "provider",
+      foreignField: "_id",
+      as: "provider",
+    },
+  },
+
+  // 4. Convert provider array to object
+  {
+    $unwind: {
+      path: "$provider",
+      preserveNullAndEmptyArrays: true,
+    },
+  },
+
+  // 5. Calculate rating
+  {
+    $addFields: {
+      averageRating: {
+        $cond: [
+          {
+            $gt: [
+              { $size: "$reviews" },
               0,
             ],
           },
-
-          totalReviews: {
-            $size: "$reviews",
+          {
+            $round: [
+              {
+                $avg: "$reviews.rating",
+              },
+              1,
+            ],
           },
-        },
+          0,
+        ],
       },
-    ];
+
+      totalReviews: {
+        $size: "$reviews",
+      },
+    },
+  },
+];
 
     // -------------------------------------------------
     // Minimum rating filter
@@ -249,6 +267,8 @@ const getServices = async (req, res) => {
     aggregationPipeline.push({
       $project: {
         reviews: 0,
+        "provider.password": 0,
+
       },
     });
 

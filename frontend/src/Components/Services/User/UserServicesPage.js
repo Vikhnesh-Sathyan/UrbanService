@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getServices } from "../../../Services/userService";
 
+import "../../../styles/UserServices.css";
+
 const UserServicesPage = () => {
 
     const navigate = useNavigate();
@@ -74,110 +76,140 @@ const UserServicesPage = () => {
   // ==========================================
 
   return (
-    <div>
+  <div className="user-services-page">
 
-      <h1>Available Services</h1>
+    <div className="user-services-header">
+      <div>
+        <span className="user-services-eyebrow">
+          EXPLORE SERVICES
+        </span>
 
-      <p>
-        Choose a service from our trusted providers.
-      </p>
+        <h1>Available Services</h1>
 
+        <p>
+          Choose a service from our trusted providers.
+        </p>
+      </div>
+    </div>
 
-      {/* ==========================================
-          NO SERVICES
-      ========================================== */}
+    {services.length === 0 ? (
 
-      {services.length === 0 ? (
+      <div className="user-services-empty">
+        <div className="user-empty-icon">⌁</div>
 
-        <div>
-          <h2>No Services Available</h2>
+        <h2>No Services Available</h2>
 
-          <p>
-            There are currently no approved services.
-          </p>
-        </div>
+        <p>
+          There are currently no approved services.
+        </p>
+      </div>
 
-      ) : (
+    ) : (
 
-        /* ==========================================
-           SERVICE LIST
-        ========================================== */
+      <div className="user-services-grid">
 
-        <div>
+        {services.map((service) => (
 
-          {services.map((service) => (
+          <div
+            className="user-service-card"
+            key={service._id}
+          >
 
-            <div
-              key={service._id}
-            >
+            <div className="user-service-image-wrapper">
 
-              {/* IMAGE */}
-
-              {service.image && (
+              {service.image ? (
                 <img
+                  className="user-service-image"
                   src={`http://localhost:5000/uploads/${service.image}`}
                   alt={service.name}
-                  width="200"
                 />
+              ) : (
+                <div className="user-service-image-placeholder">
+                  Service
+                </div>
               )}
 
+              <span className="user-service-category">
+                {service.category}
+              </span>
 
-              {/* NAME */}
+            </div>
+
+
+            <div className="user-service-body">
 
               <h2>
                 {service.name}
               </h2>
 
-
-              {/* CATEGORY */}
-
-              <p>
-                {service.category}
-              </p>
-
-
-              {/* DESCRIPTION */}
-
-              <p>
+              <p className="user-service-description">
                 {service.description}
               </p>
 
 
-              {/* PRICE */}
+              <div className="user-service-provider">
 
-              <h3>
-                ₹{service.price}
-              </h3>
+                <div className="user-provider-avatar">
+                  {(service.provider?.name || "P")
+                    .charAt(0)
+                    .toUpperCase()}
+                </div>
+
+                <div>
+                  <span>Service Provider</span>
+
+                  <strong>
+                    {service.provider?.name ||
+                      "Unknown Provider"}
+                  </strong>
+                </div>
+
+              </div>
 
 
-              {/* PROVIDER */}
+              <div className="user-service-footer">
 
-              <p>
-                Provider:{" "}
-                {service.provider?.name ||
-                  "Unknown Provider"}
-              </p>
+                <div className="user-service-price">
+                  <span>Starting from</span>
 
+                  <strong>
+                    ₹{service.price}
+                  </strong>
+                </div>
 
-              {/* VIEW BUTTON */}
-              <button
-                 type="button"
-               onClick={() =>
-                  navigate(`/user/services/${service._id}`)
-               }
-              >
-                          View Details
-              </button>
+                <button
+                  type="button"
+                  className="user-service-button"
+                  onClick={() =>
+                    navigate(
+                      `/user/services/${service._id}`,
+                      {
+                        state: {
+                          service,
+                        },
+                      }
+                    )
+                  }
+                >
+                  View Details
+                  <span>→</span>
+                </button>
+
+              </div>
+
             </div>
 
-          ))}
+          </div>
 
-        </div>
+        ))}
 
-      )}
+      </div>
 
-    </div>
-  );
+    )}
+
+  </div>
+);
+
 };
 
 export default UserServicesPage;
