@@ -18,7 +18,7 @@ import ProviderBookingsPage from "./Components/Services/Provider/ProviderBooking
 import ProviderServicesPage from "./Components/Services/Provider/ProviderServicesPage";
 
 //Customer
-import UserServicesPage from "./Components/Services/User/UserServicesPage";
+import UserServicesPage from "./Components/Services/User/UserServicePage/UserServicesPage";
 import UserServiceDetails from "./Components/Services/User/UserServiceDetails";
 import UserBookService from "./Components/Services/User/UserBookService";
 import userBookings from "./Components/Services/User/UserBookings";
