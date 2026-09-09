@@ -1,0 +1,282 @@
+/* ========================================
+   PROVIDER MODAL OVERLAY
+======================================== */
+
+.provider-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(15, 23, 42, 0.55);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9999;
+
+  padding: 20px;
+}
+
+
+/* ========================================
+   PROVIDER MODAL
+======================================== */
+
+.provider-modal {
+  width: 100%;
+  max-width: 600px;
+
+  background: #ffffff;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.2);
+
+  overflow: hidden;
+
+  animation: providerModalOpen 0.2s ease;
+}
+
+
+/* ========================================
+   MODAL ANIMATION
+======================================== */
+
+@keyframes providerModalOpen {
+
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+}
+
+
+/* ========================================
+   MODAL HEADER
+======================================== */
+
+.provider-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  padding: 26px 30px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.provider-modal-header h2 {
+  margin: 6px 0 0;
+
+  font-size: 25px;
+
+  color: #0f172a;
+}
+
+
+/* ========================================
+   CLOSE X BUTTON
+======================================== */
+
+.provider-modal-close {
+  width: 38px;
+  height: 38px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #f1f5f9;
+
+  color: #475569;
+
+  font-size: 25px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.provider-modal-close:hover {
+  background: #e2e8f0;
+}
+
+
+/* ========================================
+   PROVIDER DETAILS
+======================================== */
+
+.provider-details {
+  padding: 25px 30px;
+}
+
+
+/* ========================================
+   DETAIL ROW
+======================================== */
+
+.provider-detail-row {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px 0;
+
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.provider-detail-label {
+  color: #64748b;
+
+  font-size: 15px;
+}
+
+.provider-detail-row strong {
+  color: #0f172a;
+
+  font-size: 16px;
+}
+
+
+/* ========================================
+   PROVIDER ROLE
+======================================== */
+
+.provider-role {
+  display: inline-block;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  background: #dcfce7;
+
+  color: #15803d;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+/* ========================================
+   ACTIVE STATUS
+======================================== */
+
+.provider-status-active {
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  background: #dcfce7;
+
+  color: #15803d;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+/* ========================================
+   SERVICES
+======================================== */
+
+.provider-services-section {
+  margin-top: 25px;
+}
+
+.provider-services-section h3 {
+  margin-bottom: 12px;
+
+  color: #0f172a;
+
+  font-size: 18px;
+}
+
+.provider-services-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.provider-service-item {
+  padding: 12px 15px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 10px;
+
+  color: #334155;
+
+  font-weight: 500;
+}
+
+.no-provider-services {
+  margin: 0;
+
+  color: #94a3b8;
+
+  font-size: 14px;
+}
+
+
+/* ========================================
+   MODAL FOOTER
+======================================== */
+
+.provider-modal-footer {
+  display: flex;
+
+  justify-content: flex-end;
+
+  padding: 18px 30px;
+
+  background: #f8fafc;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+
+/* ========================================
+   CLOSE BUTTON
+======================================== */
+
+.provider-modal-close-btn {
+  padding: 10px 22px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #0f172a;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.provider-modal-close-btn:hover {
+  background: #1e293b;
+}

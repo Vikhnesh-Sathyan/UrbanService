@@ -558,6 +558,10 @@ const rejectService = async (req, res) => {
   try {
     const { adminComment } = req.body;
 
+    // ========================================
+    // VALIDATE REJECTION REASON
+    // ========================================
+
     if (
       !adminComment ||
       adminComment.trim() === ""
@@ -566,6 +570,10 @@ const rejectService = async (req, res) => {
         message: "Rejection reason is required",
       });
     }
+
+    // ========================================
+    // FIND SERVICE
+    // ========================================
 
     const service = await Service.findById(
       req.params.id
@@ -577,7 +585,10 @@ const rejectService = async (req, res) => {
       });
     }
 
-    // Only pending services can be rejected
+    // ========================================
+    // ONLY PENDING SERVICES
+    // ========================================
+
     if (service.status !== "pending") {
       return res.status(400).json({
         message:
@@ -585,16 +596,34 @@ const rejectService = async (req, res) => {
       });
     }
 
-    service.status = "rejected";
-    service.adminComment = adminComment.trim();
+    // ========================================
+    // UPDATE SERVICE
+    // ========================================
 
-    await service.save();
+    const updatedService =
+      await Service.findByIdAndUpdate(
+        req.params.id,
+        {
+          status: "rejected",
+          adminComment: adminComment.trim(),
+        },
+        {
+          new: true,
+          runValidators: false,
+        }
+      );
+
+    // ========================================
+    // RESPONSE
+    // ========================================
 
     res.status(200).json({
-      message: "Service rejected",
-      service,
+      message: "Service rejected successfully",
+      service: updatedService,
     });
+
   } catch (error) {
+
     console.error(
       "Reject service error:",
       error

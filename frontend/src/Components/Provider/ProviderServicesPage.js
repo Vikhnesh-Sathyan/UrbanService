@@ -682,7 +682,23 @@ const ProviderServicesPage = () => {
 
                   </div>
                 )}
+                {/* REJECTED MESSAGE */}
 
+                {service.status === "rejected" && (
+                  
+                    <div className="service-rejected-message">
+
+                        <strong>
+                            Service Rejected
+                        </strong>
+
+                    <p>
+                {service.adminComment ||
+                       "No rejection reason provided."}
+                    </p>
+
+              </div>
+             )}
                 {/* Actions */}
 
                 <div className="service-actions">

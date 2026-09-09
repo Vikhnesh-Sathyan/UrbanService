@@ -493,3 +493,38 @@ button:disabled {
     flex: 1;
   }
 }
+
+/* ========================================
+   REJECTED SERVICE MESSAGE
+======================================== */
+
+.service-rejected-message {
+  margin-top: 20px;
+  padding: 16px;
+
+  background: #fff1f2;
+
+  border: 1px solid #fecdd3;
+
+  border-radius: 10px;
+
+  color: #991b1b;
+}
+
+.service-rejected-message strong {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 15px;
+}
+
+.service-rejected-message p {
+  margin: 0;
+
+  color: #7f1d1d;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
