@@ -14,7 +14,9 @@ const addService = async (req, res) => {
       detailedDescription,
     } = req.body;
 
-    const image = req.file ? req.file.filename : "";
+    const image = req.file
+      ? req.file.filename
+      : "";
 
     const newService = new Service({
       name,
@@ -24,7 +26,7 @@ const addService = async (req, res) => {
       image,
       detailedDescription,
 
-      // Logged-in provider's ID
+      // Logged-in provider
       provider: req.user.id,
     });
 
@@ -34,6 +36,7 @@ const addService = async (req, res) => {
       message: "Service submitted for approval!",
       service: newService,
     });
+
   } catch (error) {
     console.error("Add service error:", error);
 
@@ -44,24 +47,41 @@ const addService = async (req, res) => {
 };
 
 
+// =====================================================
+// GET PROVIDER SERVICES
+// =====================================================
+
 const getProviderServices = async (req, res) => {
   try {
+
     const services = await Service.find({
       provider: req.user.id,
-    }).sort({ createdAt: -1 });
+    })
+      .populate(
+        "provider",
+        "name email availability"
+      )
+      .sort({
+        createdAt: -1,
+      });
 
     res.status(200).json({
       services,
     });
 
   } catch (error) {
-    console.error("Get provider services error:", error);
+
+    console.error(
+      "Get provider services error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to fetch your services",
     });
   }
 };
+
 
 // =====================================================
 // GET ALL APPROVED SERVICES
@@ -70,6 +90,7 @@ const getProviderServices = async (req, res) => {
 
 const getServices = async (req, res) => {
   try {
+
     const {
       search,
       category,
@@ -81,37 +102,55 @@ const getServices = async (req, res) => {
       limit = 10,
     } = req.query;
 
-    // -------------------------------------------------
-    // Pagination validation
-    // -------------------------------------------------
 
-    const currentPage = Math.max(Number(page) || 1, 1);
+    // =================================================
+    // PAGINATION
+    // =================================================
+
+    const currentPage = Math.max(
+      Number(page) || 1,
+      1
+    );
 
     const itemsPerPage = Math.min(
-      Math.max(Number(limit) || 10, 1),
+      Math.max(
+        Number(limit) || 10,
+        1
+      ),
       50
     );
 
-    const skip = (currentPage - 1) * itemsPerPage;
+    const skip =
+      (currentPage - 1) *
+      itemsPerPage;
 
-    // -------------------------------------------------
-    // Price validation
-    // -------------------------------------------------
+
+    // =================================================
+    // PRICE VALIDATION
+    // =================================================
 
     const minimumPrice =
-      minPrice !== undefined ? Number(minPrice) : null;
+      minPrice !== undefined
+        ? Number(minPrice)
+        : null;
 
     const maximumPrice =
-      maxPrice !== undefined ? Number(maxPrice) : null;
+      maxPrice !== undefined
+        ? Number(maxPrice)
+        : null;
+
 
     if (
-      (minimumPrice !== null && !Number.isFinite(minimumPrice)) ||
-      (maximumPrice !== null && !Number.isFinite(maximumPrice))
+      (minimumPrice !== null &&
+        !Number.isFinite(minimumPrice)) ||
+      (maximumPrice !== null &&
+        !Number.isFinite(maximumPrice))
     ) {
       return res.status(400).json({
         message: "Invalid price filter",
       });
     }
+
 
     if (
       minimumPrice !== null &&
@@ -119,138 +158,192 @@ const getServices = async (req, res) => {
       minimumPrice > maximumPrice
     ) {
       return res.status(400).json({
-        message: "Minimum price cannot be greater than maximum price",
+        message:
+          "Minimum price cannot be greater than maximum price",
       });
     }
 
-    // -------------------------------------------------
-    // Rating validation
-    // -------------------------------------------------
+
+    // =================================================
+    // RATING VALIDATION
+    // =================================================
 
     const minimumRating =
-      minRating !== undefined ? Number(minRating) : null;
+      minRating !== undefined
+        ? Number(minRating)
+        : null;
+
 
     if (
       minimumRating !== null &&
-      (!Number.isFinite(minimumRating) ||
+      (
+        !Number.isFinite(minimumRating) ||
         minimumRating < 0 ||
-        minimumRating > 5)
+        minimumRating > 5
+      )
     ) {
       return res.status(400).json({
-        message: "Minimum rating must be between 0 and 5",
+        message:
+          "Minimum rating must be between 0 and 5",
       });
     }
 
-    // -------------------------------------------------
-    // Build service filter
-    // -------------------------------------------------
+
+    // =================================================
+    // SERVICE FILTER
+    // =================================================
 
     const serviceMatch = {
       status: "approved",
     };
 
-    // Search by service name
-    if (search && search.trim() !== "") {
+
+    // Search
+    if (
+      search &&
+      search.trim() !== ""
+    ) {
       serviceMatch.name = {
         $regex: search.trim(),
         $options: "i",
       };
     }
 
-    // Filter by category
-    if (category && category.trim() !== "") {
-      serviceMatch.category = category.trim();
+
+    // Category
+    if (
+      category &&
+      category.trim() !== ""
+    ) {
+      serviceMatch.category =
+        category.trim();
     }
 
-    // Filter by price
+
+    // Price
     if (
       minimumPrice !== null ||
       maximumPrice !== null
     ) {
+
       serviceMatch.price = {};
 
       if (minimumPrice !== null) {
-        serviceMatch.price.$gte = minimumPrice;
+        serviceMatch.price.$gte =
+          minimumPrice;
       }
 
       if (maximumPrice !== null) {
-        serviceMatch.price.$lte = maximumPrice;
+        serviceMatch.price.$lte =
+          maximumPrice;
       }
     }
+
 
     // =================================================
     // AGGREGATION
     // =================================================
 
- const aggregationPipeline = [
-  // 1. Only approved services
-  {
-    $match: serviceMatch,
-  },
+    const aggregationPipeline = [
 
-  // 2. Get reviews
-  {
-    $lookup: {
-      from: "reviews",
-      localField: "_id",
-      foreignField: "service",
-      as: "reviews",
-    },
-  },
+      // -----------------------------------------------
+      // 1. APPROVED SERVICES
+      // -----------------------------------------------
 
-  // 3. Get provider
-  {
-    $lookup: {
-      from: "users",
-      localField: "provider",
-      foreignField: "_id",
-      as: "provider",
-    },
-  },
+      {
+        $match: serviceMatch,
+      },
 
-  // 4. Convert provider array to object
-  {
-    $unwind: {
-      path: "$provider",
-      preserveNullAndEmptyArrays: true,
-    },
-  },
 
-  // 5. Calculate rating
-  {
-    $addFields: {
-      averageRating: {
-        $cond: [
-          {
-            $gt: [
-              { $size: "$reviews" },
+      // -----------------------------------------------
+      // 2. GET REVIEWS
+      // -----------------------------------------------
+
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "service",
+          as: "reviews",
+        },
+      },
+
+
+      // -----------------------------------------------
+      // 3. GET PROVIDER
+      // -----------------------------------------------
+
+      {
+        $lookup: {
+          from: "users",
+          localField: "provider",
+          foreignField: "_id",
+          as: "provider",
+        },
+      },
+
+
+      // -----------------------------------------------
+      // 4. CONVERT PROVIDER ARRAY TO OBJECT
+      // -----------------------------------------------
+
+      {
+        $unwind: {
+          path: "$provider",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+
+
+      // -----------------------------------------------
+      // 5. CALCULATE RATING
+      // -----------------------------------------------
+
+      {
+        $addFields: {
+
+          averageRating: {
+            $cond: [
+
+              {
+                $gt: [
+                  {
+                    $size: "$reviews",
+                  },
+                  0,
+                ],
+              },
+
+              {
+                $round: [
+                  {
+                    $avg:
+                      "$reviews.rating",
+                  },
+                  1,
+                ],
+              },
+
               0,
             ],
           },
-          {
-            $round: [
-              {
-                $avg: "$reviews.rating",
-              },
-              1,
-            ],
+
+          totalReviews: {
+            $size: "$reviews",
           },
-          0,
-        ],
+        },
       },
+    ];
 
-      totalReviews: {
-        $size: "$reviews",
-      },
-    },
-  },
-];
 
-    // -------------------------------------------------
-    // Minimum rating filter
-    // -------------------------------------------------
+    // =================================================
+    // MINIMUM RATING FILTER
+    // =================================================
 
-    if (minimumRating !== null) {
+    if (
+      minimumRating !== null
+    ) {
+
       aggregationPipeline.push({
         $match: {
           averageRating: {
@@ -260,42 +353,58 @@ const getServices = async (req, res) => {
       });
     }
 
-    // -------------------------------------------------
-    // Remove reviews array
-    // -------------------------------------------------
+
+    // =================================================
+    // REMOVE PASSWORD + REVIEWS
+    // =================================================
 
     aggregationPipeline.push({
-      $project: {
-        reviews: 0,
-        "provider.password": 0,
 
+      $project: {
+
+        reviews: 0,
+
+        "provider.password": 0,
       },
+
     });
 
-    // -------------------------------------------------
-    // Sorting
-    // -------------------------------------------------
+
+    // =================================================
+    // SORTING
+    // =================================================
 
     if (sort === "rating") {
+
       aggregationPipeline.push({
         $sort: {
           averageRating: -1,
         },
       });
-    } else if (sort === "price_low") {
+
+    } else if (
+      sort === "price_low"
+    ) {
+
       aggregationPipeline.push({
         $sort: {
           price: 1,
         },
       });
-    } else if (sort === "price_high") {
+
+    } else if (
+      sort === "price_high"
+    ) {
+
       aggregationPipeline.push({
         $sort: {
           price: -1,
         },
       });
+
     } else {
-      // Default: newest first
+
+      // Newest first
       aggregationPipeline.push({
         $sort: {
           createdAt: -1,
@@ -303,146 +412,220 @@ const getServices = async (req, res) => {
       });
     }
 
-    // -------------------------------------------------
-    // Pagination
-    // -------------------------------------------------
+
+    // =================================================
+    // PAGINATION
+    // =================================================
 
     aggregationPipeline.push(
+
       {
         $skip: skip,
       },
+
       {
         $limit: itemsPerPage,
       }
+
     );
 
-    // -------------------------------------------------
-    // Execute aggregation
-    // -------------------------------------------------
-
-    const services = await Service.aggregate(
-      aggregationPipeline
-    );
 
     // =================================================
-    // COUNT TOTAL MATCHING SERVICES
+    // EXECUTE
     // =================================================
 
-    // Important:
-    // Use the same rating logic so pagination remains correct.
+    const services =
+      await Service.aggregate(
+        aggregationPipeline
+      );
+
+
+    // =================================================
+    // COUNT TOTAL SERVICES
+    // =================================================
 
     let totalServices;
 
-    if (minimumRating !== null) {
-      const countResult = await Service.aggregate([
-        {
-          $match: serviceMatch,
-        },
 
-        {
-          $lookup: {
-            from: "reviews",
-            localField: "_id",
-            foreignField: "service",
-            as: "reviews",
+    if (
+      minimumRating !== null
+    ) {
+
+      const countResult =
+        await Service.aggregate([
+
+          {
+            $match:
+              serviceMatch,
           },
-        },
 
-        {
-          $addFields: {
-            averageRating: {
-              $cond: [
-                {
-                  $gt: [
-                    { $size: "$reviews" },
-                    0,
-                  ],
-                },
-                {
-                  $avg: "$reviews.rating",
-                },
-                0,
-              ],
+          {
+            $lookup: {
+              from: "reviews",
+              localField: "_id",
+              foreignField: "service",
+              as: "reviews",
             },
           },
-        },
 
-        {
-          $match: {
-            averageRating: {
-              $gte: minimumRating,
+          {
+            $addFields: {
+
+              averageRating: {
+                $cond: [
+
+                  {
+                    $gt: [
+                      {
+                        $size:
+                          "$reviews",
+                      },
+                      0,
+                    ],
+                  },
+
+                  {
+                    $avg:
+                      "$reviews.rating",
+                  },
+
+                  0,
+                ],
+              },
             },
           },
-        },
 
-        {
-          $count: "total",
-        },
-      ]);
+          {
+            $match: {
+              averageRating: {
+                $gte:
+                  minimumRating,
+              },
+            },
+          },
+
+          {
+            $count: "total",
+          },
+
+        ]);
+
 
       totalServices =
         countResult.length > 0
           ? countResult[0].total
           : 0;
+
     } else {
+
       totalServices =
-        await Service.countDocuments(serviceMatch);
+        await Service.countDocuments(
+          serviceMatch
+        );
     }
 
-    // -------------------------------------------------
-    // Pagination information
-    // -------------------------------------------------
 
-    const totalPages = Math.ceil(
-      totalServices / itemsPerPage
-    );
+    // =================================================
+    // PAGINATION INFORMATION
+    // =================================================
+
+    const totalPages =
+      Math.ceil(
+        totalServices /
+        itemsPerPage
+      );
+
+
+    // =================================================
+    // RESPONSE
+    // =================================================
 
     res.status(200).json({
+
       services,
 
       pagination: {
+
         page: currentPage,
+
         limit: itemsPerPage,
+
         totalServices,
+
         totalPages,
-        hasNextPage: currentPage < totalPages,
-        hasPreviousPage: currentPage > 1,
+
+        hasNextPage:
+          currentPage <
+          totalPages,
+
+        hasPreviousPage:
+          currentPage > 1,
       },
+
     });
+
   } catch (error) {
-    console.error("Get services error:", error);
+
+    console.error(
+      "Get services error:",
+      error
+    );
 
     res.status(500).json({
-      message: "Failed to fetch services",
+      message:
+        "Failed to fetch services",
     });
   }
 };
+
 
 // =====================================================
 // GET SINGLE SERVICE
 // =====================================================
 
-const getServiceById = async (req, res) => {
+const getServiceById = async (
+  req,
+  res
+) => {
+
   try {
-    const service = await Service.findById(
-      req.params.id
-    );
+
+    const service =
+      await Service.findById(
+        req.params.id
+      ).populate(
+        "provider",
+        "name email availability"
+      );
+
 
     if (!service) {
+
       return res.status(404).json({
-        message: "Service not found",
+        message:
+          "Service not found",
       });
     }
 
-    res.status(200).json(service);
+
+    res.status(200).json(
+      service
+    );
+
   } catch (error) {
-    console.error("Get service error:", error);
+
+    console.error(
+      "Get service error:",
+      error
+    );
 
     res.status(500).json({
-      message: "Failed to fetch service",
+      message:
+        "Failed to fetch service",
     });
   }
 };
+
 
 // =====================================================
 // GET PENDING SERVICES
@@ -450,12 +633,22 @@ const getServiceById = async (req, res) => {
 
 const getPendingServices = async (req, res) => {
   try {
+
     const services = await Service.find({
       status: "pending",
-    });
+    })
+      .populate(
+        "provider",
+        "name email availability"
+      )
+      .sort({
+        createdAt: -1,
+      });
 
     res.status(200).json(services);
+
   } catch (error) {
+
     console.error(
       "Get pending services error:",
       error
@@ -467,179 +660,240 @@ const getPendingServices = async (req, res) => {
   }
 };
 
+
 // =====================================================
 // APPROVE SERVICE
 // =====================================================
 
-const approveService = async (req, res) => {
+const approveService = async (
+  req,
+  res
+) => {
+
   try {
-    const service = await Service.findById(
-      req.params.id
-    );
+
+    const service =
+      await Service.findById(
+        req.params.id
+      );
+
 
     if (!service) {
+
       return res.status(404).json({
-        message: "Service not found",
+        message:
+          "Service not found",
       });
     }
 
-    // Only pending services can be approved
-    if (service.status !== "pending") {
+
+    if (
+      service.status !==
+      "pending"
+    ) {
+
       return res.status(400).json({
         message:
           "Only pending services can be approved",
       });
     }
 
-    service.status = "approved";
 
-    // Clear previous admin comment
-    service.adminComment = "";
+    service.status =
+      "approved";
+
+    service.adminComment =
+      "";
+
 
     await service.save();
 
+
     res.status(200).json({
-      message: "Service approved successfully",
+
+      message:
+        "Service approved successfully",
+
       service,
+
     });
+
   } catch (error) {
+
     console.error(
       "Approve service error:",
       error
     );
 
     res.status(500).json({
-      message: "Failed to approve service",
+      message:
+        "Failed to approve service",
     });
   }
 };
+
 
 // =====================================================
 // REQUEST CHANGES
 // =====================================================
 
-const requestChanges = async (req, res) => {
+const requestChanges = async (
+  req,
+  res
+) => {
+
   try {
-    const { adminComment } = req.body;
+
+    const {
+      adminComment,
+    } = req.body;
+
 
     if (
       !adminComment ||
       adminComment.trim() === ""
     ) {
+
       return res.status(400).json({
-        message: "Admin comment is required",
+        message:
+          "Admin comment is required",
       });
     }
 
-    const service = await Service.findById(
-      req.params.id
-    );
+
+    const service =
+      await Service.findById(
+        req.params.id
+      );
+
 
     if (!service) {
+
       return res.status(404).json({
-        message: "Service not found",
+        message:
+          "Service not found",
       });
     }
 
-    // Only pending services can receive change requests
-    if (service.status !== "pending") {
+
+    if (
+      service.status !==
+      "pending"
+    ) {
+
       return res.status(400).json({
         message:
           "Changes can only be requested for pending services",
       });
     }
 
-    service.status = "changes_requested";
-    service.adminComment = adminComment.trim();
+
+    service.status =
+      "changes_requested";
+
+    service.adminComment =
+      adminComment.trim();
+
 
     await service.save();
 
+
     res.status(200).json({
-      message: "Changes requested successfully",
+
+      message:
+        "Changes requested successfully",
+
       service,
+
     });
+
   } catch (error) {
+
     console.error(
       "Request changes error:",
       error
     );
 
     res.status(500).json({
-      message: "Failed to request changes",
+      message:
+        "Failed to request changes",
     });
   }
 };
+
 
 // =====================================================
 // REJECT SERVICE
 // =====================================================
 
-const rejectService = async (req, res) => {
-  try {
-    const { adminComment } = req.body;
+const rejectService = async (
+  req,
+  res
+) => {
 
-    // ========================================
-    // VALIDATE REJECTION REASON
-    // ========================================
+  try {
+
+    const {
+      adminComment,
+    } = req.body;
+
 
     if (
       !adminComment ||
       adminComment.trim() === ""
     ) {
+
       return res.status(400).json({
-        message: "Rejection reason is required",
+        message:
+          "Rejection reason is required",
       });
     }
 
-    // ========================================
-    // FIND SERVICE
-    // ========================================
 
-    const service = await Service.findById(
-      req.params.id
-    );
+    const service =
+      await Service.findById(
+        req.params.id
+      );
+
 
     if (!service) {
+
       return res.status(404).json({
-        message: "Service not found",
+        message:
+          "Service not found",
       });
     }
 
-    // ========================================
-    // ONLY PENDING SERVICES
-    // ========================================
 
-    if (service.status !== "pending") {
+    if (
+      service.status !==
+      "pending"
+    ) {
+
       return res.status(400).json({
         message:
           "Only pending services can be rejected",
       });
     }
 
-    // ========================================
-    // UPDATE SERVICE
-    // ========================================
 
-    const updatedService =
-      await Service.findByIdAndUpdate(
-        req.params.id,
-        {
-          status: "rejected",
-          adminComment: adminComment.trim(),
-        },
-        {
-          new: true,
-          runValidators: false,
-        }
-      );
+    service.status =
+      "rejected";
 
-    // ========================================
-    // RESPONSE
-    // ========================================
+    service.adminComment =
+      adminComment.trim();
+
+
+    await service.save();
+
 
     res.status(200).json({
-      message: "Service rejected successfully",
-      service: updatedService,
+
+      message:
+        "Service rejected successfully",
+
+      service,
+
     });
 
   } catch (error) {
@@ -650,197 +904,301 @@ const rejectService = async (req, res) => {
     );
 
     res.status(500).json({
-      message: "Failed to reject service",
+      message:
+        "Failed to reject service",
     });
   }
 };
+
 
 // =====================================================
 // UPDATE SERVICE
 // =====================================================
 
-const updateService = async (req, res) => {
+const updateService = async (
+  req,
+  res
+) => {
+
   try {
-    const service = await Service.findById(
-      req.params.id
-    );
+
+    const service =
+      await Service.findById(
+        req.params.id
+      );
+
 
     if (!service) {
+
       return res.status(404).json({
-        message: "Service not found",
+        message:
+          "Service not found",
       });
     }
 
-    // Provider can update only their own service
+
+    // Provider can update own service
     // Admin can update any service
+
     if (
-      req.user.role === "provider" &&
-      service.provider.toString() !== req.user.id
+      req.user.role ===
+        "provider" &&
+      service.provider.toString() !==
+        req.user.id
     ) {
+
       return res.status(403).json({
         message:
           "You can update only your own services",
       });
     }
 
+
     const updateFields = {
+
       name: req.body.name,
+
       price: req.body.price,
-      description: req.body.description,
-      category: req.body.category,
+
+      description:
+        req.body.description,
+
+      category:
+        req.body.category,
+
       detailedDescription:
         req.body.detailedDescription,
+
     };
 
-    // Update image only if a new image was uploaded
+
     if (req.file) {
-      updateFields.image = req.file.filename;
+
+      updateFields.image =
+        req.file.filename;
     }
+
 
     const updatedService =
       await Service.findByIdAndUpdate(
+
         req.params.id,
+
         updateFields,
+
         {
           new: true,
           runValidators: true,
         }
+
       );
 
+
     res.status(200).json({
-      message: "Service updated successfully",
-      service: updatedService,
+
+      message:
+        "Service updated successfully",
+
+      service:
+        updatedService,
+
     });
+
   } catch (error) {
+
     console.error(
       "Update service error:",
       error
     );
 
     res.status(500).json({
-      message: "Failed to update service",
+      message:
+        "Failed to update service",
     });
   }
 };
+
 
 // =====================================================
 // DELETE SERVICE
 // =====================================================
 
-const deleteService = async (req, res) => {
+const deleteService = async (
+  req,
+  res
+) => {
+
   try {
-    const service = await Service.findById(
-      req.params.id
-    );
+
+    const service =
+      await Service.findById(
+        req.params.id
+      );
+
 
     if (!service) {
+
       return res.status(404).json({
-        message: "Service not found",
+        message:
+          "Service not found",
       });
     }
 
-    // Provider can delete only their own service
+
+    // Provider can delete own service
     // Admin can delete any service
+
     if (
-      req.user.role === "provider" &&
-      service.provider.toString() !== req.user.id
+      req.user.role ===
+        "provider" &&
+      service.provider.toString() !==
+        req.user.id
     ) {
+
       return res.status(403).json({
         message:
-          "You can delete only your own service",
+          "You can delete only your own services",
       });
     }
+
 
     await service.deleteOne();
 
+
     res.status(200).json({
-      message: "Service deleted successfully",
+      message:
+        "Service deleted successfully",
     });
+
   } catch (error) {
+
     console.error(
       "Delete service error:",
       error
     );
 
     res.status(500).json({
-      message: "Failed to delete service",
+      message:
+        "Failed to delete service",
     });
   }
 };
+
 
 // =====================================================
 // RESUBMIT SERVICE
 // =====================================================
 
-const resubmitService = async (req, res) => {
+const resubmitService = async (
+  req,
+  res
+) => {
+
   try {
-    const service = await Service.findById(
-      req.params.id
-    );
+
+    const service =
+      await Service.findById(
+        req.params.id
+      );
+
 
     if (!service) {
+
       return res.status(404).json({
-        message: "Service not found",
+        message:
+          "Service not found",
       });
     }
 
-    // Only the owner provider can resubmit
+
+    // Only owner provider
+
     if (
-      service.provider.toString() !== req.user.id
+      service.provider.toString() !==
+      req.user.id
     ) {
+
       return res.status(403).json({
         message:
           "You can resubmit only your own service",
       });
     }
 
-    // Only services with requested changes
-    // can be resubmitted
+
+    // Only changes requested
+
     if (
-      service.status !== "changes_requested"
+      service.status !==
+      "changes_requested"
     ) {
+
       return res.status(400).json({
         message:
           "Only services with requested changes can be resubmitted",
       });
     }
 
-    service.status = "pending";
-    service.adminComment = "";
+
+    service.status =
+      "pending";
+
+    service.adminComment =
+      "";
+
 
     await service.save();
 
+
     res.status(200).json({
-      message: "Service resubmitted successfully",
+
+      message:
+        "Service resubmitted successfully",
+
       service,
+
     });
+
   } catch (error) {
+
     console.error(
       "Resubmit service error:",
       error
     );
 
     res.status(500).json({
-      message: "Failed to resubmit service",
+      message:
+        "Failed to resubmit service",
     });
   }
 };
 
+
 // =====================================================
-// EXPORT
+// EXPORTS
 // =====================================================
 
 module.exports = {
+
   addService,
+
   getServices,
+
   getServiceById,
+
   getProviderServices,
+
   getPendingServices,
+
   approveService,
+
   requestChanges,
+
   rejectService,
+
   updateService,
+
   deleteService,
+
   resubmitService,
-  getProviderServices,
+
 };

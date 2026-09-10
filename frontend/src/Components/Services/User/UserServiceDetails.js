@@ -210,6 +210,55 @@ const UserServiceDetails = () => {
 
             </div>
 
+            {/* ==========================================
+    PROVIDER AVAILABILITY
+========================================== */}
+
+<div className="service-availability">
+
+  <h3>
+    Provider Availability
+  </h3>
+
+  {service.provider?.availability?.days?.length > 0 ? (
+
+    <>
+      <p>
+        Available Days
+      </p>
+
+      <div className="availability-days">
+
+        {service.provider.availability.days.map(
+          (day) => (
+            <span key={day}>
+              {day}
+            </span>
+          )
+        )}
+
+      </div>
+
+      <p>
+        Working Hours
+      </p>
+
+      <strong>
+        {service.provider.availability.startTime}
+        {" — "}
+        {service.provider.availability.endTime}
+      </strong>
+    </>
+
+  ) : (
+
+    <p>
+      Provider availability is not configured.
+    </p>
+
+  )}
+
+</div>
 
             {/* ==================================
                 BOOK SERVICE
