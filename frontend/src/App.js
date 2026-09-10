@@ -21,11 +21,11 @@ import ProviderServicesPage from "./Components/Services/Provider/ProviderService
 import UserServicesPage from "./Components/Services/User/UserServicePage/UserServicesPage";
 import UserServiceDetails from "./Components/Services/User/UserServiceDetails";
 import UserBookService from "./Components/Services/User/UserBookService";
-import userBookings from "./Components/Services/User/UserBookings";
+import UserBookings from "./Components/Services/User/UserBookings/UserBookings";
 
 // Payment
 import StripeProvider from "./Components/Payment/StripeProvider";
-import UserBookings from "./Components/Services/User/UserBookings";
+// import UserBookings from "./Components/Services/User/UserBookings";
 
 function App() {
   return (
@@ -86,7 +86,7 @@ function App() {
           />
 
           <Route
-            path="/user/services/:serviceId/details"
+            path="/user/services/:serviceId/"
             element={<UserServiceDetails />}
           />
 

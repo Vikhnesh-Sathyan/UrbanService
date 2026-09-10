@@ -1,105 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { getServices } from "../../../Services/userService";
+import React from "react";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
-const ServiceDetails = () => {
-
-  // ==========================================
-  // ROUTER
-  // ==========================================
-
+const UserServiceDetails = () => {
   const { serviceId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
 
-
-  // ==========================================
-  // STATE
-  // ==========================================
-
-  const [service, setService] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-
-  // ==========================================
-  // LOAD SERVICE
-  // ==========================================
-
-  const loadService = async () => {
-    try {
-
-      setLoading(true);
-
-      const services = await getServices();
-
-      const selectedService = services.find(
-        (item) => item._id === serviceId
-      );
-
-      if (!selectedService) {
-        setService(null);
-        return;
-      }
-
-      console.log(
-        "SELECTED SERVICE:",
-        selectedService
-      );
-
-      setService(selectedService);
-
-    } catch (error) {
-
-      console.error(
-        "Failed to load service:",
-        error
-      );
-
-      setService(null);
-
-    } finally {
-
-      setLoading(false);
-
-    }
-  };
-
-
-  // ==========================================
-  // LOAD WHEN PAGE OPENS
-  // ==========================================
-
-  useEffect(() => {
-    loadService();
-  }, [serviceId]);
-
-
-  // ==========================================
-  // LOADING
-  // ==========================================
-
-  if (loading) {
-
-    return (
-      <div>
-        <h2>Loading service...</h2>
-      </div>
-    );
-
-  }
-
+  // Service comes from UserServicePage
+  const service = location.state?.service;
 
   // ==========================================
   // SERVICE NOT FOUND
   // ==========================================
 
   if (!service) {
-
     return (
       <div>
-
-        <h2>
-          Service Not Found
-        </h2>
+        <h2>Service Not Found</h2>
 
         <p>
           This service may no longer be available.
@@ -107,85 +28,89 @@ const ServiceDetails = () => {
 
         <button
           type="button"
-          onClick={() =>
-            navigate("/user/services")
-          }
+          onClick={() => navigate("/user/services")}
         >
           Back to Services
         </button>
-
       </div>
     );
-
   }
 
+  // ==========================================
+  // BOOK SERVICE
+  // ==========================================
+
+  const handleBookService = () => {
+    navigate(
+      `/user/services/${serviceId}/book`,
+      {
+        state: {
+          service,
+        },
+      }
+    );
+  };
 
   // ==========================================
-  // UI
+  // PAGE
   // ==========================================
 
   return (
-
     <div>
 
-      {/* ======================================
-          BACK BUTTON
-      ====================================== */}
+      {/* BACK */}
 
       <button
         type="button"
-        onClick={() =>
-          navigate("/user/services")
-        }
+        onClick={() => navigate("/user/services")}
       >
         ← Back to Services
       </button>
 
 
-      {/* ======================================
-          SERVICE IMAGE
-      ====================================== */}
+      {/* IMAGE */}
 
       {service.image && (
-
         <img
           src={`http://localhost:5000/uploads/${service.image}`}
           alt={service.name}
           width="300"
         />
-
       )}
 
 
-      {/* ======================================
-          SERVICE INFORMATION
-      ====================================== */}
+      {/* SERVICE */}
 
       <h1>
         {service.name}
       </h1>
 
+
+      {/* CATEGORY */}
+
       <p>
         Category: {service.category}
       </p>
 
+
+      {/* PRICE */}
+
       <h2>
         ₹{service.price}
       </h2>
+
+
+      {/* DESCRIPTION */}
 
       <p>
         {service.description}
       </p>
 
 
-      {/* ======================================
-          DETAILED DESCRIPTION
-      ====================================== */}
+      {/* DETAILED DESCRIPTION */}
 
       {service.detailedDescription && (
-
         <div>
-
           <h3>
             About this Service
           </h3>
@@ -193,15 +118,11 @@ const ServiceDetails = () => {
           <p>
             {service.detailedDescription}
           </p>
-
         </div>
-
       )}
 
 
-      {/* ======================================
-          PROVIDER
-      ====================================== */}
+      {/* PROVIDER */}
 
       <div>
 
@@ -224,28 +145,17 @@ const ServiceDetails = () => {
       </div>
 
 
-      {/* ======================================
-          BOOK SERVICE
-      ====================================== */}
+      {/* BOOK */}
 
       <button
-  type="button"
-  onClick={() =>
-    navigate(`/user/services/${service._id}/book`, {
-      state: {
-        service,
-      },
-    })
-  }
->
-
+        type="button"
+        onClick={handleBookService}
+      >
         Book Service
       </button>
 
     </div>
-
   );
-
 };
 
-export default ServiceDetails;
+export default UserServiceDetails;

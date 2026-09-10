@@ -19,11 +19,18 @@ const createBooking = async (req, res) => {
     const { service, phone, date, time, notes } = req.body;
 
     // Required fields
-    if (!service || !phone || !date || !time) {
-      return res.status(400).json({
-        message: "Service, phone, date and time are required",
-      });
-    }
+if (!service || !phone || !date || !time) {
+  return res.status(400).json({
+    message: "Service, phone, date and time are required",
+  });
+}
+
+// Validate phone
+if (!/^\d{10}$/.test(phone)) {
+  return res.status(400).json({
+    message: "Phone number must contain exactly 10 digits",
+  });
+}
 
     // Validate date
     const selectedDate = new Date(date);
