@@ -31,11 +31,30 @@ const ServiceCard = ({
         )}
 
 
-        {/* CATEGORY */}
+        {/* ======================================
+            CATEGORY
+        ====================================== */}
 
         <span className="user-service-category">
           {service.category}
         </span>
+
+
+        {/* ======================================
+            SERVICE TAG
+        ====================================== */}
+
+        {service.tag && (
+
+          <span
+            className={`user-service-tag user-service-tag-${service.tag
+              .toLowerCase()
+              .replace(/\s+/g, "-")}`}
+          >
+            {service.tag}
+          </span>
+
+        )}
 
       </div>
 

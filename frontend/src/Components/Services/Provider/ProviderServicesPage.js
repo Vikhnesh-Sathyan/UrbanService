@@ -456,40 +456,59 @@ const ProviderServicesPage = () => {
               />
 
             </div>
+{/* Tag */}
 
-            {/* Tag */}
+<div className="form-group">
 
-            <div className="form-group">
+  <label>
+    Service Tag
+  </label>
 
-              <label>
-                Tag
-              </label>
+  <select
+    name="tag"
+    value={formData.tag}
+    onChange={handleChange}
+  >
 
-              <select
-                name="tag"
-                value={formData.tag}
-                onChange={handleChange}
-              >
+    <option value="">
+      No Tag
+    </option>
 
-                <option value="">
-                  No Tag
-                </option>
+    <option value="New">
+      New
+    </option>
 
-                <option value="New">
-                  New
-                </option>
+    <option value="Popular">
+      Popular
+    </option>
 
-                <option value="Popular">
-                  Popular
-                </option>
+    <option value="Featured">
+      Featured
+    </option>
 
-                <option value="Offer">
-                  Offer
-                </option>
+    <option value="Recommended">
+      Recommended
+    </option>
 
-              </select>
+    <option value="Best Value">
+      Best Value
+    </option>
 
-            </div>
+    <option value="Top Rated">
+      Top Rated
+    </option>
+
+    <option value="Limited Offer">
+      Limited Offer
+    </option>
+
+    <option value="Offer">
+      Offer
+    </option>
+
+  </select>
+
+</div>
 
             {/* Image */}
 

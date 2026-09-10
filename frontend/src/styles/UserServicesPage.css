@@ -861,65 +861,110 @@
 }
 
 
-/* =====================================================
-   LARGE TABLET
-===================================================== */
+/* ==========================================
+   SERVICE TAG
+========================================== */
 
-@media (max-width: 1200px) {
-
-  .user-services-filters {
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
-  }
-
-  .user-clear-filter {
-    width: 100%;
-  }
-
-  .user-services-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
+.user-service-image-wrapper {
+  position: relative;
 }
 
 
-/* =====================================================
-   TABLET
-===================================================== */
+/* TAG BASE */
+.user-service-tag {
+  position: absolute;
 
-@media (max-width: 800px) {
+  top: 14px;
+  right: 14px;
+  left: auto;
 
-  .user-services-page {
-    padding: 30px 25px 50px;
-  }
+  z-index: 5;
 
+  padding: 7px 13px;
+  border-radius: 8px;
 
-  .user-services-header {
-    align-items: flex-start;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 
-    flex-direction: column;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 
-    gap: 15px;
-  }
-
-
-  .user-services-header h1 {
-    font-size: 28px;
-  }
-
-
-  .user-services-filters {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
-
-  .user-services-grid {
-    grid-template-columns: 1fr;
-  }
-
+  backdrop-filter: blur(8px);
 }
+
+/* NEW */
+
+.user-service-tag-new {
+  background: rgba(59, 130, 246, 0.92);
+  color: white;
+}
+
+
+/* POPULAR */
+
+.user-service-tag-popular {
+  background: rgba(245, 158, 11, 0.94);
+  color: white;
+}
+
+
+/* FEATURED */
+
+.user-service-tag-featured {
+  background: rgba(124, 58, 237, 0.94);
+  color: white;
+}
+
+
+/* RECOMMENDED */
+
+.user-service-tag-recommended {
+  background: rgba(16, 185, 129, 0.94);
+  color: white;
+}
+
+
+/* BEST VALUE */
+
+.user-service-tag-best-value {
+  background: rgba(6, 182, 212, 0.94);
+  color: white;
+}
+
+
+/* TOP RATED */
+
+.user-service-tag-top-rated {
+  background: rgba(234, 179, 8, 0.95);
+  color: white;
+}
+
+
+/* LIMITED OFFER */
+
+.user-service-tag-limited-offer {
+  background: rgba(239, 68, 68, 0.95);
+  color: white;
+}
+
+
+/* OFFER */
+
+.user-service-tag-offer {
+  background: rgba(236, 72, 153, 0.95);
+  color: white;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 /* =====================================================
@@ -1001,29 +1046,3 @@
 
 }
 
-
-/* =====================================================
-   SMALL MOBILE
-===================================================== */
-
-@media (max-width: 380px) {
-
-  .user-service-footer {
-    flex-direction: column;
-
-    align-items: stretch;
-  }
-
-
-  .user-service-button {
-    justify-content: center;
-  }
-
-
-  .user-pagination > button {
-    min-width: 80px;
-
-    padding: 0 9px;
-  }
-
-}

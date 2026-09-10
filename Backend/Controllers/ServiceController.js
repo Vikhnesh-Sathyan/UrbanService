@@ -12,6 +12,8 @@ const addService = async (req, res) => {
       description,
       category,
       detailedDescription,
+      tag,
+      
     } = req.body;
 
     const image = req.file
@@ -25,6 +27,7 @@ const addService = async (req, res) => {
       category,
       image,
       detailedDescription,
+      tag,
 
       // Logged-in provider
       provider: req.user.id,
@@ -968,6 +971,8 @@ const updateService = async (
 
       detailedDescription:
         req.body.detailedDescription,
+
+      tag: req.body.tag,
 
     };
 
