@@ -75,6 +75,26 @@ export const rescheduleBooking = async (
 };
 
 
+// ===============================
+// ADD RATING & REVIEW
+// ===============================
+export const addBookingReview = async (
+  bookingId,
+  rating,
+  review
+) => {
+  const response = await axios.patch(
+    `${API}/${bookingId}/review`,
+    {
+      rating,
+      review,
+    },
+    getAuthConfig()
+  );
+
+  return response.data;
+};
+
 // ==========================================
 // PROVIDER BOOKINGS
 // ==========================================

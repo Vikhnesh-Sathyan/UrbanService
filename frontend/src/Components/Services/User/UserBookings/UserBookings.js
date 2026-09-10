@@ -4,6 +4,7 @@ import {
   getMyBookings,
   cancelBooking,
   rescheduleBooking,
+  addBookingReview,
 } from "../../../../Services/bookingService";
 
 import BookingCard from "./BookingCard";
@@ -38,6 +39,16 @@ const UserBookings = () => {
 
   const [newTime, setNewTime] =
     useState("");
+
+  // ==========================================
+  // REVIEW
+  // ==========================================
+
+  const [reviewId, setReviewId] = useState(null);
+
+  const [rating, setRating] = useState(0);
+
+  const [review, setReview] = useState("");
 
 
   // ==========================================
@@ -188,6 +199,69 @@ const UserBookings = () => {
 
   };
 
+// ==========================================
+// OPEN REVIEW
+// ==========================================
+
+const handleOpenReview = (booking) => {
+  setReviewId(booking._id);
+  setRating(0);
+  setReview("");
+};
+
+
+// ==========================================
+// CLOSE REVIEW
+// ==========================================
+
+const handleCloseReview = () => {
+  setReviewId(null);
+  setRating(0);
+  setReview("");
+};
+
+// ==========================================
+// SUBMIT REVIEW
+// ==========================================
+
+const handleSubmitReview = async (e) => {
+  e.preventDefault();
+
+  if (!rating) {
+    alert("Please select a rating");
+    return;
+  }
+
+  try {
+    setActionLoading(true);
+
+    await addBookingReview(
+      reviewId,
+      rating,
+      review
+    );
+
+    alert("Review submitted successfully");
+
+    handleCloseReview();
+
+    await loadBookings();
+
+  } catch (error) {
+    console.error(
+      "Review submission error:",
+      error
+    );
+
+    alert(
+      error.response?.data?.message ||
+      "Failed to submit review"
+    );
+
+  } finally {
+    setActionLoading(false);
+  }
+};
 
   // ==========================================
   // RESCHEDULE BOOKING
@@ -360,15 +434,14 @@ const UserBookings = () => {
 
           {bookings.map((booking) => (
 
-            <BookingCard
-              key={booking._id}
-              booking={booking}
-              actionLoading={actionLoading}
-              onCancel={handleCancel}
-              onReschedule={
-                handleOpenReschedule
-              }
-            />
+        <BookingCard
+  key={booking._id}
+  booking={booking}
+  actionLoading={actionLoading}
+  onCancel={handleCancel}
+  onReschedule={handleOpenReschedule}
+  onReview={handleOpenReview}
+/>
 
           ))}
 

@@ -5,12 +5,11 @@ const BookingCard = ({
   actionLoading,
   onCancel,
   onReschedule,
+  onReview,
 }) => {
 
   const getStatusClass = (status) => {
-
     switch (status) {
-
       case "pending":
         return "booking-status-pending";
 
@@ -34,9 +33,7 @@ const BookingCard = ({
     }
   };
 
-
   return (
-
     <div className="booking-card">
 
       {/* SERVICE */}
@@ -49,22 +46,18 @@ const BookingCard = ({
       {/* CATEGORY */}
 
       {booking.service?.category && (
-
         <p>
           Category: {booking.service.category}
         </p>
-
       )}
 
 
       {/* PRICE */}
 
       {booking.service?.price !== undefined && (
-
         <p>
           Price: ₹{booking.service.price}
         </p>
-
       )}
 
 
@@ -74,7 +67,6 @@ const BookingCard = ({
         Provider:{" "}
         {booking.provider?.name || "Unknown Provider"}
       </p>
-
 
       <p>
         Provider Email:{" "}
@@ -106,18 +98,15 @@ const BookingCard = ({
       {/* NOTES */}
 
       {booking.notes && (
-
         <p>
           Notes: {booking.notes}
         </p>
-
       )}
 
 
       {/* STATUS */}
 
       <p>
-
         Status:{" "}
 
         <span
@@ -127,11 +116,10 @@ const BookingCard = ({
         >
           {booking.status || "pending"}
         </span>
-
       </p>
 
 
-      {/* ACTIONS */}
+      {/* CANCEL / RESCHEDULE */}
 
       {(booking.status === "pending" ||
         booking.status === "accepted") && (
@@ -148,7 +136,6 @@ const BookingCard = ({
             Cancel Booking
           </button>
 
-
           <button
             type="button"
             disabled={actionLoading}
@@ -160,12 +147,43 @@ const BookingCard = ({
           </button>
 
         </div>
+      )}
 
+
+      {/* REVIEW */}
+
+      {booking.status === "completed" && (
+        <div className="booking-review-section">
+
+          {booking.rating ? (
+            <>
+              <p>
+                Your Rating: {"⭐".repeat(booking.rating)}
+              </p>
+
+              {booking.review && (
+                <p>
+                  Your Review: {booking.review}
+                </p>
+              )}
+            </>
+          ) : (
+            <button
+              type="button"
+              disabled={actionLoading}
+              onClick={() =>
+                onReview(booking)
+              }
+            >
+              Leave a Review
+            </button>
+          )}
+
+        </div>
       )}
 
     </div>
   );
 };
-
 
 export default BookingCard;
