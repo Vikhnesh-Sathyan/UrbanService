@@ -112,7 +112,128 @@ const loginUser = async (req, res) => {
   }
 };
 
+
+// ==========================================
+// UPDATE PROVIDER AVAILABILITY
+// ==========================================
+
+const updateAvailability = async (req, res) => {
+  try {
+    const { days, startTime, endTime } = req.body;
+
+    // Only providers can update availability
+    if (req.user.role !== "provider") {
+      return res.status(403).json({
+        message: "Only providers can update availability",
+      });
+    }
+
+    // Required fields
+    if (
+      !Array.isArray(days) ||
+      days.length === 0 ||
+      !startTime ||
+      !endTime
+    ) {
+      return res.status(400).json({
+        message: "Days, start time and end time are required",
+      });
+    }
+
+    // Validate time format
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+    if (!timeRegex.test(startTime)) {
+      return res.status(400).json({
+        message: "Invalid start time",
+      });
+    }
+
+    if (!timeRegex.test(endTime)) {
+      return res.status(400).json({
+        message: "Invalid end time",
+      });
+    }
+
+    // Convert time to minutes
+    const convertToMinutes = (time) => {
+      const [hours, minutes] = time.split(":").map(Number);
+      return hours * 60 + minutes;
+    };
+
+    const startMinutes = convertToMinutes(startTime);
+    const endMinutes = convertToMinutes(endTime);
+
+    // Start time must be before end time
+    if (startMinutes >= endMinutes) {
+      return res.status(400).json({
+        message: "Start time must be before end time",
+      });
+    }
+
+    // Allowed days
+    const allowedDays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+
+    // Validate days
+    const invalidDay = days.some(
+      (day) => !allowedDays.includes(day)
+    );
+
+    if (invalidDay) {
+      return res.status(400).json({
+        message: "Invalid day selected",
+      });
+    }
+
+    // Update provider
+    const provider = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        availability: {
+          days,
+          startTime,
+          endTime,
+        },
+      },
+      {
+        new: true,
+      }
+    ).select("-password");
+
+    if (!provider) {
+      return res.status(404).json({
+        message: "Provider not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Availability updated successfully",
+      availability: provider.availability,
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Update availability error:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Failed to update availability",
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  updateAvailability,
 };

@@ -16,6 +16,7 @@ import UserDashboard from "./Components/Dashboard/User/UserDashboard";
 // Provider
 import ProviderBookingsPage from "./Components/Services/Provider/ProviderBookingsPage";
 import ProviderServicesPage from "./Components/Services/Provider/ProviderServicesPage";
+import ProviderAvailability from "./Components/Services/Provider/ProviderAvailability";
 
 //Customer
 import UserServicesPage from "./Components/Services/User/UserServicePage/UserServicesPage";
@@ -66,6 +67,11 @@ function App() {
           <Route
             path="/provider/bookings"
             element={<ProviderBookingsPage />}
+          />
+
+          <Route
+            path="/provider/availability"
+            element={<ProviderAvailability />}
           />
 
           {/* ================= CUSTOMER ================= */}
