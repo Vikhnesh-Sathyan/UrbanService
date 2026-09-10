@@ -549,9 +549,6 @@ const rescheduleBooking = async (req, res) => {
       role: "provider",
     });
 
-      console.log("SERVICE PROVIDER ID:", selectedService.provider);
-console.log("PROVIDER FOUND:", provider);
-console.log("PROVIDER AVAILABILITY:", provider?.availability);
 
     if (!provider) {
       return res.status(404).json({

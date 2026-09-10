@@ -670,7 +670,473 @@
 
 
 
+/* ==========================================
+   ADMIN BOOKINGS SECTION
+========================================== */
 
+.admin-bookings-section {
+  width: 100%;
+  padding: 32px;
+  box-sizing: border-box;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+
+/* ==========================================
+   SECTION HEADER
+========================================== */
+
+.admin-section-header {
+  max-width: 1400px;
+  margin: 0 auto 24px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.admin-label {
+  display: block;
+  margin-bottom: 8px;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+
+  color: #6366f1;
+}
+
+.admin-section-header h2 {
+  margin: 0;
+
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.7px;
+
+  color: #0f172a;
+}
+
+.admin-section-header p {
+  margin: 8px 0 0;
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  color: #64748b;
+}
+
+
+/* ==========================================
+   BOOKING COUNT
+========================================== */
+
+.booking-count {
+  flex-shrink: 0;
+
+  padding: 9px 14px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #475569;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+
+/* ==========================================
+   TABLE WRAPPER
+========================================== */
+
+.admin-bookings-table-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  overflow-x: auto;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+
+/* ==========================================
+   TABLE
+========================================== */
+
+.admin-bookings-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 900px;
+}
+
+
+/* ==========================================
+   TABLE HEADER
+========================================== */
+
+.admin-bookings-table thead {
+  background: #f8fafc;
+}
+
+.admin-bookings-table th {
+  padding: 15px 20px;
+
+  border-bottom: 1px solid #e2e8f0;
+
+  text-align: left;
+
+  color: #64748b;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+
+  white-space: nowrap;
+}
+
+
+/* ==========================================
+   TABLE BODY
+========================================== */
+
+.admin-bookings-table td {
+  padding: 18px 20px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  vertical-align: middle;
+
+  font-size: 14px;
+
+  color: #334155;
+}
+
+.admin-bookings-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.admin-bookings-table tbody tr:hover {
+  background: #fafbff;
+}
+
+.admin-bookings-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* ==========================================
+   CUSTOMER / PROVIDER
+========================================== */
+
+.booking-person {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  min-width: 150px;
+}
+
+.booking-person strong {
+  color: #0f172a;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.booking-person span {
+  color: #94a3b8;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+}
+
+
+/* ==========================================
+   SERVICE
+========================================== */
+
+.booking-service {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  min-width: 150px;
+}
+
+.booking-service strong {
+  color: #0f172a;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.booking-service span {
+  width: fit-content;
+
+  padding: 3px 7px;
+
+  border-radius: 6px;
+
+  background: #f1f5f9;
+
+  color: #64748b;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+
+/* ==========================================
+   DATE
+========================================== */
+
+.admin-bookings-table td:nth-child(4) {
+  color: #334155;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* ==========================================
+   TIME
+========================================== */
+
+.admin-bookings-table td:nth-child(5) {
+  color: #475569;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* ==========================================
+   STATUS BASE
+========================================== */
+
+.booking-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 82px;
+
+  padding: 6px 10px;
+
+  border-radius: 8px;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  text-transform: capitalize;
+
+  border: 1px solid transparent;
+}
+
+
+/* ==========================================
+   PENDING
+========================================== */
+
+.booking-status-pending {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+
+/* ==========================================
+   ACCEPTED
+========================================== */
+
+.booking-status-accepted {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+}
+
+
+/* ==========================================
+   IN PROGRESS
+========================================== */
+
+.booking-status-progress {
+  background: #f5f3ff;
+  color: #7c3aed;
+  border-color: #ddd6fe;
+}
+
+
+/* ==========================================
+   COMPLETED
+========================================== */
+
+.booking-status-completed {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+
+/* ==========================================
+   REJECTED
+========================================== */
+
+.booking-status-rejected {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+
+/* ==========================================
+   CANCELLED
+========================================== */
+
+.booking-status-cancelled {
+  background: #f8fafc;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+
+/* ==========================================
+   DEFAULT STATUS
+========================================== */
+
+.booking-status-default {
+  background: #f8fafc;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+
+/* ==========================================
+   EMPTY STATE
+========================================== */
+
+.admin-empty-state {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  padding: 70px 30px;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.admin-empty-icon {
+  width: 54px;
+  height: 54px;
+
+  margin: 0 auto 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background: #f1f5f9;
+
+  font-size: 24px;
+}
+
+.admin-empty-state h3 {
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.admin-empty-state p {
+  margin: 8px 0 0;
+
+  color: #94a3b8;
+
+  font-size: 13px;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 900px) {
+
+  .admin-bookings-section {
+    padding: 24px;
+  }
+
+  .admin-section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-section-header h2 {
+    font-size: 26px;
+  }
+
+  .booking-count {
+    align-self: flex-start;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .admin-bookings-section {
+    padding: 16px;
+  }
+
+  .admin-section-header {
+    margin-bottom: 18px;
+  }
+
+  .admin-section-header h2 {
+    font-size: 24px;
+  }
+
+  .admin-bookings-table-wrapper {
+    border-radius: 14px;
+  }
+
+}
 
 
 /* ========================================
