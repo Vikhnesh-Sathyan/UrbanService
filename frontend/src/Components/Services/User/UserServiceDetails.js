@@ -5,12 +5,14 @@ import {
   useParams,
 } from "react-router-dom";
 
+import "../../../styles/UserServiceDetails.css";
+
 const UserServiceDetails = () => {
   const { serviceId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Service comes from UserServicePage
+  // Service passed from UserServicePage
   const service = location.state?.service;
 
   // ==========================================
@@ -19,19 +21,23 @@ const UserServiceDetails = () => {
 
   if (!service) {
     return (
-      <div>
-        <h2>Service Not Found</h2>
+      <div className="service-details-page">
+        <div className="service-not-found">
 
-        <p>
-          This service may no longer be available.
-        </p>
+          <h2>Service Not Found</h2>
 
-        <button
-          type="button"
-          onClick={() => navigate("/user/services")}
-        >
-          Back to Services
-        </button>
+          <p>
+            This service may no longer be available.
+          </p>
+
+          <button
+            type="button"
+            onClick={() => navigate("/user/services")}
+          >
+            ← Back to Services
+          </button>
+
+        </div>
       </div>
     );
   }
@@ -41,14 +47,11 @@ const UserServiceDetails = () => {
   // ==========================================
 
   const handleBookService = () => {
-    navigate(
-      `/user/services/${serviceId}/book`,
-      {
-        state: {
-          service,
-        },
-      }
-    );
+    navigate(`/user/services/${serviceId}/book`, {
+      state: {
+        service,
+      },
+    });
   };
 
   // ==========================================
@@ -56,61 +59,184 @@ const UserServiceDetails = () => {
   // ==========================================
 
   return (
-    <div>
+    <div className="service-details-page">
 
-      {/* BACK */}
+      {/* ======================================
+          BACK BUTTON
+      ====================================== */}
 
       <button
         type="button"
+        className="service-details-back"
         onClick={() => navigate("/user/services")}
       >
         ← Back to Services
       </button>
 
 
-      {/* IMAGE */}
+      {/* ======================================
+          MAIN SERVICE CARD
+      ====================================== */}
 
-      {service.image && (
-        <img
-          src={`http://localhost:5000/uploads/${service.image}`}
-          alt={service.name}
-          width="300"
-        />
-      )}
+      <div className="service-details-card">
 
+        <div className="service-details-main">
 
-      {/* SERVICE */}
+          {/* ======================================
+              SERVICE IMAGE
+          ====================================== */}
 
-      <h1>
-        {service.name}
-      </h1>
+          <div className="service-details-image">
 
+            {service.image ? (
+              <img
+                src={`http://localhost:5000/uploads/${service.image}`}
+                alt={service.name}
+              />
+            ) : (
+              <div className="service-details-no-image">
+                No Image
+              </div>
+            )}
 
-      {/* CATEGORY */}
-
-      <p>
-        Category: {service.category}
-      </p>
-
-
-      {/* PRICE */}
-
-      <h2>
-        ₹{service.price}
-      </h2>
+          </div>
 
 
-      {/* DESCRIPTION */}
+          {/* ======================================
+              SERVICE INFORMATION
+          ====================================== */}
 
-      <p>
-        {service.description}
-      </p>
+          <div className="service-details-content">
+
+            {/* CATEGORY */}
+
+            <span className="service-details-category">
+              {service.category || "Service"}
+            </span>
 
 
-      {/* DETAILED DESCRIPTION */}
+            {/* SERVICE NAME */}
+
+            <h1>
+              {service.name}
+            </h1>
+
+
+            {/* PRICE */}
+
+            <div className="service-details-price">
+
+              <strong>
+                ₹{service.price}
+              </strong>
+
+              <span>
+                Starting price
+              </span>
+
+            </div>
+
+
+            {/* DESCRIPTION */}
+
+            <p className="service-details-description">
+              {service.description ||
+                "No description available for this service."}
+            </p>
+
+
+            {/* ==================================
+                DETAILED DESCRIPTION
+            ================================== */}
+
+            {service.detailedDescription && (
+              <div className="service-details-about">
+
+                <h3>
+                  About this Service
+                </h3>
+
+                <p>
+                  {service.detailedDescription}
+                </p>
+
+              </div>
+            )}
+
+
+            {/* DIVIDER */}
+
+            <div className="service-details-divider" />
+
+
+            {/* ==================================
+                PROVIDER
+            ================================== */}
+
+            <div className="service-provider-section">
+
+              <div className="service-provider-title">
+                Service Provider
+              </div>
+
+              <div className="service-provider">
+
+                {/* PROVIDER AVATAR */}
+
+                <div className="service-provider-avatar">
+                  {service.provider?.name
+                    ? service.provider.name.charAt(0).toUpperCase()
+                    : "P"}
+                </div>
+
+
+                {/* PROVIDER INFORMATION */}
+
+                <div className="service-provider-info">
+
+                  <strong>
+                    {service.provider?.name ||
+                      "Unknown Provider"}
+                  </strong>
+
+                  <span>
+                    {service.provider?.email ||
+                      "Email not available"}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            {/* ==================================
+                BOOK SERVICE
+            ================================== */}
+
+            <button
+              type="button"
+              className="service-book-button"
+              onClick={handleBookService}
+            >
+              Book Service →
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      {/* ======================================
+          ABOUT SECTION
+      ====================================== */}
 
       {service.detailedDescription && (
-        <div>
+        <div className="service-about">
+
           <h3>
             About this Service
           </h3>
@@ -118,41 +244,9 @@ const UserServiceDetails = () => {
           <p>
             {service.detailedDescription}
           </p>
+
         </div>
       )}
-
-
-      {/* PROVIDER */}
-
-      <div>
-
-        <h3>
-          Service Provider
-        </h3>
-
-        <p>
-          Name:{" "}
-          {service.provider?.name ||
-            "Unknown Provider"}
-        </p>
-
-        <p>
-          Email:{" "}
-          {service.provider?.email ||
-            "Not available"}
-        </p>
-
-      </div>
-
-
-      {/* BOOK */}
-
-      <button
-        type="button"
-        onClick={handleBookService}
-      >
-        Book Service
-      </button>
 
     </div>
   );

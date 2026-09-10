@@ -1,0 +1,466 @@
+/* ==========================================
+   USER BOOKINGS PAGE
+========================================== */
+
+.user-bookings-page {
+  min-height: 100vh;
+  padding: 40px 48px 60px;
+  background: #f6f7fb;
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.user-bookings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+}
+
+.user-bookings-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+
+  color: #5b5cf0;
+}
+
+.user-bookings-header h1 {
+  margin: 0;
+
+  font-size: 38px;
+  font-weight: 800;
+
+  color: #111827;
+}
+
+.user-bookings-header p {
+  margin: 10px 0 0;
+
+  font-size: 16px;
+  color: #6b7280;
+}
+
+
+/* ==========================================
+   BOOKING COUNT
+========================================== */
+
+.user-bookings-count {
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.user-bookings-count strong {
+  margin-right: 5px;
+
+  font-size: 28px;
+  color: #111827;
+}
+
+
+/* ==========================================
+   BOOKINGS GRID
+========================================== */
+
+.user-bookings-grid {
+  display: grid;
+
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(340px, 1fr)
+  );
+
+  gap: 24px;
+}
+
+
+/* ==========================================
+   BOOKING CARD
+========================================== */
+
+.booking-card {
+  padding: 26px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+
+  box-shadow: 0 8px 25px rgba(17, 24, 39, 0.05);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 14px 35px rgba(17, 24, 39, 0.08);
+}
+
+
+/* ==========================================
+   SERVICE NAME
+========================================== */
+
+.booking-card h2 {
+  margin: 0 0 18px;
+
+  font-size: 23px;
+  font-weight: 800;
+
+  color: #111827;
+}
+
+
+/* ==========================================
+   BOOKING INFORMATION
+========================================== */
+
+.booking-card p {
+  margin: 9px 0;
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  color: #6b7280;
+}
+
+.booking-card p strong {
+  color: #111827;
+}
+
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.booking-status {
+  display: inline-flex;
+
+  padding: 5px 11px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-transform: capitalize;
+}
+
+
+/* Pending */
+
+.booking-status-pending {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+
+/* Accepted */
+
+.booking-status-accepted {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+
+/* In Progress */
+
+.booking-status-progress {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+
+/* Completed */
+
+.booking-status-completed {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+
+/* Rejected */
+
+.booking-status-rejected {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+
+/* Cancelled */
+
+.booking-status-cancelled {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+
+/* Default */
+
+.booking-status-default {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+
+/* ==========================================
+   ACTIONS
+========================================== */
+
+.booking-actions {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 22px;
+  padding-top: 20px;
+
+  border-top: 1px solid #edf0f4;
+}
+
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.booking-actions button {
+  flex: 1;
+
+  padding: 12px 16px;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+/* Cancel */
+
+.booking-actions button:first-child {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.booking-actions button:first-child:hover {
+  background: #fee2e2;
+}
+
+
+/* Reschedule */
+
+.booking-actions button:last-child {
+  background: #111827;
+  color: #ffffff;
+}
+
+.booking-actions button:last-child:hover {
+  background: #1f2937;
+}
+
+
+/* Disabled */
+
+.booking-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+
+/* ==========================================
+   RESCHEDULE FORM
+========================================== */
+
+.reschedule-form-container {
+  max-width: 520px;
+
+  margin: 35px auto 0;
+  padding: 28px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+
+  box-shadow: 0 12px 35px rgba(17, 24, 39, 0.08);
+}
+
+.reschedule-form-container h2 {
+  margin: 0 0 24px;
+
+  font-size: 24px;
+  color: #111827;
+}
+
+
+/* ==========================================
+   FORM GROUP
+========================================== */
+
+.reschedule-form-container form > div {
+  margin-bottom: 18px;
+}
+
+.reschedule-form-container label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #374151;
+}
+
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+.reschedule-form-container input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  border: 1px solid #dfe3eb;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  font-size: 14px;
+  color: #111827;
+
+  outline: none;
+}
+
+.reschedule-form-container input:focus {
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+
+/* ==========================================
+   FORM BUTTONS
+========================================== */
+
+.reschedule-form-container button {
+  padding: 12px 18px;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.reschedule-form-container button[type="submit"] {
+  margin-right: 10px;
+
+  background: #111827;
+  color: #ffffff;
+}
+
+.reschedule-form-container button[type="button"] {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.reschedule-form-container button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+
+/* ==========================================
+   NO BOOKINGS
+========================================== */
+
+.user-bookings-empty {
+  padding: 70px 20px;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+}
+
+.user-bookings-empty h2 {
+  margin-bottom: 8px;
+
+  color: #111827;
+}
+
+.user-bookings-empty p {
+  margin: 0;
+
+  color: #6b7280;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+
+  .user-bookings-page {
+    padding: 30px 20px 50px;
+  }
+
+  .user-bookings-header {
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 18px;
+  }
+
+  .user-bookings-header h1 {
+    font-size: 30px;
+  }
+
+  .user-bookings-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .booking-card {
+    padding: 20px;
+  }
+
+  .booking-actions {
+    flex-direction: column;
+  }
+
+  .reschedule-form-container {
+    padding: 20px;
+  }
+
+}

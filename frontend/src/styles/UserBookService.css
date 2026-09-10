@@ -1,0 +1,375 @@
+/* ==========================================
+   BOOK SERVICE PAGE
+========================================== */
+
+.user-book-service-page {
+  min-height: 100vh;
+  padding: 32px 6%;
+  background: #f7f8fc;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+
+/* ==========================================
+   BACK BUTTON
+========================================== */
+
+.user-book-back {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 0;
+  margin-bottom: 24px;
+  transition: 0.2s ease;
+}
+
+.user-book-back:hover {
+  color: #4f46e5;
+  transform: translateX(-3px);
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.user-book-header {
+  max-width: 1180px;
+  margin: 0 auto 28px;
+}
+
+.user-book-header h1 {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #0f172a;
+}
+
+.user-book-header p {
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 16px;
+}
+
+
+/* ==========================================
+   MAIN BOOKING LAYOUT
+========================================== */
+
+.user-book-layout {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+
+/* ==========================================
+   SERVICE SUMMARY CARD
+========================================== */
+
+.user-book-service-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
+}
+
+.user-book-service-image {
+  width: 100%;
+  height: 260px;
+  background: #eef0f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.user-book-service-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.user-book-no-image {
+  color: #94a3b8;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+/* ==========================================
+   SERVICE INFORMATION
+========================================== */
+
+.user-book-service-info {
+  padding: 28px;
+}
+
+.user-book-category {
+  display: inline-flex;
+  padding: 7px 12px;
+  border-radius: 9px;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.user-book-service-info h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.user-book-price {
+  margin-top: 15px;
+  font-size: 27px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.user-book-price-label {
+  display: block;
+  margin-top: 3px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.user-book-provider {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.user-book-provider-label {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.user-book-provider-name {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+
+/* ==========================================
+   BOOKING FORM CARD
+========================================== */
+
+.user-book-form-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  padding: 32px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
+}
+
+.user-book-form-card h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.user-book-form-subtitle {
+  margin: 7px 0 25px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   FORM GROUP
+========================================== */
+
+.user-book-form-group {
+  margin-bottom: 20px;
+}
+
+.user-book-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+.user-book-form-group input,
+.user-book-form-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  border: 1px solid #dbe1ea;
+  border-radius: 11px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.user-book-form-group input {
+  height: 48px;
+}
+
+.user-book-form-group textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.user-book-form-group input::placeholder,
+.user-book-form-group textarea::placeholder {
+  color: #a1a9b8;
+}
+
+.user-book-form-group input:focus,
+.user-book-form-group textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.10);
+}
+
+
+/* ==========================================
+   DATE + TIME
+========================================== */
+
+.user-book-date-time {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+
+/* ==========================================
+   CONFIRM BUTTON
+========================================== */
+
+.user-book-submit {
+  width: 100%;
+  margin-top: 8px;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 12px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-book-submit:hover:not(:disabled) {
+  background: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.22);
+}
+
+.user-book-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.user-book-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* ==========================================
+   SERVICE NOT FOUND
+========================================== */
+
+.user-book-not-found {
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 45px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
+}
+
+.user-book-not-found h2 {
+  margin: 0 0 10px;
+  color: #0f172a;
+}
+
+.user-book-not-found p {
+  margin-bottom: 24px;
+  color: #64748b;
+}
+
+.user-book-not-found button {
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: #111827;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 900px) {
+
+  .user-book-service-page {
+    padding: 24px;
+  }
+
+  .user-book-layout {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .user-book-service-page {
+    padding: 16px;
+  }
+
+  .user-book-header h1 {
+    font-size: 30px;
+  }
+
+  .user-book-form-card {
+    padding: 24px;
+  }
+
+  .user-book-service-info {
+    padding: 24px;
+  }
+
+  .user-book-date-time {
+    grid-template-columns: 1fr;
+  }
+
+}
