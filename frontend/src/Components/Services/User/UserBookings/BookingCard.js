@@ -118,7 +118,6 @@ const BookingCard = ({
         </span>
       </p>
 
-
       {/* CANCEL / RESCHEDULE */}
 
       {(booking.status === "pending" ||
@@ -157,12 +156,12 @@ const BookingCard = ({
 
           {booking.rating ? (
             <>
-              <p>
+               <p className="review-rating">
                 Your Rating: {"⭐".repeat(booking.rating)}
               </p>
 
               {booking.review && (
-                <p>
+                <p className="review-text">
                   Your Review: {booking.review}
                 </p>
               )}
@@ -170,6 +169,7 @@ const BookingCard = ({
           ) : (
             <button
               type="button"
+              className="review-button"
               disabled={actionLoading}
               onClick={() =>
                 onReview(booking)

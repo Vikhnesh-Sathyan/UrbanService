@@ -423,6 +423,325 @@
 
 
 /* ==========================================
+   REVIEW BUTTON
+========================================== */
+
+.booking-review-section {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.review-button {
+  border: none;
+  padding: 11px 20px;
+  border-radius: 10px;
+  background: #111827;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.review-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.review-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* ==========================================
+   REVIEW DISPLAY
+========================================== */
+
+.review-rating {
+  margin: 0 0 8px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.review-text {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+/* ==========================================
+   REVIEW OVERLAY
+========================================== */
+
+.review-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+
+/* ==========================================
+   REVIEW MODAL
+========================================== */
+
+.review-modal {
+  width: 100%;
+  max-width: 520px;
+
+  background: #ffffff;
+  border-radius: 20px;
+
+  padding: 28px;
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.18);
+
+  animation: reviewModalIn 0.2s ease;
+}
+
+@keyframes reviewModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* ==========================================
+   REVIEW HEADER
+========================================== */
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  margin-bottom: 25px;
+}
+
+.review-eyebrow {
+  display: block;
+  margin-bottom: 7px;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+
+  color: #64748b;
+}
+
+.review-header h2 {
+  margin: 0;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.review-header p {
+  margin: 7px 0 0;
+
+  color: #64748b;
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   CLOSE BUTTON
+========================================== */
+
+.review-close {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f1f5f9;
+  color: #475569;
+
+  font-size: 24px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.review-close:hover {
+  background: #e2e8f0;
+}
+
+
+/* ==========================================
+   FORM FIELD
+========================================== */
+
+.review-field {
+  margin-bottom: 22px;
+}
+
+.review-field label {
+  display: block;
+
+  margin-bottom: 10px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #1e293b;
+}
+
+
+/* ==========================================
+   STAR RATING
+========================================== */
+
+.rating-stars {
+  display: flex;
+  gap: 6px;
+}
+
+.star {
+  border: none;
+  background: transparent;
+
+  padding: 3px;
+
+  font-size: 32px;
+
+  color: #cbd5e1;
+
+  cursor: pointer;
+
+  transition: transform 0.15s ease,
+              color 0.15s ease;
+}
+
+.star:hover {
+  transform: scale(1.12);
+}
+
+.star.active {
+  color: #f59e0b;
+}
+
+
+/* ==========================================
+   TEXTAREA
+========================================== */
+
+.review-field textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 13px 14px;
+
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+
+  resize: vertical;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  color: #1e293b;
+
+  outline: none;
+
+  transition: border 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.review-field textarea:focus {
+  border-color: #94a3b8;
+
+  box-shadow:
+    0 0 0 3px rgba(148, 163, 184, 0.15);
+}
+
+.review-field textarea::placeholder {
+  color: #94a3b8;
+}
+
+
+/* ==========================================
+   ACTION BUTTONS
+========================================== */
+
+.review-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  margin-top: 25px;
+}
+
+.review-cancel,
+.review-submit {
+  padding: 11px 18px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.review-cancel {
+  border: 1px solid #dbe2ea;
+  background: #ffffff;
+  color: #475569;
+}
+
+.review-cancel:hover {
+  background: #f8fafc;
+}
+
+.review-submit {
+  border: none;
+  background: #111827;
+  color: #ffffff;
+}
+
+.review-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+}
+
+.review-cancel:disabled,
+.review-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==========================================
    RESPONSIVE
 ========================================== */
 

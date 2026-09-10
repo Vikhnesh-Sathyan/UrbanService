@@ -700,74 +700,6 @@ const rescheduleBooking = async (req, res) => {
   }
 };
 
-
-// ===============================
-// ADD RATING & REVIEW
-// ===============================
-const addReview = async (req, res) => {
-  try {
-    const { rating, review } = req.body;
-
-    // Validate rating
-    if (!rating) {
-      return res.status(400).json({
-        message: "Rating is required",
-      });
-    }
-
-    if (rating < 1 || rating > 5) {
-      return res.status(400).json({
-        message: "Rating must be between 1 and 5",
-      });
-    }
-
-    // Find customer's own booking
-    const booking = await Booking.findOne({
-      _id: req.params.id,
-      user: req.user.id,
-    });
-
-    if (!booking) {
-      return res.status(404).json({
-        message: "Booking not found",
-      });
-    }
-
-    // Only completed bookings can be reviewed
-    if (booking.status !== "completed") {
-      return res.status(400).json({
-        message: "Only completed bookings can be reviewed",
-      });
-    }
-
-    // Prevent duplicate review
-    if (booking.rating) {
-      return res.status(400).json({
-        message: "This booking has already been reviewed",
-      });
-    }
-
-    // Save review
-    booking.rating = rating;
-    booking.review = review || "";
-    booking.reviewedAt = new Date();
-
-    await booking.save();
-
-    res.status(200).json({
-      message: "Review submitted successfully",
-      booking,
-    });
-
-  } catch (error) {
-    console.error("Add review error:", error);
-
-    res.status(500).json({
-      message: "Failed to submit review",
-    });
-  }
-};
-
 // ===============================
 // ADD BOOKING REVIEW
 // ===============================
@@ -878,6 +810,5 @@ module.exports = {
   rejectBooking,
   updateBookingStatus,
   getAllBookings,
-  addReview,
   addBookingReview,
 };

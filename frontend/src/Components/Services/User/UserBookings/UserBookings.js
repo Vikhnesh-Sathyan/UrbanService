@@ -10,6 +10,8 @@ import {
 import BookingCard from "./BookingCard";
 import RescheduleForm from "./RescheduleForm";
 
+import ReviewForm from "./ReviewForm";
+
 import "../../../../styles/UserBookings.css";
 
 
@@ -468,6 +470,22 @@ const handleSubmitReview = async (e) => {
           }
         />
 
+      )}
+
+      {/* ======================================
+            REVIEW
+          ====================================== */}
+
+        {reviewId && (
+          <ReviewForm
+           rating={rating}
+           review={review}
+           setRating={setRating}
+           setReview={setReview}
+           loading={actionLoading}
+           onSubmit={handleSubmitReview}
+           onClose={handleCloseReview}
+         />
       )}
 
     </div>
