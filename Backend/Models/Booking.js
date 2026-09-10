@@ -52,6 +52,20 @@ const bookingSchema = new mongoose.Schema(
       ],
       default: "pending",
     },
+    rating: {
+  type: Number,
+  min: 1,
+  max: 5,
+},
+
+review: {
+  type: String,
+  default: "",
+},
+
+reviewedAt: {
+  type: Date,
+},
   },
   {
     timestamps: true,
