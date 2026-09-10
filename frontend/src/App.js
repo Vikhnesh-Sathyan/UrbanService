@@ -14,7 +14,7 @@ import ProviderDashboard from "./Components/Dashboard/Provider/ProviderDashboard
 import UserDashboard from "./Components/Dashboard/User/UserDashboard";
 
 // Provider
-import ProviderBookingsPage from "./Components/Services/Provider/ProviderBookingsPage";
+import ProviderBookingsPage from "./Components/Services/Provider/ProviderBookingsPage/ProviderBookingsPage";
 import ProviderServicesPage from "./Components/Services/Provider/ProviderServicesPage";
 import ProviderAvailability from "./Components/Services/Provider/ProviderAvailability";
 

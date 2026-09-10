@@ -1,0 +1,569 @@
+/* ==========================================
+   PROVIDER BOOKINGS PAGE
+========================================== */
+
+.provider-booking-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.provider-bookings h1 {
+  margin: 0 0 30px;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+
+/* ==========================================
+   BOOKING CARD
+========================================== */
+
+.provider-bookings .booking-card {
+  position: relative;
+
+  background: #ffffff;
+
+  border: 1px solid #e8e8ee;
+  border-radius: 18px;
+
+  padding: 26px;
+
+  margin-bottom: 22px;
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.06);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+
+.provider-bookings .booking-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.09);
+
+  border-color: #dcdce5;
+}
+
+
+/* ==========================================
+   SERVICE TITLE
+========================================== */
+
+.provider-bookings .booking-card h3 {
+  margin: 0 0 20px;
+
+  font-size: 21px;
+  font-weight: 700;
+
+  color: #18181b;
+}
+
+
+/* ==========================================
+   BOOKING DETAILS
+========================================== */
+
+.provider-bookings .booking-card p {
+  margin: 9px 0;
+
+  color: #55565f;
+
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+.provider-bookings .booking-card p strong {
+  color: #18181b;
+}
+
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.provider-bookings .booking-card p:nth-last-of-type(1) {
+  margin-bottom: 18px;
+}
+
+
+/* ==========================================
+   BUTTON CONTAINER
+========================================== */
+
+.provider-bookings .booking-card > div {
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 20px;
+
+  flex-wrap: wrap;
+}
+
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.provider-bookings button {
+  border: none;
+
+  border-radius: 10px;
+
+  padding: 11px 18px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+
+
+.provider-bookings button:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 15px rgba(0, 0, 0, 0.12);
+}
+
+
+.provider-bookings button:active {
+  transform: translateY(0);
+}
+
+
+/* ==========================================
+   ACCEPT / START / COMPLETE
+========================================== */
+
+.provider-bookings button:first-child {
+  background: #18181b;
+
+  color: #ffffff;
+}
+
+
+/* ==========================================
+   REJECT
+========================================== */
+
+.provider-bookings button:nth-child(2) {
+  background: #f4f4f5;
+
+  color: #3f3f46;
+
+  border: 1px solid #e4e4e7;
+}
+
+
+/* ==========================================
+   EMPTY STATE
+========================================== */
+
+.provider-bookings > p {
+  padding: 50px 20px;
+
+  text-align: center;
+
+  color: #71717a;
+
+  background: #ffffff;
+
+  border: 1px dashed #d4d4d8;
+
+  border-radius: 18px;
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.provider-bookings-page-loading {
+  min-height: 400px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #71717a;
+
+  font-size: 16px;
+}
+
+/* ==========================================
+   PROVIDER BOOKINGS PAGE
+========================================== */
+
+.provider-bookings {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.provider-bookings-header {
+  margin-bottom: 35px;
+}
+
+.provider-bookings-eyebrow {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.provider-bookings-header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.provider-bookings-header p {
+  margin-top: 8px;
+  opacity: 0.7;
+}
+
+
+/* ==========================================
+   BOOKING SECTION
+========================================== */
+
+.provider-booking-section {
+  margin-bottom: 35px;
+}
+
+.provider-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.provider-section-header h2 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.provider-section-header span {
+  min-width: 25px;
+  height: 25px;
+  padding: 0 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #eee;
+}
+
+
+/* ==========================================
+   BOOKING LIST
+========================================== */
+
+.provider-booking-list {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  );
+  gap: 20px;
+}
+
+
+/* ==========================================
+   BOOKING CARD
+========================================== */
+
+.provider-booking-list .booking-card {
+  padding: 22px;
+  border-radius: 14px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.provider-booking-list .booking-card h3 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 20px;
+}
+
+.provider-booking-list .booking-card p {
+  margin: 9px 0;
+  line-height: 1.5;
+}
+
+
+/* ==========================================
+   STATUS ROW
+========================================== */
+
+.provider-status-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+
+/* ==========================================
+   STATUS BADGE
+========================================== */
+
+.provider-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+
+/* PENDING */
+
+.provider-status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+
+/* ACCEPTED */
+
+.provider-status-accepted {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+
+/* IN PROGRESS */
+
+.provider-status-progress {
+  background: #e2d9f3;
+  color: #563d7c;
+}
+
+
+/* COMPLETED */
+
+.provider-status-completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+
+/* REJECTED */
+
+.provider-status-rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+
+/* CANCELLED */
+
+.provider-status-cancelled {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+
+/* DEFAULT */
+
+.provider-status-default {
+  background: #eee;
+  color: #555;
+}
+
+
+/* ==========================================
+   ACTIONS
+========================================== */
+
+.provider-booking-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.provider-booking-actions button {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.provider-booking-actions button:hover {
+  opacity: 0.9;
+}
+
+
+/* ==========================================
+   RESULT MESSAGES
+========================================== */
+
+.provider-completed-message,
+.provider-rejected-message,
+.provider-cancelled-message {
+  margin-top: 18px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.provider-completed-message {
+  background: #d4edda;
+  color: #155724;
+}
+
+.provider-rejected-message {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.provider-cancelled-message {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.provider-loading {
+  padding: 40px;
+  text-align: center;
+}
+
+
+/* ==========================================
+   EMPTY
+========================================== */
+
+.provider-empty {
+  padding: 50px 20px;
+  text-align: center;
+  border: 1px dashed #ccc;
+  border-radius: 14px;
+}
+
+.provider-empty h3 {
+  margin-bottom: 8px;
+}
+
+.provider-empty p {
+  opacity: 0.7;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+  .provider-bookings {
+    padding: 20px 15px;
+  }
+
+  .provider-bookings-header h1 {
+    font-size: 26px;
+  }
+
+  .provider-booking-list {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* ==========================================
+   CUSTOMER REVIEW
+========================================== */
+
+.provider-customer-review {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8f9fa;
+}
+
+.provider-customer-review h4 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.provider-rating {
+  margin: 2px 0 8px;
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: 2px;
+}
+
+.provider-review-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  font-style: italic;
+  color: #555;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+
+  .provider-bookings {
+    padding: 20px 15px;
+  }
+
+
+  .provider-bookings h1 {
+    font-size: 26px;
+  }
+
+
+  .provider-bookings .booking-card {
+    padding: 20px;
+  }
+
+
+  .provider-bookings button {
+    width: 100%;
+  }
+
+}
