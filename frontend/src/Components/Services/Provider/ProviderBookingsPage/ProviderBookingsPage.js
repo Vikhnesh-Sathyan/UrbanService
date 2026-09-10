@@ -7,19 +7,14 @@ import {
   updateBookingStatus,
 } from "../../../../Services/bookingService";
 
-import ProviderBookingCard from "./ProviderBookingCard";
+import ProviderBookingSection from "./ProviderBookingSection";
 
 import "../../../../styles/ProviderBookings.css";
 
 
 const ProviderBookingsPage = () => {
 
-  // ==========================================
-  // BOOKINGS
-  // ==========================================
-
   const [bookings, setBookings] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
 
@@ -158,59 +153,32 @@ const ProviderBookingsPage = () => {
 
 
   // ==========================================
-  // SEPARATE BOOKINGS
+  // SEPARATE BOOKINGS BY STATUS
   // ==========================================
 
   const pendingBookings = bookings.filter(
-    (booking) =>
-      booking.status === "pending"
+    (booking) => booking.status === "pending"
   );
 
   const acceptedBookings = bookings.filter(
-    (booking) =>
-      booking.status === "accepted"
+    (booking) => booking.status === "accepted"
   );
 
   const inProgressBookings = bookings.filter(
-    (booking) =>
-      booking.status === "in_progress"
+    (booking) => booking.status === "in_progress"
   );
 
   const completedBookings = bookings.filter(
-    (booking) =>
-      booking.status === "completed"
+    (booking) => booking.status === "completed"
   );
 
   const rejectedBookings = bookings.filter(
-    (booking) =>
-      booking.status === "rejected"
+    (booking) => booking.status === "rejected"
   );
 
   const cancelledBookings = bookings.filter(
-    (booking) =>
-      booking.status === "cancelled"
+    (booking) => booking.status === "cancelled"
   );
-
-
-  // ==========================================
-  // RENDER SECTION
-  // ==========================================
-
-  const renderBookings = (bookingList) => {
-
-    return bookingList.map((booking) => (
-
-      <ProviderBookingCard
-        key={booking._id}
-        booking={booking}
-        onAccept={handleAccept}
-        onReject={handleReject}
-        onStatusUpdate={handleStatusUpdate}
-      />
-
-    ));
-
-  };
 
 
   // ==========================================
@@ -244,7 +212,10 @@ const ProviderBookingsPage = () => {
 
     <div className="provider-bookings">
 
-      {/* HEADER */}
+
+      {/* =====================================
+          HEADER
+      ===================================== */}
 
       <div className="provider-bookings-header">
 
@@ -264,7 +235,9 @@ const ProviderBookingsPage = () => {
       </div>
 
 
-      {/* NO BOOKINGS */}
+      {/* =====================================
+          NO BOOKINGS
+      ===================================== */}
 
       {bookings.length === 0 ? (
 
@@ -284,202 +257,83 @@ const ProviderBookingsPage = () => {
 
         <>
 
+
           {/* =================================
               PENDING
           ================================= */}
 
-          {pendingBookings.length > 0 && (
-
-            <section className="provider-booking-section">
-
-              <div className="provider-section-header">
-
-                <h2>
-                  Pending Requests
-                </h2>
-
-                <span>
-                  {pendingBookings.length}
-                </span>
-
-              </div>
-
-              <div className="provider-booking-list">
-
-                {renderBookings(
-                  pendingBookings
-                )}
-
-              </div>
-
-            </section>
-
-          )}
+          <ProviderBookingSection
+            title="Pending Requests"
+            bookings={pendingBookings}
+            onAccept={handleAccept}
+            onReject={handleReject}
+            onStatusUpdate={handleStatusUpdate}
+          />
 
 
           {/* =================================
               ACCEPTED
           ================================= */}
 
-          {acceptedBookings.length > 0 && (
-
-            <section className="provider-booking-section">
-
-              <div className="provider-section-header">
-
-                <h2>
-                  Accepted
-                </h2>
-
-                <span>
-                  {acceptedBookings.length}
-                </span>
-
-              </div>
-
-              <div className="provider-booking-list">
-
-                {renderBookings(
-                  acceptedBookings
-                )}
-
-              </div>
-
-            </section>
-
-          )}
+          <ProviderBookingSection
+            title="Accepted"
+            bookings={acceptedBookings}
+            onAccept={handleAccept}
+            onReject={handleReject}
+            onStatusUpdate={handleStatusUpdate}
+          />
 
 
           {/* =================================
               IN PROGRESS
           ================================= */}
 
-          {inProgressBookings.length > 0 && (
-
-            <section className="provider-booking-section">
-
-              <div className="provider-section-header">
-
-                <h2>
-                  In Progress
-                </h2>
-
-                <span>
-                  {inProgressBookings.length}
-                </span>
-
-              </div>
-
-              <div className="provider-booking-list">
-
-                {renderBookings(
-                  inProgressBookings
-                )}
-
-              </div>
-
-            </section>
-
-          )}
+          <ProviderBookingSection
+            title="In Progress"
+            bookings={inProgressBookings}
+            onAccept={handleAccept}
+            onReject={handleReject}
+            onStatusUpdate={handleStatusUpdate}
+          />
 
 
           {/* =================================
               COMPLETED
           ================================= */}
 
-          {completedBookings.length > 0 && (
-
-            <section className="provider-booking-section">
-
-              <div className="provider-section-header">
-
-                <h2>
-                  Completed
-                </h2>
-
-                <span>
-                  {completedBookings.length}
-                </span>
-
-              </div>
-
-              <div className="provider-booking-list">
-
-                {renderBookings(
-                  completedBookings
-                )}
-
-              </div>
-
-            </section>
-
-          )}
+          <ProviderBookingSection
+            title="Completed"
+            bookings={completedBookings}
+            onAccept={handleAccept}
+            onReject={handleReject}
+            onStatusUpdate={handleStatusUpdate}
+          />
 
 
           {/* =================================
               REJECTED
           ================================= */}
 
-          {rejectedBookings.length > 0 && (
-
-            <section className="provider-booking-section">
-
-              <div className="provider-section-header">
-
-                <h2>
-                  Rejected
-                </h2>
-
-                <span>
-                  {rejectedBookings.length}
-                </span>
-
-              </div>
-
-              <div className="provider-booking-list">
-
-                {renderBookings(
-                  rejectedBookings
-                )}
-
-              </div>
-
-            </section>
-
-          )}
+          <ProviderBookingSection
+            title="Rejected"
+            bookings={rejectedBookings}
+            onAccept={handleAccept}
+            onReject={handleReject}
+            onStatusUpdate={handleStatusUpdate}
+          />
 
 
           {/* =================================
               CANCELLED
           ================================= */}
 
-          {cancelledBookings.length > 0 && (
-
-            <section className="provider-booking-section">
-
-              <div className="provider-section-header">
-
-                <h2>
-                  Cancelled
-                </h2>
-
-                <span>
-                  {cancelledBookings.length}
-                </span>
-
-              </div>
-
-              <div className="provider-booking-list">
-
-                {renderBookings(
-                  cancelledBookings
-                )}
-
-              </div>
-
-            </section>
-
-          )}
+          <ProviderBookingSection
+            title="Cancelled"
+            bookings={cancelledBookings}
+            onAccept={handleAccept}
+            onReject={handleReject}
+            onStatusUpdate={handleStatusUpdate}
+          />
 
         </>
 
