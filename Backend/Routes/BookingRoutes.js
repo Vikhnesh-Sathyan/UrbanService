@@ -10,6 +10,7 @@ const {
   rejectBooking,
   updateBookingStatus,
   getAllBookings,
+  addBookingReview,
 } = require("../Controllers/BookingController");
 
 const authMiddleware = require("../Middleware/AuthMiddleware");
@@ -51,6 +52,14 @@ router.put(
   authMiddleware,
   roleMiddleware("user"),
   rescheduleBooking
+);
+
+// Add review
+router.patch(
+  "/:id/review",
+  authMiddleware,
+  roleMiddleware("user"),
+  addBookingReview
 );
 
 // ===============================
