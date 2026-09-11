@@ -19,7 +19,6 @@
   color: #f5f7ff;
 }
 
-
 /* =========================================================
    HEADER
 ========================================================= */
@@ -30,12 +29,10 @@
 
 .provider-profile-eyebrow {
   display: block;
-
   margin-bottom: 8px;
 
   font-size: 11px;
   font-weight: 700;
-
   letter-spacing: 1.7px;
 
   color: #818cf8;
@@ -46,7 +43,6 @@
 
   font-size: 32px;
   font-weight: 700;
-
   letter-spacing: -0.5px;
 
   color: #f8fafc;
@@ -56,10 +52,8 @@
   margin: 8px 0 0;
 
   font-size: 14px;
-
   color: #8992a8;
 }
-
 
 /* =========================================================
    SUCCESS POPUP
@@ -67,17 +61,14 @@
 
 .provider-success-popup {
   position: fixed;
-
   top: 24px;
   right: 24px;
-
   z-index: 9999;
 
   width: 370px;
 
   display: flex;
   align-items: center;
-
   gap: 13px;
 
   padding: 16px 17px;
@@ -85,7 +76,6 @@
   background: rgba(20, 27, 48, 0.96);
 
   border: 1px solid rgba(99, 102, 241, 0.25);
-
   border-radius: 12px;
 
   box-shadow:
@@ -94,8 +84,7 @@
 
   backdrop-filter: blur(18px);
 
-  animation:
-    providerPopupIn 0.3s ease;
+  animation: providerPopupIn 0.3s ease;
 }
 
 .provider-success-icon {
@@ -111,7 +100,6 @@
   border-radius: 50%;
 
   background: rgba(34, 197, 94, 0.12);
-
   border: 1px solid rgba(34, 197, 94, 0.25);
 
   color: #4ade80;
@@ -125,7 +113,6 @@
 
   display: flex;
   flex-direction: column;
-
   gap: 3px;
 }
 
@@ -138,7 +125,6 @@
 
 .provider-success-content span {
   font-size: 11px;
-
   color: #858fa5;
 }
 
@@ -185,27 +171,23 @@
   }
 }
 
-
 /* =========================================================
    ERROR
 ========================================================= */
 
 .provider-profile-error {
   padding: 14px 17px;
-
   margin-bottom: 20px;
 
   background: rgba(239, 68, 68, 0.07);
 
   border: 1px solid rgba(239, 68, 68, 0.16);
-
   border-radius: 10px;
 
   color: #fca5a5;
 
   font-size: 13px;
 }
-
 
 /* =========================================================
    PROFILE HERO
@@ -214,11 +196,9 @@
 .provider-profile-hero {
   display: flex;
   align-items: center;
-
   gap: 22px;
 
   padding: 28px;
-
   margin-bottom: 22px;
 
   background:
@@ -229,7 +209,6 @@
     );
 
   border: 1px solid rgba(255, 255, 255, 0.07);
-
   border-radius: 16px;
 
   box-shadow:
@@ -237,7 +216,6 @@
 
   box-sizing: border-box;
 }
-
 
 /* Avatar */
 
@@ -269,7 +247,6 @@
     0 12px 35px rgba(79, 70, 229, 0.28);
 }
 
-
 /* Hero information */
 
 .provider-profile-hero-info {
@@ -289,10 +266,8 @@
   margin: 0 0 10px;
 
   font-size: 14px;
-
   color: #9aa3b8;
 }
-
 
 /* Role */
 
@@ -305,7 +280,6 @@
   background: rgba(99, 102, 241, 0.11);
 
   border: 1px solid rgba(99, 102, 241, 0.22);
-
   border-radius: 6px;
 
   color: #a5b0ff;
@@ -314,10 +288,8 @@
   font-weight: 700;
 
   text-transform: uppercase;
-
   letter-spacing: 0.8px;
 }
-
 
 /* =========================================================
    PROFILE CARD
@@ -325,13 +297,11 @@
 
 .provider-profile-card {
   margin-bottom: 20px;
-
   padding: 26px;
 
   background: rgba(17, 22, 40, 0.88);
 
   border: 1px solid rgba(255, 255, 255, 0.055);
-
   border-radius: 14px;
 
   box-sizing: border-box;
@@ -339,7 +309,6 @@
   box-shadow:
     0 8px 30px rgba(0, 0, 0, 0.12);
 }
-
 
 /* Card header */
 
@@ -352,7 +321,6 @@
 
   font-size: 18px;
   font-weight: 650;
-
   letter-spacing: -0.2px;
 
   color: #f1f5f9;
@@ -362,12 +330,10 @@
   margin: 6px 0 0;
 
   font-size: 13px;
-
   line-height: 1.5;
 
   color: #808aa1;
 }
-
 
 /* =========================================================
    PROFILE FORM GRID
@@ -382,29 +348,23 @@
   gap: 20px;
 }
 
-
 /* =========================================================
    FORM GROUP
 ========================================================= */
 
 .provider-profile-form-group {
   display: flex;
-
   flex-direction: column;
-
   gap: 8px;
 }
 
 .provider-profile-form-group label {
   font-size: 11px;
-
   font-weight: 650;
-
   letter-spacing: 0.3px;
 
   color: #aab2c4;
 }
-
 
 /* =========================================================
    INPUTS / SELECT / TEXTAREA
@@ -422,7 +382,6 @@
   background: rgba(255, 255, 255, 0.035);
 
   border: 1px solid rgba(255, 255, 255, 0.075);
-
   border-radius: 8px;
 
   outline: none;
@@ -430,7 +389,6 @@
   color: #e8ebf3;
 
   font-family: inherit;
-
   font-size: 13px;
 
   transition:
@@ -439,14 +397,12 @@
     box-shadow 0.2s ease;
 }
 
-
 /* Placeholder */
 
 .provider-profile-form-group input::placeholder,
 .provider-profile-form-group textarea::placeholder {
   color: #5f687d;
 }
-
 
 /* Focus */
 
@@ -460,7 +416,6 @@
   box-shadow:
     0 0 0 3px rgba(99, 102, 241, 0.08);
 }
-
 
 /* Disabled */
 
@@ -478,13 +433,6 @@
   border-color: rgba(255, 255, 255, 0.045);
 }
 
-
-/* Select */
-
-/* .provider-profile-form-group select {
-  cursor: pointer;
-} */
-
 /* =========================================================
    PROVIDER PROFILE - SELECT
 ========================================================= */
@@ -492,19 +440,23 @@
 .provider-profile-form-group select {
   width: 100%;
   height: 54px;
+
   padding: 0 44px 0 16px;
 
   box-sizing: border-box;
 
   background: #111629;
+
   border: 1px solid rgba(124, 140, 255, 0.35);
   border-radius: 10px;
 
   color: #f1f3ff;
+
   font-size: 14px;
   font-weight: 500;
 
   outline: none;
+
   cursor: pointer;
 
   appearance: auto;
@@ -515,14 +467,13 @@
     background 0.2s ease;
 }
 
-
 /* Hover */
 
 .provider-profile-form-group select:hover {
   border-color: rgba(124, 140, 255, 0.65);
+
   background: #151a30;
 }
-
 
 /* Focus */
 
@@ -535,7 +486,6 @@
   background: #111629;
 }
 
-
 /* =========================================================
    SELECT OPTIONS
 ========================================================= */
@@ -547,13 +497,11 @@
   padding: 12px;
 }
 
-
 /* Placeholder option */
 
 .provider-profile-form-group select option[value=""] {
   color: #7f879d;
 }
-
 
 /* =========================================================
    DISABLED SELECT
@@ -561,19 +509,19 @@
 
 .provider-profile-form-group select:disabled {
   background: #0d1121;
+
   border-color: rgba(255, 255, 255, 0.06);
+
   color: #6f778d;
 
   cursor: not-allowed;
+
   opacity: 0.75;
 }
 
-.provider-profile-form-group select:disabled {
-  cursor: default;
-}
-
-
-/* Textarea */
+/* =========================================================
+   TEXTAREA
+========================================================= */
 
 .provider-profile-form-group textarea {
   min-height: 125px;
@@ -583,15 +531,14 @@
   line-height: 1.6;
 }
 
-
-/* Small helper text */
+/* =========================================================
+   SMALL HELPER TEXT
+========================================================= */
 
 .provider-profile-form-group small {
   font-size: 10px;
-
   color: #697389;
 }
-
 
 /* =========================================================
    PROFESSIONAL DESCRIPTION
@@ -600,7 +547,6 @@
 .provider-description-group {
   grid-column: 1 / -1;
 }
-
 
 /* =========================================================
    AVAILABILITY
@@ -619,7 +565,6 @@
   display: block;
 
   font-size: 10px;
-
   font-weight: 700;
 
   letter-spacing: 1.1px;
@@ -627,17 +572,14 @@
   color: #697389;
 }
 
-
 /* Day list */
 
 .provider-day-list {
   display: flex;
-
   flex-wrap: wrap;
 
   gap: 8px;
 }
-
 
 /* Day badge */
 
@@ -650,25 +592,20 @@
   background: rgba(99, 102, 241, 0.09);
 
   border: 1px solid rgba(99, 102, 241, 0.18);
-
   border-radius: 7px;
 
   color: #aab3ff;
 
   font-size: 11px;
-
   font-weight: 600;
 }
-
 
 /* No data */
 
 .provider-no-data {
   font-size: 12px;
-
   color: #687288;
 }
-
 
 /* Time grid */
 
@@ -681,7 +618,6 @@
   gap: 16px;
 }
 
-
 /* Time card */
 
 .provider-time-item {
@@ -690,7 +626,6 @@
   background: rgba(255, 255, 255, 0.025);
 
   border: 1px solid rgba(255, 255, 255, 0.05);
-
   border-radius: 10px;
 }
 
@@ -700,7 +635,6 @@
   margin-bottom: 7px;
 
   font-size: 10px;
-
   font-weight: 700;
 
   letter-spacing: 1px;
@@ -710,12 +644,10 @@
 
 .provider-time-item strong {
   font-size: 15px;
-
   font-weight: 600;
 
   color: #e4e8f0;
 }
-
 
 /* =========================================================
    ACCOUNT
@@ -736,7 +668,6 @@
   background: rgba(255, 255, 255, 0.025);
 
   border: 1px solid rgba(255, 255, 255, 0.05);
-
   border-radius: 10px;
 }
 
@@ -746,7 +677,6 @@
   margin-bottom: 7px;
 
   font-size: 10px;
-
   font-weight: 700;
 
   letter-spacing: 1px;
@@ -758,12 +688,10 @@
   display: block;
 
   font-size: 14px;
-
   font-weight: 600;
 
   color: #e6eaf2;
 }
-
 
 /* =========================================================
    ACTIONS
@@ -771,14 +699,12 @@
 
 .provider-profile-actions {
   display: flex;
-
   align-items: center;
 
   gap: 10px;
 
   padding-bottom: 20px;
 }
-
 
 /* Common button */
 
@@ -790,9 +716,7 @@
   border-radius: 8px;
 
   font-family: inherit;
-
   font-size: 12px;
-
   font-weight: 650;
 
   cursor: pointer;
@@ -803,7 +727,6 @@
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
-
 
 /* Edit */
 
@@ -830,7 +753,6 @@
     0 10px 28px rgba(79, 70, 229, 0.3);
 }
 
-
 /* Save */
 
 .provider-profile-save-button {
@@ -856,7 +778,6 @@
     0 10px 28px rgba(79, 70, 229, 0.28);
 }
 
-
 /* Cancel */
 
 .provider-profile-cancel-button {
@@ -875,7 +796,6 @@
   color: #e5e7eb;
 }
 
-
 /* Disabled buttons */
 
 .provider-profile-actions button:disabled {
@@ -885,7 +805,6 @@
 
   transform: none;
 }
-
 
 /* =========================================================
    LOADING
@@ -903,13 +822,11 @@
   font-size: 14px;
 }
 
-
 /* =========================================================
    RESPONSIVE
 ========================================================= */
 
 @media (max-width: 900px) {
-
   .provider-profile-page {
     padding: 24px;
   }
@@ -927,16 +844,13 @@
   }
 }
 
-
 @media (max-width: 700px) {
-
   .provider-profile-page {
     padding: 20px;
   }
 
   .provider-profile-hero {
     padding: 22px;
-
     gap: 16px;
   }
 
@@ -958,16 +872,13 @@
   .provider-success-popup {
     left: 18px;
     right: 18px;
-
     top: 18px;
 
     width: auto;
   }
 }
 
-
 @media (max-width: 500px) {
-
   .provider-profile-page {
     padding: 16px;
   }
