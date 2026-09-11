@@ -250,6 +250,19 @@ const UserServicePage = () => {
 
   };
 
+  // ==========================================
+// VIEW PROVIDER PROFILE
+// ==========================================
+
+const handleViewProvider = (providerId) => {
+
+  if (!providerId) {
+    return;
+  }
+
+  navigate(`/user/provider/${providerId}`);
+
+};
 
   // ==========================================
   // LOADING
@@ -398,6 +411,7 @@ const UserServicePage = () => {
               key={service._id}
               service={service}
               onViewDetails={handleViewDetails}
+              onViewProvider={handleViewProvider}
             />
 
           ))}

@@ -3,6 +3,7 @@ import React from "react";
 const ServiceCard = ({
   service,
   onViewDetails,
+  onViewProvider,
 }) => {
 
   return (
@@ -134,23 +135,44 @@ const ServiceCard = ({
           </div>
 
 
-          {/* DETAILS BUTTON */}
+          {/* ACTIONS */}
 
-          <button
-            type="button"
-            className="user-service-button"
-            onClick={() =>
-              onViewDetails(service)
-            }
-          >
+          <div className="user-service-actions">
 
-            View Details
+            {/* VIEW PROVIDER */}
 
-            <span>
-              →
-            </span>
+            <button
+              type="button"
+              className="user-service-provider-button"
+              onClick={() =>
+                onViewProvider(
+                  service.provider?._id
+                )
+              }
+              disabled={!service.provider?._id}
+            >
+              View Provider
+            </button>
 
-          </button>
+
+            {/* VIEW DETAILS */}
+
+            <button
+              type="button"
+              className="user-service-button"
+              onClick={() =>
+                onViewDetails(service)
+              }
+            >
+              View Details
+
+              <span>
+                →
+              </span>
+
+            </button>
+
+          </div>
 
         </div>
 

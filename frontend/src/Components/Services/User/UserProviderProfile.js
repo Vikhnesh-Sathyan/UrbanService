@@ -5,7 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import "../../../styles/UserProviderProfile.css";
 
 const UserProviderProfile = () => {
-  const { id } = useParams();
+ const { providerId } = useParams();
   const navigate = useNavigate();
 
   const [provider, setProvider] = useState(null);
@@ -18,9 +18,9 @@ const UserProviderProfile = () => {
   // FETCH PROVIDER PROFILE
   // ========================================
 
-  useEffect(() => {
-    fetchProviderProfile();
-  }, [id]);
+ useEffect(() => {
+  fetchProviderProfile();
+}, [providerId]);
 
   const fetchProviderProfile = async () => {
     try {
@@ -30,7 +30,7 @@ const UserProviderProfile = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `http://localhost:5000/api/users/provider/${id}`,
+        `http://localhost:5000/api/users/providers/${providerId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

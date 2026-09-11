@@ -960,7 +960,129 @@
 
 
 
+/* =========================================================
+   SERVICE ACTIONS
+========================================================= */
 
+.user-service-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* =========================================================
+   VIEW PROVIDER BUTTON
+========================================================= */
+
+.user-service-provider-button {
+  height: 46px;
+  padding: 0 18px;
+
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  border-radius: 10px;
+
+  background: rgba(99, 102, 241, 0.08);
+
+  color: #7c8cff;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.user-service-provider-button:hover {
+  background: rgba(99, 102, 241, 0.15);
+
+  border-color: rgba(99, 102, 241, 0.5);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 20px rgba(79, 70, 229, 0.12);
+}
+
+.user-service-provider-button:active {
+  transform: translateY(0);
+}
+
+.user-service-provider-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* =========================================================
+   VIEW DETAILS BUTTON
+========================================================= */
+
+.user-service-button {
+  height: 46px;
+  padding: 0 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+
+  background: #111827;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.user-service-button:hover {
+  background: #182033;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.user-service-button span {
+  font-size: 17px;
+  line-height: 1;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .user-service-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .user-service-provider-button,
+  .user-service-button {
+    width: 100%;
+  }
+
+}
 
 
 
