@@ -18,7 +18,8 @@ const UserProfile = () => {
 
   const [error, setError] = useState("");
 
-  const [success, setSuccess] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+
 
   // ========================================
   // EDIT MODE
@@ -61,7 +62,11 @@ const UserProfile = () => {
 
       const user = response.data.user;
 
-      // Make sure nested objects exist
+
+      // ====================================
+      // FORMAT PROFILE
+      // ====================================
+
       const formattedProfile = {
         ...user,
 
@@ -73,12 +78,17 @@ const UserProfile = () => {
         },
 
         emergencyContact: {
-          name: user.emergencyContact?.name || "",
-          phone: user.emergencyContact?.phone || "",
+          name:
+            user.emergencyContact?.name || "",
+
+          phone:
+            user.emergencyContact?.phone || "",
+
           relationship:
             user.emergencyContact?.relationship || "",
         },
       };
+
 
       setProfile(formattedProfile);
 
@@ -163,8 +173,9 @@ const UserProfile = () => {
 
   const handleEdit = () => {
 
-    setSuccess("");
     setError("");
+
+    setShowSuccess(false);
 
     setIsEditing(true);
   };
@@ -180,7 +191,6 @@ const UserProfile = () => {
     setProfile(originalProfile);
 
     setError("");
-    setSuccess("");
 
     setIsEditing(false);
   };
@@ -195,57 +205,59 @@ const UserProfile = () => {
     try {
 
       setSaving(true);
+
       setError("");
-      setSuccess("");
 
       const token = localStorage.getItem("token");
 
+
       if (!token) {
+
         setError("Please login again.");
+
         return;
       }
 
-      // Data sent to backend
-      const updateData = {
 
-        name: profile.name,
+      // ====================================
+      // UPDATE PROFILE API
+      // ====================================
 
-        phone: profile.phone,
-
-        city: profile.location?.city || "",
-
-        state: profile.location?.state || "",
-
-        emergencyContact: {
-          name:
-            profile.emergencyContact?.name || "",
-
-          phone:
-            profile.emergencyContact?.phone || "",
-
-          relationship:
-            profile.emergencyContact?.relationship || "",
-        },
-      };
-
-
-      // PUT API
       const response = await axios.put(
+
         "http://localhost:5000/api/users/profile",
-        updateData,
+
+        {
+          name: profile.name,
+
+          phone: profile.phone,
+
+          city: profile.location.city,
+
+          state: profile.location.state,
+
+          emergencyContact:
+            profile.emergencyContact,
+        },
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
+
       );
 
 
-      // Get updated user from backend
+      // ====================================
+      // UPDATE LOCAL PROFILE
+      // ====================================
+
       const updatedUser = response.data.user;
 
 
       const formattedProfile = {
+
         ...updatedUser,
 
         location: {
@@ -273,19 +285,32 @@ const UserProfile = () => {
             updatedUser.emergencyContact
               ?.relationship || "",
         },
+
       };
 
 
-      // Update React state
       setProfile(formattedProfile);
 
       setOriginalProfile(formattedProfile);
 
       setIsEditing(false);
 
-      setSuccess(
-        "Profile updated successfully."
-      );
+
+      // ====================================
+      // SHOW SUCCESS POPUP
+      // ====================================
+
+      setShowSuccess(true);
+
+
+      // Hide popup after 3 seconds
+
+      setTimeout(() => {
+
+        setShowSuccess(false);
+
+      }, 3000);
+
 
     } catch (error) {
 
@@ -314,13 +339,17 @@ const UserProfile = () => {
   if (loading) {
 
     return (
+
       <div className="user-profile-page">
 
         <div className="profile-loading">
+
           Loading profile...
+
         </div>
 
       </div>
+
     );
   }
 
@@ -332,13 +361,17 @@ const UserProfile = () => {
   if (!profile) {
 
     return (
+
       <div className="user-profile-page">
 
         <div className="profile-error">
+
           {error || "Profile not found."}
+
         </div>
 
       </div>
+
     );
   }
 
@@ -358,15 +391,20 @@ const UserProfile = () => {
   // ========================================
 
   const memberSince = profile.createdAt
+
     ? new Date(
         profile.createdAt
       ).toLocaleDateString(
+
         "en-US",
+
         {
           month: "long",
           year: "numeric",
         }
+
       )
+
     : "—";
 
 
@@ -375,7 +413,58 @@ const UserProfile = () => {
   // ========================================
 
   return (
+
     <div className="user-profile-page">
+
+
+      {/* ====================================
+          SUCCESS POPUP
+      ==================================== */}
+
+      {showSuccess && (
+
+        <div className="profile-success-popup">
+
+          <div className="profile-success-icon">
+
+            ✓
+
+          </div>
+
+
+          <div className="profile-success-content">
+
+            <strong>
+              Profile updated successfully
+            </strong>
+
+            <span>
+              Your profile changes have been saved.
+            </span>
+
+          </div>
+
+
+          <button
+
+            type="button"
+
+            className="profile-success-close"
+
+            onClick={() =>
+              setShowSuccess(false)
+            }
+
+          >
+
+            ×
+
+          </button>
+
+        </div>
+
+      )}
+
 
       {/* ====================================
           HEADER
@@ -386,34 +475,29 @@ const UserProfile = () => {
         <div>
 
           <span className="profile-eyebrow">
+
             ACCOUNT
+
           </span>
 
+
           <h1>
+
             My Profile
+
           </h1>
 
+
           <p>
+
             Manage your personal information and
             account details.
+
           </p>
 
         </div>
 
       </div>
-
-
-      {/* ====================================
-          SUCCESS MESSAGE
-      ==================================== */}
-
-      {success && (
-
-        <div className="profile-success">
-          {success}
-        </div>
-
-      )}
 
 
       {/* ====================================
@@ -423,7 +507,9 @@ const UserProfile = () => {
       {error && (
 
         <div className="profile-error">
+
           {error}
+
         </div>
 
       )}
@@ -436,21 +522,32 @@ const UserProfile = () => {
       <div className="user-profile-hero">
 
         <div className="profile-avatar">
+
           {profileInitial}
+
         </div>
+
 
         <div className="profile-hero-info">
 
           <h2>
+
             {profile.name || "Your Name"}
+
           </h2>
 
+
           <p>
+
             {profile.email}
+
           </p>
 
+
           <span className="profile-role">
+
             {profile.role}
+
           </span>
 
         </div>
@@ -483,6 +580,7 @@ const UserProfile = () => {
 
         <div className="profile-form-grid">
 
+
           {/* NAME */}
 
           <div className="profile-form-group">
@@ -492,11 +590,17 @@ const UserProfile = () => {
             </label>
 
             <input
+
               type="text"
+
               name="name"
+
               value={profile.name || ""}
+
               onChange={handleChange}
+
               disabled={!isEditing}
+
             />
 
           </div>
@@ -511,9 +615,13 @@ const UserProfile = () => {
             </label>
 
             <input
+
               type="email"
+
               value={profile.email || ""}
+
               disabled
+
             />
 
             <small>
@@ -532,12 +640,19 @@ const UserProfile = () => {
             </label>
 
             <input
+
               type="tel"
+
               name="phone"
+
               value={profile.phone || ""}
+
               onChange={handleChange}
+
               placeholder="Enter phone number"
+
               disabled={!isEditing}
+
             />
 
           </div>
@@ -573,6 +688,7 @@ const UserProfile = () => {
 
         <div className="profile-form-grid">
 
+
           {/* CITY */}
 
           <div className="profile-form-group">
@@ -582,14 +698,21 @@ const UserProfile = () => {
             </label>
 
             <input
+
               type="text"
+
               name="city"
+
               value={
                 profile.location?.city || ""
               }
+
               onChange={handleLocationChange}
+
               placeholder="Enter your city"
+
               disabled={!isEditing}
+
             />
 
           </div>
@@ -604,14 +727,21 @@ const UserProfile = () => {
             </label>
 
             <input
+
               type="text"
+
               name="state"
+
               value={
                 profile.location?.state || ""
               }
+
               onChange={handleLocationChange}
+
               placeholder="Enter your state"
+
               disabled={!isEditing}
+
             />
 
           </div>
@@ -647,6 +777,7 @@ const UserProfile = () => {
 
         <div className="profile-form-grid">
 
+
           {/* CONTACT NAME */}
 
           <div className="profile-form-group">
@@ -656,15 +787,22 @@ const UserProfile = () => {
             </label>
 
             <input
+
               type="text"
+
               name="name"
+
               value={
                 profile.emergencyContact?.name ||
                 ""
               }
+
               onChange={handleEmergencyChange}
+
               placeholder="Enter contact name"
+
               disabled={!isEditing}
+
             />
 
           </div>
@@ -679,15 +817,22 @@ const UserProfile = () => {
             </label>
 
             <input
+
               type="tel"
+
               name="phone"
+
               value={
                 profile.emergencyContact?.phone ||
                 ""
               }
+
               onChange={handleEmergencyChange}
+
               placeholder="Enter contact phone"
+
               disabled={!isEditing}
+
             />
 
           </div>
@@ -702,13 +847,18 @@ const UserProfile = () => {
             </label>
 
             <select
+
               name="relationship"
+
               value={
                 profile.emergencyContact
                   ?.relationship || ""
               }
+
               onChange={handleEmergencyChange}
+
               disabled={!isEditing}
+
             >
 
               <option value="">
@@ -773,6 +923,9 @@ const UserProfile = () => {
 
         <div className="profile-account-grid">
 
+
+          {/* ACCOUNT TYPE */}
+
           <div className="profile-account-item">
 
             <span>
@@ -785,6 +938,8 @@ const UserProfile = () => {
 
           </div>
 
+
+          {/* MEMBER SINCE */}
 
           <div className="profile-account-item">
 
@@ -809,14 +964,21 @@ const UserProfile = () => {
 
       <div className="profile-actions">
 
+
         {!isEditing ? (
 
           <button
+
             type="button"
+
             className="profile-edit-button"
+
             onClick={handleEdit}
+
           >
+
             Edit Profile
+
           </button>
 
         ) : (
@@ -824,23 +986,38 @@ const UserProfile = () => {
           <>
 
             <button
+
               type="button"
+
               className="profile-save-button"
+
               onClick={handleSave}
+
               disabled={saving}
+
             >
+
               {saving
                 ? "Saving..."
                 : "Save Changes"}
+
             </button>
 
+
             <button
+
               type="button"
+
               className="profile-cancel-button"
+
               onClick={handleCancel}
+
               disabled={saving}
+
             >
+
               Cancel
+
             </button>
 
           </>
@@ -849,8 +1026,11 @@ const UserProfile = () => {
 
       </div>
 
+
     </div>
+
   );
+
 };
 
 export default UserProfile;
