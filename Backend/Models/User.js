@@ -31,27 +31,55 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
 
+    // Phone number
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
     // User location
     location: {
-      address: {
-        type: String,
-        default: "",
-      },
-
+      // User enters this manually
       city: {
         type: String,
         default: "",
+        trim: true,
       },
 
+      // User enters this manually
       state: {
         type: String,
         default: "",
+        trim: true,
       },
 
+      // Used later for location-based features
       // [longitude, latitude]
       coordinates: {
         type: [Number],
         default: [0, 0],
+      },
+    },
+
+    // Emergency contact
+    emergencyContact: {
+      name: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+
+      phone: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+
+      relationship: {
+        type: String,
+        default: "",
+        trim: true,
       },
     },
 
