@@ -25,6 +25,7 @@ import UserServiceDetails from "./Components/Services/User/UserServiceDetails";
 import UserBookService from "./Components/Services/User/UserBookService";
 import UserBookings from "./Components/Services/User/UserBookings/UserBookings";
 import UserProfile from "./Components/Profile/UserProfile";
+import UserProviderProfile from "./Components/Services/User/UserProviderProfile";
 
 // Payment
 import StripeProvider from "./Components/Payment/StripeProvider";
@@ -106,6 +107,12 @@ function App() {
             path="/user/profile"
             element={<UserProfile />}
           />
+
+          <Route
+            path="/user/provider/:providerId"
+            element={<UserProviderProfile />}
+          />
+
 
         </Routes>
       </Router>

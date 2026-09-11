@@ -105,8 +105,10 @@ const getProviderProfile = async (req, res) => {
         _id: provider._id,
         name: provider.name,
         phone: provider.phone,
+
         professionalDescription:
         provider.professionalDescription,
+        
         experience: provider.experience,
         location: provider.location,
         availability: provider.availability,

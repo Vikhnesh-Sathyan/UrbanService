@@ -1,0 +1,731 @@
+/* =========================================================
+   USER PROVIDER PROFILE PAGE
+========================================================= */
+
+.user-provider-profile-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 32px;
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(99, 102, 241, 0.08),
+      transparent 30%
+    ),
+    #0b1020;
+
+  color: #f4f6ff;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.user-provider-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 24px;
+  padding: 9px 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  color: #9da7c2;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.user-provider-back-button:hover {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.25);
+  color: #b7beff;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.user-provider-profile-header {
+  margin-bottom: 28px;
+}
+
+.user-provider-profile-eyebrow {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #7f8cff;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 1.6px;
+}
+
+.user-provider-profile-header h1 {
+  margin: 0;
+
+  color: #f5f7ff;
+
+  font-size: 32px;
+  font-weight: 750;
+
+  letter-spacing: -0.6px;
+}
+
+.user-provider-profile-header p {
+  margin: 8px 0 0;
+
+  color: #858fa9;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   PROFILE HERO
+========================================================= */
+
+.user-provider-profile-hero {
+  display: flex;
+  align-items: center;
+
+  gap: 22px;
+
+  margin-bottom: 22px;
+  padding: 28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(47, 55, 105, 0.72),
+      rgba(18, 23, 45, 0.96)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.16);
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+.user-provider-profile-avatar {
+  width: 82px;
+  height: 82px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6474f4,
+      #8b5cf6
+    );
+
+  color: #ffffff;
+
+  font-size: 30px;
+  font-weight: 750;
+
+  box-shadow:
+    0 12px 35px rgba(79, 70, 229, 0.28);
+}
+
+
+/* =========================================================
+   HERO INFO
+========================================================= */
+
+.user-provider-profile-hero-info {
+  min-width: 0;
+}
+
+.user-provider-profile-hero-info h2 {
+  margin: 0 0 7px;
+
+  color: #ffffff;
+
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.user-provider-profile-hero-info p {
+  max-width: 700px;
+
+  margin: 0 0 12px;
+
+  color: #9aa3b9;
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   PROVIDER BADGE
+========================================================= */
+
+.user-provider-profile-role {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 11px;
+
+  background: rgba(99, 102, 241, 0.11);
+
+  border: 1px solid rgba(99, 102, 241, 0.22);
+
+  border-radius: 6px;
+
+  color: #a2abff;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+
+/* =========================================================
+   PROFILE CARD
+========================================================= */
+
+.user-provider-profile-card {
+  margin-bottom: 20px;
+  padding: 26px;
+
+  background: rgba(15, 20, 39, 0.88);
+
+  border: 1px solid rgba(255, 255, 255, 0.055);
+
+  border-radius: 14px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.user-provider-profile-card-header {
+  margin-bottom: 22px;
+}
+
+.user-provider-profile-card-header h2 {
+  margin: 0;
+
+  color: #f2f4fa;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.user-provider-profile-card-header p {
+  margin: 6px 0 0;
+
+  color: #7f899f;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   INFORMATION GRID
+========================================================= */
+
+.user-provider-info-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+
+  margin-bottom: 18px;
+}
+
+
+/* =========================================================
+   INFORMATION ITEM
+========================================================= */
+
+.user-provider-info-item {
+  padding: 17px 18px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  border: 1px solid rgba(255, 255, 255, 0.055);
+
+  border-radius: 10px;
+}
+
+.user-provider-info-item span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #69748c;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1.1px;
+
+  text-transform: uppercase;
+}
+
+.user-provider-info-item strong {
+  display: block;
+
+  color: #e6e9f2;
+
+  font-size: 14px;
+  font-weight: 550;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   PROFESSIONAL DESCRIPTION
+========================================================= */
+
+.user-provider-description {
+  padding: 19px;
+
+  background: rgba(255, 255, 255, 0.022);
+
+  border: 1px solid rgba(255, 255, 255, 0.05);
+
+  border-radius: 10px;
+}
+
+.user-provider-description span {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #69748c;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1.1px;
+
+  text-transform: uppercase;
+}
+
+.user-provider-description p {
+  margin: 0;
+
+  color: #aeb5c6;
+
+  font-size: 14px;
+
+  line-height: 1.75;
+}
+
+
+/* =========================================================
+   AVAILABILITY
+========================================================= */
+
+.user-provider-availability {
+  margin-bottom: 20px;
+}
+
+.user-provider-section-label {
+  display: block;
+
+  margin-bottom: 11px;
+
+  color: #69748c;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1.1px;
+}
+
+
+/* =========================================================
+   WORKING DAYS
+========================================================= */
+
+.user-provider-day-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+}
+
+.user-provider-day-badge {
+  padding: 8px 13px;
+
+  background: rgba(99, 102, 241, 0.09);
+
+  border: 1px solid rgba(99, 102, 241, 0.18);
+
+  border-radius: 7px;
+
+  color: #a7afff;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   AVAILABILITY TIME
+========================================================= */
+
+.user-provider-availability-time {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+.user-provider-time-item {
+  padding: 17px 18px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  border: 1px solid rgba(255, 255, 255, 0.05);
+
+  border-radius: 10px;
+}
+
+.user-provider-time-item span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #69748c;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+.user-provider-time-item strong {
+  color: #e8ebf4;
+
+  font-size: 15px;
+  font-weight: 650;
+}
+
+
+/* =========================================================
+   SERVICES GRID
+========================================================= */
+
+.user-provider-services-list {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+
+/* =========================================================
+   SERVICE CARD
+========================================================= */
+
+.user-provider-service-card {
+  padding: 20px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  border: 1px solid rgba(255, 255, 255, 0.055);
+
+  border-radius: 11px;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.user-provider-service-card:hover {
+  transform: translateY(-2px);
+
+  background: rgba(255, 255, 255, 0.04);
+
+  border-color: rgba(99, 102, 241, 0.22);
+}
+
+
+/* =========================================================
+   SERVICE TOP
+========================================================= */
+
+.user-provider-service-top {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 12px;
+}
+
+.user-provider-service-top h3 {
+  margin: 0 0 7px;
+
+  color: #f0f2f8;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.user-provider-service-category {
+  color: #909bff;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   SERVICE PRICE
+========================================================= */
+
+.user-provider-service-price {
+  flex-shrink: 0;
+
+  color: #eef0f7;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   SERVICE DESCRIPTION
+========================================================= */
+
+.user-provider-service-card p {
+  min-height: 42px;
+
+  margin: 0 0 18px;
+
+  color: #8e97ab;
+
+  font-size: 13px;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   BOOK BUTTON
+========================================================= */
+
+.user-provider-book-button {
+  width: 100%;
+
+  padding: 11px 16px;
+
+  border: 1px solid rgba(99, 102, 241, 0.28);
+
+  border-radius: 8px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.95),
+      rgba(124, 92, 246, 0.95)
+    );
+
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.user-provider-book-button:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 22px rgba(79, 70, 229, 0.25);
+}
+
+.user-provider-book-button:active {
+  transform: translateY(0);
+}
+
+.user-provider-book-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   EMPTY SERVICES
+========================================================= */
+
+.user-provider-no-services {
+  padding: 30px;
+
+  text-align: center;
+
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+
+  border-radius: 10px;
+
+  color: #747e94;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   NO DATA
+========================================================= */
+
+.user-provider-no-data {
+  color: #707a91;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.user-provider-profile-loading {
+  min-height: 400px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #8992a8;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.user-provider-profile-error {
+  padding: 16px 18px;
+
+  margin-bottom: 20px;
+
+  background: rgba(239, 68, 68, 0.07);
+
+  border: 1px solid rgba(239, 68, 68, 0.15);
+
+  border-radius: 9px;
+
+  color: #f28b8b;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .user-provider-profile-page {
+    padding: 24px;
+  }
+
+  .user-provider-info-grid,
+  .user-provider-services-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .user-provider-profile-page {
+    padding: 18px;
+  }
+
+  .user-provider-profile-hero {
+    padding: 20px;
+
+    align-items: flex-start;
+
+    gap: 16px;
+  }
+
+  .user-provider-profile-avatar {
+    width: 64px;
+    height: 64px;
+
+    font-size: 24px;
+  }
+
+  .user-provider-profile-hero-info h2 {
+    font-size: 20px;
+  }
+
+  .user-provider-profile-card {
+    padding: 20px;
+  }
+
+  .user-provider-availability-time {
+    grid-template-columns: 1fr;
+  }
+}
