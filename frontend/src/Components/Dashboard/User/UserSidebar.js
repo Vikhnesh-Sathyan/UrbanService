@@ -85,6 +85,9 @@ const UserSidebar = ({ isOpen, onClose }) => {
           <span>
             Browse Services
           </span>
+
+          
+
         </NavLink>
 
 
@@ -158,6 +161,7 @@ const UserSidebar = ({ isOpen, onClose }) => {
             <span>
               Contact support
             </span>
+
           </div>
 
         </div>

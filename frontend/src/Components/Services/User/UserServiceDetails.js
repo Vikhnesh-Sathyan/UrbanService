@@ -22,6 +22,7 @@ const UserServiceDetails = () => {
   if (!service) {
     return (
       <div className="service-details-page">
+
         <div className="service-not-found">
 
           <h2>Service Not Found</h2>
@@ -38,9 +39,32 @@ const UserServiceDetails = () => {
           </button>
 
         </div>
+
       </div>
     );
   }
+
+  // ==========================================
+  // PROVIDER DATA
+  // ==========================================
+
+  const providerName =
+    service.provider?.name || "Unknown Provider";
+
+  const providerEmail =
+    service.provider?.email || "Email not available";
+
+  const providerAvailability =
+    service.provider?.availability;
+
+  const availableDays =
+    providerAvailability?.days || [];
+
+  const startTime =
+    providerAvailability?.startTime;
+
+  const endTime =
+    providerAvailability?.endTime;
 
   // ==========================================
   // BOOK SERVICE
@@ -75,7 +99,7 @@ const UserServiceDetails = () => {
 
 
       {/* ======================================
-          MAIN SERVICE CARD
+          SERVICE DETAILS CARD
       ====================================== */}
 
       <div className="service-details-card">
@@ -89,14 +113,18 @@ const UserServiceDetails = () => {
           <div className="service-details-image">
 
             {service.image ? (
+
               <img
                 src={`http://localhost:5000/uploads/${service.image}`}
                 alt={service.name}
               />
+
             ) : (
+
               <div className="service-details-no-image">
                 No Image
               </div>
+
             )}
 
           </div>
@@ -150,6 +178,7 @@ const UserServiceDetails = () => {
             ================================== */}
 
             {service.detailedDescription && (
+
               <div className="service-details-about">
 
                 <h3>
@@ -161,6 +190,7 @@ const UserServiceDetails = () => {
                 </p>
 
               </div>
+
             )}
 
 
@@ -184,9 +214,9 @@ const UserServiceDetails = () => {
                 {/* PROVIDER AVATAR */}
 
                 <div className="service-provider-avatar">
-                  {service.provider?.name
-                    ? service.provider.name.charAt(0).toUpperCase()
-                    : "P"}
+                  {providerName
+                    .charAt(0)
+                    .toUpperCase()}
                 </div>
 
 
@@ -195,13 +225,11 @@ const UserServiceDetails = () => {
                 <div className="service-provider-info">
 
                   <strong>
-                    {service.provider?.name ||
-                      "Unknown Provider"}
+                    {providerName}
                   </strong>
 
                   <span>
-                    {service.provider?.email ||
-                      "Email not available"}
+                    {providerEmail}
                   </span>
 
                 </div>
@@ -210,55 +238,74 @@ const UserServiceDetails = () => {
 
             </div>
 
-            {/* ==========================================
-    PROVIDER AVAILABILITY
-========================================== */}
 
-<div className="service-availability">
+            {/* ==================================
+                PROVIDER AVAILABILITY
+            ================================== */}
 
-  <h3>
-    Provider Availability
-  </h3>
+            <div className="service-availability">
 
-  {service.provider?.availability?.days?.length > 0 ? (
+              <h3>
+                Provider Availability
+              </h3>
 
-    <>
-      <p>
-        Available Days
-      </p>
+              {availableDays.length > 0 ? (
 
-      <div className="availability-days">
+                <>
 
-        {service.provider.availability.days.map(
-          (day) => (
-            <span key={day}>
-              {day}
-            </span>
-          )
-        )}
+                  {/* AVAILABLE DAYS */}
 
-      </div>
+                  <p>
+                    Available Days
+                  </p>
 
-      <p>
-        Working Hours
-      </p>
+                  <div className="availability-days">
 
-      <strong>
-        {service.provider.availability.startTime}
-        {" — "}
-        {service.provider.availability.endTime}
-      </strong>
-    </>
+                    {availableDays.map((day) => (
 
-  ) : (
+                      <span key={day}>
+                        {day}
+                      </span>
 
-    <p>
-      Provider availability is not configured.
-    </p>
+                    ))}
 
-  )}
+                  </div>
 
-</div>
+
+                  {/* WORKING HOURS */}
+
+                  <p>
+                    Working Hours
+                  </p>
+
+                  {startTime && endTime ? (
+
+                    <strong>
+                      {startTime}
+                      {" — "}
+                      {endTime}
+                    </strong>
+
+                  ) : (
+
+                    <span>
+                      Working hours not configured.
+                    </span>
+
+                  )}
+
+                </>
+
+              ) : (
+
+                <p>
+                  Provider availability is not configured.
+                </p>
+
+              )}
+
+            </div>
+
 
             {/* ==================================
                 BOOK SERVICE
@@ -277,25 +324,6 @@ const UserServiceDetails = () => {
         </div>
 
       </div>
-
-
-      {/* ======================================
-          ABOUT SECTION
-      ====================================== */}
-
-      {service.detailedDescription && (
-        <div className="service-about">
-
-          <h3>
-            About this Service
-          </h3>
-
-          <p>
-            {service.detailedDescription}
-          </p>
-
-        </div>
-      )}
 
     </div>
   );

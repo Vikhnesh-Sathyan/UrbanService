@@ -4,7 +4,7 @@
 
 .service-details-page {
   min-height: 100vh;
-  padding: 32px 6%;
+  padding: 32px 6% 60px;
   background: #f7f8fc;
   color: #111827;
   box-sizing: border-box;
@@ -57,6 +57,7 @@
   grid-template-columns: 45% 55%;
 }
 
+
 /* ==========================================
    IMAGE SECTION
 ========================================== */
@@ -71,13 +72,12 @@
   overflow: hidden;
 }
 
-/* Actual service image */
 .service-details-image img {
   width: 100%;
   height: 100%;
+  display: block;
   object-fit: cover;
   object-position: center;
-  display: block;
 }
 
 
@@ -91,13 +91,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: #f1f5f9;
   color: #94a3b8;
-
   font-size: 16px;
   font-weight: 600;
 }
+
 
 /* ==========================================
    CONTENT
@@ -118,12 +117,12 @@
   display: inline-flex;
   align-self: flex-start;
   padding: 7px 12px;
+  margin-bottom: 18px;
   border-radius: 9px;
   background: #eef2ff;
   color: #4f46e5;
   font-size: 12px;
   font-weight: 700;
-  margin-bottom: 18px;
 }
 
 
@@ -206,8 +205,8 @@
 .service-details-divider {
   width: 100%;
   height: 1px;
-  background: #e5e7eb;
   margin: 24px 0;
+  background: #e5e7eb;
 }
 
 
@@ -244,7 +243,11 @@
   height: 48px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -257,6 +260,10 @@
 /* ==========================================
    PROVIDER INFO
 ========================================== */
+
+.service-provider-info {
+  min-width: 0;
+}
 
 .service-provider-info strong {
   display: block;
@@ -364,7 +371,10 @@
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .service-book-button:hover {
@@ -375,35 +385,6 @@
 
 .service-book-button:active {
   transform: translateY(0);
-}
-
-
-/* ==========================================
-   ABOUT SECTION
-========================================== */
-
-.service-about {
-  max-width: 1180px;
-  margin: 24px auto 0;
-  padding: 28px 32px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
-}
-
-.service-about h3 {
-  margin: 0 0 10px;
-  font-size: 20px;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.service-about p {
-  margin: 0;
-  color: #64748b;
-  font-size: 14px;
-  line-height: 1.7;
 }
 
 
@@ -440,6 +421,11 @@
   color: #ffffff;
   font-weight: 600;
   cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.service-not-found button:hover {
+  background: #4f46e5;
 }
 
 
@@ -458,11 +444,7 @@
   }
 
   .service-details-image {
-    min-height: 380px;
-  }
-
-  .service-details-image img {
-    min-height: 380px;
+    height: 380px;
   }
 
   .service-details-content {
@@ -475,10 +457,22 @@
 }
 
 
+/* ==========================================
+   MOBILE
+========================================== */
+
 @media (max-width: 600px) {
 
   .service-details-page {
     padding: 16px;
+  }
+
+  .service-details-card {
+    border-radius: 18px;
+  }
+
+  .service-details-image {
+    height: 260px;
   }
 
   .service-details-content {
@@ -493,11 +487,16 @@
     font-size: 28px;
   }
 
-  .service-about {
-    padding: 24px;
-  }
-
   .service-availability {
     padding: 16px;
+  }
+
+  .service-book-button {
+    padding: 14px 18px;
+  }
+
+  .service-not-found {
+    margin: 60px auto;
+    padding: 30px 20px;
   }
 }

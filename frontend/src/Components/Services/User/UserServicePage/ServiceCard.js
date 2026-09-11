@@ -3,7 +3,7 @@ import React from "react";
 const ServiceCard = ({
   service,
   onViewDetails,
-  onViewProvider,
+ 
 }) => {
 
   return (
@@ -135,26 +135,6 @@ const ServiceCard = ({
           </div>
 
 
-          {/* ACTIONS */}
-
-          <div className="user-service-actions">
-
-            {/* VIEW PROVIDER */}
-
-            <button
-              type="button"
-              className="user-service-provider-button"
-              onClick={() =>
-                onViewProvider(
-                  service.provider?._id
-                )
-              }
-              disabled={!service.provider?._id}
-            >
-              View Provider
-            </button>
-
-
             {/* VIEW DETAILS */}
 
             <button
@@ -177,8 +157,6 @@ const ServiceCard = ({
         </div>
 
       </div>
-
-    </div>
   );
 };
 
