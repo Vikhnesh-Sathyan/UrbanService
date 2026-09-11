@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    // ========================================
+    // BASIC USER DETAILS
+    // ========================================
+
     // User name
     name: {
       type: String,
@@ -37,32 +41,43 @@ const userSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    //Proffessional description
+    professionalDescription: {
+      type: String,
+      default: "",
+      trim: true,
+    },
 
-    // User location
+    // ========================================
+    // LOCATION
+    // ========================================
+
+    // City and state entered by the user/provider
     location: {
-      // User enters this manually
       city: {
         type: String,
         default: "",
         trim: true,
       },
 
-      // User enters this manually
       state: {
         type: String,
         default: "",
         trim: true,
       },
 
-      // Used later for location-based features
       // [longitude, latitude]
+      // Can be used later for location-based features
       coordinates: {
         type: [Number],
         default: [0, 0],
       },
     },
 
-    // Emergency contact
+    // ========================================
+    // EMERGENCY CONTACT
+    // ========================================
+
     emergencyContact: {
       name: {
         type: String,
@@ -83,7 +98,11 @@ const userSchema = new mongoose.Schema(
       },
     },
 
-    // Provider availability
+    // ========================================
+    // PROVIDER AVAILABILITY
+    // ========================================
+
+    // Used by providers to define their working schedule
     availability: {
       days: {
         type: [String],

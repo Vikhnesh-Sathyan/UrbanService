@@ -82,26 +82,16 @@ const getProfile = async (req, res) => {
 
 const getProviderProfile = async (req, res) => {
   try {
-
-    // Find provider
     const provider = await User.findOne({
       _id: req.params.id,
       role: "provider",
-    }).select(
-      "-password"
-    );
+    }).select("-password");
 
-    // Provider not found
     if (!provider) {
       return res.status(404).json({
         message: "Provider not found",
       });
     }
-
-
-    // ====================================
-    // GET ONLY APPROVED SERVICES
-    // ====================================
 
     const services = await Service.find({
       provider: provider._id,
@@ -110,27 +100,21 @@ const getProviderProfile = async (req, res) => {
       "name price description category tag image detailedDescription"
     );
 
-
-    // ====================================
-    // RESPONSE
-    // ====================================
-
     res.status(200).json({
-
       provider: {
         _id: provider._id,
         name: provider.name,
         phone: provider.phone,
+        professionalDescription:
+          provider.professionalDescription,
         location: provider.location,
         availability: provider.availability,
       },
 
       services,
-
     });
 
   } catch (error) {
-
     console.error(
       "Get provider profile error:",
       error
@@ -148,10 +132,10 @@ const getProviderProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-
     const {
       name,
       phone,
+      professionalDescription,
       city,
       state,
       emergencyContact,
@@ -166,7 +150,6 @@ const updateProfile = async (req, res) => {
       });
     }
 
-
     // ====================================
     // BASIC DETAILS
     // ====================================
@@ -179,6 +162,14 @@ const updateProfile = async (req, res) => {
       user.phone = phone.trim();
     }
 
+    // ====================================
+    // PROFESSIONAL DESCRIPTION
+    // ====================================
+
+    if (professionalDescription !== undefined) {
+      user.professionalDescription =
+        professionalDescription.trim();
+    }
 
     // ====================================
     // LOCATION
@@ -191,7 +182,6 @@ const updateProfile = async (req, res) => {
     if (state !== undefined) {
       user.location.state = state.trim();
     }
-
 
     // ====================================
     // EMERGENCY CONTACT
@@ -215,18 +205,12 @@ const updateProfile = async (req, res) => {
       }
     }
 
-
     // Save changes
     await user.save();
 
-
-    // ====================================
-    // GET UPDATED USER
-    // ====================================
-
+    // Get updated user
     const updatedUser = await User.findById(req.user.id)
       .select("-password");
-
 
     res.status(200).json({
       message: "Profile updated successfully",
@@ -234,14 +218,17 @@ const updateProfile = async (req, res) => {
     });
 
   } catch (error) {
-
-    console.error("Update profile error:", error);
+    console.error(
+      "Update profile error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to update profile",
     });
   }
 };
+
 
 
 // ========================================
