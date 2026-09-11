@@ -48,6 +48,13 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
+    //professional experience
+    experience: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
     // ========================================
     // LOCATION
     // ========================================

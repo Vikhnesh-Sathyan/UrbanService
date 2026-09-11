@@ -106,7 +106,8 @@ const getProviderProfile = async (req, res) => {
         name: provider.name,
         phone: provider.phone,
         professionalDescription:
-          provider.professionalDescription,
+        provider.professionalDescription,
+        experience: provider.experience,
         location: provider.location,
         availability: provider.availability,
       },
@@ -136,6 +137,7 @@ const updateProfile = async (req, res) => {
       name,
       phone,
       professionalDescription,
+      experience,
       city,
       state,
       emergencyContact,
@@ -169,6 +171,13 @@ const updateProfile = async (req, res) => {
     if (professionalDescription !== undefined) {
       user.professionalDescription =
         professionalDescription.trim();
+    }
+    // ====================================
+    // EXPERIENCE
+    // ====================================
+
+    if (experience !== undefined) {
+      user.experience = experience.trim();
     }
 
     // ====================================
