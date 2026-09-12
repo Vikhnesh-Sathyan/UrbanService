@@ -6,6 +6,7 @@ import "../../../styles/UserProviderProfile.css";
 
 const UserProviderProfile = () => {
  const { providerId } = useParams();
+ console.log("Provider ID:", providerId);
   const navigate = useNavigate();
 
   const [provider, setProvider] = useState(null);
@@ -467,11 +468,13 @@ const UserProviderProfile = () => {
                 <button
                   type="button"
                   className="user-provider-book-button"
-                  onClick={() =>
-                    navigate(
-                      `/user/services/${service._id}/book`
-                    )
-                  }
+                 onClick={() =>
+                   navigate(`/user/services/${service._id}/book`, {
+                  state: {
+                  service,
+                },
+          })
+              }
                 >
                   Book Service
                 </button>

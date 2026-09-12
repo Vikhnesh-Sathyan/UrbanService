@@ -86,9 +86,25 @@ const UserSidebar = ({ isOpen, onClose }) => {
             Browse Services
           </span>
 
-          
-
         </NavLink>
+
+        {/* PROVIDERS */}
+
+<NavLink
+  to="/user/providers"
+  className={({ isActive }) =>
+    `user-nav-item ${isActive ? "active" : ""}`
+  }
+  onClick={onClose}
+>
+  <span className="user-nav-icon">
+    ◉
+  </span>
+
+  <span>
+    Browse Providers
+  </span>
+</NavLink>
 
 
         {/* BOOKINGS */}

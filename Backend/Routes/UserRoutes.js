@@ -32,27 +32,30 @@ router.put(
   updateProfile
 );
 
+
 // ========================================
-// USER VIEW PROVIDER PROFILE
+// BROWSE PROVIDERS
 // ========================================
 
+// User can view all providers
+router.get(
+  "/providers",
+  authMiddleware,
+  roleMiddleware("user"),
+  getProviders
+);
+
+
+// ========================================
+// VIEW PROVIDER PROFILE
+// ========================================
+
+// User can view a specific provider
 router.get(
   "/providers/:id",
   authMiddleware,
   roleMiddleware("user"),
   getProviderProfile
-);
-
-// ========================================
-// ADMIN
-// ========================================
-
-// Admin can view providers
-router.get(
-  "/providers",
-  authMiddleware,
-  roleMiddleware("admin"),
-  getProviders
 );
 
 

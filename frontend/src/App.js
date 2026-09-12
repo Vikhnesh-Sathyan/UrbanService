@@ -25,6 +25,9 @@ import UserServiceDetails from "./Components/Services/User/UserServiceDetails";
 import UserBookService from "./Components/Services/User/UserBookService";
 import UserBookings from "./Components/Services/User/UserBookings/UserBookings";
 import UserProfile from "./Components/Profile/UserProfile";
+
+// User Providers
+import UserProviders from "./Components/Services/User/UserProviders";
 import UserProviderProfile from "./Components/Services/User/UserProviderProfile";
 
 // Payment
@@ -108,9 +111,18 @@ function App() {
             element={<UserProfile />}
           />
 
+        {/* ================= USER PROVIDERS ================= */}
+
+          {/* All providers */}
           <Route
-            path="/user/provider/:providerId"
-            element={<UserProviderProfile />}
+            path="/user/providers"
+            element={<UserProviders />}
+          />
+
+          {/* Single provider profile */}
+          <Route
+            path="/user/providers/:providerId"  
+             element={<UserProviderProfile />}
           />
 
 

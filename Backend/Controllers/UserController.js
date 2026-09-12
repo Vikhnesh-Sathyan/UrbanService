@@ -9,23 +9,40 @@ const getProviders = async (req, res) => {
   try {
     const providers = await User.find({
       role: "provider",
-    }).select("-password");
+    })
+      .select("-password");
 
     const providersWithServices = await Promise.all(
       providers.map(async (provider) => {
+
         const services = await Service.find({
           provider: provider._id,
+          status: "approved",
         }).select(
-          "name price category description status adminComment"
+          "name price category description status"
         );
 
         return {
           _id: provider._id,
           name: provider.name,
-          email: provider.email,
-          role: provider.role,
-          isActive: provider.isActive,
-          services: services,
+          phone: provider.phone,
+
+          professionalDescription:
+            provider.professionalDescription,
+
+          experience:
+            provider.experience,
+
+          location:
+            provider.location,
+
+          availability:
+            provider.availability,
+
+          isActive:
+            provider.isActive,
+
+          services,
         };
       })
     );
@@ -35,14 +52,17 @@ const getProviders = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Get providers error:", error);
+
+    console.error(
+      "Get providers error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to fetch providers",
     });
   }
 };
-
 
 // ========================================
 // GET MY PROFILE

@@ -1,0 +1,404 @@
+/* ==========================================
+   USER PROVIDERS PAGE
+========================================== */
+
+.user-providers-page {
+  min-height: 100vh;
+  padding: 42px 6%;
+  background: #f7f8fc;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.user-providers-header {
+  max-width: 1180px;
+  margin: 0 auto 34px;
+}
+
+.user-providers-eyebrow {
+  display: block;
+  margin-bottom: 16px;
+
+  color: #4f46e5;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.user-providers-header h1 {
+  margin: 0;
+
+  color: #0f172a;
+  font-size: 44px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -1.2px;
+}
+
+.user-providers-header p {
+  margin: 14px 0 0;
+
+  color: #64748b;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+
+/* ==========================================
+   PROVIDER COUNT
+========================================== */
+
+.user-providers-count {
+  margin-top: 8px;
+
+  color: #111827;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   PROVIDERS GRID
+========================================== */
+
+.user-providers-grid {
+  max-width: 1180px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+
+/* ==========================================
+   PROVIDER CARD
+========================================== */
+
+.user-provider-card {
+  min-height: 440px;
+  padding: 30px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+
+  box-sizing: border-box;
+
+  transition: 0.2s ease;
+}
+
+.user-provider-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.1);
+}
+
+
+/* ==========================================
+   PROVIDER AVATAR
+========================================== */
+
+.user-provider-avatar {
+  width: 64px;
+  height: 64px;
+
+  margin-bottom: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  color: #ffffff;
+
+  font-size: 22px;
+  font-weight: 800;
+}
+
+
+/* ==========================================
+   PROVIDER NAME
+========================================== */
+
+.user-provider-card h2 {
+  margin: 0;
+
+  color: #0f172a;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.user-provider-role {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+/* ==========================================
+   PROFESSIONAL DESCRIPTION
+========================================== */
+
+.user-provider-description {
+  min-height: 72px;
+
+  margin-top: 38px;
+  margin-bottom: 24px;
+
+  color: #1e293b;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+
+/* ==========================================
+   PROVIDER DETAILS
+========================================== */
+
+.user-provider-details {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-bottom: 24px;
+}
+
+
+/* ==========================================
+   DETAIL ITEM
+========================================== */
+
+.user-provider-detail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.user-provider-detail-label {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.user-provider-detail-value {
+  color: #111827;
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   SERVICES COUNT
+========================================== */
+
+.user-provider-services {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 18px;
+  padding: 12px 14px;
+
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+/* SERVICES LABEL */
+
+.user-provider-services-label {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+}
+
+/* SERVICE COUNT */
+
+.user-provider-services-count {
+  min-width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 8px;
+
+  border-radius: 8px;
+
+  background: #eef2ff;
+  color: #4f46e5;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* ==========================================
+   VIEW PROFILE BUTTON
+========================================== */
+
+.user-provider-view-button {
+  width: 100%;
+  margin-top: 12px; /* gap between services and button */
+  padding: 14px 20px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #111827;
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-provider-view-button:hover {
+  background: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.22);
+}
+
+.user-provider-view-button:active {
+  transform: translateY(0);
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.user-providers-loading {
+  max-width: 1180px;
+  margin: 100px auto;
+
+  text-align: center;
+
+  color: #64748b;
+  font-size: 15px;
+}
+
+
+/* ==========================================
+   ERROR
+========================================== */
+
+.user-providers-error {
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 40px;
+
+  text-align: center;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  color: #64748b;
+
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+
+/* ==========================================
+   NO PROVIDERS
+========================================== */
+
+.user-providers-empty {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 45px;
+
+  text-align: center;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  color: #64748b;
+
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1000px) {
+
+  .user-providers-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .user-providers-page {
+    padding: 28px 20px;
+  }
+
+  .user-providers-header h1 {
+    font-size: 36px;
+  }
+
+  .user-providers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-provider-card {
+    min-height: auto;
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .user-providers-page {
+    padding: 22px 16px;
+  }
+
+  .user-providers-header h1 {
+    font-size: 30px;
+  }
+
+  .user-providers-header p {
+    font-size: 15px;
+  }
+
+  .user-provider-card {
+    padding: 24px;
+  }
+
+}
