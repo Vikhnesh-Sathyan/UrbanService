@@ -41,7 +41,7 @@ router.put(
 router.get(
   "/providers",
   authMiddleware,
-  roleMiddleware("user"),
+  roleMiddleware("user" , "admin"),
   getProviders
 );
 
@@ -54,7 +54,7 @@ router.get(
 router.get(
   "/providers/:id",
   authMiddleware,
-  roleMiddleware("user"),
+  roleMiddleware("user", "admin"),
   getProviderProfile
 );
 

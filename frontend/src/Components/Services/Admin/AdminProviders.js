@@ -473,17 +473,39 @@ const AdminProviders = () => {
                 MODAL FOOTER
             ======================================== */}
 
-            <div className="provider-modal-footer">
+    <div className="provider-modal-footer">
 
-              <button
-                type="button"
-                className="provider-modal-close-btn"
-                onClick={handleCloseProvider}
-              >
-                Close
-              </button>
+  <button
+    type="button"
+    className={
+      selectedProvider.isActive === false
+        ? "provider-unblock-btn"
+        : "provider-block-btn"
+    }
+    onClick={() => {
+      // We will add the block/unblock API here next
+      console.log(
+        selectedProvider.isActive === false
+          ? "UNBLOCK PROVIDER"
+          : "BLOCK PROVIDER",
+        selectedProvider._id
+      );
+    }}
+  >
+    {selectedProvider.isActive === false
+      ? "Unblock Provider"
+      : "Block Provider"}
+  </button>
 
-            </div>
+  <button
+    type="button"
+    className="provider-modal-close-btn"
+    onClick={handleCloseProvider}
+  >
+    Close
+  </button>
+
+</div>
 
           </div>
 

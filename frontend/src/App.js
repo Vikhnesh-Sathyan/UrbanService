@@ -30,6 +30,9 @@ import UserProfile from "./Components/Profile/UserProfile";
 import UserProviders from "./Components/Services/User/UserProviders";
 import UserProviderProfile from "./Components/Services/User/UserProviderProfile";
 
+//admin providers
+import AdminProviders from "./Components/Services/Admin/AdminProviders";
+
 // Payment
 import StripeProvider from "./Components/Payment/StripeProvider";
 // import UserBookings from "./Components/Services/User/UserBookings";
@@ -123,6 +126,13 @@ function App() {
           <Route
             path="/user/providers/:providerId"  
              element={<UserProviderProfile />}
+          />
+
+          {/* ================= ADMIN PROVIDERS ================= */}
+
+          <Route
+            path="/admin/providers"
+            element={<AdminProviders />}
           />
 
 
