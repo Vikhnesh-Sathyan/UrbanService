@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getProviders } from "../../../Services/providerService";
 import "../../../styles/AdminProviders.css";
+import {useNavigate} from "react-router-dom"; 
 
 const AdminProviders = () => {
 
+  const navigate = useNavigate();
+  
   // ========================================
   // STATE
   // ========================================

@@ -32,6 +32,7 @@ import UserProviderProfile from "./Components/Services/User/UserProviderProfile"
 
 //admin providers
 import AdminProviders from "./Components/Services/Admin/AdminProviders";
+import AdminProviderDetails from "./Components/Services/Admin/AdminProviderDetails";
 
 // Payment
 import StripeProvider from "./Components/Payment/StripeProvider";
@@ -134,6 +135,12 @@ function App() {
             path="/admin/providers"
             element={<AdminProviders />}
           />
+
+          <Route
+            path="/admin/providers/:providerId"
+            element={<AdminProviderDetails />}
+          />
+
 
 
         </Routes>
