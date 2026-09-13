@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { getProviders } from "../../../Services/providerService";
 import "../../../styles/AdminProviders.css";
-import {useNavigate} from "react-router-dom"; 
 
 const AdminProviders = () => {
 
   const navigate = useNavigate();
-  
+
   // ========================================
   // STATE
   // ========================================
 
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Selected provider for View modal
-  const [selectedProvider, setSelectedProvider] = useState(null);
 
 
   // ========================================
@@ -62,33 +60,6 @@ const AdminProviders = () => {
 
 
   // ========================================
-  // OPEN PROVIDER DETAILS
-  // ========================================
-
-  const handleViewProvider = (provider) => {
-
-    console.log(
-      "SELECTED PROVIDER:",
-      provider
-    );
-
-    setSelectedProvider(provider);
-
-  };
-
-
-  // ========================================
-  // CLOSE PROVIDER DETAILS
-  // ========================================
-
-  const handleCloseProvider = () => {
-
-    setSelectedProvider(null);
-
-  };
-
-
-  // ========================================
   // LOADING
   // ========================================
 
@@ -112,7 +83,7 @@ const AdminProviders = () => {
 
 
   // ========================================
-  // UI
+  // PAGE
   // ========================================
 
   return (
@@ -169,348 +140,127 @@ const AdminProviders = () => {
       ) : (
 
         /* ========================================
-           PROVIDER GRID
+           PROVIDER LIST
         ======================================== */
 
         <div className="admin-providers-grid">
 
-          {providers.map((provider) => (
+          {providers.map((provider) => {
 
-            <div
-              className="admin-provider-card"
-              key={provider._id}
-            >
+            const serviceCount =
+              Array.isArray(provider.services)
+                ? provider.services.length
+                : 0;
 
-              {/* PROVIDER ICON */}
+            const isActive =
+              provider.isActive !== false;
 
-              <div className="provider-card-icon">
-                👤
-              </div>
+            return (
 
-
-              {/* PROVIDER INFORMATION */}
-
-              <div className="provider-card-info">
-
-                <h3>
-                  {provider.name || "Unknown Provider"}
-                </h3>
-
-                <p>
-                  {provider.email || "No email"}
-                </p>
-
-                <span className="provider-role">
-                  Provider
-                </span>
-
-              </div>
-
-
-              {/* ACTIONS */}
-
-              <div className="provider-card-actions">
-
-                <button
-                  type="button"
-                  className="provider-view-btn"
-                  onClick={() =>
-                    handleViewProvider(provider)
-                  }
-                >
-                  View
-                </button>
-
-              </div>
-
-            </div>
-
-          ))}
-
-        </div>
-
-      )}
-
-
-      {/* ========================================
-          PROVIDER DETAILS MODAL
-      ======================================== */}
-
-      {selectedProvider && (
-
-        <div
-          className="provider-modal-overlay"
-          onClick={handleCloseProvider}
-        >
-
-          <div
-            className="provider-modal"
-            onClick={(e) =>
-              e.stopPropagation()
-            }
-          >
-
-            {/* ========================================
-                MODAL HEADER
-            ======================================== */}
-
-            <div className="provider-modal-header">
-
-              <div>
-
-                <span className="admin-label">
-                  PROVIDER DETAILS
-                </span>
-
-                <h2>
-                  Provider Details
-                </h2>
-
-              </div>
-
-              <button
-                type="button"
-                className="provider-modal-close"
-                onClick={handleCloseProvider}
+              <div
+                className="admin-provider-card"
+                key={provider._id}
               >
-                ×
-              </button>
 
-            </div>
+                {/* =================================
+                    PROVIDER ICON
+                ================================= */}
 
-
-            {/* ========================================
-                PROVIDER DETAILS
-            ======================================== */}
-
-            <div className="provider-details">
-
-              {/* NAME */}
-
-              <div className="provider-detail-row">
-
-                <span className="provider-detail-label">
-                  Name
-                </span>
-
-                <strong>
-                  {selectedProvider.name ||
-                    "Unknown"}
-                </strong>
-
-              </div>
+                <div className="provider-card-icon">
+                  👤
+                </div>
 
 
-              {/* EMAIL */}
+                {/* =================================
+                    PROVIDER INFORMATION
+                ================================= */}
 
-              <div className="provider-detail-row">
+                <div className="provider-card-info">
 
-                <span className="provider-detail-label">
-                  Email
-                </span>
+                  <h3>
+                    {provider.name ||
+                      "Unknown Provider"}
+                  </h3>
 
-                <strong>
-                  {selectedProvider.email ||
-                    "Unknown"}
-                </strong>
+                  <p>
+                    {provider.email ||
+                      "No email"}
+                  </p>
 
-              </div>
+                  <span className="provider-role">
+                    Provider
+                  </span>
 
-
-              {/* ROLE */}
-
-              <div className="provider-detail-row">
-
-                <span className="provider-detail-label">
-                  Role
-                </span>
-
-                <span className="provider-role">
-                  Provider
-                </span>
-
-              </div>
+                </div>
 
 
-              {/* ACCOUNT STATUS */}
+                {/* =================================
+                    STATUS
+                ================================= */}
 
-              <div className="provider-detail-row">
+                <div className="provider-card-status">
 
-                <span className="provider-detail-label">
-                  Account Status
-                </span>
+                  <span className="provider-status-label">
+                    STATUS
+                  </span>
 
-                <span
-                  className={
-                    selectedProvider.isActive === false
-                      ? "provider-status-inactive"
-                      : "provider-status-active"
-                  }
-                >
-                  {selectedProvider.isActive === false
-                    ? "Inactive"
-                    : "Active"}
-                </span>
+                  <span
+                    className={
+                      isActive
+                        ? "provider-status-active"
+                        : "provider-status-inactive"
+                    }
+                  >
+                    {isActive
+                      ? "Active"
+                      : "Blocked"}
+                  </span>
 
-              </div>
-
-
-              {/* ========================================
-                  SERVICES
-              ======================================== */}
-
-              <div className="provider-services-section">
-
-                <h3>
-                  Services
-                </h3>
-
-                <div className="provider-services-list">
-
-                  {Array.isArray(
-                    selectedProvider.services
-                  ) &&
-                  selectedProvider.services.length > 0 ? (
-
-                    selectedProvider.services.map(
-                      (service, index) => (
-
-                        <div
-                          className="provider-service-item"
-                          key={
-                            service._id || index
-                          }
-                        >
-
-                          {/* SERVICE INFORMATION */}
-
-                          <div className="provider-service-info">
-
-                            <strong>
-                              {service.name ||
-                                "Unknown Service"}
-                            </strong>
-
-                            <span>
-                              ₹{service.price}
-                            </span>
-
-                          </div>
+                </div>
 
 
-                          {/* SERVICE STATUS */}
+                {/* =================================
+                    SERVICE COUNT
+                ================================= */}
 
-                          <div className="provider-service-status">
+                <div className="provider-card-services">
 
-                            <span
-                              className={`provider-service-status-badge ${
-                                service.status || "pending"
-                              }`}
-                            >
+                  <span>
+                    SERVICES
+                  </span>
 
-                              {service.status ===
-                                "approved" && (
-                                <>
-                                  ✓ Approved
-                                </>
-                              )}
+                  <strong>
+                    {serviceCount}
+                  </strong>
 
-                              {service.status ===
-                                "rejected" && (
-                                <>
-                                  ✕ Rejected
-                                </>
-                              )}
-
-                              {service.status ===
-                                "pending" && (
-                                <>
-                                  ⏳ Pending
-                                </>
-                              )}
-
-                            </span>
-
-                          </div>
+                </div>
 
 
-                          {/* REJECTION REASON */}
+                {/* =================================
+                    VIEW DETAILS
+                ================================= */}
 
-                          {service.status ===
-                            "rejected" &&
-                            service.adminComment && (
+                <div className="provider-card-actions">
 
-                              <p className="provider-rejection-reason">
-
-                                <strong>
-                                  Reason:
-                                </strong>{" "}
-
-                                {service.adminComment}
-
-                              </p>
-
-                            )}
-
-                        </div>
-
+                  <button
+                    type="button"
+                    className="provider-view-btn"
+                    onClick={() =>
+                      navigate(
+                        `/admin/providers/${provider._id}`
                       )
-                    )
-
-                  ) : (
-
-                    <p className="no-provider-services">
-                      No services found.
-                    </p>
-
-                  )}
+                    }
+                  >
+                    View Details
+                  </button>
 
                 </div>
 
               </div>
 
-            </div>
+            );
 
-
-            {/* ========================================
-                MODAL FOOTER
-            ======================================== */}
-
-    <div className="provider-modal-footer">
-
-  <button
-    type="button"
-    className={
-      selectedProvider.isActive === false
-        ? "provider-unblock-btn"
-        : "provider-block-btn"
-    }
-    onClick={() => {
-      // We will add the block/unblock API here next
-      console.log(
-        selectedProvider.isActive === false
-          ? "UNBLOCK PROVIDER"
-          : "BLOCK PROVIDER",
-        selectedProvider._id
-      );
-    }}
-  >
-    {selectedProvider.isActive === false
-      ? "Unblock Provider"
-      : "Block Provider"}
-  </button>
-
-  <button
-    type="button"
-    className="provider-modal-close-btn"
-    onClick={handleCloseProvider}
-  >
-    Close
-  </button>
-
-</div>
-
-          </div>
+          })}
 
         </div>
 

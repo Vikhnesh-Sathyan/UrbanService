@@ -9,70 +9,101 @@ const AdminProviderDetails = () => {
   const { providerId } = useParams();
   const navigate = useNavigate();
 
+  // ========================================
+  // STATE
+  // ========================================
+
   const [provider, setProvider] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+
+  // ========================================
+  // FETCH PROVIDER
+  // ========================================
 
   useEffect(() => {
     fetchProvider();
   }, [providerId]);
 
-  const fetchProvider = async () => {
-    try {
 
-      setLoading(true);
-      setError("");
+const fetchProvider = async () => {
+  try {
 
-      const token = localStorage.getItem("token");
+    setLoading(true);
+    setError("");
 
-      const response = await axios.get(
-        `http://localhost:5000/api/users/providers/${providerId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    const token = localStorage.getItem("token");
 
-      console.log(
-        "PROVIDER DETAILS:",
-        response.data
-      );
+    const response = await axios.get(
+      `http://localhost:5000/api/users/providers/${providerId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      setProvider(response.data.provider);
+    console.log(
+      "PROVIDER DETAILS:",
+      response.data
+    );
 
-    } catch (error) {
+    setProvider({
+      ...response.data.provider,
+      services: response.data.services || [],
+    });
 
-      console.error(
-        "Fetch provider details error:",
-        error
-      );
+  } catch (error) {
 
-      setError(
-        error.response?.data?.message ||
-        "Failed to load provider details."
-      );
+    console.error(
+      "Fetch provider details error:",
+      error
+    );
 
-    } finally {
+    setError(
+      error.response?.data?.message ||
+      "Failed to load provider details."
+    );
 
-      setLoading(false);
+  } finally {
 
-    }
-  };
+    setLoading(false);
+
+  }
+};
+
+
+  // ========================================
+  // LOADING
+  // ========================================
 
   if (loading) {
+
     return (
       <section className="admin-provider-details-page">
+
         <div className="admin-provider-details-loading">
+
           Loading provider details...
+
         </div>
+
       </section>
     );
+
   }
 
+
+  // ========================================
+  // ERROR
+  // ========================================
+
   if (error) {
+
     return (
       <section className="admin-provider-details-page">
+
         <div className="admin-provider-details-error">
 
           <h2>
@@ -84,44 +115,123 @@ const AdminProviderDetails = () => {
           </p>
 
           <button
-            onClick={() => navigate("/admin/providers")}
+            type="button"
+            onClick={() =>
+              navigate("/admin/providers")
+            }
           >
             Back to Providers
           </button>
 
         </div>
+
       </section>
     );
+
   }
+
+
+  // ========================================
+  // NO PROVIDER
+  // ========================================
 
   if (!provider) {
     return null;
   }
 
+
+  // ========================================
+  // MAIN UI
+  // ========================================
+
   return (
+
     <section className="admin-provider-details-page">
 
-      {/* HEADER */}
+
+      {/* =================================================
+          HEADER
+      ================================================= */}
 
       <div className="admin-provider-details-header">
 
-        <button
-          type="button"
-          className="admin-provider-back-btn"
-          onClick={() =>
-            navigate("/admin/providers")
-          }
-        >
-          ← Back to Providers
-        </button>
+
+        {/* =================================================
+            TOP ACTIONS
+        ================================================= */}
+
+        <div className="admin-provider-top-actions">
+
+
+          {/* BACK */}
+
+          <button
+            type="button"
+            className="admin-provider-back-btn"
+            onClick={() =>
+              navigate("/admin/providers")
+            }
+          >
+            ← Back to Providers
+          </button>
+
+
+          {/* BLOCK / UNBLOCK */}
+
+          {provider.isActive === false ? (
+
+            <button
+              type="button"
+              className="admin-unblock-btn"
+              onClick={() => {
+                console.log(
+                  "UNBLOCK PROVIDER:",
+                  provider._id
+                );
+              }}
+            >
+              Unblock Provider
+            </button>
+
+          ) : (
+
+            <button
+              type="button"
+              className="admin-block-btn"
+              onClick={() => {
+                console.log(
+                  "BLOCK PROVIDER:",
+                  provider._id
+                );
+              }}
+            >
+              Block Provider
+            </button>
+
+          )}
+
+        </div>
+
+
+        {/* =================================================
+            PROVIDER TITLE
+        ================================================= */}
 
         <div className="admin-provider-title">
 
+
+          {/* AVATAR */}
+
           <div className="admin-provider-avatar">
+
             {provider.name
               ?.charAt(0)
               ?.toUpperCase() || "P"}
+
           </div>
+
+
+          {/* PROVIDER NAME */}
 
           <div>
 
@@ -130,11 +240,13 @@ const AdminProviderDetails = () => {
             </span>
 
             <h1>
-              {provider.name || "Unknown Provider"}
+              {provider.name ||
+                "Unknown Provider"}
             </h1>
 
             <p>
-              {provider.email || "No email"}
+              {provider.email ||
+                "No email"}
             </p>
 
           </div>
@@ -144,7 +256,10 @@ const AdminProviderDetails = () => {
       </div>
 
 
-      {/* ACCOUNT STATUS */}
+
+      {/* =================================================
+          ACCOUNT STATUS
+      ================================================= */}
 
       <div className="admin-provider-status-card">
 
@@ -162,6 +277,7 @@ const AdminProviderDetails = () => {
 
         </div>
 
+
         <span
           className={
             provider.isActive === false
@@ -169,73 +285,139 @@ const AdminProviderDetails = () => {
               : "status-badge active"
           }
         >
+
           {provider.isActive === false
             ? "Blocked"
             : "Active"}
+
         </span>
 
       </div>
 
 
-      {/* BASIC INFORMATION */}
+
+      {/* =================================================
+          BASIC INFORMATION
+      ================================================= */}
 
       <div className="admin-provider-section">
 
+
         <div className="admin-provider-section-header">
 
-          <h2>
-            Basic Information
-          </h2>
+          <div>
 
-          <p>
-            Provider account information
-          </p>
+            <h2>
+              Basic Information
+            </h2>
+
+            <p>
+              Provider account information
+            </p>
+
+          </div>
 
         </div>
 
+
         <div className="admin-provider-info-grid">
 
-          <div className="admin-provider-info-item">
-            <span>Name</span>
-            <strong>
-              {provider.name || "Not provided"}
-            </strong>
-          </div>
+
+          {/* NAME */}
 
           <div className="admin-provider-info-item">
-            <span>Email</span>
-            <strong>
-              {provider.email || "Not provided"}
-            </strong>
-          </div>
 
-          <div className="admin-provider-info-item">
-            <span>Phone</span>
-            <strong>
-              {provider.phone || "Not provided"}
-            </strong>
-          </div>
+            <span>
+              Name
+            </span>
 
-          <div className="admin-provider-info-item">
-            <span>Role</span>
             <strong>
-              {provider.role || "Provider"}
-            </strong>
-          </div>
-
-          <div className="admin-provider-info-item">
-            <span>Experience</span>
-            <strong>
-              {provider.experience || "Not provided"}
-            </strong>
-          </div>
-
-          <div className="admin-provider-info-item">
-            <span>Location</span>
-            <strong>
-              {provider.location?.city ||
+              {provider.name ||
                 "Not provided"}
             </strong>
+
+          </div>
+
+
+          {/* EMAIL */}
+
+          <div className="admin-provider-info-item">
+
+            <span>
+              Email
+            </span>
+
+            <strong>
+              {provider.email ||
+                "Not provided"}
+            </strong>
+
+          </div>
+
+
+          {/* PHONE */}
+
+          <div className="admin-provider-info-item">
+
+            <span>
+              Phone
+            </span>
+
+            <strong>
+              {provider.phone ||
+                "Not provided"}
+            </strong>
+
+          </div>
+
+
+          {/* ROLE */}
+
+          <div className="admin-provider-info-item">
+
+            <span>
+              Role
+            </span>
+
+            <strong>
+              {provider.role ||
+                "Provider"}
+            </strong>
+
+          </div>
+
+
+          {/* EXPERIENCE */}
+
+          <div className="admin-provider-info-item">
+
+            <span>
+              Experience
+            </span>
+
+            <strong>
+              {provider.experience ||
+                "Not provided"}
+            </strong>
+
+          </div>
+
+
+          {/* LOCATION */}
+
+          <div className="admin-provider-info-item">
+
+            <span>
+              Location
+            </span>
+
+            <strong>
+
+              {provider.location?.city ||
+                "Not provided"}
+
+            </strong>
+
           </div>
 
         </div>
@@ -243,17 +425,30 @@ const AdminProviderDetails = () => {
       </div>
 
 
-      {/* PROFESSIONAL DESCRIPTION */}
+
+      {/* =================================================
+          PROFESSIONAL INFORMATION
+      ================================================= */}
 
       <div className="admin-provider-section">
 
+
         <div className="admin-provider-section-header">
 
-          <h2>
-            Professional Information
-          </h2>
+          <div>
+
+            <h2>
+              Professional Information
+            </h2>
+
+            <p>
+              About the provider and their professional background
+            </p>
+
+          </div>
 
         </div>
+
 
         <div className="admin-provider-description">
 
@@ -265,32 +460,52 @@ const AdminProviderDetails = () => {
       </div>
 
 
-      {/* AVAILABILITY */}
+
+      {/* =================================================
+          AVAILABILITY
+      ================================================= */}
 
       <div className="admin-provider-section">
 
+
         <div className="admin-provider-section-header">
 
-          <h2>
-            Availability
-          </h2>
+          <div>
+
+            <h2>
+              Availability
+            </h2>
+
+            <p>
+              Provider working availability
+            </p>
+
+          </div>
 
         </div>
 
+
         <div className="admin-provider-availability">
 
+
           {provider.availability ? (
+
             <pre>
+
               {JSON.stringify(
                 provider.availability,
                 null,
                 2
               )}
+
             </pre>
+
           ) : (
+
             <p>
               Availability not provided.
             </p>
+
           )}
 
         </div>
@@ -298,13 +513,21 @@ const AdminProviderDetails = () => {
       </div>
 
 
-      {/* SERVICES */}
+
+      {/* =================================================
+          SERVICES
+      ================================================= */}
 
       <div className="admin-provider-section">
 
+
+        {/* SERVICES HEADER */}
+
         <div className="admin-provider-section-header">
 
+
           <div>
+
             <h2>
               Services
             </h2>
@@ -312,96 +535,94 @@ const AdminProviderDetails = () => {
             <p>
               Services offered by this provider
             </p>
+
           </div>
 
+
           <strong className="service-count">
+
             {provider.services?.length || 0}
+
           </strong>
 
         </div>
 
 
+
+        {/* SERVICES */}
+
         {provider.services?.length > 0 ? (
 
           <div className="admin-provider-services-list">
 
-            {provider.services.map((service) => (
 
-              <div
-                className="admin-provider-service-card"
-                key={service._id}
-              >
+            {provider.services.map(
+              (service) => (
 
-                <div>
+                <div
+                  className="admin-provider-service-card"
+                  key={service._id}
+                >
 
-                  <h3>
-                    {service.name}
-                  </h3>
 
-                  <p>
-                    {service.category ||
-                      "General Service"}
-                  </p>
+                  {/* SERVICE INFORMATION */}
 
-                  <span>
-                    {service.description ||
-                      "No description provided."}
-                  </span>
+                  <div>
+
+                    <h3>
+                      {service.name ||
+                        "Unknown Service"}
+                    </h3>
+
+
+                    <p>
+                      {service.category ||
+                        "General Service"}
+                    </p>
+
+
+                    <span>
+
+                      {service.description ||
+                        "No description provided."}
+
+                    </span>
+
+                  </div>
+
+
+
+                  {/* SERVICE RIGHT */}
+
+                  <div className="admin-provider-service-right">
+
+
+                    {/* PRICE */}
+
+                    <strong>
+
+                      ₹
+                      {service.price ??
+                        "0"}
+
+                    </strong>
+
+                  </div>
 
                 </div>
 
-                <div className="admin-provider-service-right">
-
-                  <strong>
-                    ₹{service.price}
-                  </strong>
-
-                  <span
-                    className={`service-status ${service.status}`}
-                  >
-                    {service.status}
-                  </span>
-
-                </div>
-
-              </div>
-
-            ))}
+              )
+            )}
 
           </div>
 
         ) : (
 
           <div className="admin-no-services">
+
             No services found.
+
           </div>
-
-        )}
-
-      </div>
-
-
-      {/* ACTIONS */}
-
-      <div className="admin-provider-actions">
-
-        {provider.isActive === false ? (
-
-          <button
-            type="button"
-            className="admin-unblock-btn"
-          >
-            Unblock Provider
-          </button>
-
-        ) : (
-
-          <button
-            type="button"
-            className="admin-block-btn"
-          >
-            Block Provider
-          </button>
 
         )}
 

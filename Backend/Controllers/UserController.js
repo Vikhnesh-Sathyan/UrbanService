@@ -7,10 +7,10 @@ const Service = require("../Models/Service");
 
 const getProviders = async (req, res) => {
   try {
+
     const providers = await User.find({
       role: "provider",
-    })
-      .select("-password");
+    }).select("-password");
 
     const providersWithServices = await Promise.all(
       providers.map(async (provider) => {
@@ -24,7 +24,12 @@ const getProviders = async (req, res) => {
 
         return {
           _id: provider._id,
+
           name: provider.name,
+
+          // EMAIL
+          email: provider.email,
+
           phone: provider.phone,
 
           professionalDescription:
@@ -64,6 +69,7 @@ const getProviders = async (req, res) => {
   }
 };
 
+
 // ========================================
 // GET MY PROFILE
 // ========================================
@@ -71,11 +77,9 @@ const getProviders = async (req, res) => {
 const getProfile = async (req, res) => {
   try {
 
-    // Get currently logged-in user
     const user = await User.findById(req.user.id)
       .select("-password");
 
-    // User not found
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -87,7 +91,11 @@ const getProfile = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Get profile error:", error);
+
+    console.error(
+      "Get profile error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to fetch profile",
@@ -102,6 +110,7 @@ const getProfile = async (req, res) => {
 
 const getProviderProfile = async (req, res) => {
   try {
+
     const provider = await User.findOne({
       _id: req.params.id,
       role: "provider",
@@ -121,23 +130,36 @@ const getProviderProfile = async (req, res) => {
     );
 
     res.status(200).json({
+
       provider: {
+
         _id: provider._id,
+
         name: provider.name,
+
+        // EMAIL
+        email: provider.email,
+
         phone: provider.phone,
 
         professionalDescription:
-        provider.professionalDescription,
-        
-        experience: provider.experience,
-        location: provider.location,
-        availability: provider.availability,
+          provider.professionalDescription,
+
+        experience:
+          provider.experience,
+
+        location:
+          provider.location,
+
+        availability:
+          provider.availability,
       },
 
       services,
     });
 
   } catch (error) {
+
     console.error(
       "Get provider profile error:",
       error
@@ -149,12 +171,14 @@ const getProviderProfile = async (req, res) => {
   }
 };
 
+
 // ========================================
 // UPDATE MY PROFILE
 // ========================================
 
 const updateProfile = async (req, res) => {
   try {
+
     const {
       name,
       phone,
@@ -165,7 +189,6 @@ const updateProfile = async (req, res) => {
       emergencyContact,
     } = req.body;
 
-    // Find logged-in user
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -173,6 +196,7 @@ const updateProfile = async (req, res) => {
         message: "User not found",
       });
     }
+
 
     // ====================================
     // BASIC DETAILS
@@ -186,6 +210,7 @@ const updateProfile = async (req, res) => {
       user.phone = phone.trim();
     }
 
+
     // ====================================
     // PROFESSIONAL DESCRIPTION
     // ====================================
@@ -194,6 +219,8 @@ const updateProfile = async (req, res) => {
       user.professionalDescription =
         professionalDescription.trim();
     }
+
+
     // ====================================
     // EXPERIENCE
     // ====================================
@@ -201,6 +228,7 @@ const updateProfile = async (req, res) => {
     if (experience !== undefined) {
       user.experience = experience.trim();
     }
+
 
     // ====================================
     // LOCATION
@@ -213,6 +241,7 @@ const updateProfile = async (req, res) => {
     if (state !== undefined) {
       user.location.state = state.trim();
     }
+
 
     // ====================================
     // EMERGENCY CONTACT
@@ -236,12 +265,18 @@ const updateProfile = async (req, res) => {
       }
     }
 
-    // Save changes
+
+    // ====================================
+    // SAVE
+    // ====================================
+
     await user.save();
+
 
     // Get updated user
     const updatedUser = await User.findById(req.user.id)
       .select("-password");
+
 
     res.status(200).json({
       message: "Profile updated successfully",
@@ -249,6 +284,7 @@ const updateProfile = async (req, res) => {
     });
 
   } catch (error) {
+
     console.error(
       "Update profile error:",
       error
@@ -261,6 +297,97 @@ const updateProfile = async (req, res) => {
 };
 
 
+// ========================================
+// GET SINGLE PROVIDER PROFILE - ADMIN
+// ========================================
+
+const getAdminProviderProfile = async (req, res) => {
+
+  try {
+
+    const { id } = req.params;
+
+
+    // ====================================
+    // FIND PROVIDER
+    // ====================================
+
+    const provider = await User.findOne({
+      _id: id,
+      role: "provider",
+    }).select("-password");
+
+
+    if (!provider) {
+      return res.status(404).json({
+        message: "Provider not found",
+      });
+    }
+
+
+    // ====================================
+    // GET ALL SERVICES
+    // ====================================
+
+    const services = await Service.find({
+      provider: provider._id,
+    }).select(
+      "name price category description tag image detailedDescription status adminComment"
+    );
+
+
+    // ====================================
+    // RESPONSE
+    // ====================================
+
+    res.status(200).json({
+
+      provider: {
+
+        _id: provider._id,
+
+        name: provider.name,
+
+        // EMAIL
+        email: provider.email,
+
+        phone: provider.phone,
+
+        role: provider.role,
+
+        professionalDescription:
+          provider.professionalDescription,
+
+        experience:
+          provider.experience,
+
+        location:
+          provider.location,
+
+        availability:
+          provider.availability,
+
+        isActive:
+          provider.isActive,
+      },
+
+      services,
+    });
+
+
+  } catch (error) {
+
+    console.error(
+      "Get admin provider profile error:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Failed to fetch provider profile",
+    });
+  }
+};
+
 
 // ========================================
 // EXPORTS
@@ -271,4 +398,5 @@ module.exports = {
   getProfile,
   updateProfile,
   getProviderProfile,
+  getAdminProviderProfile,
 };
