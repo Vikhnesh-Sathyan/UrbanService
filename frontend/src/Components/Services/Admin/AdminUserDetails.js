@@ -9,6 +9,7 @@ const AdminUserDetails = () => {
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [bookings, setBookings] = useState([]);
 
   const loadUserDetails = async () => {
     try {
@@ -37,9 +38,41 @@ const AdminUserDetails = () => {
       setLoading(false);
     }
   };
+  const loadUserBookings = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+      `http://localhost:5000/api/bookings/admin/user/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.message || "Failed to fetch bookings"
+      );
+    }
+
+    setBookings(data.bookings || []);
+  } catch (error) {
+    console.error(
+      "Failed to load user bookings:",
+      error
+    );
+
+    setBookings([]);
+  }
+};
 
   useEffect(() => {
     loadUserDetails();
+    loadUserBookings();
   }, [userId]);
 
   if (loading) {
@@ -168,6 +201,101 @@ const AdminUserDetails = () => {
 
         </div>
       </div>
+      {/* Booking History */}
+<div className="admin-user-bookings-card">
+
+  <div className="admin-user-card-header">
+    <h3>Booking History</h3>
+
+    <p>
+      Services booked by this customer
+    </p>
+  </div>
+
+  {bookings.length === 0 ? (
+    <div className="admin-user-no-bookings">
+      <div className="admin-empty-icon">
+        📅
+      </div>
+
+      <h3>No Bookings Found</h3>
+
+      <p>
+        This user has not made any bookings yet.
+      </p>
+    </div>
+  ) : (
+    <div className="admin-user-bookings-wrapper">
+      <table className="admin-user-bookings-table">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Provider</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {bookings.map((booking) => (
+            <tr key={booking._id}>
+
+              <td>
+                <div className="booking-service">
+                  <strong>
+                    {booking.service?.name ||
+                      "Unknown Service"}
+                  </strong>
+
+                  {booking.service?.category && (
+                    <span>
+                      {booking.service.category}
+                    </span>
+                  )}
+                </div>
+              </td>
+
+              <td>
+                <div className="booking-person">
+                  <strong>
+                    {booking.provider?.name ||
+                      "Unknown"}
+                  </strong>
+
+                  <span>
+                    {booking.provider?.email || "-"}
+                  </span>
+                </div>
+              </td>
+
+              <td>
+                {booking.date || "-"}
+              </td>
+
+              <td>
+                {booking.time || "-"}
+              </td>
+
+              <td>
+                <span
+                  className={`booking-status booking-status-${
+                    booking.status === "in_progress"
+                      ? "progress"
+                      : booking.status || "default"
+                  }`}
+                >
+                  {booking.status || "pending"}
+                </span>
+              </td>
+
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>
 
     </section>
   );

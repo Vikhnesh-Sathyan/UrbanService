@@ -797,6 +797,29 @@ const getAllBookings = async (req, res) => {
   }
 };
 
+const getUserBookings = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const bookings = await Booking.find({
+      user: userId,
+    })
+      .populate("service", "name price category image")
+      .populate("provider", "name email")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      bookings,
+    });
+  } catch (error) {
+    console.error("Get user bookings error:", error);
+
+    res.status(500).json({
+      message: "Failed to fetch user bookings",
+    });
+  }
+};
+
 // ===============================
 // EXPORTS
 // ===============================
@@ -809,6 +832,7 @@ module.exports = {
   acceptBooking,
   rejectBooking,
   updateBookingStatus,
-  getAllBookings,
   addBookingReview,
+  getAllBookings,
+  getUserBookings,
 };

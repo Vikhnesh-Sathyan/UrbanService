@@ -1487,7 +1487,91 @@
   }
 }
 
+/* ========================================
+   ADMIN USER BOOKING HISTORY
+======================================== */
 
+.admin-user-bookings-card {
+  max-width: 1100px;
+  margin: 20px auto 0;
+  padding: 28px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.admin-user-bookings-wrapper {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.admin-user-bookings-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 750px;
+}
+
+.admin-user-bookings-table thead {
+  background: #f8fafc;
+}
+
+.admin-user-bookings-table th {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e2e8f0;
+
+  text-align: left;
+
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-user-bookings-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+
+  color: #334155;
+  font-size: 13px;
+}
+
+.admin-user-bookings-table tbody tr:hover {
+  background: #fafbff;
+}
+
+.admin-user-bookings-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-user-no-bookings {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.admin-user-no-bookings h3 {
+  margin: 0 0 8px;
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.admin-user-no-bookings p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .admin-user-bookings-card {
+    padding: 20px;
+  }
+}
 
 
 

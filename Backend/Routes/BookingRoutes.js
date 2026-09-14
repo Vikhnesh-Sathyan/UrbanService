@@ -11,6 +11,7 @@ const {
   updateBookingStatus,
   getAllBookings,
   addBookingReview,
+  getUserBookings,
 } = require("../Controllers/BookingController");
 
 const authMiddleware = require("../Middleware/AuthMiddleware");
@@ -99,11 +100,21 @@ router.patch(
 );
 
 // Get all bookings (Admin)
+
+router.get(
+  "/admin/user/:userId",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getUserBookings
+);
+
 router.get(
   "/admin",
   authMiddleware,
   roleMiddleware("admin"),
   getAllBookings
 );
+
+
 
 module.exports = router;
