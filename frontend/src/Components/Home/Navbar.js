@@ -29,7 +29,7 @@ function Navbar() {
           </Link>
 
           {/* Services */}
-          <Link to="/services" className="home-navbar-link">
+          <Link to="/user/services" className="home-navbar-link">
             <FaTools className="navbar-icon services-icon" />
             <span>Services</span>
           </Link>

@@ -69,14 +69,43 @@ const UserServiceDetails = () => {
   // ==========================================
   // BOOK SERVICE
   // ==========================================
+const handleBookService = () => {
+  const token = localStorage.getItem("token");
 
-  const handleBookService = () => {
+  // No login token
+  if (!token) {
+    alert("Please login to book this service.");
+    navigate("/login");
+    return;
+  }
+
+  try {
+    // Decode JWT payload
+    const payload = JSON.parse(atob(token.split(".")[1]));
+
+    // Check token expiry
+    if (payload.exp && payload.exp * 1000 < Date.now()) {
+      localStorage.removeItem("token");
+
+      alert("Your session has expired. Please login again.");
+      navigate("/login");
+      return;
+    }
+
+    // Valid token → open booking page
     navigate(`/user/services/${serviceId}/book`, {
       state: {
         service,
       },
     });
-  };
+  } catch (error) {
+    // Invalid token
+    localStorage.removeItem("token");
+
+    alert("Please login to book this service.");
+    navigate("/login");
+  }
+};
 
   // ==========================================
   // PAGE

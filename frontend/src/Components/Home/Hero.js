@@ -31,7 +31,7 @@ function Hero() {
 
           <div className="hero-buttons">
 
-            <Link to="/services" className="hero-primary-btn">
+            <Link to="/user/services" className="hero-primary-btn">
               Explore Services
               <FaArrowRight />
             </Link>
