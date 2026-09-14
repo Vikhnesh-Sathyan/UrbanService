@@ -1,8 +1,6 @@
 import React from "react";
 
 const ServiceFilters = ({
-  search,
-  setSearch,
   category,
   setCategory,
   minPrice,
@@ -17,26 +15,6 @@ const ServiceFilters = ({
 }) => {
   return (
     <div className="user-services-filters">
-
-      {/* SEARCH */}
-
-      <div className="user-filter-field">
-
-        <label>
-          Search
-        </label>
-
-        <input
-          type="text"
-          placeholder="Search services..."
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-        />
-
-      </div>
-
 
       {/* CATEGORY */}
 

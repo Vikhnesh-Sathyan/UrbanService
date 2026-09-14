@@ -225,50 +225,70 @@ const UserServicesPage = () => {
           HERO / HEADER
       ====================================== */}
 
-      <section className="user-services-hero">
+ <section className="user-services-hero">
 
-        <span className="user-services-eyebrow">
-          SERVICE MARKETPLACE
-        </span>
+  <div className="user-services-marquee">
+    <div className="user-services-marquee-track">
+      <span>✦ TRUSTED LOCAL SERVICES</span>
+      <span>• VERIFIED PROFESSIONALS</span>
+      <span>• EASY BOOKING</span>
+      <span>• SECURE PAYMENTS</span>
+      <span>• QUALITY SERVICES</span>
 
-        <h1>
-          Available Services
-        </h1>
+      <span>✦ TRUSTED LOCAL SERVICES</span>
+      <span>• VERIFIED PROFESSIONALS</span>
+      <span>• EASY BOOKING</span>
+      <span>• SECURE PAYMENTS</span>
+      <span>• QUALITY SERVICES</span>
+    </div>
+  </div>
 
-        <p>
-          Discover trusted professionals
-          for your everyday needs.
-        </p>
+  <div className="user-services-hero-content">
 
-        {/* SEARCH */}
+    <span className="user-services-eyebrow">
+      ✦ SERVICE MARKETPLACE
+    </span>
 
-        <div className="user-services-search">
+    <h1>
+      Available Services
+    </h1>
 
-          <FaSearch />
+    <p>
+      Discover trusted professionals for your everyday needs.
+    </p>
 
-          <input
-            type="text"
-            value={search}
-            onChange={handleSearchChange}
-            placeholder="Search for a service..."
-          />
+  </div>
 
-          {search && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearch("");
-                setPage(1);
-              }}
-              className="user-services-search-clear"
-            >
-              ×
-            </button>
-          )}
+  <div className="user-services-search">
+    <FaSearch />
 
-        </div>
+    <input
+      type="text"
+      value={search}
+      onChange={handleSearchChange}
+      placeholder="Search for a service..."
+    />
 
-      </section>
+    {search && (
+      <button
+        type="button"
+        onClick={() => {
+          setSearch("");
+          setPage(1);
+        }}
+        className="user-services-search-clear"
+      >
+        ×
+      </button>
+    )}
+  </div>
+  <div className="user-services-trust">
+  <span>✓ Verified Professionals</span>
+  <span>✓ Secure Booking</span>
+  <span>✓ Trusted Services</span>
+</div>
+
+</section>
 
 
       {/* ======================================
