@@ -36,6 +36,10 @@ import AdminProviderDetails from "./Components/Services/Admin/AdminProviderDetai
 // admin help requests
 import AdminHelpRequests from "./Components/Services/Admin/AdminHelpRequests";
 
+//admin Users
+import AdminUsers from "./Components/Services/Admin/AdminUsers";
+
+
 // Payment
 import StripeProvider from "./Components/Payment/StripeProvider";
 // import UserBookings from "./Components/Services/User/UserBookings";
@@ -147,6 +151,11 @@ function App() {
           <Route
             path="/admin/help-requests"
             element={<AdminHelpRequests />}
+          />
+                    {/* ================= ADMIN Users================= */}
+          <Route
+          path="/admin/users"
+          element={<AdminUsers />}
           />
 
 

@@ -10,6 +10,8 @@ const {
   getProviderProfile,
   blockProvider,
   unblockProvider,
+  getUsers,
+  getUserDetails,
 } = require("../Controllers/UserController");
 
 const router = express.Router();
@@ -80,6 +82,28 @@ router.patch(
   authMiddleware,
   roleMiddleware("admin"),
   unblockProvider
+);
+
+//Admin view user profile
+router.get(
+  "/",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getUsers
+);
+
+router.get(
+  "/",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getUsers
+);
+
+router.get(
+  "/:id",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getUserDetails
 );
 
 module.exports = router;

@@ -30,6 +30,11 @@ const AdminSidebar = () => {
       path: "/admin/providers",
     },
     {
+      name: "Users",
+      icon: <FaUsers />,
+      path: "/admin/users",
+    },
+    {
       name: "Bookings",
       icon: <FaClipboardList />,
       path: "/admin/bookings",

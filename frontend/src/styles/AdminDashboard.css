@@ -1205,3 +1205,129 @@
   }
 
 }
+
+
+/* ========================================
+   ADMIN USERS
+======================================== */
+
+.admin-users-section {
+  width: 100%;
+  padding: 32px;
+  box-sizing: border-box;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* Users table */
+
+.admin-users-table-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+.admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 850px;
+}
+
+.admin-users-table thead {
+  background: #f8fafc;
+}
+
+.admin-users-table th {
+  padding: 15px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+}
+
+.admin-users-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  font-size: 14px;
+  color: #334155;
+}
+
+.admin-users-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.admin-users-table tbody tr:hover {
+  background: #fafbff;
+}
+
+.admin-users-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* User information */
+
+.admin-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 180px;
+}
+
+.admin-user-info strong {
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-user-info span {
+  color: #94a3b8;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* View details button */
+
+.admin-view-btn {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.admin-view-btn:hover {
+  background: #374151;
+}
+
+/* ========================================
+   USERS RESPONSIVE
+======================================== */
+
+@media (max-width: 900px) {
+  .admin-users-section {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-users-section {
+    padding: 16px;
+  }
+
+  .admin-users-table-wrapper {
+    border-radius: 14px;
+  }
+}
