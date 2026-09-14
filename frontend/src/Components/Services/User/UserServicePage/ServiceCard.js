@@ -3,8 +3,20 @@ import React from "react";
 const ServiceCard = ({
   service,
   onViewDetails,
- 
 }) => {
+
+  // ==========================================
+  // RATING
+  // ==========================================
+
+  const averageRating = Number(
+    service.averageRating || 0
+  );
+
+  const totalReviews = Number(
+    service.totalReviews || 0
+  );
+
 
   return (
     <div className="user-service-card">
@@ -32,18 +44,14 @@ const ServiceCard = ({
         )}
 
 
-        {/* ======================================
-            CATEGORY
-        ====================================== */}
+        {/* CATEGORY */}
 
         <span className="user-service-category">
           {service.category}
         </span>
 
 
-        {/* ======================================
-            SERVICE TAG
-        ====================================== */}
+        {/* SERVICE TAG */}
 
         {service.tag && (
 
@@ -71,6 +79,41 @@ const ServiceCard = ({
         <h2>
           {service.name}
         </h2>
+
+
+        {/* ====================================
+            RATING
+        ==================================== */}
+
+        <div className="user-service-rating">
+
+          {totalReviews > 0 ? (
+
+            <>
+
+              <span className="user-service-stars">
+                {"★".repeat(Math.round(averageRating))}
+              </span>
+
+              <strong>
+                {averageRating.toFixed(1)}
+              </strong>
+
+              <span className="user-service-review-count">
+                ({totalReviews} reviews)
+              </span>
+
+            </>
+
+          ) : (
+
+            <span className="user-service-no-rating">
+              ⭐ New
+            </span>
+
+          )}
+
+        </div>
 
 
         {/* DESCRIPTION */}
@@ -135,28 +178,28 @@ const ServiceCard = ({
           </div>
 
 
-            {/* VIEW DETAILS */}
+          {/* VIEW DETAILS */}
 
-            <button
-              type="button"
-              className="user-service-button"
-              onClick={() =>
-                onViewDetails(service)
-              }
-            >
-              View Details
+          <button
+            type="button"
+            className="user-service-button"
+            onClick={() =>
+              onViewDetails(service)
+            }
+          >
+            View Details
 
-              <span>
-                →
-              </span>
+            <span>
+              →
+            </span>
 
-            </button>
-
-          </div>
+          </button>
 
         </div>
 
       </div>
+
+    </div>
   );
 };
 

@@ -893,100 +893,26 @@
     0 6px 15px rgba(17, 24, 39, 0.15);
 }
 
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 900px) {
-
-  .user-services-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
-  .user-services-filters {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
+.user-service-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 12px;
 }
 
+.user-service-stars {
+  color: #f5b301;
+  font-size: 18px;
+  letter-spacing: 2px;
+  line-height: 1;
+}
 
-@media (max-width: 600px) {
+.user-service-rating strong {
+  color: #0f6fce;
+  font-size: 14px;
+}
 
-  .user-services-page {
-    padding: 25px 16px 40px;
-  }
-
-  .user-services-header {
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 15px;
-
-    margin-bottom: 22px;
-  }
-
-  .user-services-header h1 {
-    font-size: 25px;
-  }
-
-  .user-services-header p {
-    font-size: 13px;
-  }
-
-  .user-services-filters {
-    grid-template-columns: 1fr;
-
-    padding: 15px;
-
-    gap: 13px;
-  }
-
-  .user-services-grid {
-    grid-template-columns: 1fr;
-
-    gap: 18px;
-  }
-
-  .user-service-image-wrapper {
-    height: 190px;
-  }
-
-  .user-service-body {
-    padding: 18px;
-  }
-
-  .user-service-footer {
-    align-items: flex-end;
-  }
-
-  .user-service-actions {
-    width: auto;
-  }
-
-  .user-service-button {
-    width: auto;
-  }
-
-  .user-pagination {
-    gap: 8px;
-
-    flex-wrap: wrap;
-  }
-
-  .user-pagination > button {
-    min-width: 90px;
-  }
-
-  .user-pagination-pages {
-    order: 3;
-
-    width: 100%;
-
-    justify-content: center;
-  }
-
+.user-service-review-count {
+  color: #161617;
+  font-size: 13px;
 }

@@ -1,29 +1,23 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaSearch, FaSlidersH } from "react-icons/fa";
 
 import { getServices } from "../../../../Services/userService";
-
 import ServiceCard from "./ServiceCard";
 import ServiceFilters from "./ServiceFilters";
 import Pagination from "./Pagination";
 
 import "../../../../styles/UserServicesPage.css";
 
-
-const UserServicePage = () => {
-
+const UserServicesPage = () => {
   const navigate = useNavigate();
-
 
   // ==========================================
   // SERVICES
   // ==========================================
 
   const [services, setServices] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
 
   // ==========================================
   // PAGINATION
@@ -40,102 +34,68 @@ const UserServicePage = () => {
     hasPreviousPage: false,
   });
 
-
   // ==========================================
   // FILTERS
   // ==========================================
 
   const [search, setSearch] = useState("");
-
   const [category, setCategory] = useState("");
 
   const [minPrice, setMinPrice] = useState("");
-
   const [maxPrice, setMaxPrice] = useState("");
 
   const [minRating, setMinRating] = useState("");
-
   const [sort, setSort] = useState("");
-
 
   // ==========================================
   // LOAD SERVICES
   // ==========================================
 
   const loadServices = async () => {
-
     try {
-
       setLoading(true);
-
 
       const params = {
         page,
         limit: 9,
       };
 
-
-      // SEARCH
-
+      // Search
       if (search.trim()) {
         params.search = search.trim();
       }
 
-
-      // CATEGORY
-
+      // Category
       if (category) {
         params.category = category;
       }
 
-
-      // MIN PRICE
-
+      // Price
       if (minPrice !== "") {
         params.minPrice = minPrice;
       }
-
-
-      // MAX PRICE
 
       if (maxPrice !== "") {
         params.maxPrice = maxPrice;
       }
 
-
-      // RATING
-
+      // Rating
       if (minRating !== "") {
         params.minRating = minRating;
       }
 
-
-      // SORT
-
+      // Sorting
       if (sort) {
         params.sort = sort;
       }
 
-
-      console.log("SERVICE QUERY:", params);
-
-
       const data = await getServices(params);
-
-
-      console.log("SERVICES RESPONSE:", data);
-
-
-      // SERVICES
 
       setServices(
         Array.isArray(data?.services)
           ? data.services
           : []
       );
-
-
-      // PAGINATION
 
       setPagination(
         data?.pagination || {
@@ -147,33 +107,21 @@ const UserServicePage = () => {
           hasPreviousPage: false,
         }
       );
-
     } catch (error) {
-
-      console.error(
-        "Failed to load services:",
-        error
-      );
+      console.error("Failed to load services:", error);
 
       setServices([]);
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
-
   // ==========================================
-  // FETCH SERVICES
+  // LOAD WHEN FILTER CHANGES
   // ==========================================
 
   useEffect(() => {
-
     loadServices();
-
   }, [
     page,
     search,
@@ -184,13 +132,20 @@ const UserServicePage = () => {
     sort,
   ]);
 
+  // ==========================================
+  // SEARCH
+  // ==========================================
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+    setPage(1);
+  };
 
   // ==========================================
   // PAGE CHANGE
   // ==========================================
 
   const handlePageChange = (newPage) => {
-
     if (
       newPage < 1 ||
       newPage > pagination.totalPages
@@ -198,235 +153,314 @@ const UserServicePage = () => {
       return;
     }
 
-
     setPage(newPage);
-
 
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-
   };
-
 
   // ==========================================
   // CLEAR FILTERS
   // ==========================================
 
   const clearFilters = () => {
-
     setSearch("");
-
     setCategory("");
-
     setMinPrice("");
-
     setMaxPrice("");
-
     setMinRating("");
-
     setSort("");
 
     setPage(1);
-
   };
-
 
   // ==========================================
   // VIEW SERVICE DETAILS
   // ==========================================
 
   const handleViewDetails = (service) => {
-
     navigate(
       `/user/services/${service._id}`,
       {
-        state: {
-          service,
-        },
+        state: { service },
       }
     );
-
   };
-
 
   // ==========================================
   // LOADING
   // ==========================================
 
   if (loading) {
-
     return (
-
       <div className="user-services-page">
 
-        <div className="user-services-empty">
+        <div className="user-services-loading">
 
-          <div className="user-empty-icon">
-            ◈
-          </div>
+          <div className="user-services-loading-spinner"></div>
 
-          <h2>
-            Loading services...
-          </h2>
+          <h2>Finding services...</h2>
 
           <p>
-            Finding trusted professionals for you.
+            Discovering trusted professionals
+            near you.
           </p>
 
         </div>
 
       </div>
-
     );
-
   }
-
 
   // ==========================================
   // PAGE
   // ==========================================
 
   return (
-
     <div className="user-services-page">
 
-
       {/* ======================================
-          HEADER
+          HERO / HEADER
       ====================================== */}
 
-      <div className="user-services-header">
+      <section className="user-services-hero">
 
-        <div>
+        <span className="user-services-eyebrow">
+          SERVICE MARKETPLACE
+        </span>
 
-          <span className="user-services-eyebrow">
-            SERVICE MARKETPLACE
-          </span>
+        <h1>
+          Available Services
+        </h1>
 
-          <h1>
-            Available Services
-          </h1>
+        <p>
+          Discover trusted professionals
+          for your everyday needs.
+        </p>
 
-          <p>
-            Discover trusted professionals
-            for your needs.
-          </p>
+        {/* SEARCH */}
+
+        <div className="user-services-search">
+
+          <FaSearch />
+
+          <input
+            type="text"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder="Search for a service..."
+          />
+
+          {search && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch("");
+                setPage(1);
+              }}
+              className="user-services-search-clear"
+            >
+              ×
+            </button>
+          )}
 
         </div>
 
-
-        <div className="user-services-count">
-
-          <strong>
-            {pagination.totalServices}
-          </strong>
-
-          <span>
-            {" "}services available
-          </span>
-
-        </div>
-
-      </div>
+      </section>
 
 
       {/* ======================================
-          FILTERS
+          MARKETPLACE CONTENT
       ====================================== */}
 
-      <ServiceFilters
-        search={search}
-        setSearch={setSearch}
+      <section className="user-services-marketplace">
 
-        category={category}
-        setCategory={setCategory}
+        {/* ====================================
+            SIDEBAR
+        ==================================== */}
 
-        minPrice={minPrice}
-        setMinPrice={setMinPrice}
+        <aside className="user-services-sidebar">
 
-        maxPrice={maxPrice}
-        setMaxPrice={setMaxPrice}
+          <div className="user-services-sidebar-title">
 
-        minRating={minRating}
-        setMinRating={setMinRating}
+            <div>
+              <FaSlidersH />
 
-        sort={sort}
-        setSort={setSort}
+              <span>Filters</span>
+            </div>
 
-        clearFilters={clearFilters}
-      />
+            <button
+              type="button"
+              onClick={clearFilters}
+            >
+              Clear
+            </button>
 
-
-      {/* ======================================
-          SERVICES
-      ====================================== */}
-
-      {services.length === 0 ? (
-
-        <div className="user-services-empty">
-
-          <div className="user-empty-icon">
-            ◈
           </div>
 
-          <h2>
-            No Services Found
-          </h2>
+          <ServiceFilters
+            category={category}
+            setCategory={(value) => {
+              setCategory(value);
+              setPage(1);
+            }}
+            minPrice={minPrice}
+            setMinPrice={(value) => {
+              setMinPrice(value);
+              setPage(1);
+            }}
+            maxPrice={maxPrice}
+            setMaxPrice={(value) => {
+              setMaxPrice(value);
+              setPage(1);
+            }}
+            minRating={minRating}
+            setMinRating={(value) => {
+              setMinRating(value);
+              setPage(1);
+            }}
+          />
 
-          <p>
-            Try changing your search or filters.
-          </p>
-
-          <button
-            type="button"
-            onClick={clearFilters}
-          >
-            Clear Filters
-          </button>
-
-        </div>
-
-      ) : (
-
-        <div className="user-services-grid">
-
-          {services.map((service) => (
-
-            <ServiceCard
-              key={service._id}
-              service={service}
-              onViewDetails={handleViewDetails}
-            />
-
-          ))}
-
-        </div>
-
-      )}
+        </aside>
 
 
-      {/* ======================================
-          PAGINATION
-      ====================================== */}
+        {/* ====================================
+            RESULTS
+        ==================================== */}
 
-      {pagination.totalPages > 1 && (
+        <main className="user-services-results">
 
-        <Pagination
-          page={page}
-          pagination={pagination}
-          onPageChange={handlePageChange}
-        />
+          {/* RESULTS HEADER */}
 
-      )}
+          <div className="user-services-results-header">
+
+            <div>
+
+              <span className="user-services-results-label">
+                SERVICES
+              </span>
+
+              <h2>
+                {pagination.totalServices}{" "}
+                services available
+              </h2>
+
+            </div>
+
+
+            {/* SORT */}
+
+            <div className="user-services-sort">
+
+              <label htmlFor="service-sort">
+                Sort by
+              </label>
+
+              <select
+                id="service-sort"
+                value={sort}
+                onChange={(event) => {
+                  setSort(event.target.value);
+                  setPage(1);
+                }}
+              >
+                <option value="">
+                  Recommended
+                </option>
+
+                <option value="price_asc">
+                  Price: Low to High
+                </option>
+
+                <option value="price_desc">
+                  Price: High to Low
+                </option>
+
+                <option value="rating_desc">
+                  Highest Rated
+                </option>
+
+                <option value="newest">
+                  Newest
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          {/* SERVICE GRID */}
+
+          {services.length > 0 ? (
+
+            <div className="user-services-grid">
+
+              {services.map((service) => (
+
+                <ServiceCard
+                  key={service._id}
+                  service={service}
+                  onViewDetails={handleViewDetails}
+                />
+
+              ))}
+
+            </div>
+
+          ) : (
+
+            <div className="user-services-no-results">
+
+              <div className="user-services-no-results-icon">
+                🔎
+              </div>
+
+              <h2>
+                No services found
+              </h2>
+
+              <p>
+                Try changing your search or filters.
+              </p>
+
+              <button
+                type="button"
+                onClick={clearFilters}
+              >
+                Clear Filters
+              </button>
+
+            </div>
+
+          )}
+
+
+          {/* PAGINATION */}
+
+          {pagination.totalPages > 1 && (
+
+            <div className="user-services-pagination">
+
+              <Pagination
+                currentPage={page}
+                totalPages={pagination.totalPages}
+                onPageChange={handlePageChange}
+              />
+
+            </div>
+
+          )}
+
+        </main>
+
+      </section>
 
     </div>
-
   );
-
 };
 
-
-export default UserServicePage;
-
+export default UserServicesPage;

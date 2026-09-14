@@ -1,6 +1,7 @@
 const Booking = require("../Models/Booking");
 const Service = require("../Models/Service");
 const User = require("../Models/User");
+const Review = require("../Models/Review");
 
 // Helper function
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -703,6 +704,9 @@ const rescheduleBooking = async (req, res) => {
 // ===============================
 // ADD BOOKING REVIEW
 // ===============================
+// ===============================
+// ADD BOOKING REVIEW
+// ===============================
 const addBookingReview = async (req, res) => {
   try {
     const { rating, review } = req.body;
@@ -733,26 +737,42 @@ const addBookingReview = async (req, res) => {
       });
     }
 
-    // Prevent multiple reviews
-    if (booking.rating) {
+    // Check whether this booking already has a review
+    const existingReview = await Review.findOne({
+      booking: booking._id,
+    });
+
+    if (existingReview) {
       return res.status(400).json({
         message: "This booking has already been reviewed",
       });
     }
 
-    // Save review
-    booking.rating = rating;
-    booking.review = review || "";
-    booking.reviewedAt = new Date();
+    // Create review document
+    const newReview = new Review({
+      booking: booking._id,
+      user: req.user.id,
+      provider: booking.provider,
+      service: booking.service,
+      rating: Number(rating),
+      comment: review || "",
+    });
 
-    await booking.save();
+    await newReview.save();
 
-    res.status(200).json({
+    res.status(201).json({
       message: "Review submitted successfully",
-      booking,
+      review: newReview,
     });
 
   } catch (error) {
+    // Handles duplicate booking review
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: "This booking has already been reviewed",
+      });
+    }
+
     console.error("Add review error:", error);
 
     res.status(500).json({
