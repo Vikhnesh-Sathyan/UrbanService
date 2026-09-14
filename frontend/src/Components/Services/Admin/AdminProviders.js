@@ -5,7 +5,6 @@ import { getProviders } from "../../../Services/providerService";
 import "../../../styles/AdminProviders.css";
 
 const AdminProviders = () => {
-
   const navigate = useNavigate();
 
   // ========================================
@@ -15,14 +14,12 @@ const AdminProviders = () => {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
   // ========================================
   // LOAD PROVIDERS
   // ========================================
 
   const loadProviders = async () => {
     try {
-
       setLoading(true);
 
       const data = await getProviders();
@@ -32,23 +29,19 @@ const AdminProviders = () => {
       setProviders(
         Array.isArray(data)
           ? data
-          : data.providers || []
+          : data?.providers || []
       );
-
     } catch (error) {
-
       console.error(
         "Failed to load providers:",
         error
       );
 
+      setProviders([]);
     } finally {
-
       setLoading(false);
-
     }
   };
-
 
   // ========================================
   // LOAD ON PAGE OPEN
@@ -58,36 +51,26 @@ const AdminProviders = () => {
     loadProviders();
   }, []);
 
-
   // ========================================
   // LOADING
   // ========================================
 
   if (loading) {
-
     return (
       <section className="admin-providers-section">
-
-        <div className="admin-empty-state">
-
-          <h3>
-            Loading providers...
-          </h3>
-
+        <div className="admin-loading-state">
+          <div className="admin-loading-spinner"></div>
+          <p>Loading providers...</p>
         </div>
-
       </section>
     );
-
   }
-
 
   // ========================================
   // PAGE
   // ========================================
 
   return (
-
     <section className="admin-providers-section">
 
       {/* ========================================
@@ -97,7 +80,6 @@ const AdminProviders = () => {
       <div className="admin-section-header">
 
         <div>
-
           <span className="admin-label">
             PROVIDER MANAGEMENT
           </span>
@@ -109,11 +91,9 @@ const AdminProviders = () => {
           <p>
             View and manage registered service providers.
           </p>
-
         </div>
 
       </div>
-
 
       {/* ========================================
           NO PROVIDERS
@@ -140,136 +120,181 @@ const AdminProviders = () => {
       ) : (
 
         /* ========================================
-           PROVIDER LIST
+           PROVIDERS TABLE
         ======================================== */
 
-        <div className="admin-providers-grid">
+        <div className="admin-providers-table-container">
 
-          {providers.map((provider) => {
+          <div className="admin-providers-table">
 
-            const serviceCount =
-              Array.isArray(provider.services)
-                ? provider.services.length
-                : 0;
+            {/* ====================================
+                TABLE HEADER
+            ==================================== */}
 
-            const isActive =
-              provider.isActive !== false;
+            <div className="admin-table-header">
 
-            return (
-
-              <div
-                className="admin-provider-card"
-                key={provider._id}
-              >
-
-                {/* =================================
-                    PROVIDER ICON
-                ================================= */}
-
-                <div className="provider-card-icon">
-                  👤
-                </div>
-
-
-                {/* =================================
-                    PROVIDER INFORMATION
-                ================================= */}
-
-                <div className="provider-card-info">
-
-                  <h3>
-                    {provider.name ||
-                      "Unknown Provider"}
-                  </h3>
-
-                  <p>
-                    {provider.email ||
-                      "No email"}
-                  </p>
-
-                  <span className="provider-role">
-                    Provider
-                  </span>
-
-                </div>
-
-
-                {/* =================================
-                    STATUS
-                ================================= */}
-
-                <div className="provider-card-status">
-
-                  <span className="provider-status-label">
-                    STATUS
-                  </span>
-
-                  <span
-                    className={
-                      isActive
-                        ? "provider-status-active"
-                        : "provider-status-inactive"
-                    }
-                  >
-                    {isActive
-                      ? "Active"
-                      : "Blocked"}
-                  </span>
-
-                </div>
-
-
-                {/* =================================
-                    SERVICE COUNT
-                ================================= */}
-
-                <div className="provider-card-services">
-
-                  <span>
-                    SERVICES
-                  </span>
-
-                  <strong>
-                    {serviceCount}
-                  </strong>
-
-                </div>
-
-
-                {/* =================================
-                    VIEW DETAILS
-                ================================= */}
-
-                <div className="provider-card-actions">
-
-                  <button
-                    type="button"
-                    className="provider-view-btn"
-                    onClick={() =>
-                      navigate(
-                        `/admin/providers/${provider._id}`
-                      )
-                    }
-                  >
-                    View Details
-                  </button>
-
-                </div>
-
+              <div>
+                Provider
               </div>
 
-            );
+              <div>
+                Email
+              </div>
 
-          })}
+              <div>
+                Phone
+              </div>
+
+              <div>
+                Status
+              </div>
+
+              <div>
+                Services
+              </div>
+
+              <div>
+                Role
+              </div>
+
+              <div>
+                Action
+              </div>
+
+            </div>
+
+            {/* ====================================
+                TABLE ROWS
+            ==================================== */}
+
+            {providers.map((provider) => {
+
+              const serviceCount =
+                Array.isArray(provider.services)
+                  ? provider.services.length
+                  : 0;
+
+              const isActive =
+                provider.isActive !== false;
+
+              return (
+
+                <div
+                  className="admin-table-row"
+                  key={provider._id}
+                >
+
+                  {/* PROVIDER */}
+
+                  <div className="provider-table-info">
+
+                    <div className="provider-table-avatar">
+                      👤
+                    </div>
+
+                    <div className="provider-table-name">
+
+                      <h3>
+                        {provider.name ||
+                          "Unknown Provider"}
+                      </h3>
+
+                      <span>
+                        Provider Account
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                  {/* EMAIL */}
+
+                  <div className="provider-table-email">
+
+                    {provider.email ||
+                      "No email"}
+
+                  </div>
+
+                  {/* PHONE */}
+
+                  <div className="provider-table-phone">
+
+                    {provider.phone ||
+                      "No phone"}
+
+                  </div>
+
+                  {/* STATUS */}
+
+                  <div>
+
+                    <span
+                      className={
+                        isActive
+                          ? "provider-status-active"
+                          : "provider-status-inactive"
+                      }
+                    >
+                      {isActive
+                        ? "Active"
+                        : "Blocked"}
+                    </span>
+
+                  </div>
+
+                  {/* SERVICES */}
+
+                  <div className="provider-table-services">
+
+                    <strong>
+                      {serviceCount}
+                    </strong>
+
+                  </div>
+
+                  {/* ROLE */}
+
+                  <div>
+
+                    <span className="provider-role">
+                      Service Provider
+                    </span>
+
+                  </div>
+
+                  {/* ACTION */}
+
+                  <div className="provider-table-action">
+
+                    <button
+                      type="button"
+                      className="provider-view-btn"
+                      onClick={() =>
+                        navigate(
+                          `/admin/providers/${provider._id}`
+                        )
+                      }
+                    >
+                      View Details
+                    </button>
+
+                  </div>
+
+                </div>
+
+              );
+
+            })}
+
+          </div>
 
         </div>
 
       )}
 
     </section>
-
   );
-
 };
 
 export default AdminProviders;

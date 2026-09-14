@@ -675,12 +675,13 @@ const approveService = async (
 
   try {
 
+    //Find the service
     const service =
       await Service.findById(
         req.params.id
       );
 
-
+      // Check if the service exists
     if (!service) {
 
       return res.status(404).json({
@@ -688,30 +689,30 @@ const approveService = async (
           "Service not found",
       });
     }
-
+  // Check if the service is pending
 
     if (
       service.status !==
       "pending"
     ) {
-
+      // Only pending services can be approved
       return res.status(400).json({
         message:
           "Only pending services can be approved",
       });
     }
 
-
+// Update the service status to approved and clear admin comment
     service.status =
       "approved";
 
     service.adminComment =
       "";
 
-
+// Save the updated service
     await service.save();
 
-
+// Send a success response with the updated service
     res.status(200).json({
 
       message:

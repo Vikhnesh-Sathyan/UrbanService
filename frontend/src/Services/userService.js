@@ -22,7 +22,7 @@ const getAuthConfig = () => {
 // Search + Filter + Sort + Pagination
 // ==========================================
 
-export const getServices = async (params = {}) => {
+export const getServices = async (params = {}) => {//
   const response = await axios.get(
     API,
     {
