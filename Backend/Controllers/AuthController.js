@@ -80,7 +80,13 @@ const loginUser = async (req, res) => {
         message: "Invalid email or password",
       });
     }
-
+    // Check if provider account is blocked
+    if (user.role === "provider" && user.isActive === false) {
+      return res.status(403).json({
+        code: "PROVIDER_BLOCKED",
+          message: "Your provider account has been blocked by the administrator",
+      });
+    }
     // Generate JWT
     const token = jwt.sign(
       {

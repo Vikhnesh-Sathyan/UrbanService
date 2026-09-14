@@ -35,6 +35,12 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
 
+     // User account status
+      isActive: {
+        type: Boolean,
+        default: true,
+      },
+
     // Phone number
     phone: {
       type: String,
@@ -134,6 +140,7 @@ const userSchema = new mongoose.Schema(
         type: String,
         default: "18:00",
       },
+     
     },
   },
   {

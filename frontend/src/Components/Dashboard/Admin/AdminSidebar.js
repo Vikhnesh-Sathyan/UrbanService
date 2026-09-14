@@ -5,6 +5,7 @@ import {
   FaBriefcase,
   FaUsers,
   FaClipboardList,
+  FaQuestionCircle,
   FaSignOutAlt,
 } from "react-icons/fa";
 
@@ -32,6 +33,11 @@ const AdminSidebar = () => {
       name: "Bookings",
       icon: <FaClipboardList />,
       path: "/admin/bookings",
+    },
+    {
+      name: "Help Requests",
+      icon: <FaQuestionCircle />,
+      path: "/admin/help-requests",
     },
   ];
 

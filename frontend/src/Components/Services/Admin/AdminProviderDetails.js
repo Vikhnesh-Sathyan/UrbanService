@@ -73,6 +73,88 @@ const fetchProvider = async () => {
   }
 };
 
+// ========================================
+// BLOCK PROVIDER
+// ========================================
+
+const handleBlockProvider = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.patch(
+      `http://localhost:5000/api/users/providers/${providerId}/block`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log(
+      "BLOCK PROVIDER RESPONSE:",
+      response.data
+    );
+
+    alert(response.data.message);
+
+    // Refresh provider details
+    fetchProvider();
+
+  } catch (error) {
+    console.error(
+      "Block provider error:",
+      error
+    );
+
+    alert(
+      error.response?.data?.message ||
+      "Failed to block provider"
+    );
+  }
+};
+
+
+// ========================================
+// UNBLOCK PROVIDER
+// ========================================
+
+const handleUnblockProvider = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.patch(
+      `http://localhost:5000/api/users/providers/${providerId}/unblock`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log(
+      "UNBLOCK PROVIDER RESPONSE:",
+      response.data
+    );
+
+    alert(response.data.message);
+
+    // Refresh provider details
+    fetchProvider();
+
+  } catch (error) {
+    console.error(
+      "Unblock provider error:",
+      error
+    );
+
+    alert(
+      error.response?.data?.message ||
+      "Failed to unblock provider"
+    );
+  }
+};
 
   // ========================================
   // LOADING
@@ -181,32 +263,22 @@ const fetchProvider = async () => {
           {provider.isActive === false ? (
 
             <button
-              type="button"
-              className="admin-unblock-btn"
-              onClick={() => {
-                console.log(
-                  "UNBLOCK PROVIDER:",
-                  provider._id
-                );
-              }}
-            >
-              Unblock Provider
-            </button>
+  type="button"
+  className="admin-unblock-btn"
+  onClick={handleUnblockProvider}
+>
+  Unblock Provider
+</button>
 
           ) : (
 
-            <button
-              type="button"
-              className="admin-block-btn"
-              onClick={() => {
-                console.log(
-                  "BLOCK PROVIDER:",
-                  provider._id
-                );
-              }}
-            >
-              Block Provider
-            </button>
+          <button
+  type="button"
+  className="admin-block-btn"
+  onClick={handleBlockProvider}
+>
+  Block Provider
+</button>
 
           )}
 

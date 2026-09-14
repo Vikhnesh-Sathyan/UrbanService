@@ -388,6 +388,112 @@ const getAdminProviderProfile = async (req, res) => {
   }
 };
 
+// ========================================
+// BLOCK PROVIDER
+// ========================================
+
+const blockProvider = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const provider = await User.findOne({
+      _id: id,
+      role: "provider",
+    });
+
+    if (!provider) {
+      return res.status(404).json({
+        message: "Provider not found",
+      });
+    }
+
+    // Already blocked
+    if (provider.isActive === false) {
+      return res.status(400).json({
+        message: "Provider is already blocked",
+      });
+    }
+
+    // Block provider
+    provider.isActive = false;
+
+    await provider.save();
+
+    res.status(200).json({
+      message: "Provider blocked successfully",
+      provider: {
+        _id: provider._id,
+        name: provider.name,
+        email: provider.email,
+        isActive: provider.isActive,
+      },
+    });
+
+  } catch (error) {
+    console.error(
+      "Block provider error:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Failed to block provider",
+    });
+  }
+};
+
+// ========================================
+// UNBLOCK PROVIDER
+// ========================================
+
+const unblockProvider = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const provider = await User.findOne({
+      _id: id,
+      role: "provider",
+    });
+
+    if (!provider) {
+      return res.status(404).json({
+        message: "Provider not found",
+      });
+    }
+
+    // Already active
+    if (provider.isActive !== false) {
+      return res.status(400).json({
+        message: "Provider is already active",
+      });
+    }
+
+    // Unblock provider
+    provider.isActive = true;
+
+    await provider.save();
+
+    res.status(200).json({
+      message: "Provider unblocked successfully",
+      provider: {
+        _id: provider._id,
+        name: provider.name,
+        email: provider.email,
+        isActive: provider.isActive,
+      },
+    });
+
+  } catch (error) {
+    console.error(
+      "Unblock provider error:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Failed to unblock provider",
+    });
+  }
+};
+
 
 // ========================================
 // EXPORTS
@@ -399,4 +505,6 @@ module.exports = {
   updateProfile,
   getProviderProfile,
   getAdminProviderProfile,
+  blockProvider,
+  unblockProvider,
 };

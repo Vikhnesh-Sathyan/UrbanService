@@ -8,6 +8,8 @@ const {
   getProfile,
   updateProfile,
   getProviderProfile,
+  blockProvider,
+  unblockProvider,
 } = require("../Controllers/UserController");
 
 const router = express.Router();
@@ -31,6 +33,8 @@ router.put(
   authMiddleware,
   updateProfile
 );
+
+
 
 
 // ========================================
@@ -58,5 +62,24 @@ router.get(
   getProviderProfile
 );
 
+// ========================================
+// BLOCK / UNBLOCK PROVIDER
+// ========================================
+
+// Admin can block a provider
+router.patch(
+  "/providers/:id/block",
+  authMiddleware,
+  roleMiddleware("admin"),
+  blockProvider
+);
+
+// Admin can unblock a provider
+router.patch(
+  "/providers/:id/unblock",
+  authMiddleware,
+  roleMiddleware("admin"),
+  unblockProvider
+);
 
 module.exports = router;

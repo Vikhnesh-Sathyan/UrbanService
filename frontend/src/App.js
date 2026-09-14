@@ -33,6 +33,8 @@ import UserProviderProfile from "./Components/Services/User/UserProviderProfile"
 //admin providers
 import AdminProviders from "./Components/Services/Admin/AdminProviders";
 import AdminProviderDetails from "./Components/Services/Admin/AdminProviderDetails";
+// admin help requests
+import AdminHelpRequests from "./Components/Services/Admin/AdminHelpRequests";
 
 // Payment
 import StripeProvider from "./Components/Payment/StripeProvider";
@@ -139,6 +141,12 @@ function App() {
           <Route
             path="/admin/providers/:providerId"
             element={<AdminProviderDetails />}
+          />
+          {/* ================= ADMIN HELP REQUESTS ================= */}
+
+          <Route
+            path="/admin/help-requests"
+            element={<AdminHelpRequests />}
           />
 
 
