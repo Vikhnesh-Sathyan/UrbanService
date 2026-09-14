@@ -27,7 +27,7 @@
       rgba(59, 130, 246, 0.25),
       transparent 35%
     ),
- #f8fafc;
+    #f8fafc;
 
   font-family:
     Inter,
@@ -243,13 +243,21 @@
 }
 
 
-/* Password label */
+/* =========================================
+   PASSWORD LABEL
+========================================= */
 
 .password-label {
   display: flex;
 
   align-items: center;
   justify-content: space-between;
+
+  margin-bottom: 8px;
+}
+
+.password-label label {
+  margin-bottom: 0;
 }
 
 .password-label span {
@@ -437,6 +445,170 @@
 
 
 /* =========================================
+   BLOCKED PROVIDER HELP
+========================================= */
+
+.help-section {
+  margin-top: 24px;
+
+  padding: 20px;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f8faff,
+      #f5f3ff
+    );
+
+  border: 1px solid #e0e7ff;
+
+  box-shadow:
+    0 8px 24px rgba(79, 70, 229, 0.08);
+
+  animation: helpAppear 0.3s ease-out;
+}
+
+@keyframes helpAppear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.help-section h3 {
+  margin: 0 0 7px;
+
+  color: #111827;
+
+  font-size: 17px;
+
+  font-weight: 700;
+}
+
+.help-section p {
+  margin: 0 0 16px;
+
+  color: #6b7280;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+.help-section form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.help-section textarea {
+  width: 100%;
+
+  min-height: 100px;
+
+  padding: 12px 13px;
+
+  box-sizing: border-box;
+
+  resize: vertical;
+
+  outline: none;
+
+  border-radius: 10px;
+
+  border: 1px solid #dbe2f0;
+
+  background: #ffffff;
+
+  color: #374151;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.help-section textarea::placeholder {
+  color: #9ca3af;
+}
+
+.help-section textarea:hover {
+  border-color: #c7d2fe;
+}
+
+.help-section textarea:focus {
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 4px rgba(99, 102, 241, 0.10);
+}
+
+.help-section button {
+  width: 100%;
+
+  height: 44px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #4f46e5,
+      #6366f1
+    );
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 18px rgba(79, 70, 229, 0.20);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.help-section button:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 11px 22px rgba(79, 70, 229, 0.27);
+}
+
+.help-section button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.help-section button:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.65;
+}
+
+
+/* =========================================
    REGISTER SECTION
 ========================================= */
 
@@ -536,6 +708,10 @@
     width: 54px;
     height: 54px;
   }
+
+  .help-section {
+    padding: 18px;
+  }
 }
 
 
@@ -555,5 +731,13 @@
 
   .login-form {
     gap: 18px;
+  }
+
+  .help-section {
+    padding: 16px;
+  }
+
+  .help-section h3 {
+    font-size: 16px;
   }
 }
