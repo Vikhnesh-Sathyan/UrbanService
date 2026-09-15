@@ -9,178 +9,207 @@ const ServiceFilters = ({
   setMaxPrice,
   minRating,
   setMinRating,
-  sort,
-  setSort,
-  clearFilters,
 }) => {
+  // ==========================================
+  // PRICE RANGE
+  // ==========================================
+
+  const handlePriceRange = (value) => {
+    switch (value) {
+      case "":
+        setMinPrice("");
+        setMaxPrice("");
+        break;
+
+      case "0-500":
+        setMinPrice("0");
+        setMaxPrice("500");
+        break;
+
+      case "500-1000":
+        setMinPrice("500");
+        setMaxPrice("1000");
+        break;
+
+      case "1000-2000":
+        setMinPrice("1000");
+        setMaxPrice("2000");
+        break;
+
+      case "2000-5000":
+        setMinPrice("2000");
+        setMaxPrice("5000");
+        break;
+
+      case "5000+":
+        setMinPrice("5000");
+        setMaxPrice("");
+        break;
+
+      default:
+        setMinPrice("");
+        setMaxPrice("");
+    }
+  };
+
+  // Current selected price range
+  const getPriceRange = () => {
+    if (minPrice === "0" && maxPrice === "500") {
+      return "0-500";
+    }
+
+    if (minPrice === "500" && maxPrice === "1000") {
+      return "500-1000";
+    }
+
+    if (minPrice === "1000" && maxPrice === "2000") {
+      return "1000-2000";
+    }
+
+    if (minPrice === "2000" && maxPrice === "5000") {
+      return "2000-5000";
+    }
+
+    if (minPrice === "5000" && maxPrice === "") {
+      return "5000+";
+    }
+
+    return "";
+  };
+
   return (
     <div className="user-services-filters">
 
-      {/* CATEGORY */}
+      {/* ======================================
+          CATEGORY
+      ====================================== */}
 
-      <div className="user-filter-field">
+      <div className="user-filter-section">
 
-        <label>
-          Category
-        </label>
+        <div className="user-filter-title">
+          CATEGORY
+        </div>
 
-        <select
-          value={category}
-          onChange={(e) => {
-            setCategory(e.target.value);
-          }}
-        >
+        <div className="user-filter-field">
 
-          <option value="">
-            All Categories
-          </option>
+          <select
+            value={category}
+            onChange={(e) => {
+              setCategory(e.target.value);
+            }}
+          >
+            <option value="">
+              All Categories
+            </option>
 
-          <option value="Electrical">
-            Electrical
-          </option>
+            <option value="Electrical">
+              Electrical
+            </option>
 
-          <option value="Plumbing">
-            Plumbing
-          </option>
+            <option value="Plumbing">
+              Plumbing
+            </option>
 
-          <option value="Cleaning">
-            Cleaning
-          </option>
+            <option value="Cleaning">
+              Cleaning
+            </option>
 
-          <option value="Beauty">
-            Beauty
-          </option>
+            <option value="Beauty">
+              Beauty
+            </option>
 
-          <option value="AC Repair">
-            AC Repair
-          </option>
+            <option value="AC Repair">
+              AC Repair
+            </option>
+          </select>
 
-        </select>
-
-      </div>
-
-
-      {/* MIN PRICE */}
-
-      <div className="user-filter-field">
-
-        <label>
-          Min Price
-        </label>
-
-        <input
-          type="number"
-          placeholder="₹ Min"
-          value={minPrice}
-          onChange={(e) => {
-            setMinPrice(e.target.value);
-          }}
-        />
+        </div>
 
       </div>
 
+{/* ======================================
+    PRICE RANGE
+====================================== */}
 
-      {/* MAX PRICE */}
+<div className="user-filter-section">
 
-      <div className="user-filter-field">
+  <div className="user-filter-title">
+    PRICE RANGE
+  </div>
 
-        <label>
-          Max Price
-        </label>
+  <div className="user-price-range">
 
-        <input
-          type="number"
-          placeholder="₹ Max"
-          value={maxPrice}
-          onChange={(e) => {
-            setMaxPrice(e.target.value);
-          }}
-        />
+    <div className="user-price-values">
+      <span>₹0</span>
+      <strong>
+        {maxPrice ? `₹${Number(maxPrice).toLocaleString()}` : "Any Price"}
+      </strong>
+    </div>
 
-      </div>
+    <input
+      type="range"
+      min="0"
+      max="5000"
+      step="100"
+      value={maxPrice || 5000}
+      onChange={(e) => {
+        const value = Number(e.target.value);
 
+        setMinPrice("");
 
-      {/* RATING */}
+        if (value === 5000) {
+          setMaxPrice("");
+        } else {
+          setMaxPrice(String(value));
+        }
+      }}
+      className="user-price-slider"
+    />
 
-      <div className="user-filter-field">
+  </div>
 
-        <label>
-          Rating
-        </label>
-
-        <select
-          value={minRating}
-          onChange={(e) => {
-            setMinRating(e.target.value);
-          }}
-        >
-
-          <option value="">
-            Any Rating
-          </option>
-
-          <option value="4">
-            ⭐ 4+
-          </option>
-
-          <option value="3">
-            ⭐ 3+
-          </option>
-
-          <option value="2">
-            ⭐ 2+
-          </option>
-
-        </select>
-
-      </div>
+</div>
 
 
-      {/* SORT */}
+      {/* ======================================
+          RATING
+      ====================================== */}
 
-      <div className="user-filter-field">
+      <div className="user-filter-section">
 
-        <label>
-          Sort
-        </label>
+        <div className="user-filter-title">
+          RATING
+        </div>
 
-        <select
-          value={sort}
-          onChange={(e) => {
-            setSort(e.target.value);
-          }}
-        >
+        <div className="user-filter-field">
 
-          <option value="">
-            Newest
-          </option>
+          <select
+            value={minRating}
+            onChange={(e) => {
+              setMinRating(e.target.value);
+            }}
+          >
+            <option value="">
+              Any Rating
+            </option>
 
-          <option value="rating">
-            Highest Rated
-          </option>
+            <option value="4">
+              ⭐ 4+ & above
+            </option>
 
-          <option value="price_low">
-            Price: Low to High
-          </option>
+            <option value="3">
+              ⭐ 3+ & above
+            </option>
 
-          <option value="price_high">
-            Price: High to Low
-          </option>
+            <option value="2">
+              ⭐ 2+ & above
+            </option>
 
-        </select>
+          </select>
+
+        </div>
 
       </div>
-
-
-      {/* CLEAR */}
-
-      <button
-        type="button"
-        className="user-clear-filter"
-        onClick={clearFilters}
-      >
-        Clear
-      </button>
 
     </div>
   );

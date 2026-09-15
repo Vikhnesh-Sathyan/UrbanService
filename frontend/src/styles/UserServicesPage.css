@@ -4,10 +4,9 @@
 
 .user-services-page {
   min-height: calc(100vh - 70px);
-
-  padding: 42px 52px 70px;
-
+  padding: 42px 32px 70px;
   box-sizing: border-box;
+  overflow-x: hidden;
 
   background:
     radial-gradient(
@@ -17,6 +16,7 @@
     ),
     #f7f8fc;
 }
+
 
 
 /* =====================================================
@@ -367,83 +367,201 @@
 
 
 
-/* =====================================================
-   FILTER BAR
-===================================================== */
+/* =========================================
+   SERVICE FILTER SIDEBAR
+========================================= */
 
 .user-services-filters {
-  display: grid;
-
-  grid-template-columns:
-    minmax(220px, 2fr)
-    repeat(5, minmax(120px, 1fr))
-    auto;
-
-  gap: 12px;
-
-  align-items: end;
-
-  padding: 18px;
-  margin-bottom: 30px;
-
-  background: rgba(255, 255, 255, 0.9);
-
-  border: 1px solid #e7e9f0;
-  border-radius: 16px;
-
-  box-shadow:
-    0 5px 20px rgba(15, 23, 42, 0.04);
-
-  backdrop-filter: blur(12px);
-}
-
-
-/* =====================================================
-   FILTER FIELD
-===================================================== */
-
-.user-filter-field {
   display: flex;
   flex-direction: column;
-
-  gap: 7px;
-
-  min-width: 0;
+  gap: 24px;
 }
 
-.user-filter-field label {
-  font-size: 10px;
+.user-filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-filter-title {
+  color: #111827;
+  font-size: 11px;
   font-weight: 800;
-
-  color: #6b7280;
-
-  text-transform: uppercase;
-  letter-spacing: 0.7px;
+  letter-spacing: 1.2px;
 }
 
-
-/* =====================================================
-   FILTER INPUTS
-===================================================== */
-
-.user-filter-field input,
 .user-filter-field select {
   width: 100%;
   height: 42px;
-
   padding: 0 12px;
+  border: 1px solid #e2e5ec;
+  border-radius: 10px;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
 
+.user-filter-field select:hover {
+  border-color: #c7c9f8;
+  background: #ffffff;
+}
+
+.user-filter-field select:focus {
+  border-color: #6366f1;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+}
+
+
+/* =========================================
+   MARKETPLACE SIDEBAR LAYOUT
+========================================= */
+
+.user-services-marketplace {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+
+  align-items: start;
+}
+
+.user-services-sidebar {
+  position: sticky;
+  top: 90px;
+  width: 100%;
+  min-width: 0;
+  min-height: 470px;
+
+  padding: 26px 24px;
   box-sizing: border-box;
 
-  border: 1px solid #e2e5ed;
-  border-radius: 10px;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fafbff 100%);
+
+  border: 1px solid #e4e7f0;
+  border-radius: 18px;
+
+  box-shadow:
+    0 14px 40px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+.user-services-results {
+  width: 100%;
+  min-width: 0;
+}
+
+
+/* =========================================
+   PREMIUM FILTER SIDEBAR
+========================================= */
+
+.user-services-sidebar {
+  padding: 24px 20px;
+  transform: translate(-40px, -40px); 
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fafbff 100%);
+  border: 1px solid #e4e7f0;
+  border-radius: 1px;
+  box-shadow:
+    0 12px 35px rgba(15, 23, 42, 0.07),
+    0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+/* FILTER HEADER */
+
+.user-services-sidebar-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid #e8eaf1;
+}
+
+.user-services-sidebar-title > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.user-services-sidebar-title svg {
+  color: #4f46e5;
+  font-size: 15px;
+}
+
+.user-services-sidebar-title span {
+  color: #111827;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+
+.user-services-sidebar-title button {
+  padding: 5px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #6366f1;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.user-services-sidebar-title button:hover {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+/* FILTER SECTIONS */
+
+.user-services-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.user-filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-filter-title {
+  color: #374151;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.3px;
+}
+
+/* DROPDOWNS */
+
+.user-filter-field select {
+  width: 100%;
+  height: 42px;
+  padding: 0 11px;
+  box-sizing: border-box;
+
+  border: 1px solid #e1e5ed;
+  border-radius: 9px;
 
   background: #ffffff;
-  color: #1f2937;
+  color: #374151;
 
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 500;
 
   outline: none;
+  cursor: pointer;
 
   transition:
     border-color 0.2s ease,
@@ -451,66 +569,120 @@
     background 0.2s ease;
 }
 
-.user-filter-field input::placeholder {
-  color: #a3a8b5;
-}
-
-.user-filter-field input:hover,
 .user-filter-field select:hover {
-  border-color: #cfd3df;
+  border-color: #c7c9f5;
+  background: #fcfcff;
 }
 
-.user-filter-field input:focus,
 .user-filter-field select:focus {
   border-color: #6366f1;
-
-  box-shadow:
-    0 0 0 3px rgba(99, 102, 241, 0.1);
-
-  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
 }
 
+/* PRICE RANGE */
 
-/* =====================================================
-   CLEAR FILTER BUTTON
-===================================================== */
+.user-price-range {
+  width: 100%;
+}
 
-.user-clear-filter {
-  height: 42px;
+.user-price-values {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  color: #6b7280;
+  font-size: 11px;
+}
 
-  padding: 0 16px;
-
-  border: 1px solid #e1e4eb;
-  border-radius: 10px;
-
-  background: #f8f9fc;
-  color: #4b5563;
-
+.user-price-values strong {
+  color: #4f46e5;
   font-size: 12px;
-  font-weight: 750;
+  font-weight: 800;
+}
 
+/* SINGLE PRICE SLIDER */
+
+.user-price-slider {
+  width: 100%;
+  height: 5px;
+  margin: 0;
+  padding: 0;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  border-radius: 10px;
+  background: #e5e7eb;
+  outline: none;
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
 }
 
-.user-clear-filter:hover {
-  background: #111827;
+/* Chrome / Edge / Safari */
 
-  color: #ffffff;
-
-  border-color: #111827;
-
-  transform: translateY(-1px);
+.user-price-slider::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 10px;
+  background: #e5e7eb;
 }
 
-.user-clear-filter:active {
-  transform: translateY(0);
+.user-price-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 16px;
+  height: 16px;
+
+  margin-top: -5.5px;
+
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+
+  background: #6366f1;
+
+  box-shadow: 0 2px 7px rgba(79, 70, 229, 0.35);
+
+  cursor: grab;
 }
+
+.user-price-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.08);
+}
+
+/* Firefox */
+
+.user-price-slider::-moz-range-track {
+  height: 5px;
+  border-radius: 10px;
+  background: #e5e7eb;
+}
+
+.user-price-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+
+  background: #6366f1;
+
+  box-shadow: 0 2px 7px rgba(79, 70, 229, 0.35);
+
+  cursor: grab;
+}
+
+.user-price-slider::-moz-range-thumb:active {
+  cursor: grabbing;
+}
+
+
+
+
+
+
+
+
+
 
 
 /* =====================================================
