@@ -84,36 +84,23 @@ const ServiceCard = ({
         {/* ====================================
             RATING
         ==================================== */}
+<div className="user-service-rating">
+  {totalReviews > 0 ? (
+    <>
+      <span className="user-service-star">★</span>
 
-        <div className="user-service-rating">
+      <strong>{averageRating.toFixed(1)}</strong>
 
-          {totalReviews > 0 ? (
-
-            <>
-
-              <span className="user-service-stars">
-                {"★".repeat(Math.round(averageRating))}
-              </span>
-
-              <strong>
-                {averageRating.toFixed(1)}
-              </strong>
-
-              <span className="user-service-review-count">
-                ({totalReviews} reviews)
-              </span>
-
-            </>
-
-          ) : (
-
-            <span className="user-service-no-rating">
-              ⭐ New
-            </span>
-
-          )}
-
-        </div>
+      <span className="user-service-review-count">
+        ({totalReviews} review{totalReviews !== 1 ? "s" : ""})
+      </span>
+    </>
+  ) : (
+    <span className="user-service-no-rating">
+      ⭐ New
+    </span>
+  )}
+</div>
 
 
         {/* DESCRIPTION */}
