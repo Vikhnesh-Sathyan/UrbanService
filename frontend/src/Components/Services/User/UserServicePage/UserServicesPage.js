@@ -52,6 +52,8 @@ const UserServicesPage = () => {
   const [provider, setProvider] = useState("");
   const [providers, setProviders] = useState([]);
 
+  const [availability, setAvailability] = useState("");
+
   // ==========================================
   // LOAD ALL PROVIDERS
   // ==========================================
@@ -224,6 +226,7 @@ const UserServicesPage = () => {
     minRating,
     sort,
     provider,
+    availability,
   ]);
 
   // ==========================================
@@ -267,6 +270,7 @@ const UserServicesPage = () => {
     setMinRating("");
     setSort("");
     setProvider("");
+    setAvailability("");
 
     setPage(1);
   };
@@ -507,7 +511,11 @@ const UserServicesPage = () => {
               setMinRating(value);
               setPage(1);
             }}
-
+             availability={availability}
+             setAvailability={(value) => {
+              setAvailability(value);
+              setPage(1);
+            }}
           />
 
         </aside>

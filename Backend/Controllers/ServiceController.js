@@ -91,10 +91,8 @@ const getProviderServices = async (req, res) => {
 // GET ALL APPROVED SERVICES
 // Search + Filter + Rating + Sorting + Pagination
 // =====================================================
-
 const getServices = async (req, res) => {
   try {
-
     const {
       search,
       category,
@@ -102,11 +100,11 @@ const getServices = async (req, res) => {
       minPrice,
       maxPrice,
       minRating,
+      availability,
       sort,
       page = 1,
       limit = 10,
     } = req.query;
-
 
     // =================================================
     // PAGINATION
@@ -144,7 +142,6 @@ const getServices = async (req, res) => {
         ? Number(maxPrice)
         : null;
 
-
     if (
       (minimumPrice !== null &&
         !Number.isFinite(minimumPrice)) ||
@@ -155,7 +152,6 @@ const getServices = async (req, res) => {
         message: "Invalid price filter",
       });
     }
-
 
     if (
       minimumPrice !== null &&
@@ -178,7 +174,6 @@ const getServices = async (req, res) => {
         ? Number(minRating)
         : null;
 
-
     if (
       minimumRating !== null &&
       (
@@ -195,31 +190,93 @@ const getServices = async (req, res) => {
 
 
     // =================================================
+    // AVAILABILITY VALIDATION
+    // =================================================
+
+    const validAvailabilityDays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+
+    if (
+      availability &&
+      availability !== "today" &&
+      !validAvailabilityDays.includes(availability)
+    ) {
+      return res.status(400).json({
+        message: "Invalid availability filter",
+      });
+    }
+
+
+    // =================================================
+    // INDIA CURRENT DAY / TIME
+    // =================================================
+
+    const now = new Date();
+
+    const todayDay = new Intl.DateTimeFormat(
+      "en-US",
+      {
+        weekday: "long",
+        timeZone: "Asia/Kolkata",
+      }
+    ).format(now);
+
+    const currentTime = new Intl.DateTimeFormat(
+      "en-GB",
+      {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        timeZone: "Asia/Kolkata",
+      }
+    ).format(now);
+
+
+    // =================================================
     // SERVICE FILTER
     // =================================================
 
     const serviceMatch = {
       status: "approved",
-    };   
+    };
 
-// Provider
-if (provider && provider.trim() !== "") {
-  if (!mongoose.Types.ObjectId.isValid(provider)) {
-    return res.status(400).json({
-      message: "Invalid provider",
-    });
-  }
 
-  serviceMatch.provider = new mongoose.Types.ObjectId(
-    provider.trim()
-  );
+    // =================================================
+    // PROVIDER FILTER
+    // =================================================
 
-  console.log("PROVIDER FILTER:");
-  console.log("Original provider:", provider);
-  console.log("Converted provider:", serviceMatch.provider);
-}
+    if (
+      provider &&
+      provider.trim() !== ""
+    ) {
+      if (
+        !mongoose.Types.ObjectId.isValid(
+          provider
+        )
+      ) {
+        return res.status(400).json({
+          message: "Invalid provider",
+        });
+      }
 
-    // Search
+      serviceMatch.provider =
+        new mongoose.Types.ObjectId(
+          provider.trim()
+        );
+    }
+
+
+    // =================================================
+    // SEARCH
+    // =================================================
+
     if (
       search &&
       search.trim() !== ""
@@ -231,7 +288,10 @@ if (provider && provider.trim() !== "") {
     }
 
 
-    // Category
+    // =================================================
+    // CATEGORY
+    // =================================================
+
     if (
       category &&
       category.trim() !== ""
@@ -241,12 +301,14 @@ if (provider && provider.trim() !== "") {
     }
 
 
-    // Price
+    // =================================================
+    // PRICE
+    // =================================================
+
     if (
       minimumPrice !== null ||
       maximumPrice !== null
     ) {
-
       serviceMatch.price = {};
 
       if (minimumPrice !== null) {
@@ -262,13 +324,52 @@ if (provider && provider.trim() !== "") {
 
 
     // =================================================
-    // AGGREGATION
+    // AVAILABILITY MATCH
     // =================================================
 
-    const aggregationPipeline = [
+    let availabilityMatch = null;
+
+    if (availability === "today") {
+
+      availabilityMatch = {
+        "provider.availability.days":
+          todayDay,
+
+        $expr: {
+          $and: [
+            {
+              $lte: [
+                "$provider.availability.startTime",
+                currentTime,
+              ],
+            },
+            {
+              $gte: [
+                "$provider.availability.endTime",
+                currentTime,
+              ],
+            },
+          ],
+        },
+      };
+
+    } else if (availability) {
+
+      availabilityMatch = {
+        "provider.availability.days":
+          availability,
+      };
+    }
+
+
+    // =================================================
+    // BASE PIPELINE
+    // =================================================
+
+    const basePipeline = [
 
       // -----------------------------------------------
-      // 1. APPROVED SERVICES
+      // 1. MATCH APPROVED SERVICES
       // -----------------------------------------------
 
       {
@@ -305,7 +406,7 @@ if (provider && provider.trim() !== "") {
 
 
       // -----------------------------------------------
-      // 4. CONVERT PROVIDER ARRAY TO OBJECT
+      // 4. PROVIDER ARRAY → OBJECT
       // -----------------------------------------------
 
       {
@@ -314,47 +415,60 @@ if (provider && provider.trim() !== "") {
           preserveNullAndEmptyArrays: true,
         },
       },
+    ];
 
 
-      // -----------------------------------------------
-      // 5. CALCULATE RATING
-      // -----------------------------------------------
+    // =================================================
+    // APPLY AVAILABILITY FILTER
+    // =================================================
 
-      {
-        $addFields: {
+    if (availabilityMatch) {
+      basePipeline.push({
+        $match: availabilityMatch,
+      });
+    }
 
-          averageRating: {
-            $cond: [
 
-              {
-                $gt: [
-                  {
-                    $size: "$reviews",
-                  },
-                  0,
-                ],
-              },
+    // =================================================
+    // CALCULATE RATING
+    // =================================================
 
-              {
-                $round: [
-                  {
-                    $avg:
-                      "$reviews.rating",
-                  },
-                  1,
-                ],
-              },
+    basePipeline.push({
 
-              0,
-            ],
-          },
+      $addFields: {
 
-          totalReviews: {
-            $size: "$reviews",
-          },
+        averageRating: {
+          $cond: [
+
+            {
+              $gt: [
+                {
+                  $size: "$reviews",
+                },
+                0,
+              ],
+            },
+
+            {
+              $round: [
+                {
+                  $avg:
+                    "$reviews.rating",
+                },
+                1,
+              ],
+            },
+
+            0,
+          ],
+        },
+
+        totalReviews: {
+          $size: "$reviews",
         },
       },
-    ];
+
+    });
 
 
     // =================================================
@@ -365,59 +479,46 @@ if (provider && provider.trim() !== "") {
       minimumRating !== null
     ) {
 
-      aggregationPipeline.push({
+      basePipeline.push({
         $match: {
           averageRating: {
             $gte: minimumRating,
           },
         },
       });
+
     }
 
 
     // =================================================
-    // REMOVE PASSWORD + REVIEWS
+    // SORT
     // =================================================
 
-    aggregationPipeline.push({
+    if (
+      sort === "rating_desc"
+    ) {
 
-      $project: {
-
-        reviews: 0,
-
-        "provider.password": 0,
-      },
-
-    });
-
-
-    // =================================================
-    // SORTING
-    // =================================================
-
-    if (sort === "rating") {
-
-      aggregationPipeline.push({
+      basePipeline.push({
         $sort: {
           averageRating: -1,
         },
       });
 
     } else if (
-      sort === "price_low"
+      sort === "price_asc"
     ) {
 
-      aggregationPipeline.push({
+      basePipeline.push({
         $sort: {
           price: 1,
         },
       });
 
     } else if (
-      sort === "price_high"
+      sort === "price_desc"
     ) {
 
-      aggregationPipeline.push({
+      basePipeline.push({
         $sort: {
           price: -1,
         },
@@ -425,20 +526,41 @@ if (provider && provider.trim() !== "") {
 
     } else {
 
-      // Newest first
-      aggregationPipeline.push({
+      // Recommended / Newest
+
+      basePipeline.push({
         $sort: {
           createdAt: -1,
         },
       });
+
     }
+
+
+    // =================================================
+    // REMOVE REVIEWS + PASSWORD
+    // =================================================
+
+    basePipeline.push({
+
+      $project: {
+
+        reviews: 0,
+
+        "provider.password": 0,
+
+      },
+
+    });
 
 
     // =================================================
     // PAGINATION
     // =================================================
 
-    aggregationPipeline.push(
+    const aggregationPipeline = [
+
+      ...basePipeline,
 
       {
         $skip: skip,
@@ -446,13 +568,13 @@ if (provider && provider.trim() !== "") {
 
       {
         $limit: itemsPerPage,
-      }
+      },
 
-    );
+    ];
 
 
     // =================================================
-    // EXECUTE
+    // GET SERVICES
     // =================================================
 
     const services =
@@ -465,89 +587,31 @@ if (provider && provider.trim() !== "") {
     // COUNT TOTAL SERVICES
     // =================================================
 
-    let totalServices;
+    const countPipeline = [
+
+      ...basePipeline,
+
+      {
+        $count: "total",
+      },
+
+    ];
 
 
-    if (
-      minimumRating !== null
-    ) {
-
-      const countResult =
-        await Service.aggregate([
-
-          {
-            $match:
-              serviceMatch,
-          },
-
-          {
-            $lookup: {
-              from: "reviews",
-              localField: "_id",
-              foreignField: "service",
-              as: "reviews",
-            },
-          },
-
-          {
-            $addFields: {
-
-              averageRating: {
-                $cond: [
-
-                  {
-                    $gt: [
-                      {
-                        $size:
-                          "$reviews",
-                      },
-                      0,
-                    ],
-                  },
-
-                  {
-                    $avg:
-                      "$reviews.rating",
-                  },
-
-                  0,
-                ],
-              },
-            },
-          },
-
-          {
-            $match: {
-              averageRating: {
-                $gte:
-                  minimumRating,
-              },
-            },
-          },
-
-          {
-            $count: "total",
-          },
-
-        ]);
+    const countResult =
+      await Service.aggregate(
+        countPipeline
+      );
 
 
-      totalServices =
-        countResult.length > 0
-          ? countResult[0].total
-          : 0;
-
-    } else {
-
-      totalServices =
-        await Service.countDocuments(
-          serviceMatch
-        );
-    }
+    const totalServices =
+      countResult.length > 0
+        ? countResult[0].total
+        : 0;
 
 
     // =================================================
-    // PAGINATION INFORMATION
+    // TOTAL PAGES
     // =================================================
 
     const totalPages =
@@ -581,6 +645,7 @@ if (provider && provider.trim() !== "") {
 
         hasPreviousPage:
           currentPage > 1,
+
       },
 
     });

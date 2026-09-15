@@ -15,6 +15,9 @@ const ServiceFilters = ({
 
   minRating,
   setMinRating,
+
+  availability,
+  setAvailability,
 }) => {
   return (
     <div className="user-services-filters">
@@ -158,7 +161,66 @@ const ServiceFilters = ({
         </div>
 
       </div>
+{/* ======================================
+    AVAILABILITY
+====================================== */}
 
+<div className="user-filter-section">
+
+  <div className="user-filter-title">
+    AVAILABILITY
+  </div>
+
+  <div className="user-filter-field">
+
+    <select
+      value={availability}
+      onChange={(e) => {
+        setAvailability(e.target.value);
+      }}
+    >
+
+      <option value="">
+        Any Availability
+      </option>
+
+      <option value="today">
+        Available Today
+      </option>
+
+      <option value="Monday">
+        Monday
+      </option>
+
+      <option value="Tuesday">
+        Tuesday
+      </option>
+
+      <option value="Wednesday">
+        Wednesday
+      </option>
+
+      <option value="Thursday">
+        Thursday
+      </option>
+
+      <option value="Friday">
+        Friday
+      </option>
+
+      <option value="Saturday">
+        Saturday
+      </option>
+
+      <option value="Sunday">
+        Sunday
+      </option>
+
+    </select>
+
+  </div>
+
+</div>
 
       {/* ======================================
           RATING
