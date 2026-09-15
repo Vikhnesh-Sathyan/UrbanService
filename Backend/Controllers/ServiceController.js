@@ -1,4 +1,5 @@
 const Service = require("../Models/Service");
+const mongoose = require("mongoose");
 
 // =====================================================
 // ADD SERVICE
@@ -97,6 +98,7 @@ const getServices = async (req, res) => {
     const {
       search,
       category,
+      provider,
       minPrice,
       maxPrice,
       minRating,
@@ -198,8 +200,24 @@ const getServices = async (req, res) => {
 
     const serviceMatch = {
       status: "approved",
-    };
+    };   
 
+// Provider
+if (provider && provider.trim() !== "") {
+  if (!mongoose.Types.ObjectId.isValid(provider)) {
+    return res.status(400).json({
+      message: "Invalid provider",
+    });
+  }
+
+  serviceMatch.provider = new mongoose.Types.ObjectId(
+    provider.trim()
+  );
+
+  console.log("PROVIDER FILTER:");
+  console.log("Original provider:", provider);
+  console.log("Converted provider:", serviceMatch.provider);
+}
 
     // Search
     if (

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { FaSearch, FaSlidersH } from "react-icons/fa";
 
 import { getServices } from "../../../../Services/userService";
@@ -47,6 +48,46 @@ const UserServicesPage = () => {
   const [minRating, setMinRating] = useState("");
   const [sort, setSort] = useState("");
 
+  // Provider filter
+  const [provider, setProvider] = useState("");
+  const [providers, setProviders] = useState([]);
+
+  // ==========================================
+  // LOAD ALL PROVIDERS
+  // ==========================================
+  // This is separate from services.
+  // Therefore selecting one provider will NOT
+  // remove the other providers from the dropdown.
+
+  const loadProviders = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/users/providers",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      const providerList = Array.isArray(response.data?.providers)
+        ? response.data.providers
+        : [];
+
+      const formattedProviders = providerList
+        .filter((item) => item?._id)
+        .map((item) => ({
+          id: item._id,
+          name: item.name,
+        }));
+
+      setProviders(formattedProviders);
+    } catch (error) {
+      console.error("Failed to load providers:", error);
+      setProviders([]);
+    }
+  };
+
   // ==========================================
   // LOAD SERVICES
   // ==========================================
@@ -60,17 +101,26 @@ const UserServicesPage = () => {
         limit: 9,
       };
 
-      // Search
+      // ========================================
+      // SEARCH
+      // ========================================
+
       if (search.trim()) {
         params.search = search.trim();
       }
 
-      // Category
+      // ========================================
+      // CATEGORY
+      // ========================================
+
       if (category) {
         params.category = category;
       }
 
-      // Price
+      // ========================================
+      // PRICE
+      // ========================================
+
       if (minPrice !== "") {
         params.minPrice = minPrice;
       }
@@ -79,23 +129,49 @@ const UserServicesPage = () => {
         params.maxPrice = maxPrice;
       }
 
-      // Rating
+      // ========================================
+      // RATING
+      // ========================================
+
       if (minRating !== "") {
         params.minRating = minRating;
       }
 
-      // Sorting
+      // ========================================
+      // SORT
+      // ========================================
+
       if (sort) {
         params.sort = sort;
       }
 
+      // ========================================
+      // PROVIDER
+      // ========================================
+
+      if (provider) {
+        params.provider = provider;
+      }
+
+      // ========================================
+      // API CALL
+      // ========================================
+
       const data = await getServices(params);
+
+      // ========================================
+      // SERVICES
+      // ========================================
 
       setServices(
         Array.isArray(data?.services)
           ? data.services
           : []
       );
+
+      // ========================================
+      // PAGINATION
+      // ========================================
 
       setPagination(
         data?.pagination || {
@@ -111,13 +187,30 @@ const UserServicesPage = () => {
       console.error("Failed to load services:", error);
 
       setServices([]);
+
+      setPagination({
+        page: 1,
+        limit: 9,
+        totalServices: 0,
+        totalPages: 0,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      });
     } finally {
       setLoading(false);
     }
   };
 
   // ==========================================
-  // LOAD WHEN FILTER CHANGES
+  // LOAD PROVIDERS ONCE
+  // ==========================================
+
+  useEffect(() => {
+    loadProviders();
+  }, []);
+
+  // ==========================================
+  // LOAD SERVICES WHEN FILTER CHANGES
   // ==========================================
 
   useEffect(() => {
@@ -130,6 +223,7 @@ const UserServicesPage = () => {
     maxPrice,
     minRating,
     sort,
+    provider,
   ]);
 
   // ==========================================
@@ -172,6 +266,7 @@ const UserServicesPage = () => {
     setMaxPrice("");
     setMinRating("");
     setSort("");
+    setProvider("");
 
     setPage(1);
   };
@@ -225,70 +320,119 @@ const UserServicesPage = () => {
           HERO / HEADER
       ====================================== */}
 
- <section className="user-services-hero">
+      <section className="user-services-hero">
 
-  <div className="user-services-marquee">
-    <div className="user-services-marquee-track">
-      <span>✦ TRUSTED LOCAL SERVICES</span>
-      <span>• VERIFIED PROFESSIONALS</span>
-      <span>• EASY BOOKING</span>
-      <span>• SECURE PAYMENTS</span>
-      <span>• QUALITY SERVICES</span>
+        <div className="user-services-marquee">
 
-      <span>✦ TRUSTED LOCAL SERVICES</span>
-      <span>• VERIFIED PROFESSIONALS</span>
-      <span>• EASY BOOKING</span>
-      <span>• SECURE PAYMENTS</span>
-      <span>• QUALITY SERVICES</span>
-    </div>
-  </div>
+          <div className="user-services-marquee-track">
 
-  <div className="user-services-hero-content">
+            <span>
+              ✦ TRUSTED LOCAL SERVICES
+            </span>
 
-    <span className="user-services-eyebrow">
-      ✦ SERVICE MARKETPLACE
-    </span>
+            <span>
+              • VERIFIED PROFESSIONALS
+            </span>
 
-    <h1>
-      Available Services
-    </h1>
+            <span>
+              • EASY BOOKING
+            </span>
 
-    <p>
-      Discover trusted professionals for your everyday needs.
-    </p>
+            <span>
+              • SECURE PAYMENTS
+            </span>
 
-  </div>
+            <span>
+              • QUALITY SERVICES
+            </span>
 
-  <div className="user-services-search">
-    <FaSearch />
+            <span>
+              ✦ TRUSTED LOCAL SERVICES
+            </span>
 
-    <input
-      type="text"
-      value={search}
-      onChange={handleSearchChange}
-      placeholder="Search for a service..."
-    />
+            <span>
+              • VERIFIED PROFESSIONALS
+            </span>
 
-    {search && (
-      <button
-        type="button"
-        onClick={() => {
-          setSearch("");
-          setPage(1);
-        }}
-        className="user-services-search-clear"
-      >
-        ×
-      </button>
-    )}
-  </div>
-  <div className="user-services-trust">
-  <span>✓ Verified Professionals</span>
-  <span>✓ Secure Booking</span>
-  <span>✓ Trusted Services</span>
-</div>
+            <span>
+              • EASY BOOKING
+            </span>
 
-</section>
+            <span>
+              • SECURE PAYMENTS
+            </span>
+
+            <span>
+              • QUALITY SERVICES
+            </span>
+
+          </div>
+
+        </div>
+
+        <div className="user-services-hero-content">
+
+          <span className="user-services-eyebrow">
+            ✦ SERVICE MARKETPLACE
+          </span>
+
+          <h1>
+            Available Services
+          </h1>
+
+          <p>
+            Discover trusted professionals for your everyday needs.
+          </p>
+
+        </div>
+
+        {/* SEARCH */}
+
+        <div className="user-services-search">
+
+          <FaSearch />
+
+          <input
+            type="text"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder="Search for a service..."
+          />
+
+          {search && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch("");
+                setPage(1);
+              }}
+              className="user-services-search-clear"
+            >
+              ×
+            </button>
+          )}
+
+        </div>
+
+        {/* TRUST ITEMS */}
+
+        <div className="user-services-trust">
+
+          <span>
+            ✓ Verified Professionals
+          </span>
+
+          <span>
+            ✓ Secure Booking
+          </span>
+
+          <span>
+            ✓ Trusted Services
+          </span>
+
+        </div>
+
+      </section>
 
 
       {/* ======================================
@@ -308,7 +452,9 @@ const UserServicesPage = () => {
             <div>
               <FaSlidersH />
 
-              <span>Filters</span>
+              <span>
+                Filters
+              </span>
             </div>
 
             <button
@@ -320,27 +466,48 @@ const UserServicesPage = () => {
 
           </div>
 
+
+          {/* FILTERS */}
+
           <ServiceFilters
+
             category={category}
+
             setCategory={(value) => {
               setCategory(value);
               setPage(1);
             }}
+
+            provider={provider}
+
+            providers={providers}
+
+            setProvider={(value) => {
+              setProvider(value);
+              setPage(1);
+            }}
+
             minPrice={minPrice}
+
             setMinPrice={(value) => {
               setMinPrice(value);
               setPage(1);
             }}
+
             maxPrice={maxPrice}
+
             setMaxPrice={(value) => {
               setMaxPrice(value);
               setPage(1);
             }}
+
             minRating={minRating}
+
             setMinRating={(value) => {
               setMinRating(value);
               setPage(1);
             }}
+
           />
 
         </aside>
@@ -386,6 +553,7 @@ const UserServicesPage = () => {
                   setPage(1);
                 }}
               >
+
                 <option value="">
                   Recommended
                 </option>
@@ -413,7 +581,9 @@ const UserServicesPage = () => {
           </div>
 
 
-          {/* SERVICE GRID */}
+          {/* ====================================
+              SERVICE GRID
+          ==================================== */}
 
           {services.length > 0 ? (
 
@@ -459,7 +629,9 @@ const UserServicesPage = () => {
           )}
 
 
-          {/* PAGINATION */}
+          {/* ====================================
+              PAGINATION
+          ==================================== */}
 
           {pagination.totalPages > 1 && (
 
