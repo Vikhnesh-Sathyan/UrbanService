@@ -40,7 +40,10 @@ const UserServicesPage = () => {
   // ==========================================
 
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
   const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
 
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -91,6 +94,35 @@ const UserServicesPage = () => {
   };
 
   // ==========================================
+// LOAD ALL SERVICE CATEGORIES
+// ==========================================
+
+const loadCategories = async () => {
+  try {
+    const response = await axios.get(
+      "http://localhost:5000/api/services/categories"
+    );
+
+    const categoryList = Array.isArray(
+      response.data?.categories
+    )
+      ? response.data.categories
+      : [];
+
+    setCategories(categoryList);
+
+  } catch (error) {
+    console.error(
+      "Failed to load categories:",
+      error
+    );
+
+    setCategories([]);
+  }
+};
+
+
+  // ==========================================
   // LOAD SERVICES
   // ==========================================
 
@@ -107,8 +139,8 @@ const UserServicesPage = () => {
       // SEARCH
       // ========================================
 
-      if (search.trim()) {
-        params.search = search.trim();
+     if (debouncedSearch.trim()) {
+        params.search = debouncedSearch.trim();
       }
 
       // ========================================
@@ -209,7 +241,20 @@ const UserServicesPage = () => {
 
   useEffect(() => {
     loadProviders();
+    loadCategories();
   }, []);
+
+// ==========================================
+// DEBOUNCE SEARCH
+// ==========================================
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setDebouncedSearch(search);
+  }, 500);
+
+  return () => clearTimeout(timer);
+}, [search]);
 
   // ==========================================
   // LOAD SERVICES WHEN FILTER CHANGES
@@ -219,7 +264,7 @@ const UserServicesPage = () => {
     loadServices();
   }, [
     page,
-    search,
+    debouncedSearch,
     category,
     minPrice,
     maxPrice,
@@ -476,6 +521,7 @@ const UserServicesPage = () => {
           <ServiceFilters
 
             category={category}
+            categories={categories}
 
             setCategory={(value) => {
               setCategory(value);

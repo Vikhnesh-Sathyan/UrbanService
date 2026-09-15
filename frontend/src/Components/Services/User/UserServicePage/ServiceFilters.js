@@ -3,6 +3,7 @@ import React from "react";
 const ServiceFilters = ({
   category,
   setCategory,
+  categories,
 
   provider,
   providers,
@@ -44,25 +45,11 @@ const ServiceFilters = ({
               All Categories
             </option>
 
-            <option value="Electrical">
-              Electrical
-            </option>
-
-            <option value="Plumbing">
-              Plumbing
-            </option>
-
-            <option value="Cleaning">
-              Cleaning
-            </option>
-
-            <option value="Beauty">
-              Beauty
-            </option>
-
-            <option value="AC Repair">
-              AC Repair
-            </option>
+          {categories?.map((item) => (
+            <option key={item} value={item}>
+             {item}
+          </option>
+          ))}
           </select>
 
         </div>
