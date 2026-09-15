@@ -1263,6 +1263,44 @@ const resubmitService = async (
 
 
 // =====================================================
+// GET SERVICE CATEGORIES
+// =====================================================
+
+const getServiceCategories = async (req, res) => {
+  try {
+    const categories = await Service.distinct(
+      "category",
+      {
+        status: "approved",
+        category: {
+          $exists: true,
+          $ne: "",
+        },
+      }
+    );
+
+    categories.sort((a, b) =>
+      a.localeCompare(b)
+    );
+
+    res.status(200).json({
+      categories,
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Get service categories error:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Failed to fetch service categories",
+    });
+  }
+};
+
+// =====================================================
 // EXPORTS
 // =====================================================
 
@@ -1289,5 +1327,7 @@ module.exports = {
   deleteService,
 
   resubmitService,
+
+  getServiceCategories,
 
 };

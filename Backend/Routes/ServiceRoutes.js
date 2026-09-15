@@ -9,6 +9,7 @@ const {
   addService,
   getServices,
   getServiceById,
+  getServiceCategories,
   getProviderServices,
   getPendingServices,
   approveService,
@@ -16,7 +17,7 @@ const {
   rejectService,
   updateService,
   deleteService,
-  resubmitService
+  resubmitService,
 } = require("../Controllers/ServiceController");
 
 const router = express.Router();
@@ -116,6 +117,10 @@ router.patch(
 
 // Anyone can view approved services
 router.get("/", getServices);
+
+// Anyone can view service categories
+
+router.get("/categories", getServiceCategories);
 
 // Anyone can view one service
 router.get("/:id", getServiceById);
