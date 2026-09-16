@@ -244,13 +244,44 @@ const getMyBookings = async (req, res) => {
         "provider",
         "name email"
       )
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Get reviews for these bookings
+    const bookingIds = bookings.map(
+      (booking) => booking._id
+    );
+
+    const reviews = await Review.find({
+      booking: { $in: bookingIds },
+      user: req.user.id,
+    }).lean();
+
+    // Attach review data to the corresponding booking
+    const bookingsWithReviews = bookings.map(
+      (booking) => {
+        const review = reviews.find(
+          (item) =>
+            item.booking.toString() ===
+            booking._id.toString()
+        );
+
+        return {
+          ...booking,
+          rating: review?.rating || null,
+          review: review?.comment || "",
+        };
+      }
+    );
 
     res.status(200).json({
-      bookings,
+      bookings: bookingsWithReviews,
     });
   } catch (error) {
-    console.error("Get my bookings error:", error);
+    console.error(
+      "Get my bookings error:",
+      error
+    );
 
     res.status(500).json({
       message: "Failed to fetch bookings",
@@ -319,10 +350,39 @@ const getProviderBookings = async (req, res) => {
         "service",
         "name price category image"
       )
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Get booking IDs
+    const bookingIds = bookings.map(
+      (booking) => booking._id
+    );
+
+    // Get reviews for these bookings
+    const reviews = await Review.find({
+      booking: { $in: bookingIds },
+      provider: req.user.id,
+    }).lean();
+
+    // Attach review data to each booking
+    const bookingsWithReviews = bookings.map(
+      (booking) => {
+        const review = reviews.find(
+          (item) =>
+            item.booking.toString() ===
+            booking._id.toString()
+        );
+
+        return {
+          ...booking,
+          rating: review?.rating || null,
+          review: review?.comment || "",
+        };
+      }
+    );
 
     res.status(200).json({
-      bookings,
+      bookings: bookingsWithReviews,
     });
   } catch (error) {
     console.error(
@@ -704,19 +764,23 @@ const rescheduleBooking = async (req, res) => {
 // ===============================
 // ADD BOOKING REVIEW
 // ===============================
-// ===============================
-// ADD BOOKING REVIEW
-// ===============================
 const addBookingReview = async (req, res) => {
   try {
     const { rating, review } = req.body;
 
-    // Validate rating
-    if (!rating || rating < 1 || rating > 5) {
-      return res.status(400).json({
-        message: "Rating must be between 1 and 5",
-      });
-    }
+// Validate rating
+if (!rating || rating < 1 || rating > 5) {
+  return res.status(400).json({
+    message: "Rating must be between 1 and 5",
+  });
+}
+
+// Validate review comment
+if (!review || !review.trim()) {
+  return res.status(400).json({
+    message: "Please write a review",
+  });
+}
 
     // Find customer's own booking
     const booking = await Booking.findOne({
@@ -755,7 +819,7 @@ const addBookingReview = async (req, res) => {
       provider: booking.provider,
       service: booking.service,
       rating: Number(rating),
-      comment: review || "",
+      comment: review.trim(),
     });
 
     await newReview.save();

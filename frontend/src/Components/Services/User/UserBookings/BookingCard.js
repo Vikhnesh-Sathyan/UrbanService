@@ -433,6 +433,12 @@ const providerDistance =
     customerLocation?.longitude ?? null
   }
 />
+{/* <TrackingMap 
+  latitude={providerLocation.latitude} 
+  longitude={providerLocation.longitude} 
+  customerLatitude={8.800000} 
+  customerLongitude={76.720000} 
+/> */}
   </div>
 )}
 
