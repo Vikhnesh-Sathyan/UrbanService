@@ -925,6 +925,56 @@ const updateProviderLocation = async (req, res) => {
 };
 
 // ===============================
+// GET PROVIDER LOCATION
+// ===============================
+const getProviderLocation = async (req, res) => {
+  try {
+    // Find customer's own booking
+    const booking = await Booking.findOne({
+      _id: req.params.id,
+      user: req.user.id,
+    });
+
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
+    // Tracking is available only while job is active
+    if (booking.status !== "in_progress") {
+      return res.status(400).json({
+        message:
+          "Provider location is available only when the booking is in progress",
+      });
+    }
+
+    // Check whether provider has shared a location yet
+    if (
+      booking.tracking.latitude === null ||
+      booking.tracking.longitude === null
+    ) {
+      return res.status(404).json({
+        message: "Provider location is not available yet",
+      });
+    }
+
+    res.status(200).json({
+      tracking: booking.tracking,
+    });
+  } catch (error) {
+    console.error(
+      "Get provider location error:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Failed to fetch provider location",
+    });
+  }
+};
+
+// ===============================
 // EXPORTS
 // ===============================
 module.exports = {
@@ -937,6 +987,7 @@ module.exports = {
   rejectBooking,
   updateBookingStatus,
   updateProviderLocation,
+  getProviderLocation,
   addBookingReview,
   getAllBookings,
   getUserBookings,

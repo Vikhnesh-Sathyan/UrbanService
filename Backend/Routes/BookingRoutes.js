@@ -10,6 +10,7 @@ const {
   rejectBooking,
   updateBookingStatus,
   updateProviderLocation,
+  getProviderLocation,
   getAllBookings,
   addBookingReview,
   getUserBookings,
@@ -62,6 +63,14 @@ router.patch(
   authMiddleware,
   roleMiddleware("user"),
   addBookingReview
+);
+
+// Get provider location
+router.get(
+  "/:id/location",
+  authMiddleware,
+  roleMiddleware("user"),
+  getProviderLocation
 );
 
 // ===============================
