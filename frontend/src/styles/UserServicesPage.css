@@ -8,13 +8,7 @@
   box-sizing: border-box;
   overflow-x: hidden;
 
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(99, 102, 241, 0.08),
-      transparent 30%
-    ),
-    #f7f8fc;
+  background: #f8f8fb;
 }
 
 
@@ -715,16 +709,21 @@
 
 .user-services-results-header {
   display: flex;
-  align-items: flex-end;
+
+  align-items: center;
   justify-content: space-between;
 
-  gap: 30px;
+  gap: 24px;
 
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 
-  padding-bottom: 20px;
+  padding: 0 0 20px;
 
   border-bottom: 1px solid #e8eaf0;
+
+  margin-left: -60px;
+
+  margin-top: -40px;
 }
 
 
@@ -781,29 +780,31 @@
   text-transform: uppercase;
 }
 
-
 /* =====================================================
-   SERVICES COUNT
+   SERVICE COUNT
 ===================================================== */
-
-.user-services-results-header h2 {
-  margin: 0;
-
-  color: #111827;
-
-  font-size: 27px;
-  font-weight: 800;
-
-  line-height: 1.15;
-
-  letter-spacing: -0.7px;
+.user-services-results-count {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding-left: 14px;
+  background: transparent;
 }
 
+.user-services-results-count span {
+  color: #6366f1;
+  font-size: 26px;
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: -0.8px;
+}
 
-/* Highlight the number */
-
-.user-services-results-header h2::first-letter {
-  color: #4f46e5;
+.user-services-results-count strong {
+  color: #6366f1;
+  font-size: 18px;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -0.2px;
 }
 
 
@@ -813,14 +814,10 @@
 
 .user-services-sort {
   display: flex;
+
   align-items: center;
+
   gap: 12px;
-
-  padding: 0;
-
-  background: transparent;
-  border: none;
-  box-shadow: none;
 }
 
 
@@ -834,10 +831,9 @@
   font-size: 11px;
   font-weight: 800;
 
-  text-transform: uppercase;
   letter-spacing: 0.8px;
 
-  white-space: nowrap;
+  text-transform: uppercase;
 }
 
 
@@ -846,31 +842,16 @@
 ===================================================== */
 
 .user-services-sort select {
-  min-width: 175px;
-  height: 44px;
+  min-width: 190px;
 
-  padding: 0 42px 0 16px;
+  height: 46px;
 
-  appearance: none;
+  padding: 0 40px 0 16px;
 
-  border: 1px solid #202438;
+  border: 1px solid #e1e4eb;
   border-radius: 12px;
 
-  background-color: #151827;
-
-  background-image:
-    linear-gradient(45deg, transparent 50%, #aeb4c5 50%),
-    linear-gradient(135deg, #aeb4c5 50%, transparent 50%);
-
-  background-position:
-    calc(100% - 18px) 18px,
-    calc(100% - 13px) 18px;
-
-  background-size:
-    5px 5px,
-    5px 5px;
-
-  background-repeat: no-repeat;
+  background: #111827;
 
   color: #ffffff;
 
@@ -881,14 +862,45 @@
 
   outline: none;
 
-  box-shadow:
-    0 6px 18px rgba(15, 23, 42, 0.12);
+  appearance: none;
+
+  background-image:
+    linear-gradient(45deg, transparent 50%, #9ca3af 50%),
+    linear-gradient(135deg, #9ca3af 50%, transparent 50%);
+
+  background-position:
+    calc(100% - 17px) 19px,
+    calc(100% - 12px) 19px;
+
+  background-size:
+    5px 5px,
+    5px 5px;
+
+  background-repeat: no-repeat;
 
   transition:
-    transform 0.2s ease,
-    background-color 0.2s ease,
+    border-color 0.2s ease,
     box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    background-color 0.2s ease;
+}
+
+.user-services-sort select:hover {
+  border-color: #4f46e5;
+
+  background-color: #161b2d;
+}
+
+.user-services-sort select:focus {
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.10);
+}
+
+.user-services-sort select option {
+  background: #111827;
+
+  color: #ffffff;
 }
 
 
@@ -906,15 +918,6 @@
 }
 
 
-/* FOCUS */
-
-.user-services-sort select:focus {
-  border-color: #34394f;
-
-  box-shadow:
-    0 0 0 3px rgba(99, 102, 241, 0.10),
-    0 8px 20px rgba(15, 23, 42, 0.14);
-}
 
 
 
@@ -922,45 +925,33 @@
 
 
 
-
-
-
-
-/* =====================================================
-   SERVICE GRID — PREMIUM
-===================================================== */
+/* =========================================================
+   SERVICE CARDS
+   ========================================================= */
 
 .user-services-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 22px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 }
 
 
-/* =====================================================
-   SERVICE CARD
-===================================================== */
+/* =========================================================
+   MAIN CARD
+   ========================================================= */
 
 .user-service-card {
   position: relative;
-
-  display: flex;
-  flex-direction: column;
-
   min-width: 0;
-
   overflow: hidden;
 
   background: #ffffff;
 
-  border: 1px solid #e8eaf0;
+  border: 1px solid #e6e8ef;
   border-radius: 20px;
 
   box-shadow:
-    0 6px 24px rgba(15, 23, 42, 0.045);
+    0 8px 25px rgba(15, 23, 42, 0.06);
 
   transition:
     transform 0.28s ease,
@@ -968,51 +959,33 @@
     border-color 0.28s ease;
 }
 
-.user-service-card:hover {
-  transform: translateY(-7px);
 
-  border-color: #dddff0;
+.user-service-card:hover {
+  transform: translateY(-6px);
+
+  border-color: #d8d9e8;
 
   box-shadow:
-    0 20px 45px rgba(15, 23, 42, 0.11);
+    0 20px 45px rgba(15, 23, 42, 0.13);
 }
 
 
-/* =====================================================
-   IMAGE
-===================================================== */
+/* =========================================================
+   IMAGE AREA
+   ========================================================= */
 
 .user-service-image-wrapper {
   position: relative;
 
-  height: 215px;
+  height: 330px;
 
   overflow: hidden;
 
-  background:
-    linear-gradient(
-      135deg,
-      #eef0f7,
-      #e5e7ef
-    );
+  background: #eef0f5;
 }
 
-.user-service-image-wrapper::after {
-  content: "";
 
-  position: absolute;
-
-  inset: 0;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(15, 23, 42, 0.02) 35%,
-      rgba(15, 23, 42, 0.16) 100%
-    );
-
-  pointer-events: none;
-}
+/* IMAGE */
 
 .user-service-image {
   width: 100%;
@@ -1026,268 +999,205 @@
     transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
+
 .user-service-card:hover .user-service-image {
   transform: scale(1.06);
 }
 
 
-/* =====================================================
+/* =========================================================
    IMAGE PLACEHOLDER
-===================================================== */
+   ========================================================= */
 
 .user-service-image-placeholder {
   width: 100%;
   height: 100%;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  background:
-    linear-gradient(
-      135deg,
-      #f1f2f7,
-      #e8eaf1
-    );
+  background: #eef0f5;
 
-  color: #9aa0af;
+  color: #8b91a1;
 
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
-
-  letter-spacing: 0.2px;
 }
 
 
-/* =====================================================
-   CATEGORY BADGE
-===================================================== */
+/* =========================================================
+   IMAGE DARK OVERLAY
+   ========================================================= */
+
+.user-service-image-overlay {
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.04) 25%,
+      rgba(15, 23, 42, 0.12) 45%,
+      rgba(15, 23, 42, 0.82) 100%
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CATEGORY
+   ========================================================= */
 
 .user-service-category {
   position: absolute;
 
-  top: 15px;
-  left: 15px;
+  top: 16px;
+  left: 16px;
 
-  z-index: 3;
+  z-index: 4;
 
-  padding: 7px 11px;
+  padding: 8px 13px;
 
-  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 10px;
 
-  border-radius: 9px;
-
-  background:
-    rgba(255, 255, 255, 0.92);
-
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.94);
 
   color: #4f46e5;
 
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 850;
 
-  letter-spacing: 0.6px;
-
-  text-transform: uppercase;
-
-  box-shadow:
-    0 5px 15px rgba(15, 23, 42, 0.08);
-}
-
-
-/* =====================================================
-   SERVICE TAG
-===================================================== */
-
-.user-service-tag {
-  position: absolute;
-
-  top: 15px;
-  right: 15px;
-
-  z-index: 4;
-
-  padding: 7px 11px;
-
-  border-radius: 9px;
-
-  font-size: 10px;
-  font-weight: 800;
-
-  letter-spacing: 0.6px;
+  letter-spacing: 0.7px;
 
   text-transform: uppercase;
 
   box-shadow:
-    0 6px 16px rgba(15, 23, 42, 0.16);
+    0 5px 15px rgba(15, 23, 42, 0.12);
 
   backdrop-filter: blur(10px);
 }
 
 
-/* NEW */
+/* =========================================================
+   SERVICE TAG
+   ========================================================= */
+
+.user-service-tag {
+  position: absolute;
+
+  top: 16px;
+  right: 16px;
+
+  z-index: 4;
+
+  padding: 8px 12px;
+
+  border-radius: 10px;
+
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 850;
+
+  letter-spacing: 0.6px;
+
+  text-transform: uppercase;
+
+  box-shadow:
+    0 6px 16px rgba(15, 23, 42, 0.18);
+
+  backdrop-filter: blur(10px);
+}
+
+
+/* Existing tag types */
 
 .user-service-tag-new {
   background: rgba(59, 130, 246, 0.92);
-  color: #ffffff;
 }
-
-
-/* POPULAR */
 
 .user-service-tag-popular {
   background: rgba(245, 158, 11, 0.94);
-  color: #ffffff;
 }
-
-
-/* FEATURED */
 
 .user-service-tag-featured {
   background: rgba(124, 58, 237, 0.94);
-  color: #ffffff;
 }
-
-
-/* RECOMMENDED */
 
 .user-service-tag-recommended {
   background: rgba(16, 185, 129, 0.94);
-  color: #ffffff;
 }
-
-
-/* BEST VALUE */
 
 .user-service-tag-best-value {
   background: rgba(6, 182, 212, 0.94);
-  color: #ffffff;
 }
-
-
-/* TOP RATED */
 
 .user-service-tag-top-rated {
   background: rgba(234, 179, 8, 0.95);
-  color: #ffffff;
 }
-
-
-/* LIMITED OFFER */
 
 .user-service-tag-limited-offer {
   background: rgba(239, 68, 68, 0.95);
-  color: #ffffff;
 }
-
-
-/* OFFER */
 
 .user-service-tag-offer {
   background: rgba(236, 72, 153, 0.95);
+}
+
+
+/* =========================================================
+   CONTENT OVER IMAGE
+   ========================================================= */
+
+.user-service-image-content {
+  position: absolute;
+
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+
+  z-index: 3;
+
   color: #ffffff;
 }
 
 
-/* =====================================================
-   CARD BODY
-===================================================== */
+/* SERVICE NAME */
 
-.user-service-body {
-  display: flex;
-  flex-direction: column;
+.user-service-image-content h2 {
+  margin: 0 0 8px;
 
-  flex: 1;
+  color: #ffffff;
 
-  padding: 20px 21px 21px;
+  font-size: 25px;
+  font-weight: 850;
+
+  line-height: 1.15;
+
+  letter-spacing: -0.6px;
+
+  text-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 
-/* =====================================================
-   TITLE
-===================================================== */
+/* DESCRIPTION */
 
-.user-service-body h2 {
-  margin: 0;
+.user-service-image-content p {
+  margin: 0 0 10px;
 
-  color: #111827;
+  max-width: 90%;
 
-  font-size: 20px;
-  font-weight: 800;
-
-  line-height: 1.3;
-
-  letter-spacing: -0.4px;
-
-  transition:
-    color 0.2s ease;
-}
-
-.user-service-card:hover .user-service-body h2 {
-  color: #4338ca;
-}
-
-
-/* =====================================================
-   RATING
-===================================================== */
-
-.user-service-rating {
-  display: flex;
-
-  align-items: center;
-
-  gap: 6px;
-
-  margin: 8px 0 11px;
-}
-
-.user-service-star {
-  color: #f5b301;
-
-  font-size: 16px;
-
-  line-height: 1;
-}
-
-.user-service-rating strong {
-  color: #111827;
+  color: rgba(255, 255, 255, 0.88);
 
   font-size: 13px;
-  font-weight: 800;
-}
-
-.user-service-review-count {
-  color: #8b91a1;
-
-  font-size: 12px;
   font-weight: 500;
-}
 
-.user-service-no-rating {
-  color: #8b91a1;
-
-  font-size: 12px;
-  font-weight: 600;
-}
-
-
-/* =====================================================
-   DESCRIPTION
-===================================================== */
-
-.user-service-description {
-  margin: 0 0 18px;
-
-  min-height: 42px;
-
-  color: #6b7280;
-
-  font-size: 13px;
-
-  line-height: 1.65;
+  line-height: 1.45;
 
   display: -webkit-box;
 
@@ -1298,38 +1208,94 @@
 }
 
 
-/* =====================================================
+/* =========================================================
+   RATING
+   ========================================================= */
+
+.user-service-rating {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin: 0;
+}
+
+
+.user-service-star {
+  color: #f5b301;
+
+  font-size: 16px;
+
+  line-height: 1;
+}
+
+
+.user-service-rating strong {
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+
+.user-service-review-count {
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+
+.user-service-no-rating {
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 12px;
+  font-weight: 650;
+}
+
+
+/* =========================================================
+   LOWER WHITE AREA
+   ========================================================= */
+
+.user-service-body {
+  display: flex;
+  flex-direction: column;
+
+  padding: 15px 20px 20px;
+
+  background: #ffffff;
+}
+
+
+/* =========================================================
    PROVIDER
-===================================================== */
+   ========================================================= */
 
 .user-service-provider {
   display: flex;
-
   align-items: center;
 
   gap: 11px;
 
-  margin-top: auto;
+  padding-bottom: 16px;
 
-  padding: 14px 0;
-
-  border-top: 1px solid #eef0f4;
   border-bottom: 1px solid #eef0f4;
 }
 
+
 .user-provider-avatar {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
 
   flex-shrink: 0;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
   border: 3px solid #f1efff;
-
   border-radius: 50%;
 
   background:
@@ -1341,16 +1307,16 @@
 
   color: #ffffff;
 
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 15px;
+  font-weight: 850;
 
   box-shadow:
-    0 4px 10px rgba(99, 102, 241, 0.18);
+    0 5px 14px rgba(99, 102, 241, 0.20);
 }
+
 
 .user-service-provider div:last-child {
   display: flex;
-
   flex-direction: column;
 
   gap: 3px;
@@ -1358,21 +1324,23 @@
   min-width: 0;
 }
 
+
 .user-service-provider span {
   color: #9ca3af;
 
   font-size: 9px;
-  font-weight: 800;
-
-  text-transform: uppercase;
+  font-weight: 850;
 
   letter-spacing: 0.8px;
+
+  text-transform: uppercase;
 }
+
 
 .user-service-provider strong {
   color: #374151;
 
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 750;
 
   white-space: nowrap;
@@ -1383,89 +1351,74 @@
 }
 
 
-/* =====================================================
+/* =========================================================
    FOOTER
-===================================================== */
+   ========================================================= */
 
 .user-service-footer {
   display: flex;
-
   align-items: flex-end;
-
   justify-content: space-between;
 
   gap: 14px;
 
-  padding-top: 18px;
+  padding-top: 0px;
 }
 
 
-
-/* =====================================================
+/* =========================================================
    PRICE
-===================================================== */
+   ========================================================= */
 
 .user-service-price {
   display: flex;
-
   flex-direction: column;
 
-  gap: 3px;
+  gap: 2px;
 }
+
 
 .user-service-price span {
   color: #9ca3af;
 
   font-size: 9px;
-  font-weight: 800;
-
-  text-transform: uppercase;
+  font-weight: 850;
 
   letter-spacing: 0.8px;
+
+  text-transform: uppercase;
 }
+
 
 .user-service-price strong {
   color: #111827;
 
-  font-size: 22px;
+  font-size: 25px;
   font-weight: 850;
 
   line-height: 1;
+
+  letter-spacing: -0.6px;
 }
 
 
-/* =====================================================
-   ACTION
-===================================================== */
-
-.user-service-actions {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: flex-end;
-}
-
-
-
-/* =====================================================
+/* =========================================================
    VIEW DETAILS BUTTON
-===================================================== */
+   ========================================================= */
 
 .user-service-button {
-  height: 44px;
+  height: 46px;
 
-  padding: 0 17px;
+  padding: 0 18px;
 
   display: inline-flex;
-
   align-items: center;
   justify-content: center;
 
-  gap: 8px;
+  gap: 9px;
 
   border: 1px solid #111827;
-  border-radius: 11px;
+  border-radius: 12px;
 
   background: #111827;
 
@@ -1477,7 +1430,7 @@
   cursor: pointer;
 
   box-shadow:
-    0 5px 12px rgba(17, 24, 39, 0.10);
+    0 6px 14px rgba(17, 24, 39, 0.12);
 
   transition:
     background 0.22s ease,
@@ -1485,6 +1438,7 @@
     transform 0.22s ease,
     box-shadow 0.22s ease;
 }
+
 
 .user-service-button:hover {
   background: #4f46e5;
@@ -1494,8 +1448,9 @@
   transform: translateY(-2px);
 
   box-shadow:
-    0 9px 20px rgba(79, 70, 229, 0.22);
+    0 10px 22px rgba(79, 70, 229, 0.24);
 }
+
 
 .user-service-button:active {
   transform: translateY(0);
@@ -1503,6 +1458,7 @@
   box-shadow:
     0 4px 10px rgba(17, 24, 39, 0.10);
 }
+
 
 .user-service-button span {
   font-size: 16px;
@@ -1513,9 +1469,12 @@
     transform 0.22s ease;
 }
 
+
 .user-service-button:hover span {
   transform: translateX(3px);
 }
+
+
 
 
 

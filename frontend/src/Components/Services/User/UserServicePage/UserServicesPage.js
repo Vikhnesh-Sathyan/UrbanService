@@ -577,18 +577,16 @@ useEffect(() => {
 
           <div className="user-services-results-header">
 
-            <div>
-
-              <span className="user-services-results-label">
-                SERVICES
+            <div className="user-services-results-count">
+          
+              <span>
+                {pagination.totalServices}
               </span>
 
-              <h2>
-                {pagination.totalServices}{" "}
-                services available
-              </h2>
-
-            </div>
+              <strong>
+                Services
+              </strong>
+          </div>
 
 
             {/* SORT */}

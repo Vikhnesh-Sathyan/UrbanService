@@ -22,7 +22,7 @@ const ServiceCard = ({
     <div className="user-service-card">
 
       {/* ======================================
-          IMAGE
+          SERVICE IMAGE
       ====================================== */}
 
       <div className="user-service-image-wrapper">
@@ -44,14 +44,23 @@ const ServiceCard = ({
         )}
 
 
-        {/* CATEGORY */}
+        {/* DARK IMAGE OVERLAY */}
+
+        <div className="user-service-image-overlay"></div>
+
+
+        {/* ====================================
+            CATEGORY
+        ==================================== */}
 
         <span className="user-service-category">
           {service.category}
         </span>
 
 
-        {/* SERVICE TAG */}
+        {/* ====================================
+            SERVICE TAG
+        ==================================== */}
 
         {service.tag && (
 
@@ -65,83 +74,63 @@ const ServiceCard = ({
 
         )}
 
-      </div>
-
-
-      {/* ======================================
-          BODY
-      ====================================== */}
-
-      <div className="user-service-body">
-
-        {/* NAME */}
-
-        <h2>
-          {service.name}
-        </h2>
-
 
         {/* ====================================
-            RATING
-        ==================================== */}
-<div className="user-service-rating">
-  {totalReviews > 0 ? (
-    <>
-      <span className="user-service-star">★</span>
-
-      <strong>{averageRating.toFixed(1)}</strong>
-
-      <span className="user-service-review-count">
-        ({totalReviews} review{totalReviews !== 1 ? "s" : ""})
-      </span>
-    </>
-  ) : (
-    <span className="user-service-no-rating">
-      ⭐ New
-    </span>
-  )}
-</div>
-
-
-        {/* DESCRIPTION */}
-
-        <p className="user-service-description">
-
-          {service.description ||
-            "Professional service from a trusted provider."}
-
-        </p>
-
-
-        {/* ====================================
-            PROVIDER
+            IMAGE CONTENT
         ==================================== */}
 
-        <div className="user-service-provider">
+        <div className="user-service-image-content">
 
-          <div className="user-provider-avatar">
+          <h2>
+            {service.name}
+          </h2>
 
-            {service.provider?.name
-              ?.charAt(0)
-              ?.toUpperCase() || "P"}
+          <p>
+            {service.description ||
+              "Professional service from a trusted provider."}
+          </p>
 
-          </div>
 
+          {/* RATING */}
 
-          <div>
+          <div className="user-service-rating">
 
-            <span>
-              SERVICE PROVIDER
-            </span>
+            {totalReviews > 0 ? (
 
-            <strong>
-              {service.provider?.name ||
-                "Unknown Provider"}
-            </strong>
+              <>
+                <span className="user-service-star">
+                  ★
+                </span>
+
+                <strong>
+                  {averageRating.toFixed(1)}
+                </strong>
+
+                <span className="user-service-review-count">
+                  ({totalReviews} review{totalReviews !== 1 ? "s" : ""})
+                </span>
+              </>
+
+            ) : (
+
+              <span className="user-service-no-rating">
+                ⭐ New
+              </span>
+
+            )}
 
           </div>
 
         </div>
+
+      </div>
+
+
+      {/* ======================================
+          CARD INFORMATION
+      ====================================== */}
+
+      <div className="user-service-body">
 
 
         {/* ====================================
@@ -149,6 +138,7 @@ const ServiceCard = ({
         ==================================== */}
 
         <div className="user-service-footer">
+
 
           {/* PRICE */}
 
