@@ -9,6 +9,7 @@ const {
   acceptBooking,
   rejectBooking,
   updateBookingStatus,
+  updateProviderLocation,
   getAllBookings,
   addBookingReview,
   getUserBookings,
@@ -97,6 +98,14 @@ router.patch(
   authMiddleware,
   roleMiddleware("provider"),
   updateBookingStatus
+);
+
+// Update provider location
+router.patch(
+  "/:id/location",
+  authMiddleware,
+  roleMiddleware("provider"),
+  updateProviderLocation
 );
 
 // Get all bookings (Admin)

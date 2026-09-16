@@ -841,6 +841,90 @@ const getUserBookings = async (req, res) => {
 };
 
 // ===============================
+// UPDATE PROVIDER LOCATION
+// ===============================
+const updateProviderLocation = async (req, res) => {
+  try {
+    const { latitude, longitude } = req.body;
+
+    // Validate location values
+    if (
+      latitude === undefined ||
+      longitude === undefined
+    ) {
+      return res.status(400).json({
+        message: "Latitude and longitude are required",
+      });
+    }
+
+    // Validate that values are numbers
+    if (
+      typeof latitude !== "number" ||
+      typeof longitude !== "number"
+    ) {
+      return res.status(400).json({
+        message: "Latitude and longitude must be numbers",
+      });
+    }
+
+    // Validate latitude range
+    if (latitude < -90 || latitude > 90) {
+      return res.status(400).json({
+        message: "Invalid latitude",
+      });
+    }
+
+    // Validate longitude range
+    if (longitude < -180 || longitude > 180) {
+      return res.status(400).json({
+        message: "Invalid longitude",
+      });
+    }
+
+    // Find provider's own booking
+    const booking = await Booking.findOne({
+      _id: req.params.id,
+      provider: req.user.id,
+    });
+
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
+    // Location tracking only during active job
+    if (booking.status !== "in_progress") {
+      return res.status(400).json({
+        message:
+          "Location can only be updated when the booking is in progress",
+      });
+    }
+
+    // Update latest provider location
+    booking.tracking.latitude = latitude;
+    booking.tracking.longitude = longitude;
+    booking.tracking.updatedAt = new Date();
+
+    await booking.save();
+
+    res.status(200).json({
+      message: "Provider location updated successfully",
+      tracking: booking.tracking,
+    });
+  } catch (error) {
+    console.error(
+      "Update provider location error:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Failed to update provider location",
+    });
+  }
+};
+
+// ===============================
 // EXPORTS
 // ===============================
 module.exports = {
@@ -852,6 +936,7 @@ module.exports = {
   acceptBooking,
   rejectBooking,
   updateBookingStatus,
+  updateProviderLocation,
   addBookingReview,
   getAllBookings,
   getUserBookings,

@@ -52,6 +52,23 @@ const bookingSchema = new mongoose.Schema(
       ],
       default: "pending",
     },
+
+    tracking: {
+  latitude: {
+    type: Number,
+    default: null,
+  },
+
+  longitude: {
+    type: Number,
+    default: null,
+  },
+
+  updatedAt: {
+    type: Date,
+    default: null,
+  },
+},
   },
   {
     timestamps: true,
