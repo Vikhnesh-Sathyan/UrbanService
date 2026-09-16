@@ -150,6 +150,40 @@ export const updateBookingStatus = async (
   return response.data;
 };
 
+// ==========================================
+// PROVIDER LOCATION TRACKING
+// ==========================================
+
+// Update provider location
+export const updateProviderLocation = async (
+  bookingId,
+  latitude,
+  longitude
+) => {
+  const response = await axios.patch(
+    `${API}/${bookingId}/location`,
+    {
+      latitude,
+      longitude,
+    },
+    getAuthConfig()
+  );
+
+  return response.data;
+};
+
+
+// Get provider location
+export const getProviderLocation = async (
+  bookingId
+) => {
+  const response = await axios.get(
+    `${API}/${bookingId}/location`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};
 
 // ==========================================
 // ADMIN BOOKINGS

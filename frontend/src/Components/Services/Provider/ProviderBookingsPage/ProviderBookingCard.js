@@ -1,8 +1,8 @@
+import React, { useEffect, useRef } from "react";
 
-
-
-
-import React from "react";
+import {
+  updateProviderLocation,
+} from "../../../../Services/bookingService";
 
 const ProviderBookingCard = ({
   booking,
@@ -10,6 +10,151 @@ const ProviderBookingCard = ({
   onReject,
   onStatusUpdate,
 }) => {
+  // ==========================================
+  // GPS WATCH ID
+  // ==========================================
+
+  const watchIdRef = useRef(null);
+
+
+  // ==========================================
+  // START LOCATION TRACKING
+  // ==========================================
+
+  const startLocationTracking = () => {
+    // Prevent multiple GPS watchers
+    if (watchIdRef.current !== null) {
+      return;
+    }
+
+    // Check browser support
+    if (!navigator.geolocation) {
+      console.error(
+        "Geolocation is not supported by this browser."
+      );
+
+      return;
+    }
+
+    console.log(
+      "Provider location tracking started"
+    );
+
+
+    // Start watching provider location
+    watchIdRef.current =
+      navigator.geolocation.watchPosition(
+        async (position) => {
+          const latitude =
+            position.coords.latitude;
+
+          const longitude =
+            position.coords.longitude;
+
+
+          console.log(
+            "Provider GPS:",
+            latitude,
+            longitude
+          );
+
+
+          try {
+            await updateProviderLocation(
+              booking._id,
+              latitude,
+              longitude
+            );
+
+
+            console.log(
+              "Provider location updated:",
+              latitude,
+              longitude
+            );
+
+          } catch (error) {
+
+            console.error(
+              "Failed to update provider location:",
+              error
+            );
+
+          }
+        },
+
+
+        // ======================================
+        // GPS ERROR
+        // ======================================
+
+        (error) => {
+          console.error(
+            "Location error:",
+            error
+          );
+        },
+
+
+        // ======================================
+        // GPS OPTIONS
+        // ======================================
+
+        {
+          enableHighAccuracy: true,
+          maximumAge: 10000,
+          timeout: 10000,
+        }
+      );
+  };
+
+
+  // ==========================================
+  // STOP LOCATION TRACKING
+  // ==========================================
+
+  const stopLocationTracking = () => {
+
+    if (watchIdRef.current !== null) {
+
+      navigator.geolocation.clearWatch(
+        watchIdRef.current
+      );
+
+      watchIdRef.current = null;
+
+
+      console.log(
+        "Provider location tracking stopped"
+      );
+    }
+  };
+
+
+  // ==========================================
+  // TRACK BASED ON BOOKING STATUS
+  // ==========================================
+
+  useEffect(() => {
+
+    if (booking.status === "in_progress") {
+
+      startLocationTracking();
+
+    } else {
+
+      stopLocationTracking();
+
+    }
+
+
+    // Cleanup when component is removed
+    return () => {
+      stopLocationTracking();
+    };
+
+  }, [booking.status, booking._id]);
+
 
   // ==========================================
   // STATUS CLASS
@@ -39,9 +184,7 @@ const ProviderBookingCard = ({
 
       default:
         return "provider-status-default";
-
     }
-
   };
 
 
@@ -166,14 +309,20 @@ const ProviderBookingCard = ({
 
 
           <p className="provider-rating">
-            {"⭐".repeat(booking.rating)}
+
+            {"⭐".repeat(
+              booking.rating
+            )}
+
           </p>
 
 
           {booking.review && (
 
             <p className="provider-review-text">
+
               "{booking.review}"
+
             </p>
 
           )}
@@ -312,7 +461,6 @@ const ProviderBookingCard = ({
     </div>
 
   );
-
 };
 
 
