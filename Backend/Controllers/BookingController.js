@@ -2,6 +2,7 @@ const Booking = require("../Models/Booking");
 const Service = require("../Models/Service");
 const User = require("../Models/User");
 const Review = require("../Models/Review");
+const Notification = require("../Models/Notification");
 
 // Helper function
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -421,6 +422,23 @@ const acceptBooking = async (req, res) => {
     booking.status = "accepted";
 
     await booking.save();
+
+    // Create notification for the customer
+    const notification = await Notification.create({
+      recipient: booking.user,
+      message: "Your booking has been accepted by the service provider.",
+      type: "booking",
+    });
+
+    // Send notification instantly through Socket.IO
+    const io = req.app.get("io");
+
+    if (io) {
+      io.to(`user_${booking.user}`).emit(
+        "newNotification",
+        notification
+      );
+    }
 
     res.status(200).json({
       message: "Booking accepted successfully",

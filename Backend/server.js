@@ -65,6 +65,9 @@ const io = new Server(server, {
 
 setupNotificationSocket(io);
 
+app.set("io", io);
+
+
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

@@ -62,9 +62,9 @@ import UserProviders from "./Components/Services/User/UserProviders";
 import UserProviderProfile from "./Components/Services/User/UserProviderProfile";
 
 // =====================================================
-// ADMIN
+// Notifications
 // =====================================================
-
+import NotificationListener from "./Components/Notifications/NotificationListener";
 
 // -----------------------------------------------------
 // Admin Services
@@ -113,6 +113,9 @@ function App() {
   return (
     <StripeProvider>
       <Router>
+        
+          <NotificationListener />
+
         <Routes>
 
           {/* =================================================

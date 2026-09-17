@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import "../../styles/Login.css";
 
+import {
+  connectNotificationSocket,
+} from "../../Services/notificationSocket";
+
 function Login() {
   const navigate = useNavigate();
 
@@ -48,6 +52,9 @@ function Login() {
           "user",
           JSON.stringify(data.user)
         );
+
+        // Connect user to notification socket
+       connectNotificationSocket(data.user.id);
 
         switch (data.user.role) {
           case "admin":
