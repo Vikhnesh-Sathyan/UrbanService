@@ -3,12 +3,139 @@ import { FaBell } from "react-icons/fa";
 
 import NotificationList from "./NotificationList";
 
+import {
+  getMyNotifications,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+} from "../../Services/notificationService";
+
+import {
+  onNewNotification,
+  offNewNotification,
+} from "../../Services/notificationSocket";
+
+import "../../styles/Notification.css";
+
 const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
 
   const bellRef = useRef(null);
 
-  // Close dropdown when clicking outside
+  // ==========================================
+  // LOAD EXISTING NOTIFICATIONS
+  // ==========================================
+
+  useEffect(() => {
+    const loadNotifications = async () => {
+      try {
+        const data = await getMyNotifications();
+
+        setNotifications(data.notifications || []);
+      } catch (error) {
+        console.error(
+          "Failed to load notifications:",
+          error
+        );
+      }
+    };
+
+    loadNotifications();
+  }, []);
+
+
+  // ==========================================
+  // RECEIVE REAL-TIME NOTIFICATIONS
+  // ==========================================
+
+  useEffect(() => {
+    const handleNewNotification = (notification) => {
+      console.log(
+        "🔔 NEW NOTIFICATION RECEIVED:",
+        notification
+      );
+
+      setNotifications((currentNotifications) => [
+        notification,
+        ...currentNotifications,
+      ]);
+    };
+
+    onNewNotification(handleNewNotification);
+
+    return () => {
+      offNewNotification(handleNewNotification);
+    };
+  }, []);
+
+
+  // ==========================================
+  // UNREAD COUNT
+  // ==========================================
+
+  const unreadCount = notifications.filter(
+    (notification) => !notification.isRead
+  ).length;
+
+
+  // ==========================================
+  // MARK ONE AS READ
+  // ==========================================
+
+  const handleMarkAsRead = async (notificationId) => {
+    try {
+      await markNotificationAsRead(
+        notificationId
+      );
+
+      setNotifications((currentNotifications) =>
+        currentNotifications.map((notification) =>
+          notification._id === notificationId
+            ? {
+                ...notification,
+                isRead: true,
+              }
+            : notification
+        )
+      );
+    } catch (error) {
+      console.error(
+        "Failed to mark notification as read:",
+        error
+      );
+    }
+  };
+
+
+  // ==========================================
+  // MARK ALL AS READ
+  // ==========================================
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      await markAllNotificationsAsRead();
+
+      setNotifications((currentNotifications) =>
+        currentNotifications.map(
+          (notification) => ({
+            ...notification,
+            isRead: true,
+          })
+        )
+      );
+    } catch (error) {
+      console.error(
+        "Failed to mark all notifications as read:",
+        error
+      );
+    }
+  };
+
+
+  // ==========================================
+  // CLOSE WHEN CLICKING OUTSIDE
+  // ==========================================
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -32,24 +159,58 @@ const NotificationBell = () => {
     };
   }, []);
 
+
   return (
     <div
       className="notification-bell-container"
       ref={bellRef}
     >
+
+      {/* ==========================================
+          BELL BUTTON
+      ========================================== */}
+
       <button
         type="button"
         className="notification-bell-button"
         onClick={() => setIsOpen(!isOpen)}
+        aria-label="Notifications"
       >
+
         <FaBell />
+
+        {/* Unread count */}
+
+        {unreadCount > 0 && (
+          <span className="notification-count">
+            {unreadCount > 9
+              ? "9+"
+              : unreadCount}
+          </span>
+        )}
+
       </button>
+
+
+      {/* ==========================================
+          DROPDOWN
+      ========================================== */}
 
       {isOpen && (
         <div className="notification-dropdown">
-          <NotificationList />
+
+          <NotificationList
+            notifications={notifications}
+            unreadCount={unreadCount}
+            onMarkAsRead={handleMarkAsRead}
+            onMarkAllAsRead={
+              handleMarkAllAsRead
+            }
+          />
+
         </div>
       )}
+
     </div>
   );
 };
