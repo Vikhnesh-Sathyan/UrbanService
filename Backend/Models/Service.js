@@ -10,6 +10,12 @@ const serviceSchema = new mongoose.Schema({
 
   category: String,
 
+  // Sub-category selected by provider
+  subCategory: {
+    type: String,
+    default: "",
+  },
+
   // Service tag selected by provider
   tag: {
     type: String,

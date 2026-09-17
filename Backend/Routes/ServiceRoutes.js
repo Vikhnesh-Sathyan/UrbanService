@@ -10,6 +10,7 @@ const {
   getServices,
   getServiceById,
   getServiceCategories,
+  getServiceSubCategories,
   getProviderServices,
   getPendingServices,
   approveService,
@@ -119,8 +120,10 @@ router.patch(
 router.get("/", getServices);
 
 // Anyone can view service categories
-
 router.get("/categories", getServiceCategories);
+
+// Anyone can view service sub-categories
+router.get("/subcategories",getServiceSubCategories);
 
 // Anyone can view one service
 router.get("/:id", getServiceById);

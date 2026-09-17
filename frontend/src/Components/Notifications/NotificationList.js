@@ -8,7 +8,6 @@ const NotificationList = ({
   onMarkAsRead,
   onMarkAllAsRead,
 }) => {
-
   return (
     <div className="notification-list">
 
@@ -19,7 +18,6 @@ const NotificationList = ({
       <div className="notification-list-header">
 
         <div>
-
           <h3>
             Notifications
           </h3>
@@ -29,9 +27,10 @@ const NotificationList = ({
               {unreadCount} unread
             </span>
           )}
-
         </div>
 
+
+        {/* Mark all as read */}
 
         {unreadCount > 0 && (
           <button
@@ -46,7 +45,7 @@ const NotificationList = ({
 
 
       {/* ==========================================
-          NOTIFICATIONS
+          NOTIFICATION ITEMS
       ========================================== */}
 
       {notifications.length === 0 ? (
@@ -59,17 +58,15 @@ const NotificationList = ({
 
         <div className="notification-items">
 
-          {notifications.map(
-            (notification) => (
+          {notifications.map((notification) => (
 
-              <NotificationItem
-                key={notification._id}
-                notification={notification}
-                onMarkAsRead={onMarkAsRead}
-              />
+            <NotificationItem
+              key={notification._id}
+              notification={notification}
+              onMarkAsRead={onMarkAsRead}
+            />
 
-            )
-          )}
+          ))}
 
         </div>
 

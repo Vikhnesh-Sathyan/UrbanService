@@ -12,6 +12,7 @@ const addService = async (req, res) => {
       price,
       description,
       category,
+      subCategory,
       detailedDescription,
       tag,
       
@@ -26,6 +27,7 @@ const addService = async (req, res) => {
       price,
       description,
       category,
+      subCategory,
       image,
       detailedDescription,
       tag,
@@ -96,6 +98,7 @@ const getServices = async (req, res) => {
     const {
       search,
       category,
+      subCategory,
       provider,
       minPrice,
       maxPrice,
@@ -298,6 +301,18 @@ const getServices = async (req, res) => {
     ) {
       serviceMatch.category =
         category.trim();
+    }
+
+    // =================================================
+    // SUB-CATEGORY
+    // =================================================
+
+    if (
+      subCategory &&
+      subCategory.trim() !== ""
+    ) {
+      serviceMatch.subCategory =
+        subCategory.trim();
     }
 
 
@@ -1053,6 +1068,9 @@ const updateService = async (
       category:
         req.body.category,
 
+      subCategory:
+        req.body.subCategory,
+
       detailedDescription:
         req.body.detailedDescription,
 
@@ -1300,6 +1318,54 @@ const getServiceCategories = async (req, res) => {
   }
 };
 
+
+
+// =====================================================
+// GET SERVICE SUB-CATEGORIES
+// =====================================================
+
+const getServiceSubCategories = async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    if (!category || category.trim() === "") {
+      return res.status(400).json({
+        message: "Category is required",
+      });
+    }
+
+    const subCategories = await Service.distinct(
+      "subCategory",
+      {
+        status: "approved",
+        category: category.trim(),
+        subCategory: {
+          $exists: true,
+          $ne: "",
+        },
+      }
+    );
+
+    subCategories.sort((a, b) =>
+      a.localeCompare(b)
+    );
+
+    res.status(200).json({
+      subCategories,
+    });
+
+  } catch (error) {
+    console.error(
+      "Get service sub-categories error:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Failed to fetch service sub-categories",
+    });
+  }
+};
+
 // =====================================================
 // EXPORTS
 // =====================================================
@@ -1329,5 +1395,7 @@ module.exports = {
   resubmitService,
 
   getServiceCategories,
+
+  getServiceSubCategories,
 
 };
