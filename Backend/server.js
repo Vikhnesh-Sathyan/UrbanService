@@ -4,6 +4,10 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
+const http = require("http");
+const { Server } = require("socket.io");
+
+const setupNotificationSocket = require("./Socket/notificationSocket");
 
 // Import Routes
 const authRoutes = require("./Routes/AuthRoutes");
@@ -50,9 +54,20 @@ mongoose
   .then(() => {
     console.log("✅ MongoDB connected");
 
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
+  const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+  },
+});
+
+setupNotificationSocket(io);
+
+server.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err);
