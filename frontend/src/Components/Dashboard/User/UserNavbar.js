@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import "../../../styles/UserNavbar.css";
 
+import NotificationBell from "../../Notifications/NotificationBell";
+
 const UserNavbar = ({ onMenuClick }) => {
   const navigate = useNavigate();
 
@@ -48,6 +50,7 @@ const UserNavbar = ({ onMenuClick }) => {
       <div className="user-navbar-left">
 
         <div className="user-navbar-heading">
+
           <span className="user-navbar-label">
             CUSTOMER PORTAL
           </span>
@@ -55,6 +58,7 @@ const UserNavbar = ({ onMenuClick }) => {
           <h1>
             Welcome back, {userName}
           </h1>
+
         </div>
 
       </div>
@@ -66,19 +70,9 @@ const UserNavbar = ({ onMenuClick }) => {
 
       <div className="user-navbar-right">
 
-        {/* Notification */}
+        {/* Notification Bell */}
 
-        <button
-          type="button"
-          className="user-notification-button"
-          aria-label="Notifications"
-        >
-          <span className="notification-icon">
-            ♢
-          </span>
-
-          <span className="notification-dot"></span>
-        </button>
+        <NotificationBell />
 
 
         {/* Divider */}

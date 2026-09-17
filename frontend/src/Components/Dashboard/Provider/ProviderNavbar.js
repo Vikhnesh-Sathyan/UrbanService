@@ -1,6 +1,7 @@
 import React from "react";
-import { FaBell } from "react-icons/fa";
 import "../../../styles/ProviderNavbar.css";
+
+import NotificationBell from "../../Notifications/NotificationBell";
 
 const ProviderNavbar = () => {
   return (
@@ -13,10 +14,12 @@ const ProviderNavbar = () => {
 
       <div className="navbar-actions">
 
-        <button className="notification-button">
-          <FaBell />
-          <span className="notification-dot"></span>
-        </button>
+        {/* Notification Bell */}
+
+        <NotificationBell />
+
+
+        {/* Provider Profile */}
 
         <div className="provider-profile">
 
