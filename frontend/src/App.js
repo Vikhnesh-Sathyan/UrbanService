@@ -67,11 +67,10 @@ import UserProviderProfile from "./Components/Services/User/UserProviderProfile"
 import NotificationListener from "./Components/Notifications/NotificationListener";
 
 // -----------------------------------------------------
-// Admin Services
+// Admin Category
 // -----------------------------------------------------
 
-// Add AdminServices import here when the component is ready.
-
+import AdminCategories from "./Components/Services/Admin/AdminCategories";
 // -----------------------------------------------------
 // Admin Providers
 // -----------------------------------------------------
@@ -257,28 +256,16 @@ function App() {
           ================================================= */}
 
 
-          {/* =================================================
-              ADMIN → DASHBOARD
-          ================================================= */}
-
-          <Route
-            path="/admin/dashboard"
-            element={<AdminDashboard />}
-          />
-
 
           {/* =================================================
-              ADMIN → SERVICES
+              ADMIN → Category
           ================================================= */}
-
-          {/*
-            Add this when AdminServices component is available:
 
             <Route
-              path="/admin/services"
-              element={<AdminServices />}
+              path="/admin/category"
+              element={<AdminCategories />}
             />
-          */}
+         
 
 
           {/* =================================================

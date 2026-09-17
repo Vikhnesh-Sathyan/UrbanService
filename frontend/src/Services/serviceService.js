@@ -1,6 +1,5 @@
 //It contains functions for adding, fetching, updating, deleting, and resubmitting services.
 
-
 import axios from "axios";
 
 const API = "http://localhost:5000/api/services";
@@ -33,6 +32,26 @@ export const getMyServices = async () => {
   }
 
   return [];
+};
+
+// Get all active categories
+export const getServiceCategories = async () => {
+  const response = await axios.get(
+    "http://localhost:5000/api/categories"
+  );
+
+  return response.data;
+};
+
+// Get subcategories for a selected category
+export const getServiceSubCategories = async (
+  categoryId
+) => {
+  const response = await axios.get(
+    `http://localhost:5000/api/categories/${categoryId}/subcategories`
+  );
+
+  return response.data;
 };
 
 // Add service
@@ -72,6 +91,70 @@ export const resubmitService = async (serviceId) => {
   const response = await axios.patch(
     `${API}/${serviceId}/resubmit`,
     {},
+    getAuthConfig()
+  );
+
+  return response.data;
+};
+
+// ==========================================
+// ADMIN: CREATE CATEGORY
+// ==========================================
+
+export const createCategory = async (name) => {
+  const response = await axios.post(
+    "http://localhost:5000/api/categories",
+    { name },
+    getAuthConfig()
+  );
+
+  return response.data;
+};
+
+
+// ==========================================
+// ADMIN: ADD SUBCATEGORY
+// ==========================================
+
+export const addSubCategory = async (
+  categoryId,
+  name
+) => {
+  const response = await axios.post(
+    `http://localhost:5000/api/categories/${categoryId}/subcategories`,
+    { name },
+    getAuthConfig()
+  );
+
+  return response.data;
+};
+
+// ==========================================
+// ADMIN: DELETE CATEGORY
+// ==========================================
+
+export const deleteCategory = async (
+  categoryId
+) => {
+  const response = await axios.delete(
+    `http://localhost:5000/api/categories/${categoryId}`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};
+
+
+// ==========================================
+// ADMIN: DELETE SUBCATEGORY
+// ==========================================
+
+export const deleteSubCategory = async (
+  categoryId,
+  subCategoryId
+) => {
+  const response = await axios.delete(
+    `http://localhost:5000/api/categories/${categoryId}/subcategories/${subCategoryId}`,
     getAuthConfig()
   );
 

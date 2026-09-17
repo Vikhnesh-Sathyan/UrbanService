@@ -19,11 +19,11 @@ const AdminSidebar = () => {
       icon: <FaHome />,
       path: "/admin/dashboard",
     },
-    // {
-    //   name: "Services",
-    //   icon: <FaBriefcase />,
-    //   path: "/admin/services",
-    // },
+    {
+      name: "Category",
+      icon: <FaBriefcase />,
+      path: "/admin/category",
+    },
     {
       name: "Providers",
       icon: <FaUsers />,
