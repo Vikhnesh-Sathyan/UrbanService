@@ -14,6 +14,7 @@ const reviewRoutes = require("./Routes/reviewRoutes");
 const availabilityRoutes = require("./Routes/availabilityRoutes");
 const userRoutes = require("./Routes/UserRoutes");
 const helpRequestRoutes = require("./Routes/helpRequestRoutes");
+const notificationRoutes = require("./Routes/NotificationRoutes");
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/availability", availabilityRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api",helpRequestRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 
 // Connect to MongoDB and start server
