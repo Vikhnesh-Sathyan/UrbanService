@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaSearch, FaSlidersH } from "react-icons/fa";
+import { FaSearch, FaSlidersH, FaArrowLeft } from "react-icons/fa";
 
 import { getServices } from "../../../../Services/userService";
 import ServiceCard from "./ServiceCard";
@@ -10,15 +10,46 @@ import Pagination from "./Pagination";
 
 import "../../../../styles/UserServicesPage.css";
 
+const CATEGORY_API =
+  "http://localhost:5000/api/categories";
+
 const UserServicesPage = () => {
   const navigate = useNavigate();
+
+  // ==========================================
+  // MARKETPLACE VIEW
+  // ==========================================
+
+  // category = main category selected by user
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  // subcategory = subcategory selected by user
+  const [selectedSubCategory, setSelectedSubCategory] =
+    useState(null);
+
+  const [subCategories, setSubCategories] = useState([]);
+
+  const [categoryLoading, setCategoryLoading] =
+    useState(false);
+
+  const [subCategoryLoading, setSubCategoryLoading] =
+    useState(false);
 
   // ==========================================
   // SERVICES
   // ==========================================
 
   const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  // ==========================================
+  // CATEGORIES
+  // ==========================================
+
+  const [categories, setCategories] = useState([]);
+
+  const [categoriesLoading, setCategoriesLoading] =
+    useState(true);
 
   // ==========================================
   // PAGINATION
@@ -40,10 +71,10 @@ const UserServicesPage = () => {
   // ==========================================
 
   const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] =
+    useState("");
 
   const [category, setCategory] = useState("");
-  const [categories, setCategories] = useState([]);
 
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -55,14 +86,12 @@ const UserServicesPage = () => {
   const [provider, setProvider] = useState("");
   const [providers, setProviders] = useState([]);
 
-  const [availability, setAvailability] = useState("");
+  const [availability, setAvailability] =
+    useState("");
 
   // ==========================================
   // LOAD ALL PROVIDERS
   // ==========================================
-  // This is separate from services.
-  // Therefore selecting one provider will NOT
-  // remove the other providers from the dropdown.
 
   const loadProviders = async () => {
     try {
@@ -70,12 +99,16 @@ const UserServicesPage = () => {
         "http://localhost:5000/api/users/providers",
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem(
+              "token"
+            )}`,
           },
         }
       );
 
-      const providerList = Array.isArray(response.data?.providers)
+      const providerList = Array.isArray(
+        response.data?.providers
+      )
         ? response.data.providers
         : [];
 
@@ -88,67 +121,226 @@ const UserServicesPage = () => {
 
       setProviders(formattedProviders);
     } catch (error) {
-      console.error("Failed to load providers:", error);
+      console.error(
+        "Failed to load providers:",
+        error
+      );
+
       setProviders([]);
     }
   };
 
   // ==========================================
-// LOAD ALL SERVICE CATEGORIES
-// ==========================================
+  // LOAD MAIN CATEGORIES
+  // ==========================================
 
-const loadCategories = async () => {
-  try {
-    const response = await axios.get(
-      "http://localhost:5000/api/services/categories"
+  const loadCategories = async () => {
+    try {
+      setCategoriesLoading(true);
+
+      const response = await axios.get(
+        CATEGORY_API
+      );
+
+      const categoryList = Array.isArray(
+        response.data?.categories
+      )
+        ? response.data.categories
+        : [];
+
+      // Show only active categories
+      const activeCategories = categoryList.filter(
+        (item) => item?.isActive !== false
+      );
+
+      setCategories(activeCategories);
+    } catch (error) {
+      console.error(
+        "Failed to load categories:",
+        error
+      );
+
+      setCategories([]);
+    } finally {
+      setCategoriesLoading(false);
+    }
+  };
+
+  // ==========================================
+  // LOAD SUBCATEGORIES
+  // ==========================================
+
+  const loadSubCategories = async (
+    categoryId
+  ) => {
+    try {
+      setSubCategoryLoading(true);
+
+      const response = await axios.get(
+        `${CATEGORY_API}/${categoryId}/subcategories`
+      );
+
+      const subCategoryList = Array.isArray(
+        response.data?.subCategories
+      )
+        ? response.data.subCategories
+        : [];
+
+      // Show only active subcategories
+      const activeSubCategories =
+        subCategoryList.filter(
+          (item) => item?.isActive !== false
+        );
+
+      setSubCategories(activeSubCategories);
+    } catch (error) {
+      console.error(
+        "Failed to load subcategories:",
+        error
+      );
+
+      setSubCategories([]);
+    } finally {
+      setSubCategoryLoading(false);
+    }
+  };
+
+  // ==========================================
+  // SELECT CATEGORY
+  // ==========================================
+
+  const handleCategorySelect = (categoryItem) => {
+    setSelectedCategory(categoryItem);
+
+    setSelectedSubCategory(null);
+
+    setSubCategories([]);
+
+    setServices([]);
+
+    setCategory(categoryItem.name);
+
+    setPage(1);
+
+    loadSubCategories(categoryItem._id);
+  };
+
+  // ==========================================
+  // SELECT SUBCATEGORY
+  // ==========================================
+
+  const handleSubCategorySelect = (
+    subCategoryItem
+  ) => {
+    setSelectedSubCategory(subCategoryItem);
+
+    setCategory(
+      selectedCategory?.name || ""
     );
 
-    const categoryList = Array.isArray(
-      response.data?.categories
-    )
-      ? response.data.categories
-      : [];
+    setPage(1);
 
-    setCategories(categoryList);
+    setSearch("");
+    setDebouncedSearch("");
 
-  } catch (error) {
-    console.error(
-      "Failed to load categories:",
-      error
-    );
+    setMinPrice("");
+    setMaxPrice("");
+    setMinRating("");
+    setSort("");
+    setProvider("");
+    setAvailability("");
+  };
 
-    setCategories([]);
-  }
-};
+  // ==========================================
+  // BACK TO CATEGORIES
+  // ==========================================
 
+  const handleBackToCategories = () => {
+    setSelectedCategory(null);
+    setSelectedSubCategory(null);
+
+    setSubCategories([]);
+
+    setServices([]);
+
+    setCategory("");
+
+    setSearch("");
+    setDebouncedSearch("");
+
+    setMinPrice("");
+    setMaxPrice("");
+    setMinRating("");
+    setSort("");
+    setProvider("");
+    setAvailability("");
+
+    setPage(1);
+  };
+
+  // ==========================================
+  // BACK TO SUBCATEGORIES
+  // ==========================================
+
+  const handleBackToSubCategories = () => {
+    setSelectedSubCategory(null);
+
+    setServices([]);
+
+    setSearch("");
+    setDebouncedSearch("");
+
+    setMinPrice("");
+    setMaxPrice("");
+    setMinRating("");
+    setSort("");
+    setProvider("");
+    setAvailability("");
+
+    setPage(1);
+  };
 
   // ==========================================
   // LOAD SERVICES
   // ==========================================
 
   const loadServices = async () => {
+    // IMPORTANT:
+    // Do not load services on the category
+    // or subcategory selection screens.
+    //
+    // Services are loaded ONLY after the user
+    // selects a subcategory.
+
+    if (
+      !selectedCategory ||
+      !selectedSubCategory
+    ) {
+      return;
+    }
+
     try {
       setLoading(true);
 
       const params = {
         page,
         limit: 9,
+
+        // Main category
+        category: selectedCategory.name,
+
+        // Selected subcategory
+        subCategory:
+          selectedSubCategory.name,
       };
 
       // ========================================
       // SEARCH
       // ========================================
 
-     if (debouncedSearch.trim()) {
-        params.search = debouncedSearch.trim();
-      }
-
-      // ========================================
-      // CATEGORY
-      // ========================================
-
-      if (category) {
-        params.category = category;
+      if (debouncedSearch.trim()) {
+        params.search =
+          debouncedSearch.trim();
       }
 
       // ========================================
@@ -188,6 +380,14 @@ const loadCategories = async () => {
       }
 
       // ========================================
+      // AVAILABILITY
+      // ========================================
+
+      if (availability) {
+        params.availability = availability;
+      }
+
+      // ========================================
       // API CALL
       // ========================================
 
@@ -218,7 +418,10 @@ const loadCategories = async () => {
         }
       );
     } catch (error) {
-      console.error("Failed to load services:", error);
+      console.error(
+        "Failed to load services:",
+        error
+      );
 
       setServices([]);
 
@@ -236,25 +439,25 @@ const loadCategories = async () => {
   };
 
   // ==========================================
-  // LOAD PROVIDERS ONCE
+  // LOAD INITIAL DATA
   // ==========================================
 
   useEffect(() => {
-    loadProviders();
     loadCategories();
+    loadProviders();
   }, []);
 
-// ==========================================
-// DEBOUNCE SEARCH
-// ==========================================
+  // ==========================================
+  // DEBOUNCE SEARCH
+  // ==========================================
 
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setDebouncedSearch(search);
-  }, 500);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
 
-  return () => clearTimeout(timer);
-}, [search]);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   // ==========================================
   // LOAD SERVICES WHEN FILTER CHANGES
@@ -265,13 +468,14 @@ useEffect(() => {
   }, [
     page,
     debouncedSearch,
-    category,
     minPrice,
     maxPrice,
     minRating,
     sort,
     provider,
     availability,
+    selectedCategory,
+    selectedSubCategory,
   ]);
 
   // ==========================================
@@ -309,7 +513,6 @@ useEffect(() => {
 
   const clearFilters = () => {
     setSearch("");
-    setCategory("");
     setMinPrice("");
     setMaxPrice("");
     setMinRating("");
@@ -334,41 +537,11 @@ useEffect(() => {
   };
 
   // ==========================================
-  // LOADING
+  // HERO
   // ==========================================
 
-  if (loading) {
+  const renderHero = () => {
     return (
-      <div className="user-services-page">
-
-        <div className="user-services-loading">
-
-          <div className="user-services-loading-spinner"></div>
-
-          <h2>Finding services...</h2>
-
-          <p>
-            Discovering trusted professionals
-            near you.
-          </p>
-
-        </div>
-
-      </div>
-    );
-  }
-
-  // ==========================================
-  // PAGE
-  // ==========================================
-
-  return (
-    <div className="user-services-page">
-
-      {/* ======================================
-          HERO / HEADER
-      ====================================== */}
-
       <section className="user-services-hero">
 
         <div className="user-services-marquee">
@@ -426,16 +599,15 @@ useEffect(() => {
           </span>
 
           <h1>
-            Available Services
+            Find the Right Service
           </h1>
 
           <p>
-            Discover trusted professionals for your everyday needs.
+            Discover trusted professionals for
+            your everyday needs.
           </p>
 
         </div>
-
-        {/* SEARCH */}
 
         <div className="user-services-search">
 
@@ -446,6 +618,9 @@ useEffect(() => {
             value={search}
             onChange={handleSearchChange}
             placeholder="Search for a service..."
+            disabled={
+              !selectedSubCategory
+            }
           />
 
           {search && (
@@ -462,8 +637,6 @@ useEffect(() => {
           )}
 
         </div>
-
-        {/* TRUST ITEMS */}
 
         <div className="user-services-trust">
 
@@ -482,12 +655,231 @@ useEffect(() => {
         </div>
 
       </section>
+    );
+  };
 
+  // ==========================================
+  // CATEGORY LANDING PAGE
+  // ==========================================
 
-      {/* ======================================
-          MARKETPLACE CONTENT
-      ====================================== */}
+  const renderCategories = () => {
+    return (
+      <section className="user-services-category-view">
 
+        <div className="user-services-section-heading">
+
+          <span>
+            BROWSE BY CATEGORY
+          </span>
+
+          <h2>
+            What do you need help with?
+          </h2>
+
+          <p>
+            Choose a service category to explore
+            available subcategories.
+          </p>
+
+        </div>
+
+        {categoriesLoading ? (
+          <div className="user-services-inline-loading">
+            Loading categories...
+          </div>
+        ) : categories.length > 0 ? (
+
+          <div className="user-services-category-grid">
+
+            {categories.map((categoryItem) => (
+
+              <button
+                type="button"
+                key={categoryItem._id}
+                className="user-services-category-card"
+                onClick={() =>
+                  handleCategorySelect(
+                    categoryItem
+                  )
+                }
+              >
+
+                <div className="user-services-category-icon">
+                  ✦
+                </div>
+
+                <div className="user-services-category-content">
+
+                  <h3>
+                    {categoryItem.name}
+                  </h3>
+
+                  <p>
+                    Explore services
+                  </p>
+
+                </div>
+
+                <span className="user-services-category-arrow">
+                  →
+                </span>
+
+              </button>
+
+            ))}
+
+          </div>
+
+        ) : (
+
+          <div className="user-services-no-results">
+
+            <div className="user-services-no-results-icon">
+              📂
+            </div>
+
+            <h2>
+              No categories available
+            </h2>
+
+            <p>
+              Service categories will appear here
+              once they are added.
+            </p>
+
+          </div>
+
+        )}
+
+      </section>
+    );
+  };
+
+  // ==========================================
+  // SUBCATEGORY PAGE
+  // ==========================================
+
+  const renderSubCategories = () => {
+    return (
+      <section className="user-services-category-view">
+
+        <div className="user-services-breadcrumb">
+
+          <button
+            type="button"
+            onClick={handleBackToCategories}
+          >
+            <FaArrowLeft />
+            Categories
+          </button>
+
+          <span>›</span>
+
+          <strong>
+            {selectedCategory?.name}
+          </strong>
+
+        </div>
+
+        <div className="user-services-section-heading">
+
+          <span>
+            {selectedCategory?.name}
+          </span>
+
+          <h2>
+            Choose a service type
+          </h2>
+
+          <p>
+            Select a subcategory to see the
+            services offered by professionals.
+          </p>
+
+        </div>
+
+        {subCategoryLoading ? (
+
+          <div className="user-services-inline-loading">
+            Loading subcategories...
+          </div>
+
+        ) : subCategories.length > 0 ? (
+
+          <div className="user-services-subcategory-grid">
+
+            {subCategories.map(
+              (subCategoryItem) => (
+
+                <button
+                  type="button"
+                  key={subCategoryItem._id}
+                  className="user-services-subcategory-card"
+                  onClick={() =>
+                    handleSubCategorySelect(
+                      subCategoryItem
+                    )
+                  }
+                >
+
+                  <div className="user-services-subcategory-icon">
+                    ◇
+                  </div>
+
+                  <div>
+
+                    <h3>
+                      {subCategoryItem.name}
+                    </h3>
+
+                    <p>
+                      View available services
+                    </p>
+
+                  </div>
+
+                  <span>
+                    →
+                  </span>
+
+                </button>
+
+              )
+            )}
+
+          </div>
+
+        ) : (
+
+          <div className="user-services-no-results">
+
+            <div className="user-services-no-results-icon">
+              📂
+            </div>
+
+            <h2>
+              No subcategories available
+            </h2>
+
+            <p>
+              This category does not have any
+              active subcategories yet.
+            </p>
+
+          </div>
+
+        )}
+
+      </section>
+    );
+  };
+
+  // ==========================================
+  // SERVICE LISTING PAGE
+  // ==========================================
+
+  const renderServices = () => {
+    return (
       <section className="user-services-marketplace">
 
         {/* ====================================
@@ -515,50 +907,38 @@ useEffect(() => {
 
           </div>
 
-
-          {/* FILTERS */}
-
           <ServiceFilters
-
             category={category}
-            categories={categories}
-
+            categories={categories.map(
+              (categoryItem) => categoryItem.name
+            )}
             setCategory={(value) => {
               setCategory(value);
               setPage(1);
             }}
-
             provider={provider}
-
             providers={providers}
-
             setProvider={(value) => {
               setProvider(value);
               setPage(1);
             }}
-
             minPrice={minPrice}
-
             setMinPrice={(value) => {
               setMinPrice(value);
               setPage(1);
             }}
-
             maxPrice={maxPrice}
-
             setMaxPrice={(value) => {
               setMaxPrice(value);
               setPage(1);
             }}
-
             minRating={minRating}
-
             setMinRating={(value) => {
               setMinRating(value);
               setPage(1);
             }}
-             availability={availability}
-             setAvailability={(value) => {
+            availability={availability}
+            setAvailability={(value) => {
               setAvailability(value);
               setPage(1);
             }}
@@ -566,19 +946,40 @@ useEffect(() => {
 
         </aside>
 
-
         {/* ====================================
             RESULTS
         ==================================== */}
 
         <main className="user-services-results">
 
+          {/* BREADCRUMB */}
+
+          <div className="user-services-breadcrumb">
+
+            <button
+              type="button"
+              onClick={
+                handleBackToSubCategories
+              }
+            >
+              <FaArrowLeft />
+              {selectedCategory?.name}
+            </button>
+
+            <span>›</span>
+
+            <strong>
+              {selectedSubCategory?.name}
+            </strong>
+
+          </div>
+
           {/* RESULTS HEADER */}
 
           <div className="user-services-results-header">
 
             <div className="user-services-results-count">
-          
+
               <span>
                 {pagination.totalServices}
               </span>
@@ -586,8 +987,8 @@ useEffect(() => {
               <strong>
                 Services
               </strong>
-          </div>
 
+            </div>
 
             {/* SORT */}
 
@@ -632,12 +1033,15 @@ useEffect(() => {
 
           </div>
 
+          {/* SERVICE GRID */}
 
-          {/* ====================================
-              SERVICE GRID
-          ==================================== */}
+          {loading ? (
 
-          {services.length > 0 ? (
+            <div className="user-services-inline-loading">
+              Finding available services...
+            </div>
+
+          ) : services.length > 0 ? (
 
             <div className="user-services-grid">
 
@@ -646,7 +1050,9 @@ useEffect(() => {
                 <ServiceCard
                   key={service._id}
                   service={service}
-                  onViewDetails={handleViewDetails}
+                  onViewDetails={
+                    handleViewDetails
+                  }
                 />
 
               ))}
@@ -666,7 +1072,8 @@ useEffect(() => {
               </h2>
 
               <p>
-                Try changing your search or filters.
+                There are currently no approved
+                services in this subcategory.
               </p>
 
               <button
@@ -680,10 +1087,7 @@ useEffect(() => {
 
           )}
 
-
-          {/* ====================================
-              PAGINATION
-          ==================================== */}
+          {/* PAGINATION */}
 
           {pagination.totalPages > 1 && (
 
@@ -691,8 +1095,12 @@ useEffect(() => {
 
               <Pagination
                 currentPage={page}
-                totalPages={pagination.totalPages}
-                onPageChange={handlePageChange}
+                totalPages={
+                  pagination.totalPages
+                }
+                onPageChange={
+                  handlePageChange
+                }
               />
 
             </div>
@@ -702,6 +1110,40 @@ useEffect(() => {
         </main>
 
       </section>
+    );
+  };
+
+  // ==========================================
+  // MAIN PAGE
+  // ==========================================
+
+  return (
+    <div className="user-services-page">
+
+      {renderHero()}
+
+      {/* ======================================
+          CATEGORY LEVEL
+      ====================================== */}
+
+      {!selectedCategory &&
+        renderCategories()}
+
+      {/* ======================================
+          SUBCATEGORY LEVEL
+      ====================================== */}
+
+      {selectedCategory &&
+        !selectedSubCategory &&
+        renderSubCategories()}
+
+      {/* ======================================
+          SERVICE LEVEL
+      ====================================== */}
+
+      {selectedCategory &&
+        selectedSubCategory &&
+        renderServices()}
 
     </div>
   );

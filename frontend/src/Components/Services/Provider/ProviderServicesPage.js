@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import {
   getMyServices,
+  getServiceCategories,
+  getServiceSubCategories,
   addService,
   updateService,
   deleteService,
@@ -13,11 +15,23 @@ import "../../../styles/ProviderServices.css";
 const ProviderServicesPage = () => {
   const [services, setServices] = useState([]);
 
+  // Categories from admin/database
+  const [categories, setCategories] = useState([]);
+
+  // Subcategories for selected category
+  const [subCategories, setSubCategories] =
+    useState([]);
+
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
+  const [subCategoryLoading, setSubCategoryLoading] =
+    useState(false);
+
+  const [submitting, setSubmitting] =
+    useState(false);
 
   const [showForm, setShowForm] = useState(false);
-  const [editingService, setEditingService] = useState(null);
+  const [editingService, setEditingService] =
+    useState(null);
 
   const [error, setError] = useState("");
 
@@ -26,6 +40,7 @@ const ProviderServicesPage = () => {
     price: "",
     description: "",
     category: "",
+    subCategory: "",
     tag: "",
   });
 
@@ -36,33 +51,115 @@ const ProviderServicesPage = () => {
   // ---------------------------------------
 
   const loadServices = async () => {
-  try {
-    setLoading(true);
-    setError("");
+    try {
+      setLoading(true);
+      setError("");
 
-    const data = await getMyServices();
+      const data = await getMyServices();
 
-    console.log("MY SERVICES:", data);
+      console.log("MY SERVICES:", data);
 
-    setServices(data);
+      setServices(data);
+    } catch (err) {
+      console.error(
+        "Fetch provider services error:",
+        err
+      );
 
-  } catch (err) {
-    console.error("Fetch provider services error:", err);
+      setServices([]);
 
-    setServices([]);
+      setError(
+        err.response?.data?.message ||
+          "Failed to load your services"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    setError(
-      err.response?.data?.message ||
-      "Failed to load your services"
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+  // ---------------------------------------
+  // Fetch categories from database
+  // ---------------------------------------
+
+  const loadCategories = async () => {
+    try {
+      const data = await getServiceCategories();
+
+      console.log(
+        "SERVICE CATEGORIES:",
+        data
+      );
+
+      setCategories(data.categories || []);
+    } catch (err) {
+      console.error(
+        "Fetch categories error:",
+        err
+      );
+
+      setCategories([]);
+
+      setError(
+        err.response?.data?.message ||
+          "Failed to load categories"
+      );
+    }
+  };
+
+  // ---------------------------------------
+  // Initial load
+  // ---------------------------------------
 
   useEffect(() => {
     loadServices();
+    loadCategories();
   }, []);
+
+  // ---------------------------------------
+  // Load subcategories when category changes
+  // ---------------------------------------
+
+  const loadSubCategories = async (
+    categoryId
+  ) => {
+    if (!categoryId) {
+      setSubCategories([]);
+      return;
+    }
+
+    try {
+      setSubCategoryLoading(true);
+      setError("");
+
+      const data =
+        await getServiceSubCategories(
+          categoryId
+        );
+
+      console.log(
+        "SUBCATEGORIES:",
+        data
+      );
+
+      setSubCategories(
+        data.subCategories || []
+      );
+    } catch (err) {
+      console.error(
+        "Fetch subcategories error:",
+        err
+      );
+
+      setSubCategories([]);
+
+      setError(
+        err.response?.data?.message ||
+          "Failed to load subcategories"
+      );
+    } finally {
+      setSubCategoryLoading(false);
+    }
+  };
 
   // ---------------------------------------
   // Handle input changes
@@ -78,11 +175,39 @@ const ProviderServicesPage = () => {
   };
 
   // ---------------------------------------
+  // Handle category change
+  // ---------------------------------------
+
+  const handleCategoryChange = async (e) => {
+    const categoryId = e.target.value;
+
+    // Find selected category from database list
+    const selectedCategory =
+      categories.find(
+        (category) =>
+          category._id === categoryId
+      );
+
+    setFormData((prev) => ({
+      ...prev,
+      category:
+        selectedCategory?.name || "",
+      subCategory: "",
+    }));
+
+    setSubCategories([]);
+
+    await loadSubCategories(categoryId);
+  };
+
+  // ---------------------------------------
   // Handle image
   // ---------------------------------------
 
   const handleImageChange = (e) => {
-    setImageFile(e.target.files[0] || null);
+    setImageFile(
+      e.target.files[0] || null
+    );
   };
 
   // ---------------------------------------
@@ -97,9 +222,11 @@ const ProviderServicesPage = () => {
       price: "",
       description: "",
       category: "",
+      subCategory: "",
       tag: "",
     });
 
+    setSubCategories([]);
     setImageFile(null);
     setError("");
     setShowForm(true);
@@ -109,20 +236,38 @@ const ProviderServicesPage = () => {
   // Open Edit form
   // ---------------------------------------
 
-  const handleEditClick = (service) => {
+  const handleEditClick = async (service) => {
     setEditingService(service);
 
     setFormData({
       name: service.name || "",
       price: service.price || "",
-      description: service.description || "",
+      description:
+        service.description || "",
       category: service.category || "",
+      subCategory:
+        service.subCategory || "",
       tag: service.tag || "",
     });
 
     setImageFile(null);
     setError("");
     setShowForm(true);
+
+    // Find category ID from category name
+    const selectedCategory =
+      categories.find(
+        (category) =>
+          category.name === service.category
+      );
+
+    if (selectedCategory) {
+      await loadSubCategories(
+        selectedCategory._id
+      );
+    } else {
+      setSubCategories([]);
+    }
 
     window.scrollTo({
       top: 0,
@@ -140,9 +285,11 @@ const ProviderServicesPage = () => {
       price: "",
       description: "",
       category: "",
+      subCategory: "",
       tag: "",
     });
 
+    setSubCategories([]);
     setImageFile(null);
     setEditingService(null);
     setShowForm(false);
@@ -159,22 +306,40 @@ const ProviderServicesPage = () => {
     setError("");
 
     if (!formData.name.trim()) {
-      setError("Service name is required.");
+      setError(
+        "Service name is required."
+      );
       return;
     }
 
-    if (!formData.price || Number(formData.price) <= 0) {
-      setError("Please enter a valid price.");
+    if (
+      !formData.price ||
+      Number(formData.price) <= 0
+    ) {
+      setError(
+        "Please enter a valid price."
+      );
       return;
     }
 
     if (!formData.description.trim()) {
-      setError("Service description is required.");
+      setError(
+        "Service description is required."
+      );
       return;
     }
 
-    if (!formData.category.trim()) {
-      setError("Please enter a category.");
+    if (!formData.category) {
+      setError(
+        "Please select a category."
+      );
+      return;
+    }
+
+    if (!formData.subCategory) {
+      setError(
+        "Please select a subcategory."
+      );
       return;
     }
 
@@ -183,20 +348,52 @@ const ProviderServicesPage = () => {
 
       const data = new FormData();
 
-      data.append("name", formData.name.trim());
-      data.append("price", formData.price);
-      data.append("description", formData.description.trim());
-      data.append("category", formData.category.trim());
-      data.append("tag", formData.tag);
+      data.append(
+        "name",
+        formData.name.trim()
+      );
+
+      data.append(
+        "price",
+        formData.price
+      );
+
+      data.append(
+        "description",
+        formData.description.trim()
+      );
+
+      data.append(
+        "category",
+        formData.category
+      );
+
+      data.append(
+        "subCategory",
+        formData.subCategory
+      );
+
+      data.append(
+        "tag",
+        formData.tag
+      );
 
       if (imageFile) {
-        data.append("image", imageFile);
+        data.append(
+          "image",
+          imageFile
+        );
       }
 
       if (editingService) {
-        await updateService(editingService._id, data);
+        await updateService(
+          editingService._id,
+          data
+        );
 
-        alert("Service updated successfully.");
+        alert(
+          "Service updated successfully."
+        );
       } else {
         await addService(data);
 
@@ -206,10 +403,13 @@ const ProviderServicesPage = () => {
       }
 
       resetForm();
-      await loadServices();
 
+      await loadServices();
     } catch (err) {
-      console.error("Save service error:", err);
+      console.error(
+        "Save service error:",
+        err
+      );
 
       setError(
         err.response?.data?.message ||
@@ -224,7 +424,9 @@ const ProviderServicesPage = () => {
   // Delete service
   // ---------------------------------------
 
-  const handleDelete = async (serviceId) => {
+  const handleDelete = async (
+    serviceId
+  ) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this service?"
     );
@@ -236,12 +438,16 @@ const ProviderServicesPage = () => {
     try {
       await deleteService(serviceId);
 
-      alert("Service deleted successfully.");
+      alert(
+        "Service deleted successfully."
+      );
 
       await loadServices();
-
     } catch (err) {
-      console.error("Delete service error:", err);
+      console.error(
+        "Delete service error:",
+        err
+      );
 
       alert(
         err.response?.data?.message ||
@@ -254,7 +460,9 @@ const ProviderServicesPage = () => {
   // Resubmit service
   // ---------------------------------------
 
-  const handleResubmit = async (serviceId) => {
+  const handleResubmit = async (
+    serviceId
+  ) => {
     const confirmed = window.confirm(
       "Resubmit this service for admin review?"
     );
@@ -271,9 +479,11 @@ const ProviderServicesPage = () => {
       );
 
       await loadServices();
-
     } catch (err) {
-      console.error("Resubmit service error:", err);
+      console.error(
+        "Resubmit service error:",
+        err
+      );
 
       alert(
         err.response?.data?.message ||
@@ -333,7 +543,8 @@ const ProviderServicesPage = () => {
           <h1>My Services</h1>
 
           <p>
-            Manage your services and track their approval status.
+            Manage your services and track
+            their approval status.
           </p>
         </div>
 
@@ -446,69 +657,137 @@ const ProviderServicesPage = () => {
                 Category
               </label>
 
-              <input
-                type="text"
+              <select
                 name="category"
-                value={formData.category}
-                onChange={handleChange}
-                placeholder="Example: Electrical"
+                value={
+                  categories.find(
+                    (category) =>
+                      category.name ===
+                      formData.category
+                  )?._id || ""
+                }
+                onChange={
+                  handleCategoryChange
+                }
                 required
-              />
+              >
+
+                <option value="">
+                  Select Category
+                </option>
+
+                {categories.map(
+                  (category) => (
+                    <option
+                      key={category._id}
+                      value={category._id}
+                    >
+                      {category.name}
+                    </option>
+                  )
+                )}
+
+              </select>
 
             </div>
-{/* Tag */}
 
-<div className="form-group">
+            {/* Subcategory */}
 
-  <label>
-    Service Tag
-  </label>
+            <div className="form-group">
 
-  <select
-    name="tag"
-    value={formData.tag}
-    onChange={handleChange}
-  >
+              <label>
+                Subcategory
+              </label>
 
-    <option value="">
-      No Tag
-    </option>
+              <select
+                name="subCategory"
+                value={formData.subCategory}
+                onChange={handleChange}
+                disabled={
+                  !formData.category ||
+                  subCategoryLoading
+                }
+                required
+              >
 
-    <option value="New">
-      New
-    </option>
+                <option value="">
+                  {subCategoryLoading
+                    ? "Loading subcategories..."
+                    : !formData.category
+                    ? "Select category first"
+                    : subCategories.length === 0
+                    ? "No subcategories available"
+                    : "Select Subcategory"}
+                </option>
 
-    <option value="Popular">
-      Popular
-    </option>
+                {subCategories.map(
+                  (subCategory) => (
+                    <option
+                      key={subCategory._id}
+                      value={subCategory.name}
+                    >
+                      {subCategory.name}
+                    </option>
+                  )
+                )}
 
-    <option value="Featured">
-      Featured
-    </option>
+              </select>
 
-    <option value="Recommended">
-      Recommended
-    </option>
+            </div>
 
-    <option value="Best Value">
-      Best Value
-    </option>
+            {/* Tag */}
 
-    <option value="Top Rated">
-      Top Rated
-    </option>
+            <div className="form-group">
 
-    <option value="Limited Offer">
-      Limited Offer
-    </option>
+              <label>
+                Service Tag
+              </label>
 
-    <option value="Offer">
-      Offer
-    </option>
+              <select
+                name="tag"
+                value={formData.tag}
+                onChange={handleChange}
+              >
 
-  </select>
+                <option value="">
+                  No Tag
+                </option>
 
-</div>
+                <option value="New">
+                  New
+                </option>
+
+                <option value="Popular">
+                  Popular
+                </option>
+
+                <option value="Featured">
+                  Featured
+                </option>
+
+                <option value="Recommended">
+                  Recommended
+                </option>
+
+                <option value="Best Value">
+                  Best Value
+                </option>
+
+                <option value="Top Rated">
+                  Top Rated
+                </option>
+
+                <option value="Limited Offer">
+                  Limited Offer
+                </option>
+
+                <option value="Offer">
+                  Offer
+                </option>
+
+              </select>
+
+            </div>
 
             {/* Image */}
 
@@ -524,12 +803,14 @@ const ProviderServicesPage = () => {
                 onChange={handleImageChange}
               />
 
-              {editingService?.image && !imageFile && (
-                <p>
-                  Existing image will be kept unless you select
-                  a new one.
-                </p>
-              )}
+              {editingService?.image &&
+                !imageFile && (
+                  <p>
+                    Existing image will be
+                    kept unless you select a
+                    new one.
+                  </p>
+                )}
 
             </div>
 
@@ -573,10 +854,13 @@ const ProviderServicesPage = () => {
 
           <div className="empty-state">
 
-            <h2>No Services Yet</h2>
+            <h2>
+              No Services Yet
+            </h2>
 
             <p>
-              Add your first service to start receiving bookings.
+              Add your first service to start
+              receiving bookings.
             </p>
 
             <button
@@ -620,6 +904,9 @@ const ProviderServicesPage = () => {
 
                     <p className="service-category">
                       {service.category}
+
+                      {service.subCategory &&
+                        ` • ${service.subCategory}`}
                     </p>
 
                   </div>
@@ -629,7 +916,8 @@ const ProviderServicesPage = () => {
                       service.status
                     )}`}
                   >
-                    {service.status || "pending"}
+                    {service.status ||
+                      "pending"}
                   </span>
 
                 </div>
@@ -644,17 +932,21 @@ const ProviderServicesPage = () => {
 
                 {/* Admin comment */}
 
-                {service.status === "changes_requested" &&
+                {service.status ===
+                  "changes_requested" &&
                   service.adminComment && (
 
                     <div className="admin-feedback changes-feedback">
 
                       <strong>
-                        Admin requested changes:
+                        Admin requested
+                        changes:
                       </strong>
 
                       <p>
-                        {service.adminComment}
+                        {
+                          service.adminComment
+                        }
                       </p>
 
                     </div>
@@ -662,7 +954,8 @@ const ProviderServicesPage = () => {
 
                 {/* Rejection reason */}
 
-                {service.status === "rejected" &&
+                {service.status ===
+                  "rejected" &&
                   service.rejectionReason && (
 
                     <div className="admin-feedback rejection-feedback">
@@ -672,7 +965,9 @@ const ProviderServicesPage = () => {
                       </strong>
 
                       <p>
-                        {service.rejectionReason}
+                        {
+                          service.rejectionReason
+                        }
                       </p>
 
                     </div>
@@ -680,57 +975,62 @@ const ProviderServicesPage = () => {
 
                 {/* Pending message */}
 
-                {service.status === "pending" && (
+                {service.status ===
+                  "pending" && (
 
-                  <div className="service-info">
-
-                    ⏳ Your service is waiting for
-                    admin approval.
-
-                  </div>
-                )}
+                    <div className="service-info">
+                      ⏳ Your service is waiting
+                      for admin approval.
+                    </div>
+                  )}
 
                 {/* Approved message */}
 
-                {service.status === "approved" && (
+                {service.status ===
+                  "approved" && (
 
-                  <div className="service-info">
+                    <div className="service-info">
+                      ✓ Your service has been
+                      approved and is available
+                      to customers.
+                    </div>
+                  )}
 
-                    ✓ Your service has been approved
-                    and is available to customers.
+                {/* Rejected message */}
 
-                  </div>
-                )}
-                {/* REJECTED MESSAGE */}
+                {service.status ===
+                  "rejected" && (
 
-                {service.status === "rejected" && (
-                  
                     <div className="service-rejected-message">
 
-                        <strong>
-                            Service Rejected
-                        </strong>
+                      <strong>
+                        Service Rejected
+                      </strong>
 
-                    <p>
-                {service.adminComment ||
-                       "No rejection reason provided."}
-                    </p>
+                      <p>
+                        {service.adminComment ||
+                          "No rejection reason provided."}
+                      </p>
 
-              </div>
-             )}
+                    </div>
+                  )}
+
                 {/* Actions */}
 
                 <div className="service-actions">
 
                   {/* Changes requested */}
 
-                  {service.status === "changes_requested" && (
+                  {service.status ===
+                    "changes_requested" && (
                     <>
                       <button
                         type="button"
                         className="btn-primary"
                         onClick={() =>
-                          handleEditClick(service)
+                          handleEditClick(
+                            service
+                          )
                         }
                       >
                         Edit
@@ -740,7 +1040,9 @@ const ProviderServicesPage = () => {
                         type="button"
                         className="btn-success"
                         onClick={() =>
-                          handleResubmit(service._id)
+                          handleResubmit(
+                            service._id
+                          )
                         }
                       >
                         Resubmit
@@ -750,14 +1052,18 @@ const ProviderServicesPage = () => {
 
                   {/* Edit */}
 
-                  {service.status !== "changes_requested" &&
-                    service.status !== "rejected" && (
+                  {service.status !==
+                    "changes_requested" &&
+                    service.status !==
+                      "rejected" && (
 
                       <button
                         type="button"
                         className="btn-secondary"
                         onClick={() =>
-                          handleEditClick(service)
+                          handleEditClick(
+                            service
+                          )
                         }
                       >
                         Edit
@@ -770,7 +1076,9 @@ const ProviderServicesPage = () => {
                     type="button"
                     className="btn-danger"
                     onClick={() =>
-                      handleDelete(service._id)
+                      handleDelete(
+                        service._id
+                      )
                     }
                   >
                     Delete
