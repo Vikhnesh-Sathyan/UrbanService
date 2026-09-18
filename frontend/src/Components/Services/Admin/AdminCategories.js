@@ -8,17 +8,19 @@ import {
   deleteSubCategory,
 } from "../../../Services/serviceService";
 
+import "../../../styles/AdminCategories.css";
+
 const AdminCategories = () => {
   const [categories, setCategories] = useState([]);
 
-  const [categoryName, setCategoryName] =
-    useState("");
+  const [categoryName, setCategoryName] = useState("");
 
   const [subCategoryNames, setSubCategoryNames] =
     useState({});
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -62,6 +64,7 @@ const AdminCategories = () => {
 
     if (!categoryName.trim()) {
       setError("Category name is required.");
+      setSuccess("");
       return;
     }
 
@@ -122,6 +125,7 @@ const AdminCategories = () => {
       setError(
         "Subcategory name is required."
       );
+      setSuccess("");
       return;
     }
 
@@ -160,10 +164,105 @@ const AdminCategories = () => {
     }
   };
 
+  // ==========================================
+  // DELETE CATEGORY
+  // ==========================================
+
+  const handleDeleteCategory = async (
+    categoryId,
+    categoryName
+  ) => {
+    const confirmed = window.confirm(
+      `Delete category "${categoryName}"?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      setError("");
+      setSuccess("");
+
+      await deleteCategory(categoryId);
+
+      setSuccess(
+        "Category deleted successfully."
+      );
+
+      await loadCategories();
+    } catch (error) {
+      console.error(
+        "Delete category error:",
+        error
+      );
+
+      setError(
+        error.response?.data?.message ||
+          "Failed to delete category"
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // ==========================================
+  // DELETE SUBCATEGORY
+  // ==========================================
+
+  const handleDeleteSubCategory = async (
+    categoryId,
+    subCategoryId,
+    subCategoryName
+  ) => {
+    const confirmed = window.confirm(
+      `Delete subcategory "${subCategoryName}"?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      setError("");
+      setSuccess("");
+
+      await deleteSubCategory(
+        categoryId,
+        subCategoryId
+      );
+
+      setSuccess(
+        "Subcategory deleted successfully."
+      );
+
+      await loadCategories();
+    } catch (error) {
+      console.error(
+        "Delete subcategory error:",
+        error
+      );
+
+      setError(
+        error.response?.data?.message ||
+          "Failed to delete subcategory"
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="admin-categories-page">
 
+      {/* ========================================
+          HEADER
+      ======================================== */}
+
       <div className="admin-categories-header">
+
         <div>
           <span className="admin-page-label">
             SERVICE MANAGEMENT
@@ -172,10 +271,21 @@ const AdminCategories = () => {
           <h1>Categories</h1>
 
           <p>
-            Manage the categories and subcategories
+            Manage categories and subcategories
             available to service providers.
           </p>
         </div>
+
+        <div className="admin-category-summary">
+          <span className="summary-label">
+            TOTAL CATEGORIES
+          </span>
+
+          <strong>
+            {categories.length}
+          </strong>
+        </div>
+
       </div>
 
       {/* ========================================
@@ -183,13 +293,15 @@ const AdminCategories = () => {
       ======================================== */}
 
       {error && (
-        <div className="admin-category-error">
+        <div className="admin-category-message error">
+          <span>!</span>
           {error}
         </div>
       )}
 
       {success && (
-        <div className="admin-category-success">
+        <div className="admin-category-message success">
+          <span>✓</span>
           {success}
         </div>
       )}
@@ -200,35 +312,58 @@ const AdminCategories = () => {
 
       <section className="admin-category-create-card">
 
-        <div>
-          <h2>Create Category</h2>
+        <div className="admin-create-heading">
 
-          <p>
-            Add a new service category.
-          </p>
+          <div className="admin-create-icon">
+            +
+          </div>
+
+          <div>
+            <h2>Create Category</h2>
+
+            <p>
+              Add a main service category for
+              providers to use.
+            </p>
+          </div>
+
         </div>
 
         <form
           onSubmit={handleCreateCategory}
           className="admin-category-form"
         >
-          <input
-            type="text"
-            placeholder="Example: Home Services"
-            value={categoryName}
-            onChange={(event) =>
-              setCategoryName(event.target.value)
-            }
-          />
+
+          <div className="admin-input-wrapper">
+
+            <label htmlFor="categoryName">
+              Category name
+            </label>
+
+            <input
+              id="categoryName"
+              type="text"
+              placeholder="Example: Home Services"
+              value={categoryName}
+              onChange={(event) =>
+                setCategoryName(
+                  event.target.value
+                )
+              }
+            />
+
+          </div>
 
           <button
             type="submit"
+            className="admin-primary-button"
             disabled={submitting}
           >
             {submitting
               ? "Creating..."
               : "Create Category"}
           </button>
+
         </form>
 
       </section>
@@ -240,109 +375,233 @@ const AdminCategories = () => {
       <section className="admin-category-list">
 
         <div className="admin-category-list-header">
-          <div>
-            <h2>Categories</h2>
 
-            <span>
-              {categories.length} categories
+          <div>
+            <span className="admin-section-label">
+              CATEGORY LIBRARY
             </span>
+
+            <h2>
+              Categories & Subcategories
+            </h2>
+
+            <p>
+              These options will be available
+              to service providers.
+            </p>
           </div>
+
+          <div className="admin-category-count">
+            {categories.length}{" "}
+            {categories.length === 1
+              ? "Category"
+              : "Categories"}
+          </div>
+
         </div>
 
         {loading ? (
           <div className="admin-category-empty">
-            Loading categories...
+            <div className="admin-loading-spinner"></div>
+
+            <span>
+              Loading categories...
+            </span>
           </div>
         ) : categories.length === 0 ? (
           <div className="admin-category-empty">
-            No categories created yet.
+
+            <div className="admin-empty-icon">
+              +
+            </div>
+
+            <h3>
+              No categories yet
+            </h3>
+
+            <p>
+              Create your first category above
+              to get started.
+            </p>
+
           </div>
         ) : (
           <div className="admin-category-grid">
 
-            {categories.map((category) => (
-              <div
-                className="admin-category-card"
-                key={category._id}
-              >
+            {categories.map((category) => {
 
-                <div className="admin-category-card-top">
+              const activeSubCategories =
+                category.subCategories?.filter(
+                  (subCategory) =>
+                    subCategory.isActive
+                ) || [];
 
-                  <div>
-                    <h3>
-                      {category.name}
-                    </h3>
+              return (
+                <div
+                  className="admin-category-card"
+                  key={category._id}
+                >
 
-                    <span>
-                      {
-                        category.subCategories
-                          ?.filter(
-                            (subCategory) =>
-                              subCategory.isActive
-                          ).length || 0
-                      }{" "}
-                      subcategories
-                    </span>
+                  {/* CATEGORY HEADER */}
+
+                  <div className="admin-category-card-header">
+
+                    <div className="admin-category-main-info">
+
+                      <div className="admin-category-icon">
+                        {category.name
+                          .charAt(0)
+                          .toUpperCase()}
+                      </div>
+
+                      <div>
+                        <h3>
+                          {category.name}
+                        </h3>
+
+                        <span>
+                          {activeSubCategories.length}{" "}
+                          {activeSubCategories.length === 1
+                            ? "subcategory"
+                            : "subcategories"}
+                        </span>
+                      </div>
+
+                    </div>
+
+                    <button
+                      type="button"
+                      className="admin-delete-button"
+                      disabled={submitting}
+                      onClick={() =>
+                        handleDeleteCategory(
+                          category._id,
+                          category.name
+                        )
+                      }
+                    >
+                      Delete
+                    </button>
+
+                  </div>
+
+                  {/* DIVIDER */}
+
+                  <div className="admin-category-divider"></div>
+
+                  {/* SUBCATEGORIES */}
+
+                  <div className="admin-subcategory-section">
+
+                    <div className="admin-subcategory-heading">
+                      <span>
+                        SUBCATEGORIES
+                      </span>
+
+                      <small>
+                        {activeSubCategories.length}
+                      </small>
+                    </div>
+
+                    {activeSubCategories.length >
+                    0 ? (
+                      <div className="admin-subcategory-list">
+
+                        {activeSubCategories.map(
+                          (subCategory) => (
+                            <div
+                              key={
+                                subCategory._id
+                              }
+                              className="admin-subcategory-chip"
+                            >
+
+                              <span className="subcategory-status-dot"></span>
+
+                              <span className="subcategory-name">
+                                {
+                                  subCategory.name
+                                }
+                              </span>
+
+                              <button
+                                type="button"
+                                className="admin-subcategory-delete"
+                                disabled={
+                                  submitting
+                                }
+                                onClick={() =>
+                                  handleDeleteSubCategory(
+                                    category._id,
+                                    subCategory._id,
+                                    subCategory.name
+                                  )
+                                }
+                                aria-label={`Delete ${subCategory.name}`}
+                              >
+                                ×
+                              </button>
+
+                            </div>
+                          )
+                        )}
+
+                      </div>
+                    ) : (
+                      <div className="admin-no-subcategories">
+                        No subcategories added yet.
+                      </div>
+                    )}
+
+                  </div>
+
+                  {/* ADD SUBCATEGORY */}
+
+                  <div className="admin-add-subcategory">
+
+                    <div className="admin-input-wrapper">
+
+                      <label>
+                        Add subcategory
+                      </label>
+
+                      <input
+                        type="text"
+                        placeholder="Example: Deep Cleaning"
+                        value={
+                          subCategoryNames[
+                            category._id
+                          ] || ""
+                        }
+                        onChange={(event) =>
+                          handleSubCategoryChange(
+                            category._id,
+                            event.target.value
+                          )
+                        }
+                      />
+
+                    </div>
+
+                    <button
+                      type="button"
+                      className="admin-add-button"
+                      disabled={submitting}
+                      onClick={() =>
+                        handleAddSubCategory(
+                          category._id
+                        )
+                      }
+                    >
+                      <span>+</span>
+                      Add
+                    </button>
+
                   </div>
 
                 </div>
-
-                {/* SUBCATEGORIES */}
-
-                <div className="admin-subcategory-list">
-
-                  {category.subCategories
-                    ?.filter(
-                      (subCategory) =>
-                        subCategory.isActive
-                    )
-                    .map((subCategory) => (
-                      <span
-                        key={subCategory._id}
-                        className="admin-subcategory-chip"
-                      >
-                        {subCategory.name}
-                      </span>
-                    ))}
-
-                </div>
-
-                {/* ADD SUBCATEGORY */}
-
-                <div className="admin-subcategory-form">
-
-                  <input
-                    type="text"
-                    placeholder="Add subcategory"
-                    value={
-                      subCategoryNames[
-                        category._id
-                      ] || ""
-                    }
-                    onChange={(event) =>
-                      handleSubCategoryChange(
-                        category._id,
-                        event.target.value
-                      )
-                    }
-                  />
-
-                  <button
-                    type="button"
-                    disabled={submitting}
-                    onClick={() =>
-                      handleAddSubCategory(
-                        category._id
-                      )
-                    }
-                  >
-                    Add
-                  </button>
-
-                </div>
-
-              </div>
-            ))}
+              );
+            })}
 
           </div>
         )}
