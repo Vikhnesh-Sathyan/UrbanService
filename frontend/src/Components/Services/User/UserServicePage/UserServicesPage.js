@@ -226,6 +226,41 @@ const UserServicesPage = () => {
   };
 
   // ==========================================
+// CHANGE CATEGORY FROM FILTER
+// ==========================================
+
+const handleFilterCategoryChange = (value) => {
+  const categoryItem = categories.find(
+    (item) => item.name === value
+  );
+
+  if (!categoryItem) {
+    return;
+  }
+
+  // Change the actual selected category
+  setSelectedCategory(categoryItem);
+
+  // Clear previous subcategory
+  setSelectedSubCategory(null);
+
+  // Clear old subcategories
+  setSubCategories([]);
+
+  // Clear old services
+  setServices([]);
+
+  // Update filter value
+  setCategory(value);
+
+  // Reset page
+  setPage(1);
+
+  // Load subcategories for new category
+  loadSubCategories(categoryItem._id);
+};
+
+  // ==========================================
   // SELECT SUBCATEGORY
   // ==========================================
 
@@ -913,8 +948,7 @@ const UserServicesPage = () => {
               (categoryItem) => categoryItem.name
             )}
             setCategory={(value) => {
-              setCategory(value);
-              setPage(1);
+              handleFilterCategoryChange(value);
             }}
             provider={provider}
             providers={providers}
