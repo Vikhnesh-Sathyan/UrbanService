@@ -1,5 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import { FaBell } from "react-icons/fa";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+import { useNavigate } from "react-router-dom";import { FaBell } from "react-icons/fa";
 
 import NotificationList from "./NotificationList";
 
@@ -17,6 +22,9 @@ import {
 import "../../styles/Notification.css";
 
 const NotificationBell = () => {
+
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
 
@@ -131,6 +139,25 @@ const NotificationBell = () => {
     }
   };
 
+  // ==========================================
+// HANDLE NOTIFICATION CLICK
+// ==========================================
+
+const handleNotificationClick = (
+  notification
+) => {
+  // Close notification dropdown
+  setIsOpen(false);
+
+  // Emergency booking notification
+  if (
+    notification.message?.includes(
+      "Emergency request"
+    )
+  ) {
+    navigate("/provider/bookings");
+  }
+};
 
   // ==========================================
   // CLOSE WHEN CLICKING OUTSIDE
@@ -199,14 +226,17 @@ const NotificationBell = () => {
       {isOpen && (
         <div className="notification-dropdown">
 
-          <NotificationList
-            notifications={notifications}
-            unreadCount={unreadCount}
-            onMarkAsRead={handleMarkAsRead}
-            onMarkAllAsRead={
-              handleMarkAllAsRead
-            }
-          />
+      <NotificationList
+  notifications={notifications}
+  unreadCount={unreadCount}
+  onMarkAsRead={handleMarkAsRead}
+  onMarkAllAsRead={
+    handleMarkAllAsRead
+  }
+  onNotificationClick={
+    handleNotificationClick
+  }
+/>  
 
         </div>
       )}

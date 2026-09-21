@@ -1017,15 +1017,35 @@ const createEmergencyBooking = async (req, res) => {
       status: "pending",
     });
 
-    await booking.save();
+ await booking.save();
 
-    // ===============================
-    // RESPONSE
-    // ===============================
-    res.status(201).json({
-      message: "Emergency booking created successfully",
-      booking,
-    });
+// ==========================================
+// PROVIDER EMERGENCY NOTIFICATION
+// ==========================================
+
+const notification = await Notification.create({
+  recipient: selectedProvider._id,
+  message: `🚨 Emergency request for ${selectedService.name}. A customer needs immediate service.`,
+  type: "booking",
+});
+
+// ==========================================
+// SEND REAL-TIME NOTIFICATION
+// ==========================================
+
+const io = req.app.get("io");
+
+if (io) {
+  io.to(`user_${selectedProvider._id}`).emit(
+    "newNotification",
+    notification
+  );
+}
+
+res.status(201).json({
+  message: "Emergency booking created successfully",
+  booking,
+});
   } catch (error) {
     console.error(
       "Create emergency booking error:",

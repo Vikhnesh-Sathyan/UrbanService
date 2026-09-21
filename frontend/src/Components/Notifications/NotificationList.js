@@ -7,6 +7,7 @@ const NotificationList = ({
   unreadCount,
   onMarkAsRead,
   onMarkAllAsRead,
+  onNotificationClick,
 }) => {
   return (
     <div className="notification-list">
@@ -28,7 +29,6 @@ const NotificationList = ({
             </span>
           )}
         </div>
-
 
         {/* Mark all as read */}
 
@@ -64,6 +64,9 @@ const NotificationList = ({
               key={notification._id}
               notification={notification}
               onMarkAsRead={onMarkAsRead}
+              onNotificationClick={
+                onNotificationClick
+              }
             />
 
           ))}

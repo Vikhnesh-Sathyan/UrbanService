@@ -482,3 +482,640 @@
   }
 
 }
+
+/* =========================================================
+   PREMIUM BOOKING TYPE SELECTION
+========================================================= */
+
+.user-book-type-section {
+  margin-bottom: 28px;
+}
+
+.user-book-type-header {
+  margin-bottom: 14px;
+}
+
+.user-book-section-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.user-book-type-header h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.user-book-type-header p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   BOOKING TYPE CARDS
+========================================================= */
+
+.user-book-type-selection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.user-book-type-button {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  min-height: 92px;
+  padding: 16px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  color: #0f172a;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.user-book-type-button:hover {
+  border-color: #cbd5e1;
+
+  box-shadow:
+    0 8px 20px rgba(15, 23, 42, 0.06);
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   TYPE ICON
+========================================================= */
+
+.user-book-type-icon {
+  flex-shrink: 0;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #f1f5f9;
+
+  font-size: 20px;
+}
+
+.user-book-type-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  flex: 1;
+}
+
+.user-book-type-content strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.user-book-type-content small {
+  color: #64748b;
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   CHECK
+========================================================= */
+
+.user-book-type-check {
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+
+  color: transparent;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  transition: all 0.2s ease;
+}
+
+
+/* =========================================================
+   NORMAL ACTIVE
+========================================================= */
+
+.user-book-type-button.active:not(.emergency) {
+  border-color: #2563eb;
+
+  background: #f8fbff;
+
+  box-shadow:
+    0 8px 24px rgba(37, 99, 235, 0.10);
+}
+
+.user-book-type-button.active:not(.emergency)
+.user-book-type-icon {
+  background: #dbeafe;
+}
+
+.user-book-type-button.active:not(.emergency)
+.user-book-type-check {
+  border-color: #2563eb;
+
+  background: #2563eb;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   EMERGENCY TYPE
+========================================================= */
+
+.user-book-type-button.emergency:hover {
+  border-color: #fca5a5;
+}
+
+.user-book-type-button.emergency.active {
+  border-color: #dc2626;
+
+  background: #fffafa;
+
+  box-shadow:
+    0 8px 24px rgba(220, 38, 38, 0.10);
+}
+
+.user-book-type-button.emergency.active
+.user-book-type-icon {
+  background: #fee2e2;
+}
+
+.user-book-type-button.emergency.active
+.user-book-type-check {
+  border-color: #dc2626;
+
+  background: #dc2626;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   EMERGENCY FORM MODE
+========================================================= */
+
+.user-book-form-card.emergency-mode {
+  border-color: #fecaca;
+
+  box-shadow:
+    0 18px 45px rgba(127, 29, 29, 0.08);
+}
+
+
+/* =========================================================
+   EMERGENCY HEADER
+========================================================= */
+
+.user-book-emergency-info {
+  margin-bottom: 24px;
+
+  padding: 20px;
+
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffafa 0%,
+      #fff7ed 100%
+    );
+}
+
+.user-book-emergency-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-book-emergency-icon {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #fee2e2;
+
+  font-size: 21px;
+}
+
+.user-book-emergency-heading span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #b91c1c;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.user-book-emergency-heading h3 {
+  margin: 0;
+
+  color: #7f1d1d;
+
+  font-size: 18px;
+}
+
+.user-book-emergency-description {
+  margin: 14px 0 16px;
+
+  color: #64748b;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   FIND LOCATION BUTTON
+========================================================= */
+
+.user-book-emergency-location {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 12px 14px;
+
+  border: 1px solid #dc2626;
+  border-radius: 9px;
+
+  background: #dc2626;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.user-book-emergency-location:hover:not(:disabled) {
+  background: #b91c1c;
+
+  box-shadow:
+    0 8px 18px rgba(220, 38, 38, 0.20);
+
+  transform: translateY(-1px);
+}
+
+.user-book-emergency-location:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.user-book-location-arrow {
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   LOCATION SUCCESS
+========================================================= */
+
+.user-book-location-success {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 12px;
+  padding: 11px 12px;
+
+  border: 1px solid #bbf7d0;
+  border-radius: 9px;
+
+  background: #f0fdf4;
+}
+
+.user-book-location-success-icon {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #16a34a;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.user-book-location-success strong {
+  display: block;
+
+  color: #166534;
+
+  font-size: 13px;
+}
+
+.user-book-location-success small {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #64748b;
+
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   NEARBY PROVIDERS
+========================================================= */
+
+.user-book-nearby-providers {
+  margin-top: 18px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #fed7aa;
+}
+
+.user-book-nearby-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-book-nearby-header > div:first-child > span {
+  color: #c2410c;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.user-book-nearby-header h3 {
+  margin: 3px 0 0;
+
+  color: #0f172a;
+
+  font-size: 17px;
+}
+
+.user-book-provider-count {
+  min-width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #ffedd5;
+
+  color: #c2410c;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.user-book-nearby-subtitle {
+  margin: 5px 0 14px;
+
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+.user-book-nearby-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+
+/* =========================================================
+   PROVIDER ROW
+========================================================= */
+
+.user-book-nearby-provider {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 11px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.user-book-nearby-provider:hover {
+  border-color: #cbd5e1;
+}
+
+.user-book-nearby-provider.selected {
+  border-color: #dc2626;
+
+  background: #fffafa;
+
+  box-shadow:
+    0 5px 15px rgba(220, 38, 38, 0.08);
+}
+
+.user-book-provider-avatar {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  background: #f1f5f9;
+
+  color: #334155;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.user-book-nearby-provider-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-book-nearby-provider-info strong {
+  display: block;
+
+  color: #0f172a;
+
+  font-size: 13px;
+}
+
+.user-book-nearby-provider-info span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #64748b;
+
+  font-size: 11px;
+}
+
+.user-book-provider-select {
+  flex-shrink: 0;
+
+  padding: 8px 11px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #334155;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.user-book-nearby-provider.selected
+.user-book-provider-select {
+  border-color: #dc2626;
+
+  background: #dc2626;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.user-book-submit {
+  width: 100%;
+
+  min-height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #0f172a;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.user-book-submit:hover:not(:disabled) {
+  background: #020617;
+
+  box-shadow:
+    0 10px 24px rgba(15, 23, 42, 0.18);
+
+  transform: translateY(-1px);
+}
+
+.user-book-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   EMERGENCY SUBMIT
+========================================================= */
+
+.user-book-submit.emergency-submit {
+  background: #dc2626;
+
+  box-shadow:
+    0 8px 20px rgba(220, 38, 38, 0.16);
+}
+
+.user-book-submit.emergency-submit:hover:not(:disabled) {
+  background: #b91c1c;
+
+  box-shadow:
+    0 12px 26px rgba(220, 38, 38, 0.24);
+}

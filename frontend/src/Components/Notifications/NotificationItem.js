@@ -4,10 +4,15 @@ import { FaBell, FaCheck } from "react-icons/fa";
 const NotificationItem = ({
   notification,
   onMarkAsRead,
+  onNotificationClick,
 }) => {
   const handleClick = () => {
     if (!notification.isRead) {
       onMarkAsRead(notification._id);
+    }
+
+    if (onNotificationClick) {
+      onNotificationClick(notification);
     }
   };
 

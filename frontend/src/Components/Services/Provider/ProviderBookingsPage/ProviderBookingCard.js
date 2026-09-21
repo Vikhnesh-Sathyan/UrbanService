@@ -16,6 +16,9 @@ const ProviderBookingCard = ({
 
   const watchIdRef = useRef(null);
 
+  const isEmergency =
+    booking.bookingType === "emergency";
+
 
   // ==========================================
   // START LOCATION TRACKING
@@ -40,7 +43,6 @@ const ProviderBookingCard = ({
       "Provider location tracking started"
     );
 
-
     // Start watching provider location
     watchIdRef.current =
       navigator.geolocation.watchPosition(
@@ -51,13 +53,11 @@ const ProviderBookingCard = ({
           const longitude =
             position.coords.longitude;
 
-
           console.log(
             "Provider GPS:",
             latitude,
             longitude
           );
-
 
           try {
             await updateProviderLocation(
@@ -66,23 +66,18 @@ const ProviderBookingCard = ({
               longitude
             );
 
-
             console.log(
               "Provider location updated:",
               latitude,
               longitude
             );
-
           } catch (error) {
-
             console.error(
               "Failed to update provider location:",
               error
             );
-
           }
         },
-
 
         // ======================================
         // GPS ERROR
@@ -94,7 +89,6 @@ const ProviderBookingCard = ({
             error
           );
         },
-
 
         // ======================================
         // GPS OPTIONS
@@ -114,15 +108,12 @@ const ProviderBookingCard = ({
   // ==========================================
 
   const stopLocationTracking = () => {
-
     if (watchIdRef.current !== null) {
-
       navigator.geolocation.clearWatch(
         watchIdRef.current
       );
 
       watchIdRef.current = null;
-
 
       console.log(
         "Provider location tracking stopped"
@@ -136,23 +127,16 @@ const ProviderBookingCard = ({
   // ==========================================
 
   useEffect(() => {
-
     if (booking.status === "in_progress") {
-
       startLocationTracking();
-
     } else {
-
       stopLocationTracking();
-
     }
-
 
     // Cleanup when component is removed
     return () => {
       stopLocationTracking();
     };
-
   }, [booking.status, booking._id]);
 
 
@@ -161,9 +145,7 @@ const ProviderBookingCard = ({
   // ==========================================
 
   const getStatusClass = (status) => {
-
     switch (status) {
-
       case "pending":
         return "provider-status-pending";
 
@@ -189,8 +171,24 @@ const ProviderBookingCard = ({
 
 
   return (
+    <div
+      className={`booking-card ${
+        isEmergency
+          ? "provider-booking-card-emergency"
+          : ""
+      }`}
+    >
 
-    <div className="booking-card">
+      {/* =====================================
+          EMERGENCY BADGE
+      ===================================== */}
+
+      {isEmergency && (
+        <div className="provider-emergency-badge">
+          🚨 EMERGENCY REQUEST
+        </div>
+      )}
+
 
       {/* =====================================
           SERVICE
@@ -199,6 +197,23 @@ const ProviderBookingCard = ({
       <h3>
         {booking.service?.name || "Service"}
       </h3>
+
+
+      {/* =====================================
+          EMERGENCY MESSAGE
+      ===================================== */}
+
+      {isEmergency && (
+        <div className="provider-emergency-info">
+          <strong>
+            ⚡ Immediate service requested
+          </strong>
+
+          <span>
+            Customer needs this service as soon as possible.
+          </span>
+        </div>
+      )}
 
 
       {/* =====================================
@@ -232,23 +247,34 @@ const ProviderBookingCard = ({
 
 
       {/* =====================================
-          DATE
+          DATE / TIME
       ===================================== */}
 
-      <p>
-        Date:{" "}
-        {booking.date || "-"}
-      </p>
+      {isEmergency ? (
+        <div className="provider-emergency-request-time">
+          <p>
+            <strong>Requested:</strong>{" "}
+            {booking.date || "-"} at{" "}
+            {booking.time || "-"}
+          </p>
 
+          <small>
+            Emergency request was created immediately.
+          </small>
+        </div>
+      ) : (
+        <>
+          <p>
+            Date:{" "}
+            {booking.date || "-"}
+          </p>
 
-      {/* =====================================
-          TIME
-      ===================================== */}
-
-      <p>
-        Time:{" "}
-        {booking.time || "-"}
-      </p>
+          <p>
+            Time:{" "}
+            {booking.time || "-"}
+          </p>
+        </>
+      )}
 
 
       {/* =====================================
@@ -266,7 +292,6 @@ const ProviderBookingCard = ({
       ===================================== */}
 
       <p className="provider-status-row">
-
         Status:{" "}
 
         <span
@@ -276,7 +301,6 @@ const ProviderBookingCard = ({
         >
           {booking.status || "pending"}
         </span>
-
       </p>
 
 
@@ -285,13 +309,43 @@ const ProviderBookingCard = ({
       ===================================== */}
 
       {booking.notes && (
-
         <p>
           Notes:{" "}
           {booking.notes}
         </p>
-
       )}
+
+      {/* =====================================
+    EMERGENCY CUSTOMER LOCATION
+===================================== */}
+
+{isEmergency &&
+  booking.customerLocation?.latitude !== null &&
+  booking.customerLocation?.longitude !== null && (
+    <div className="provider-emergency-location">
+      <strong>📍 Customer Location Available</strong>
+
+      <p>
+        Customer location was captured when the
+        emergency request was created.
+      </p>
+
+      <button
+        type="button"
+        onClick={() => {
+          const { latitude, longitude } =
+            booking.customerLocation;
+
+          window.open(
+            `https://www.google.com/maps?q=${latitude},${longitude}`,
+            "_blank"
+          );
+        }}
+      >
+        Open Customer Location
+      </button>
+    </div>
+  )}
 
 
       {/* =====================================
@@ -300,36 +354,26 @@ const ProviderBookingCard = ({
 
       {booking.status === "completed" &&
         booking.rating && (
+          <div className="provider-customer-review">
 
-        <div className="provider-customer-review">
+            <h4>
+              Customer Review
+            </h4>
 
-          <h4>
-            Customer Review
-          </h4>
-
-
-          <p className="provider-rating">
-
-            {"⭐".repeat(
-              booking.rating
-            )}
-
-          </p>
-
-
-          {booking.review && (
-
-            <p className="provider-review-text">
-
-              "{booking.review}"
-
+            <p className="provider-rating">
+              {"⭐".repeat(
+                booking.rating
+              )}
             </p>
 
-          )}
+            {booking.review && (
+              <p className="provider-review-text">
+                "{booking.review}"
+              </p>
+            )}
 
-        </div>
-
-      )}
+          </div>
+        )}
 
 
       {/* =====================================
@@ -337,16 +381,22 @@ const ProviderBookingCard = ({
       ===================================== */}
 
       {booking.status === "pending" && (
-
         <div className="provider-booking-actions">
 
           <button
             type="button"
+            className={
+              isEmergency
+                ? "provider-emergency-accept"
+                : ""
+            }
             onClick={() =>
               onAccept(booking._id)
             }
           >
-            Accept
+            {isEmergency
+              ? "Accept Emergency"
+              : "Accept"}
           </button>
 
 
@@ -360,7 +410,6 @@ const ProviderBookingCard = ({
           </button>
 
         </div>
-
       )}
 
 
@@ -369,7 +418,6 @@ const ProviderBookingCard = ({
       ===================================== */}
 
       {booking.status === "accepted" && (
-
         <div className="provider-booking-actions">
 
           <button
@@ -385,7 +433,6 @@ const ProviderBookingCard = ({
           </button>
 
         </div>
-
       )}
 
 
@@ -394,7 +441,6 @@ const ProviderBookingCard = ({
       ===================================== */}
 
       {booking.status === "in_progress" && (
-
         <div className="provider-booking-actions">
 
           <button
@@ -410,7 +456,6 @@ const ProviderBookingCard = ({
           </button>
 
         </div>
-
       )}
 
 
@@ -419,13 +464,9 @@ const ProviderBookingCard = ({
       ===================================== */}
 
       {booking.status === "completed" && (
-
         <div className="provider-completed-message">
-
           ✓ Service completed
-
         </div>
-
       )}
 
 
@@ -434,13 +475,9 @@ const ProviderBookingCard = ({
       ===================================== */}
 
       {booking.status === "rejected" && (
-
         <div className="provider-rejected-message">
-
           Booking rejected
-
         </div>
-
       )}
 
 
@@ -449,19 +486,13 @@ const ProviderBookingCard = ({
       ===================================== */}
 
       {booking.status === "cancelled" && (
-
         <div className="provider-cancelled-message">
-
           Booking cancelled
-
         </div>
-
       )}
 
     </div>
-
   );
 };
-
 
 export default ProviderBookingCard;
