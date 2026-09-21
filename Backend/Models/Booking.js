@@ -40,6 +40,25 @@ const bookingSchema = new mongoose.Schema(
       default: "",
     },
 
+    bookingType: {
+      type: String,
+      enum: ["normal", "emergency"],
+      default: "normal",
+    },
+
+    // Customer location for emergency bookings
+    customerLocation: {
+      latitude: {
+        type: Number,
+        default: null,
+      },
+
+      longitude: {
+        type: Number,
+        default: null,
+      },
+    },
+
     status: {
       type: String,
       enum: [
@@ -53,22 +72,23 @@ const bookingSchema = new mongoose.Schema(
       default: "pending",
     },
 
+    // Provider's live location after job starts
     tracking: {
-  latitude: {
-    type: Number,
-    default: null,
-  },
+      latitude: {
+        type: Number,
+        default: null,
+      },
 
-  longitude: {
-    type: Number,
-    default: null,
-  },
+      longitude: {
+        type: Number,
+        default: null,
+      },
 
-  updatedAt: {
-    type: Date,
-    default: null,
-  },
-},
+      updatedAt: {
+        type: Date,
+        default: null,
+      },
+    },
   },
   {
     timestamps: true,

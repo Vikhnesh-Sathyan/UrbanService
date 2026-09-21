@@ -72,6 +72,9 @@ const ProviderProfile = () => {
 
           state:
             user.location?.state || "",
+
+          coordinates:
+            user.location?.coordinates || [0, 0],
         },
 
         availability: {
@@ -166,6 +169,55 @@ const ProviderProfile = () => {
   };
 
   // ========================================
+// GET CURRENT LOCATION
+// ========================================
+
+const handleGetCurrentLocation = () => {
+  setError("");
+
+  if (!navigator.geolocation) {
+    setError(
+      "Location is not supported by your browser."
+    );
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const longitude =
+        position.coords.longitude;
+
+      const latitude =
+        position.coords.latitude;
+
+      setProfile((prev) => ({
+        ...prev,
+
+        location: {
+          ...prev.location,
+
+          coordinates: [
+            longitude,
+            latitude,
+          ],
+        },
+      }));
+    },
+
+    (error) => {
+      console.error(
+        "Location error:",
+        error
+      );
+
+      setError(
+        "Unable to get your current location. Please allow location access."
+      );
+    }
+  );
+};
+
+  // ========================================
   // SAVE PROFILE
   // ========================================
 
@@ -197,6 +249,9 @@ const ProviderProfile = () => {
 
           state:
             profile.location.state,
+
+          coordinates:
+            profile.location.coordinates,
         },
         {
           headers: {
@@ -218,6 +273,9 @@ const ProviderProfile = () => {
 
           state:
             updatedUser.location?.state || "",
+
+          coordinates:
+            updatedUser.location?.coordinates || [0, 0],
         },
 
         availability: {
@@ -720,6 +778,25 @@ const ProviderProfile = () => {
             />
 
           </div>
+
+          <div className="provider-location-action">
+
+  <button
+    type="button"
+    onClick={handleGetCurrentLocation}
+    disabled={!isEditing}
+  >
+    📍 Use My Current Location
+  </button>
+
+  {profile.location?.coordinates?.[0] !== 0 &&
+    profile.location?.coordinates?.[1] !== 0 && (
+      <span className="provider-location-success">
+        ✓ Location detected
+      </span>
+    )}
+
+</div>
 
         </div>
 

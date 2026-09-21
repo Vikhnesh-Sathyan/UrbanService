@@ -198,3 +198,37 @@ export const getAllBookings = async () => {
 
   return response.data;
 };
+
+// ==========================================
+// EMERGENCY SERVICE
+// ==========================================
+
+// Get nearby providers for emergency booking
+export const getNearbyEmergencyProviders = async (
+  latitude,
+  longitude,
+  service
+) => {
+  const response = await axios.post(
+    `${API}/emergency/nearby`,
+    {
+      latitude,
+      longitude,
+      service,
+    },
+    getAuthConfig()
+  );
+
+  return response.data;
+};
+
+// Create emergency booking
+export const createEmergencyBooking = async (bookingData) => {
+  const response = await axios.post(
+    `${API}/emergency`,
+    bookingData,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

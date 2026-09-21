@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { createBooking } from "../../../Services/bookingService";
+import {
+  createBooking,
+  createEmergencyBooking,
+  getNearbyEmergencyProviders,
+} from "../../../Services/bookingService";
 
 import "../../../styles/UserBookService.css";
 
@@ -21,6 +25,20 @@ const UserBookService = () => {
   const [notes, setNotes] = useState("");
 
   const [loading, setLoading] = useState(false);
+
+  // Booking type
+  const [bookingType, setBookingType] = useState("normal");
+
+  // Customer location for emergency booking
+  const [customerLocation, setCustomerLocation] = useState(null);
+
+  const [locationLoading, setLocationLoading] = useState(false);
+
+  // Nearby providers for emergency service
+  const [nearbyProviders, setNearbyProviders] = useState([]);
+
+  // Selected provider for emergency booking
+  const [selectedProvider, setSelectedProvider] = useState(null);
 
   // ==========================================
   // PROVIDER AVAILABILITY
@@ -127,98 +145,158 @@ const UserBookService = () => {
   };
 
   // ==========================================
+  // GET CUSTOMER CURRENT LOCATION
+  // ==========================================
+
+// ==========================================
+// GET CUSTOMER LOCATION + NEARBY PROVIDERS
+// ==========================================
+
+const handleGetLocation = () => {
+  // Check browser support
+  if (!navigator.geolocation) {
+    alert("Geolocation is not supported by your browser.");
+    return;
+  }
+
+  setLocationLoading(true);
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      // Save customer location
+      const locationData = {
+        latitude,
+        longitude,
+      };
+
+      setCustomerLocation(locationData);
+
+      console.log("CUSTOMER LOCATION:", locationData);
+
+      try {
+        // Find nearby providers
+        const data = await getNearbyEmergencyProviders(
+          latitude,
+          longitude,
+          service._id
+        );
+
+        console.log("NEARBY PROVIDERS:", data);
+
+        setNearbyProviders(data.providers || []);
+
+      } catch (error) {
+        console.error(
+          "Nearby provider error:",
+          error
+        );
+
+        alert(
+          error.response?.data?.message ||
+          "Failed to find nearby providers"
+        );
+      } finally {
+        setLocationLoading(false);
+      }
+    },
+
+    (error) => {
+      console.error("Location error:", error);
+
+      setLocationLoading(false);
+
+      alert(
+        "Unable to get your location. Please allow location permission."
+      );
+    }
+  );
+};
+
+  // ==========================================
   // SUBMIT BOOKING
   // ==========================================
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    e.preventDefault();
+  setLoading(true);
 
-    // Phone validation
-    if (!/^\d{10}$/.test(phone)) {
+  try {
+    // ==========================================
+    // EMERGENCY BOOKING
+    // ==========================================
+    if (bookingType === "emergency") {
+      if (!customerLocation) {
+        alert("Please detect your current location first.");
+        setLoading(false);
+        return;
+      }
 
-      alert(
-        "Please enter a valid 10-digit phone number"
-      );
+      if (!selectedProvider) {
+        alert("Please select a nearby provider.");
+        setLoading(false);
+        return;
+      }
 
-      return;
-    }
-
-    // Date validation
-    if (!date) {
-
-      alert("Please select a booking date");
-
-      return;
-    }
-
-    // Time validation
-    if (!time) {
-
-      alert("Please select a booking time");
-
-      return;
-    }
-
-    if (
-      time < startTime ||
-      time > endTime
-    ) {
-
-      alert(
-        `Booking time must be between ${startTime} and ${endTime}`
-      );
-
-      return;
-    }
-
-    try {
-
-      setLoading(true);
-
-      const data = await createBooking({
-
+      const data = await createEmergencyBooking({
         service: service._id,
-
         phone,
+        provider: selectedProvider._id,
 
-        date,
-
-        time,
+        customerLocation: {
+          latitude: customerLocation.latitude,
+          longitude: customerLocation.longitude,
+        },
 
         notes,
-
       });
 
-      console.log(
-        "BOOKING CREATED:",
-        data
-      );
+      console.log("EMERGENCY BOOKING CREATED:", data);
 
-      alert(
-        "Booking created successfully!"
-      );
-
+alert(
+  "🚨 Emergency booking request sent successfully!\n\n" +
+  "Your request has been sent to the selected provider."
+);
+      
       navigate("/user/bookings");
 
-    } catch (error) {
-
-      console.error(
-        "Booking error:",
-        error
-      );
-
-      alert(
-        error.response?.data?.message ||
-        "Failed to create booking"
-      );
-
-    } finally {
-
-      setLoading(false);
-
+      return;
     }
-  };
+
+    // ==========================================
+    // NORMAL BOOKING
+    // ==========================================
+
+    const data = await createBooking({
+      service: service._id,
+      phone,
+      date,
+      time,
+      notes,
+    });
+
+    console.log("NORMAL BOOKING CREATED:", data);
+
+    alert("Booking created successfully.");
+
+    // Keep your existing navigation here
+    // Example:
+    // navigate("/user/bookings");
+
+  } catch (error) {
+    console.error("Booking error:", error);
+
+    alert(
+      error.response?.data?.message ||
+      "Failed to create booking"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   // ==========================================
   // TODAY
@@ -410,16 +488,109 @@ const UserBookService = () => {
 
         <div className="user-book-form-card">
 
-          <h2>
-            Booking Details
-          </h2>
+        <h2>
+  Booking Details
+</h2>
 
-          <p className="user-book-form-subtitle">
+<p className="user-book-form-subtitle">
+  Choose how you want to book this service.
+</p>
+{bookingType === "emergency" && (
+  <div className="user-book-emergency-info">
 
-            Select a date and time within the
-            provider's availability.
+    <h3>🚨 Emergency Service</h3>
 
+    <p>
+      Need this service immediately?
+      We'll find nearby providers based on your current location.
+    </p>
+
+    <button
+  type="button"
+  className="user-book-emergency-location"
+  onClick={handleGetLocation}
+  disabled={locationLoading}
+>
+  {locationLoading
+    ? "Detecting Location..."
+    : "📍 Find Nearby Providers"}
+</button>
+
+{customerLocation && (
+  <div className="user-book-location-success">
+    <p>📍 Your location has been detected</p>
+    <small>
+      Your current location will be used to find nearby emergency providers.
+    </small>
+  </div>
+)}
+
+{/* NEARBY PROVIDERS */}
+
+{nearbyProviders.length > 0 && (
+  <div className="user-book-nearby-providers">
+    <h3>Nearby Providers</h3>
+
+    <p className="user-book-nearby-subtitle">
+      Providers available near your current location
+    </p>
+
+    {nearbyProviders.map((item) => (
+      <div
+        key={item.provider._id}
+        className="user-book-nearby-provider"
+      >
+        <div className="user-book-nearby-provider-info">
+          <strong>{item.provider.name}</strong>
+
+          <p>
+            📍 {item.distance} km away
           </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            setSelectedProvider(item.provider);
+            console.log("SELECTED PROVIDER:", item.provider);
+          }}
+        >
+          {selectedProvider?._id === item.provider._id
+            ? "Selected ✓"
+            : "Select"}
+        </button>
+      </div>
+    ))}
+  </div>
+)}
+
+
+  </div>
+)}
+{/* BOOKING TYPE */}
+<div className="user-book-type-selection">
+
+  <button
+    type="button"
+    className={`user-book-type-button ${
+      bookingType === "normal" ? "active" : ""
+    }`}
+    onClick={() => setBookingType("normal")}
+  >
+    📅 Normal Booking
+  </button>
+
+  <button
+    type="button"
+    className={`user-book-type-button ${
+      bookingType === "emergency" ? "active emergency" : ""
+    }`}
+    onClick={() => setBookingType("emergency")}
+  >
+    🚨 Emergency Service
+  </button>
+
+</div>
 
 
           <form onSubmit={handleSubmit}>
@@ -447,59 +618,57 @@ const UserBookService = () => {
             </div>
 
 
-            {/* DATE */}
+{bookingType === "normal" && (
+  <>
+    
+    {/* DATE */}
+    <div className="user-book-form-group">
 
-            <div className="user-book-form-group">
+      <label>
+        Booking Date
+      </label>
 
-              <label>
-                Booking Date
-              </label>
+      <input
+        type="date"
+        value={date}
+        onChange={handleDateChange}
+        min={today}
+        required
+      />
 
-              <input
-                type="date"
-                value={date}
-                onChange={handleDateChange}
-                min={today}
-                required
-              />
+      <small className="user-book-help">
+        Available:{" "}
+        {availableDays.join(", ")}
+      </small>
 
-              <small className="user-book-help">
-
-                Available:
-                {" "}
-                {availableDays.join(", ")}
-
-              </small>
-
-            </div>
+    </div>
 
 
-            {/* TIME */}
+    {/* TIME */}
+    <div className="user-book-form-group">
 
-            <div className="user-book-form-group">
+      <label>
+        Booking Time
+      </label>
 
-              <label>
-                Booking Time
-              </label>
+      <input
+        type="time"
+        value={time}
+        onChange={handleTimeChange}
+        min={startTime}
+        max={endTime}
+        required
+      />
 
-              <input
-                type="time"
-                value={time}
-                onChange={handleTimeChange}
-                min={startTime}
-                max={endTime}
-                required
-              />
+      <small className="user-book-help">
+        Working hours:{" "}
+        {startTime} — {endTime}
+      </small>
 
-              <small className="user-book-help">
+    </div>
 
-                Working hours:
-                {" "}
-                {startTime} — {endTime}
-
-              </small>
-
-            </div>
+  </>
+)}
 
 
             {/* NOTES */}

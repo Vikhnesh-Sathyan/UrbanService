@@ -186,6 +186,7 @@ const updateProfile = async (req, res) => {
       experience,
       city,
       state,
+      coordinates,
       emergencyContact,
     } = req.body;
 
@@ -229,18 +230,30 @@ const updateProfile = async (req, res) => {
       user.experience = experience.trim();
     }
 
+// ====================================
+// LOCATION
+// ====================================
 
-    // ====================================
-    // LOCATION
-    // ====================================
+if (city !== undefined) {
+  user.location.city = city.trim();
+}
 
-    if (city !== undefined) {
-      user.location.city = city.trim();
-    }
+if (state !== undefined) {
+  user.location.state = state.trim();
+}
 
-    if (state !== undefined) {
-      user.location.state = state.trim();
-    }
+// Save GPS coordinates
+if (coordinates !== undefined) {
+  if (
+    Array.isArray(coordinates) &&
+    coordinates.length === 2
+  ) {
+    user.location.coordinates = [
+      Number(coordinates[0]), // longitude
+      Number(coordinates[1]), // latitude
+    ];
+  }
+}
 
 
     // ====================================

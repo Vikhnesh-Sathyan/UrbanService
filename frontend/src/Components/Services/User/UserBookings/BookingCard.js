@@ -138,7 +138,19 @@ useEffect(() => {
   loadProviderLocation();
 
   // Get customer's location
+// Get customer's location
+if (
+  booking.bookingType === "emergency" &&
+  booking.customerLocation?.latitude !== null &&
+  booking.customerLocation?.longitude !== null
+) {
+  setCustomerLocation({
+    latitude: booking.customerLocation.latitude,
+    longitude: booking.customerLocation.longitude,
+  });
+} else {
   loadCustomerLocation();
+}
 
   // Refresh provider location every 5 seconds
   const interval = setInterval(() => {
@@ -245,7 +257,19 @@ const providerDistance =
 
   return (
 
-    <div className="booking-card">
+  <div
+    className={`booking-card ${
+      booking.bookingType === "emergency"
+        ? "booking-card-emergency"
+        : ""
+    }`}
+  >
+
+    {booking.bookingType === "emergency" && (
+      <div className="booking-emergency-badge">
+        🚨 Emergency Booking
+      </div>
+    )}
 
 
       {/* =====================================
@@ -302,24 +326,30 @@ const providerDistance =
       </p>
 
 
-      {/* =====================================
-          DATE
-      ===================================== */}
+ {booking.bookingType === "emergency" ? (
+  <div className="booking-emergency-request-time">
+    <p>
+      <strong>Requested:</strong>{" "}
+      {booking.date || "-"} at {booking.time || "-"}
+    </p>
 
-      <p>
-        Date:{" "}
-        {booking.date || "-"}
-      </p>
+    <small>
+      This was created as an immediate emergency request.
+    </small>
+  </div>
+) : (
+  <>
+    <p>
+      Date:{" "}
+      {booking.date || "-"}
+    </p>
 
-
-      {/* =====================================
-          TIME
-      ===================================== */}
-
-      <p>
-        Time:{" "}
-        {booking.time || "-"}
-      </p>
+    <p>
+      Time:{" "}
+      {booking.time || "-"}
+    </p>
+  </>
+)}
 
 
       {/* =====================================

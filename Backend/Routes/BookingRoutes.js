@@ -2,6 +2,7 @@ const express = require("express");
 
 const {
   createBooking,
+  createEmergencyBooking,
   getMyBookings,
   cancelBooking,
   rescheduleBooking,
@@ -14,6 +15,7 @@ const {
   getAllBookings,
   addBookingReview,
   getUserBookings,
+  getNearbyEmergencyProviders,
 } = require("../Controllers/BookingController");
 
 const authMiddleware = require("../Middleware/AuthMiddleware");
@@ -31,6 +33,13 @@ router.post(
   authMiddleware,
   roleMiddleware("user"),
   createBooking
+);
+
+router.post(
+  "/emergency",
+  authMiddleware,
+  roleMiddleware("user"),
+  createEmergencyBooking
 );
 
 // Get customer's bookings
@@ -71,6 +80,13 @@ router.get(
   authMiddleware,
   roleMiddleware("user"),
   getProviderLocation
+);
+// Find nearby providers for emergency booking
+router.post(
+  "/emergency/nearby",
+  authMiddleware,
+  roleMiddleware("user"),
+  getNearbyEmergencyProviders
 );
 
 // ===============================

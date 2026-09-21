@@ -783,3 +783,41 @@
   }
 
 }
+
+/* ==========================================
+   EMERGENCY BOOKING
+========================================== */
+
+.booking-card-emergency {
+  border-left: 4px solid #dc2626;
+}
+
+.booking-emergency-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.booking-emergency-request-time {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #fff7ed;
+}
+
+.booking-emergency-request-time p {
+  margin: 0;
+}
+
+.booking-emergency-request-time small {
+  display: block;
+  margin-top: 5px;
+  color: #6b7280;
+}

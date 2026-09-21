@@ -204,7 +204,7 @@ const ProviderServicesPage = () => {
   // Handle image
   // ---------------------------------------
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e) => { //get the first file selected by user and setImageFile stores it.
     setImageFile(
       e.target.files[0] || null
     );
