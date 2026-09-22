@@ -7,6 +7,8 @@ import {
   addBookingReview,
 } from "../../../../Services/bookingService";
 
+import { getMyComplaints } from "../../../../Services/complaintService";
+
 import BookingCard from "./BookingCard";
 import RescheduleForm from "./RescheduleForm";
 
@@ -52,6 +54,12 @@ const UserBookings = () => {
 
   const [review, setReview] = useState("");
 
+  // ==========================================
+  // Complaint
+  // ==========================================
+
+  const [complaints, setComplaints] = useState([]);
+
 
   // ==========================================
   // LOAD BOOKINGS
@@ -94,6 +102,32 @@ const UserBookings = () => {
 
   };
 
+const loadComplaints = async () => {
+  try {
+    const data = await getMyComplaints();
+
+    setComplaints(data.complaints || []);
+  } catch (error) {
+    console.error(
+      "Failed to load complaints:",
+      error
+    );
+
+    setComplaints([]);
+  }
+};
+
+// ==========================================
+// FIND COMPLAINT FOR BOOKING
+// ==========================================
+
+const getComplaintForBooking = (bookingId) => {
+  return complaints.find(
+    (complaint) =>
+      complaint.booking?._id === bookingId ||
+      complaint.booking === bookingId
+  );
+};
 
   // ==========================================
   // LOAD WHEN PAGE OPENS
@@ -102,6 +136,7 @@ const UserBookings = () => {
   useEffect(() => {
 
     loadBookings();
+    loadComplaints();
 
   }, []);
 
@@ -439,6 +474,7 @@ const handleSubmitReview = async (e) => {
         <BookingCard
   key={booking._id}
   booking={booking}
+  complaint={getComplaintForBooking(booking._id)}
   actionLoading={actionLoading}
   onCancel={handleCancel}
   onReschedule={handleOpenReschedule}

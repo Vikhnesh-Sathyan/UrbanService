@@ -98,10 +98,24 @@ import AdminUserDetails from "./Components/Services/Admin/AdminUserDetails";
 import AdminHelpRequests from "./Components/Services/Admin/AdminHelpRequests";
 
 // =====================================================
+// Admin Complaint 
+// =====================================================
+
+import AdminComplaints from "./Components/Services/Admin/AdminComplaints";
+
+// =====================================================
+// Complaint Form
+// =====================================================
+import ComplaintForm from "./Components/Services/User/ComplaintForm";
+
+// =====================================================
 // PAYMENT
 // =====================================================
 
 import StripeProvider from "./Components/Payment/StripeProvider";
+
+
+
 
 
 // =====================================================
@@ -321,6 +335,22 @@ function App() {
             element={<AdminHelpRequests />}
           />
 
+          {/* =================================================
+                ADMIN → COMPLAINTS
+          ================================================= */}
+
+          <Route
+            path="/admin/complaints"
+            element={<AdminComplaints />}
+          />
+
+         {/* =================================================
+              Complaint Form
+          ================================================= */}
+          <Route
+            path="/user/complaints/new"
+            element={<ComplaintForm />}
+          />
 
         </Routes>
       </Router>

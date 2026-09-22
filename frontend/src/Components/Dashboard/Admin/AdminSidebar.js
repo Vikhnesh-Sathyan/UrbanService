@@ -40,6 +40,11 @@ const AdminSidebar = () => {
       path: "/admin/bookings",
     },
     {
+      name: "Complaints",
+      icon: <FaClipboardList />,
+      path: "/admin/complaints"
+    },
+    {
       name: "Help Requests",
       icon: <FaQuestionCircle />,
       path: "/admin/help-requests",

@@ -20,6 +20,7 @@ const userRoutes = require("./Routes/UserRoutes");
 const helpRequestRoutes = require("./Routes/helpRequestRoutes");
 const notificationRoutes = require("./Routes/NotificationRoutes");
 const categoryRoutes = require("./Routes/CategoryRoutes");
+const complaintRoutes = require("./Routes/complaintRoutes");
 
 const app = express();
 
@@ -46,7 +47,7 @@ app.use("/api/users", userRoutes);
 app.use("/api",helpRequestRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/categories", categoryRoutes);
-
+app.use("/api/complaints", complaintRoutes);
 
 // Connect to MongoDB and start server
 const PORT = process.env.PORT || 5000;

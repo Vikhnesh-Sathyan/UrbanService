@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import TrackingMap from "../../Tracking/TrackingMap";
-
+import { useNavigate } from "react-router-dom";
 
 import {
   getProviderLocation,
 } from "../../../../Services/bookingService";
 
-
 const BookingCard = ({
   booking,
+  complaint,
   actionLoading,
   onCancel,
   onReschedule,
   onReview,
 }) => {
+  const navigate = useNavigate();
 
   // ==========================================
   // PROVIDER LOCATION
@@ -29,148 +30,140 @@ const BookingCard = ({
     useState("");
 
   const [customerLocation, setCustomerLocation] =
-  useState(null);
-
+    useState(null);
 
   // ==========================================
   // GET PROVIDER LOCATION
   // ==========================================
 
   const loadProviderLocation = async () => {
-
     try {
-
       setLocationLoading(true);
-
       setLocationError("");
-
 
       const data = await getProviderLocation(
         booking._id
       );
 
-
       setProviderLocation(
         data?.tracking || null
       );
-
     } catch (error) {
-
       console.error(
         "Failed to load provider location:",
         error
       );
 
-
       setProviderLocation(null);
-
 
       setLocationError(
         error.response?.data?.message ||
-        "Provider location is not available yet"
+          "Provider location is not available yet"
       );
-
     } finally {
-
       setLocationLoading(false);
-
     }
-
   };
 
+  // ==========================================
+  // GET CUSTOMER LOCATION
+  // ==========================================
+
   const loadCustomerLocation = () => {
-  if (!navigator.geolocation) {
-    setLocationError(
-      "Geolocation is not supported by this browser."
-    );
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const latitude =
-        position.coords.latitude;
-
-      const longitude =
-        position.coords.longitude;
-
-      setCustomerLocation({
-        latitude,
-        longitude,
-      });
-
-      console.log(
-        "Customer GPS:",
-        latitude,
-        longitude
-      );
-    },
-    (error) => {
-      console.error(
-        "Customer location error:",
-        error
-      );
-
+    if (!navigator.geolocation) {
       setLocationError(
-        "Unable to get your location."
+        "Geolocation is not supported by this browser."
       );
-    },
-    {
-      enableHighAccuracy: true,
-      maximumAge: 10000,
-      timeout: 10000,
+
+      return;
     }
-  );
-};
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const latitude =
+          position.coords.latitude;
+
+        const longitude =
+          position.coords.longitude;
+
+        setCustomerLocation({
+          latitude,
+          longitude,
+        });
+
+        console.log(
+          "Customer GPS:",
+          latitude,
+          longitude
+        );
+      },
+      (error) => {
+        console.error(
+          "Customer location error:",
+          error
+        );
+
+        setLocationError(
+          "Unable to get your location."
+        );
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 10000,
+      }
+    );
+  };
 
   // ==========================================
   // LOAD LOCATION WHEN IN PROGRESS
   // ==========================================
-useEffect(() => {
-  if (booking.status !== "in_progress") {
-    setProviderLocation(null);
-    setCustomerLocation(null);
-    setLocationError("");
-    return;
-  }
 
-  // Get provider location
-  loadProviderLocation();
+  useEffect(() => {
+    if (booking.status !== "in_progress") {
+      setProviderLocation(null);
+      setCustomerLocation(null);
+      setLocationError("");
 
-  // Get customer's location
-// Get customer's location
-if (
-  booking.bookingType === "emergency" &&
-  booking.customerLocation?.latitude !== null &&
-  booking.customerLocation?.longitude !== null
-) {
-  setCustomerLocation({
-    latitude: booking.customerLocation.latitude,
-    longitude: booking.customerLocation.longitude,
-  });
-} else {
-  loadCustomerLocation();
-}
+      return;
+    }
 
-  // Refresh provider location every 5 seconds
-  const interval = setInterval(() => {
+    // Get provider location
     loadProviderLocation();
-  }, 5000);
 
-  return () => {
-    clearInterval(interval);
-  };
-}, [booking.status, booking._id]);
+    // Get customer's location
+    if (
+      booking.bookingType === "emergency" &&
+      booking.customerLocation?.latitude !== null &&
+      booking.customerLocation?.longitude !== null
+    ) {
+      setCustomerLocation({
+        latitude:
+          booking.customerLocation.latitude,
 
+        longitude:
+          booking.customerLocation.longitude,
+      });
+    } else {
+      loadCustomerLocation();
+    }
+
+    // Refresh provider location every 5 seconds
+    const interval = setInterval(() => {
+      loadProviderLocation();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [booking.status, booking._id]);
 
   // ==========================================
   // STATUS CLASS
   // ==========================================
 
   const getStatusClass = (status) => {
-
     switch (status) {
-
       case "pending":
         return "booking-status-pending";
 
@@ -191,123 +184,180 @@ if (
 
       default:
         return "booking-status-default";
-
     }
-
   };
-// ==========================================
-// CALCULATE DISTANCE BETWEEN TWO LOCATIONS
-// ==========================================
 
-const calculateDistance = (
-  providerLatitude,
-  providerLongitude,
-  customerLatitude,
-  customerLongitude
-) => {
-  const earthRadius = 6371; // kilometers
+  // ==========================================
+  // COMPLAINT STATUS
+  // ==========================================
 
-  const latitudeDifference =
-    ((customerLatitude - providerLatitude) *
-      Math.PI) /
-    180;
+  const getComplaintStatusLabel = (status) => {
+    switch (status) {
+      case "open":
+        return "Open";
 
-  const longitudeDifference =
-    ((customerLongitude - providerLongitude) *
-      Math.PI) /
-    180;
+      case "under_review":
+        return "Under Review";
 
-  const providerLat =
-    (providerLatitude * Math.PI) / 180;
+      case "resolved":
+        return "Resolved";
 
-  const customerLat =
-    (customerLatitude * Math.PI) / 180;
+      case "rejected":
+        return "Rejected";
 
-  const a =
-    Math.sin(latitudeDifference / 2) *
-      Math.sin(latitudeDifference / 2) +
-    Math.cos(providerLat) *
-      Math.cos(customerLat) *
-      Math.sin(longitudeDifference / 2) *
-      Math.sin(longitudeDifference / 2);
+      default:
+        return "Unknown";
+    }
+  };
 
-  const c =
-    2 *
-    Math.atan2(
-      Math.sqrt(a),
-      Math.sqrt(1 - a)
-    );
+  const getComplaintStatusClass = (status) => {
+    switch (status) {
+      case "open":
+        return "booking-complaint-status-open";
 
-  return earthRadius * c;
-};
-// ==========================================
-// PROVIDER DISTANCE
-// ==========================================
+      case "under_review":
+        return "booking-complaint-status-review";
 
-const providerDistance =
-  providerLocation &&
-  customerLocation
-    ? calculateDistance(
-        providerLocation.latitude,
-        providerLocation.longitude,
-        customerLocation.latitude,
-        customerLocation.longitude
-      )
-    : null;
+      case "resolved":
+        return "booking-complaint-status-resolved";
+
+      case "rejected":
+        return "booking-complaint-status-rejected";
+
+      default:
+        return "booking-complaint-status-default";
+    }
+  };
+
+  // ==========================================
+  // COMPLAINT ACTION
+  // ==========================================
+
+  const getComplaintActionLabel = (action) => {
+    switch (action) {
+      case "warning":
+        return "Provider Warning Issued";
+
+      case "provider_blocked":
+        return "Provider Blocked";
+
+      default:
+        return "";
+    }
+  };
+
+  // ==========================================
+  // CALCULATE DISTANCE
+  // ==========================================
+
+  const calculateDistance = (
+    providerLatitude,
+    providerLongitude,
+    customerLatitude,
+    customerLongitude
+  ) => {
+    const earthRadius = 6371;
+
+    const latitudeDifference =
+      ((customerLatitude - providerLatitude) *
+        Math.PI) /
+      180;
+
+    const longitudeDifference =
+      ((customerLongitude - providerLongitude) *
+        Math.PI) /
+      180;
+
+    const providerLat =
+      (providerLatitude * Math.PI) /
+      180;
+
+    const customerLat =
+      (customerLatitude * Math.PI) /
+      180;
+
+    const a =
+      Math.sin(latitudeDifference / 2) *
+        Math.sin(latitudeDifference / 2) +
+      Math.cos(providerLat) *
+        Math.cos(customerLat) *
+        Math.sin(longitudeDifference / 2) *
+        Math.sin(longitudeDifference / 2);
+
+    const c =
+      2 *
+      Math.atan2(
+        Math.sqrt(a),
+        Math.sqrt(1 - a)
+      );
+
+    return earthRadius * c;
+  };
+
+  // ==========================================
+  // PROVIDER DISTANCE
+  // ==========================================
+
+  const providerDistance =
+    providerLocation &&
+    customerLocation
+      ? calculateDistance(
+          providerLocation.latitude,
+          providerLocation.longitude,
+          customerLocation.latitude,
+          customerLocation.longitude
+        )
+      : null;
 
   return (
+    <div
+      className={`booking-card ${
+        booking.bookingType === "emergency"
+          ? "booking-card-emergency"
+          : ""
+      }`}
+    >
+      {/* =====================================
+          EMERGENCY BADGE
+      ===================================== */}
 
-  <div
-    className={`booking-card ${
-      booking.bookingType === "emergency"
-        ? "booking-card-emergency"
-        : ""
-    }`}
-  >
-
-    {booking.bookingType === "emergency" && (
-      <div className="booking-emergency-badge">
-        🚨 Emergency Booking
-      </div>
-    )}
-
+      {booking.bookingType === "emergency" && (
+        <div className="booking-emergency-badge">
+          🚨 Emergency Booking
+        </div>
+      )}
 
       {/* =====================================
           SERVICE
       ===================================== */}
 
       <h2>
-        {booking.service?.name || "Unknown Service"}
+        {booking.service?.name ||
+          booking.service?.title ||
+          "Unknown Service"}
       </h2>
-
 
       {/* =====================================
           CATEGORY
       ===================================== */}
 
       {booking.service?.category && (
-
         <p>
           Category:{" "}
           {booking.service.category}
         </p>
-
       )}
-
 
       {/* =====================================
           PRICE
       ===================================== */}
 
       {booking.service?.price !== undefined && (
-
         <p>
           Price: ₹
           {booking.service.price}
         </p>
-
       )}
-
 
       {/* =====================================
           PROVIDER
@@ -319,38 +369,41 @@ const providerDistance =
           "Unknown Provider"}
       </p>
 
-
       <p>
         Provider Email:{" "}
         {booking.provider?.email || "-"}
       </p>
 
+      {/* =====================================
+          DATE / TIME
+      ===================================== */}
 
- {booking.bookingType === "emergency" ? (
-  <div className="booking-emergency-request-time">
-    <p>
-      <strong>Requested:</strong>{" "}
-      {booking.date || "-"} at {booking.time || "-"}
-    </p>
+      {booking.bookingType === "emergency" ? (
+        <div className="booking-emergency-request-time">
+          <p>
+            <strong>Requested:</strong>{" "}
+            {booking.date || "-"} at{" "}
+            {booking.time || "-"}
+          </p>
 
-    <small>
-      This was created as an immediate emergency request.
-    </small>
-  </div>
-) : (
-  <>
-    <p>
-      Date:{" "}
-      {booking.date || "-"}
-    </p>
+          <small>
+            This was created as an immediate
+            emergency request.
+          </small>
+        </div>
+      ) : (
+        <>
+          <p>
+            Date:{" "}
+            {booking.date || "-"}
+          </p>
 
-    <p>
-      Time:{" "}
-      {booking.time || "-"}
-    </p>
-  </>
-)}
-
+          <p>
+            Time:{" "}
+            {booking.time || "-"}
+          </p>
+        </>
+      )}
 
       {/* =====================================
           PHONE
@@ -361,29 +414,23 @@ const providerDistance =
         {booking.phone || "-"}
       </p>
 
-
       {/* =====================================
           NOTES
       ===================================== */}
 
       {booking.notes && (
-
         <p>
           Notes:{" "}
           {booking.notes}
         </p>
-
       )}
 
-
       {/* =====================================
-          STATUS
+          BOOKING STATUS
       ===================================== */}
 
       <p>
-
         Status:{" "}
-
         <span
           className={`booking-status ${getStatusClass(
             booking.status
@@ -391,101 +438,93 @@ const providerDistance =
         >
           {booking.status || "pending"}
         </span>
-
       </p>
-
 
       {/* =====================================
           PROVIDER TRACKING
       ===================================== */}
 
       {booking.status === "in_progress" && (
-
         <div className="provider-tracking-section">
-
           <h3>
             Provider Tracking
           </h3>
 
-
           {/* LOCATION LOADING */}
 
           {locationLoading && (
-
             <p>
               Getting provider location...
             </p>
-
           )}
-
 
           {/* LOCATION AVAILABLE */}
 
           {!locationLoading &&
             providerLocation && (
-<div className="provider-location-info">
+              <div className="provider-location-info">
+                {providerDistance !== null && (
+                  <p>
+                    <strong>
+                      Distance:
+                    </strong>{" "}
+                    {providerDistance < 1
+                      ? `${Math.round(
+                          providerDistance * 1000
+                        )} m`
+                      : `${providerDistance.toFixed(
+                          1
+                        )} km`}
+                  </p>
+                )}
 
-  {providerDistance !== null && (
-    <p>
-      <strong>Distance:</strong>{" "}
-      {providerDistance < 1
-        ? `${Math.round(
-            providerDistance * 1000
-          )} m`
-        : `${providerDistance.toFixed(
-            1
-          )} km`}
-    </p>
-  )}
+                {providerLocation.updatedAt && (
+                  <p>
+                    <strong>
+                      Last Updated:
+                    </strong>{" "}
+                    {new Date(
+                      providerLocation.updatedAt
+                    ).toLocaleString()}
+                  </p>
+                )}
+              </div>
+            )}
 
-  {providerLocation.updatedAt && (
-    <p>
-      <strong>Last Updated:</strong>{" "}
-      {new Date(
-        providerLocation.updatedAt
-      ).toLocaleString()}
-    </p>
-  )}
-
-</div>
-
-          )}
+          {/* MAP */}
 
           {providerLocation && (
-  <div className="provider-map">
-  <TrackingMap
-  latitude={providerLocation.latitude}
-  longitude={providerLocation.longitude}
-  customerLatitude={
-    customerLocation?.latitude ?? null
-  }
-  customerLongitude={
-    customerLocation?.longitude ?? null
-  }
-/>
-{/* <TrackingMap 
-  latitude={providerLocation.latitude} 
-  longitude={providerLocation.longitude} 
-  customerLatitude={8.800000} 
-  customerLongitude={76.720000} 
-/> */}
-  </div>
-)}
+            <div className="provider-map">
+              <TrackingMap
+                latitude={
+                  providerLocation.latitude
+                }
+                longitude={
+                  providerLocation.longitude
+                }
+                customerLatitude={
+                  customerLocation?.latitude ??
+                  null
+                }
+                customerLongitude={
+                  customerLocation?.longitude ??
+                  null
+                }
+              />
+            </div>
+          )}
 
-          {/* LOCATION NOT AVAILABLE */}
+          {/* LOCATION ERROR */}
 
           {!locationLoading &&
             !providerLocation &&
             locationError && (
+              <p>
+                {locationError}
+              </p>
+            )}
 
-            <p>
-              {locationError}
-            </p>
-
-          )}
-
-
-          {/* REFRESH LOCATION */}
+          {/* REFRESH */}
 
           <button
             type="button"
@@ -496,11 +535,8 @@ const providerDistance =
               ? "Updating..."
               : "Refresh Location"}
           </button>
-
         </div>
-
       )}
-
 
       {/* =====================================
           CANCEL / RESCHEDULE
@@ -508,9 +544,7 @@ const providerDistance =
 
       {(booking.status === "pending" ||
         booking.status === "accepted") && (
-
         <div className="booking-actions">
-
           <button
             type="button"
             disabled={actionLoading}
@@ -521,7 +555,6 @@ const providerDistance =
             Cancel Booking
           </button>
 
-
           <button
             type="button"
             disabled={actionLoading}
@@ -531,24 +564,22 @@ const providerDistance =
           >
             Reschedule
           </button>
-
         </div>
-
       )}
 
-
       {/* =====================================
-          REVIEW
+          REVIEW / COMPLAINT
       ===================================== */}
 
       {booking.status === "completed" && (
-
         <div className="booking-review-section">
 
+          {/* =================================
+              REVIEW
+          ================================= */}
+
           {booking.rating ? (
-
             <>
-
               <p className="review-rating">
                 Your Rating:{" "}
                 {"⭐".repeat(
@@ -556,20 +587,14 @@ const providerDistance =
                 )}
               </p>
 
-
               {booking.review && (
-
                 <p className="review-text">
                   Your Review:{" "}
                   {booking.review}
                 </p>
-
               )}
-
             </>
-
           ) : (
-
             <button
               type="button"
               className="review-button"
@@ -580,18 +605,113 @@ const providerDistance =
             >
               Leave a Review
             </button>
-
           )}
 
+          {/* =================================
+              COMPLAINT EXISTS
+          ================================= */}
+
+          {complaint ? (
+            <div className="booking-complaint-section">
+
+              <div className="booking-complaint-header">
+                <span>
+                  ⚠ Complaint
+                </span>
+
+                <span
+                  className={`booking-complaint-status ${getComplaintStatusClass(
+                    complaint.status
+                  )}`}
+                >
+                  {getComplaintStatusLabel(
+                    complaint.status
+                  )}
+                </span>
+              </div>
+
+              <div className="booking-complaint-details">
+
+                <p>
+                  <strong>
+                    Issue:
+                  </strong>{" "}
+                  {complaint.reason
+                    ? complaint.reason
+                        .replaceAll(
+                          "_",
+                          " "
+                        )
+                        .replace(
+                          /\b\w/g,
+                          (letter) =>
+                            letter.toUpperCase()
+                        )
+                    : "Reported Issue"}
+                </p>
+
+                {complaint.adminResponse && (
+                  <div className="booking-complaint-response">
+                    <strong>
+                      Admin Response
+                    </strong>
+
+                    <p>
+                      {complaint.adminResponse}
+                    </p>
+                  </div>
+                )}
+
+                {complaint.adminAction &&
+                  complaint.adminAction !==
+                    "none" && (
+                    <p className="booking-complaint-action">
+                      <strong>
+                        Action:
+                      </strong>{" "}
+                      {getComplaintActionLabel(
+                        complaint.adminAction
+                      )}
+                    </p>
+                  )}
+
+                {complaint.reviewedAt && (
+                  <small className="booking-complaint-reviewed">
+                    Reviewed on{" "}
+                    {new Date(
+                      complaint.reviewedAt
+                    ).toLocaleDateString()}
+                  </small>
+                )}
+
+              </div>
+            </div>
+          ) : (
+            /* =================================
+               NO COMPLAINT
+            ================================= */
+
+            <button
+              type="button"
+              className="booking-report-button"
+              onClick={() =>
+                navigate(
+                  "/user/complaints/new",
+                  {
+                    state: {
+                      booking,
+                    },
+                  }
+                )
+              }
+            >
+              ⚠ Report an Issue
+            </button>
+          )}
         </div>
-
       )}
-
     </div>
-
   );
-
 };
-
 
 export default BookingCard;

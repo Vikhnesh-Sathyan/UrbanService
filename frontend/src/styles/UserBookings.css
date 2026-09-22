@@ -821,3 +821,174 @@
   margin-top: 5px;
   color: #6b7280;
 }
+
+/* =====================================================
+   CUSTOMER COMPLAINT STATUS
+===================================================== */
+
+.booking-complaint-section {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.booking-complaint-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.booking-complaint-header > span:first-child {
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+}
+
+/* =====================================================
+   COMPLAINT STATUS
+===================================================== */
+
+.booking-complaint-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.booking-complaint-status-open {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.booking-complaint-status-review {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.booking-complaint-status-resolved {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.booking-complaint-status-rejected {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.booking-complaint-status-default {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+/* =====================================================
+   COMPLAINT DETAILS
+===================================================== */
+
+.booking-complaint-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.booking-complaint-details p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+.booking-complaint-details strong {
+  color: #1f2937;
+}
+
+/* =====================================================
+   ADMIN RESPONSE
+===================================================== */
+
+.booking-complaint-response {
+  margin-top: 4px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #ffffff;
+  border-left: 3px solid #374151;
+}
+
+.booking-complaint-response strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.booking-complaint-response p {
+  color: #4b5563;
+}
+
+/* =====================================================
+   ADMIN ACTION
+===================================================== */
+
+.booking-complaint-action {
+  padding: 9px 11px;
+  border-radius: 7px;
+  background: #f3f4f6;
+}
+
+/* =====================================================
+   REVIEWED DATE
+===================================================== */
+
+.booking-complaint-reviewed {
+  color: #6b7280;
+  font-size: 11px;
+}
+
+/* =====================================================
+   REPORT BUTTON
+===================================================== */
+
+.booking-report-button {
+  margin-top: 12px;
+  padding: 9px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.booking-report-button:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 600px) {
+  .booking-complaint-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .booking-complaint-status {
+    align-self: flex-start;
+  }
+
+  .booking-complaint-section {
+    padding: 14px;
+  }
+}
