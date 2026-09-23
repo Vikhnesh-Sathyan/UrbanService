@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import AdminSidebar from "../../Dashboard/Admin/AdminSidebar";
 import AdminNavbar from "../../Dashboard/Admin/AdminNavbar";
 
-import { getAdminOverview } from "../../../Services/analyticsService";
+import { getAdminOverview , getBookingActivity } from "../../../Services/analyticsService";
+
+import BookingActivityChart from "./BookingActivityChart";
 
 import "../../../styles/AdminAnalytics.css";
 
@@ -13,39 +15,47 @@ const AdminAnalytics = () => {
   // =====================================================
 
   const [overview, setOverview] = useState(null);
+  const [bookingActivity, setBookingActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  
 
   // =====================================================
   // LOAD ADMIN ANALYTICS
   // =====================================================
+useEffect(() => {
+  const loadAnalytics = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-  useEffect(() => {
-    const loadOverview = async () => {
-      try {
-        setLoading(true);
-        setError("");
+      const [
+        overviewResponse,
+        bookingResponse,
+      ] = await Promise.all([
+        getAdminOverview(),
+        getBookingActivity(),
+      ]);
 
-        const response = await getAdminOverview();
+      setOverview(overviewResponse.data);
+      setBookingActivity(bookingResponse.data);
+    } catch (error) {
+      console.error(
+        "Admin analytics error:",
+        error
+      );
 
-        setOverview(response.data);
-      } catch (error) {
-        console.error(
-          "Admin analytics error:",
-          error
-        );
+      setError(
+        error.response?.data?.message ||
+          "Failed to load analytics."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        setError(
-          error.response?.data?.message ||
-            "Failed to load analytics."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadOverview();
-  }, []);
+  loadAnalytics();
+}, []);
 
   // =====================================================
   // LOADING STATE
@@ -270,6 +280,10 @@ const AdminAnalytics = () => {
   </div>
 
 </div>
+
+<BookingActivityChart
+  data={bookingActivity}/>
+  
         </section>
 
       </main>

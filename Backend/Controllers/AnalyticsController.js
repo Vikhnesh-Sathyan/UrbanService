@@ -88,6 +88,48 @@ const getAdminOverview = async (req, res) => {
   }
 };
 
+// =====================================================
+// GET BOOKING ACTIVITY
+// Groups bookings by date for the admin analytics chart.
+// =====================================================
+
+const getBookingActivity = async (req, res) => {
+  try {
+    const bookingActivity = await Booking.aggregate([
+      {
+        $group: {
+          _id: "$date",
+          bookings: {
+            $sum: 1,
+          },
+        },
+      },
+
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: bookingActivity,
+    });
+  } catch (error) {
+    console.error(
+      "Booking activity analytics error:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load booking activity",
+    });
+  }
+};
+
 module.exports = {
   getAdminOverview,
+ getBookingActivity,
 };

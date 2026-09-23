@@ -30,3 +30,17 @@ export const getAdminOverview = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET BOOKING ACTIVITY
+// Fetches booking counts grouped by date.
+// =====================================================
+
+export const getBookingActivity = async () => {
+  const response = await axios.get(
+    `${API}/admin/bookings`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};
