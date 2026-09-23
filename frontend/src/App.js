@@ -71,6 +71,7 @@ import NotificationListener from "./Components/Notifications/NotificationListene
 // -----------------------------------------------------
 
 import AdminCategories from "./Components/Services/Admin/AdminCategories";
+
 // -----------------------------------------------------
 // Admin Providers
 // -----------------------------------------------------
@@ -104,6 +105,12 @@ import AdminHelpRequests from "./Components/Services/Admin/AdminHelpRequests";
 import AdminComplaints from "./Components/Services/Admin/AdminComplaints";
 
 // =====================================================
+// Admin Analytics
+// =====================================================
+
+import AdminAnalytics from "./Components/Analytics/Admin/AdminAnalytics";
+
+// =====================================================
 // Complaint Form
 // =====================================================
 import ComplaintForm from "./Components/Services/User/ComplaintForm";
@@ -113,8 +120,6 @@ import ComplaintForm from "./Components/Services/User/ComplaintForm";
 // =====================================================
 
 import StripeProvider from "./Components/Payment/StripeProvider";
-
-
 
 
 
@@ -264,6 +269,14 @@ function App() {
             element={<UserProviderProfile />}
           />
 
+          {/* =================================================
+              Complaint Form
+          ================================================= */}
+          <Route
+            path="/user/complaints/new"
+            element={<ComplaintForm />}
+          />
+
 
           {/* =================================================
               ADMIN
@@ -344,14 +357,17 @@ function App() {
             element={<AdminComplaints />}
           />
 
-         {/* =================================================
-              Complaint Form
+          
+          {/* =================================================
+                ADMIN Analytics
           ================================================= */}
+
           <Route
-            path="/user/complaints/new"
-            element={<ComplaintForm />}
+            path="/admin/analytics"
+            element={<AdminAnalytics />}
           />
 
+        
         </Routes>
       </Router>
     </StripeProvider>

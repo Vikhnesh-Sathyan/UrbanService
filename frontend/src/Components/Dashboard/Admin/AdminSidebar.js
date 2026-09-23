@@ -6,6 +6,7 @@ import {
   FaUsers,
   FaClipboardList,
   FaQuestionCircle,
+  FaChartBar,
   FaSignOutAlt,
 } from "react-icons/fa";
 
@@ -38,6 +39,11 @@ const AdminSidebar = () => {
       name: "Bookings",
       icon: <FaClipboardList />,
       path: "/admin/bookings",
+    },
+    {
+      name: "Analytics",
+      icon: <FaChartBar />,
+      path: "/admin/analytics" ,
     },
     {
       name: "Complaints",

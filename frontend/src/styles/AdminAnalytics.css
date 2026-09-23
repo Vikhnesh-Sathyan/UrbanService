@@ -1,0 +1,59 @@
+/* =====================================================
+   ADMIN ANALYTICS PAGE
+   ===================================================== */
+
+.admin-analytics-content {
+  min-height: calc(100vh - 72px);
+  padding: 42px 48px 70px;
+  background: #f7f7f5;
+}
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.admin-analytics-header {
+  max-width: 1200px;
+  margin: 0 auto 36px;
+}
+
+.admin-analytics-header h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 40px;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.admin-analytics-header p {
+  max-width: 620px;
+  margin: 11px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 900px) {
+  .admin-analytics-content {
+    padding: 34px 28px 60px;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-analytics-content {
+    padding: 28px 18px 50px;
+  }
+
+  .admin-analytics-header h1 {
+    font-size: 32px;
+  }
+
+  .admin-analytics-header p {
+    font-size: 13px;
+  }
+}
