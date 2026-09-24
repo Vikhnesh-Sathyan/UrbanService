@@ -58,3 +58,17 @@ export const getBookingBreakdown = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET SERVICE ANALYTICS
+// Fetches booking volume for each service.
+// =====================================================
+
+export const getServiceAnalytics = async () => {
+  const response = await axios.get(
+    `${API}/admin/services`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

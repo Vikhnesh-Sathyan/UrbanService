@@ -10,6 +10,8 @@ const {
   getAdminOverview,
   getBookingActivity,
   getBookingBreakdown,
+  getServiceAnalytics,
+
 } = require("../Controllers/AnalyticsController");
 
 const authMiddleware = require("../Middleware/AuthMiddleware");
@@ -38,6 +40,17 @@ router.get(
   authMiddleware,
   roleMiddleware("admin"),
   getBookingBreakdown
+);
+
+// =====================================================
+// ADMIN → SERVICE ANALYTICS
+// =====================================================
+
+router.get(
+  "/admin/services",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getServiceAnalytics
 );
 
 module.exports = router;

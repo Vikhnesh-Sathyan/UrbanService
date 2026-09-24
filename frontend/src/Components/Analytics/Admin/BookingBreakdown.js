@@ -11,15 +11,26 @@ import {
 const BookingBreakdown = ({ data }) => {
   const bookingTypes = data?.bookingTypes || [];
 
-  const typeData = bookingTypes.map((item) => ({
-    name:
-      item._id === "emergency"
-        ? "Emergency"
-        : "Normal",
-    value: item.count,
-  }));
+const typeData = bookingTypes
+  .map((item) => {
+    let name = "Other";
 
-  const TYPE_COLORS = ["#18181b", "#a1a1aa"];
+    if (item._id === "normal") {
+      name = "Normal";
+    }
+
+    if (item._id === "emergency") {
+      name = "Emergency";
+    }
+
+    return {
+      name,
+      value: item.count,
+    };
+  })
+  .filter((item) => item.value > 0);
+
+  const TYPE_COLORS = ["#18181b", "#a1a1aa" , "#d4d4d8",];
 
   const totalBookings = typeData.reduce(
     (total, item) => total + item.value,

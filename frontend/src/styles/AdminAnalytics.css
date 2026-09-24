@@ -704,27 +704,95 @@
   font-size: 11px;
   font-weight: 500;
 }
-
 /* =====================================================
-   RESPONSIVE
+   SERVICE ANALYTICS
    ===================================================== */
 
-@media (max-width: 900px) {
-  .admin-analytics-content {
-    padding: 34px 28px 60px;
-  }
+.analytics-service-section {
+  margin-top: 24px;
 }
 
-@media (max-width: 600px) {
-  .admin-analytics-content {
-    padding: 28px 18px 50px;
-  }
+.analytics-service-chart-card {
+  width: 100%;
+  box-sizing: border-box;
 
-  .admin-analytics-header h1 {
-    font-size: 32px;
-  }
+  padding: 28px 32px;
 
-  .admin-analytics-header p {
-    font-size: 13px;
-  }
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.025),
+    0 12px 40px rgba(0, 0, 0, 0.045);
+}
+
+.analytics-service-chart-wrapper {
+  width: 100%;
+  height: 320px;
+
+  margin-top: 12px;
+}
+
+.analytics-service-empty {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #9ca3af;
+
+  font-size: 13px;
+}
+
+.analytics-service-tooltip {
+  min-width: 145px;
+
+  padding: 11px 13px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.analytics-service-tooltip-name {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #6b7280;
+
+  font-size: 11px;
+  font-weight: 650;
+
+  line-height: 1.4;
+}
+
+.analytics-service-tooltip-value {
+  display: flex;
+  align-items: baseline;
+
+  gap: 5px;
+}
+
+.analytics-service-tooltip-value strong {
+  color: #18181b;
+
+  font-size: 19px;
+  font-weight: 750;
+
+  line-height: 1;
+}
+
+.analytics-service-tooltip-value span {
+  color: #6b7280;
+
+  font-size: 11px;
 }

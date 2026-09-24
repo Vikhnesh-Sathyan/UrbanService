@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import AdminSidebar from "../../Dashboard/Admin/AdminSidebar";
 import AdminNavbar from "../../Dashboard/Admin/AdminNavbar";
 
-import { getAdminOverview , getBookingActivity ,   getBookingBreakdown,
+import { getAdminOverview , getBookingActivity ,   getBookingBreakdown, getServiceAnalytics,
  } from "../../../Services/analyticsService";
 
 import BookingActivityChart from "./BookingActivityChart";
 import BookingBreakdown from "./BookingBreakdown";
 import BookingStatusChart from "./BookingStatusChart";
+import ServiceBookingChart from "./ServiceBookingChart";
 
 import "../../../styles/AdminAnalytics.css";
 
@@ -20,6 +21,7 @@ const AdminAnalytics = () => {
   const [overview, setOverview] = useState(null);
   const [bookingBreakdown, setBookingBreakdown] = useState(null);
   const [bookingActivity, setBookingActivity] = useState([]);
+  const [serviceAnalytics, setServiceAnalytics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   
@@ -37,15 +39,18 @@ useEffect(() => {
         overviewResponse,
         bookingResponse,
           breakdownResponse,
+          serviceResponse,
       ] = await Promise.all([
         getAdminOverview(),
         getBookingActivity(),
         getBookingBreakdown(),
+        getServiceAnalytics(),
       ]);
 
       setOverview(overviewResponse.data);
       setBookingActivity(bookingResponse.data);
       setBookingBreakdown(breakdownResponse.data);
+      setServiceAnalytics(serviceResponse.data);
     } catch (error) {
       console.error(
         "Admin analytics error:",
@@ -304,6 +309,18 @@ useEffect(() => {
     data={bookingBreakdown}
   />
 
+  {/* =====================================================
+    SERVICE ANALYTICS
+===================================================== */}
+
+<div className="analytics-service-section">
+
+  <ServiceBookingChart
+    data={serviceAnalytics}
+  />
+
+</div>
+
 </div>
         </section>
 
@@ -312,5 +329,6 @@ useEffect(() => {
     </div>
   );
 };
+
 
 export default AdminAnalytics;

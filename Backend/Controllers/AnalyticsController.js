@@ -181,9 +181,87 @@ const getBookingBreakdown = async (req, res) => {
   }
 };
 
+// =====================================================
+// GET SERVICE ANALYTICS
+// Returns the number of bookings for each service.
+// =====================================================
+
+const getServiceAnalytics = async (req, res) => {
+  try {
+    const serviceAnalytics = await Booking.aggregate([
+      // Group bookings by service
+      {
+        $group: {
+          _id: "$service",
+          bookingCount: {
+            $sum: 1,
+          },
+        },
+      },
+
+      // Show service information
+      {
+        $lookup: {
+          from: "services",
+          localField: "_id",
+          foreignField: "_id",
+          as: "service",
+        },
+      },
+
+      // Convert service array into object
+      {
+        $unwind: {
+          path: "$service",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+
+      // Return clean analytics data
+      {
+        $project: {
+          _id: 0,
+          serviceId: "$_id",
+          serviceName: {
+            $ifNull: [
+              "$service.name",
+              "$service.title",
+            ],
+          },
+          bookingCount: 1,
+        },
+      },
+
+      // Most booked services first
+      {
+        $sort: {
+          bookingCount: -1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: serviceAnalytics,
+    });
+  } catch (error) {
+    console.error(
+      "Service analytics error:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load service analytics",
+    });
+  }
+};
+
 module.exports = {
   getAdminOverview,
   getBookingActivity,
   getBookingBreakdown,
+  getServiceAnalytics,
+
 
 };
