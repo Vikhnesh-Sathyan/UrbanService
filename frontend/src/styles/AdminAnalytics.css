@@ -958,3 +958,207 @@
   }
 
 }
+/* =====================================================
+   COMPLAINT ANALYTICS
+   ===================================================== */
+
+.analytics-complaint-section {
+  margin-top: 36px;
+}
+
+.analytics-complaint-summary {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+
+  margin-bottom: 24px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  background: #ffffff;
+}
+
+.analytics-complaint-total {
+  min-height: 130px;
+
+  padding: 24px 28px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border-right: 1px solid #e5e7eb;
+}
+
+.analytics-complaint-total span,
+.analytics-complaint-status-card span {
+  color: #9ca3af;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.analytics-complaint-total strong {
+  color: #18181b;
+
+  font-size: 38px;
+  font-weight: 750;
+
+  letter-spacing: -0.045em;
+}
+
+.analytics-complaint-status-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+}
+
+.analytics-complaint-status-card {
+  min-height: 130px;
+
+  padding: 24px 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border-right: 1px solid #e5e7eb;
+}
+
+.analytics-complaint-status-card:last-child {
+  border-right: none;
+}
+
+.analytics-complaint-status-card strong {
+  color: #18181b;
+
+  font-size: 28px;
+  font-weight: 750;
+
+  letter-spacing: -0.04em;
+}
+
+
+/* =====================================================
+   COMPLAINT REASON CHART
+   ===================================================== */
+
+.analytics-complaint-chart-card {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 28px 32px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.025),
+    0 12px 40px rgba(0, 0, 0, 0.045);
+}
+
+.analytics-complaint-chart-wrapper {
+  width: 100%;
+  height: 320px;
+
+  margin-top: 12px;
+}
+
+.analytics-complaint-empty {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #9ca3af;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   TOOLTIP
+   ===================================================== */
+
+.analytics-complaint-tooltip {
+  min-width: 150px;
+
+  padding: 11px 13px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.analytics-complaint-tooltip span {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #6b7280;
+
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.analytics-complaint-tooltip strong {
+  color: #18181b;
+
+  font-size: 19px;
+  font-weight: 750;
+}
+
+.analytics-complaint-tooltip small {
+  margin-left: 5px;
+
+  color: #9ca3af;
+
+  font-size: 10px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 950px) {
+
+  .analytics-complaint-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-complaint-total {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .analytics-complaint-status-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .analytics-complaint-status-card:nth-child(2) {
+    border-right: none;
+  }
+
+  .analytics-complaint-status-card:nth-child(-n + 2) {
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+}

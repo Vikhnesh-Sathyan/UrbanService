@@ -12,6 +12,7 @@ const {
   getBookingBreakdown,
   getServiceAnalytics,
   getProviderAnalytics,
+  getComplaintAnalytics
 
 } = require("../Controllers/AnalyticsController");
 
@@ -63,6 +64,17 @@ router.get(
   authMiddleware,
   roleMiddleware("admin"),
   getProviderAnalytics
+);
+
+// =====================================================
+// ADMIN → COMPLAINT ANALYTICS
+// =====================================================
+
+router.get(
+  "/admin/complaints",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getComplaintAnalytics
 );
 
 module.exports = router;

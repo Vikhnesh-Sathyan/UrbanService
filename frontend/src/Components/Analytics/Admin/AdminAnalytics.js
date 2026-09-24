@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import AdminSidebar from "../../Dashboard/Admin/AdminSidebar";
 import AdminNavbar from "../../Dashboard/Admin/AdminNavbar";
 
-import { getAdminOverview , getBookingActivity ,   getBookingBreakdown, getServiceAnalytics, getProviderAnalytics,
+import { getAdminOverview , getBookingActivity ,   getBookingBreakdown, getServiceAnalytics, getProviderAnalytics , getComplaintAnalytics,
  } from "../../../Services/analyticsService";
 
 import BookingActivityChart from "./BookingActivityChart";
@@ -11,7 +11,8 @@ import BookingBreakdown from "./BookingBreakdown";
 import BookingStatusChart from "./BookingStatusChart";
 import ServiceBookingChart from "./ServiceBookingChart";
 import ProviderPerformanceChart from "./ProviderPerformanceChart";
-
+import ComplaintStatusSummary from "./ComplaintStatusSummary";
+import ComplaintReasonChart from "./ComplaintReasonChart";
 import "../../../styles/AdminAnalytics.css";
 
 const AdminAnalytics = () => {
@@ -24,6 +25,7 @@ const AdminAnalytics = () => {
   const [bookingActivity, setBookingActivity] = useState([]);
   const [serviceAnalytics, setServiceAnalytics] = useState([]);
   const [providerAnalytics, setProviderAnalytics] = useState(null);
+  const [complaintAnalytics, setComplaintAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   
@@ -42,13 +44,15 @@ useEffect(() => {
         bookingResponse,
           breakdownResponse,
           serviceResponse,
-          providerResponse
+          providerResponse,
+          complaintResponse
       ] = await Promise.all([
         getAdminOverview(),
         getBookingActivity(),
         getBookingBreakdown(),
         getServiceAnalytics(),
         getProviderAnalytics(),
+        getComplaintAnalytics(),
       ]);
 
       setOverview(overviewResponse.data);
@@ -56,6 +60,7 @@ useEffect(() => {
       setBookingBreakdown(breakdownResponse.data);
       setServiceAnalytics(serviceResponse.data);
       setProviderAnalytics(providerResponse.data);
+      setComplaintAnalytics(complaintResponse.data);
     } catch (error) {
       console.error(
         "Admin analytics error:",
@@ -383,6 +388,40 @@ useEffect(() => {
   <ProviderPerformanceChart
     data={providerAnalytics?.performance || []}
   />
+
+  {/* =====================================================
+    COMPLAINT ANALYTICS
+===================================================== */}
+
+<div className="analytics-complaint-section">
+
+  <div className="analytics-section-heading">
+
+    <div>
+
+      <span>
+        COMPLAINT ANALYTICS
+      </span>
+
+      <h2>
+        Customer issue insights
+      </h2>
+
+    </div>
+
+  </div>
+
+
+  <ComplaintStatusSummary
+    data={complaintAnalytics}
+  />
+
+
+  <ComplaintReasonChart
+    data={complaintAnalytics}
+  />
+
+</div>
 
 </div>
 

@@ -86,3 +86,17 @@ export const getProviderAnalytics = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET COMPLAINT ANALYTICS
+// Fetches complaint status and reason analytics.
+// =====================================================
+
+export const getComplaintAnalytics = async () => {
+  const response = await axios.get(
+    `${API}/admin/complaints`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

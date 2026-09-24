@@ -376,12 +376,94 @@ const getProviderAnalytics = async (req, res) => {
   }
 };
 
+// =====================================================
+// GET COMPLAINT ANALYTICS
+// Returns complaint status and reason breakdown
+// for the admin analytics dashboard.
+// =====================================================
+
+const getComplaintAnalytics = async (req, res) => {
+  try {
+    // -------------------------------------------------
+    // COMPLAINT STATUS BREAKDOWN
+    // -------------------------------------------------
+
+    const statusBreakdown = await Complaint.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+    ]);
+
+
+    // -------------------------------------------------
+    // COMPLAINT REASON BREAKDOWN
+    // -------------------------------------------------
+
+    const reasonBreakdown = await Complaint.aggregate([
+      {
+        $group: {
+          _id: "$reason",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+    ]);
+
+
+    // -------------------------------------------------
+    // TOTAL COMPLAINTS
+    // -------------------------------------------------
+
+    const totalComplaints =
+      await Complaint.countDocuments();
+
+
+    // -------------------------------------------------
+    // RESPONSE
+    // -------------------------------------------------
+
+    res.status(200).json({
+      success: true,
+
+      data: {
+        totalComplaints,
+        statusBreakdown,
+        reasonBreakdown,
+      },
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Complaint analytics error:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load complaint analytics",
+    });
+  }
+};
+
 module.exports = {
   getAdminOverview,
   getBookingActivity,
   getBookingBreakdown,
   getServiceAnalytics,
   getProviderAnalytics,
-
+  getComplaintAnalytics,
 
 };
