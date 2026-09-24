@@ -3,9 +3,12 @@ import React, { useEffect, useState } from "react";
 import AdminSidebar from "../../Dashboard/Admin/AdminSidebar";
 import AdminNavbar from "../../Dashboard/Admin/AdminNavbar";
 
-import { getAdminOverview , getBookingActivity } from "../../../Services/analyticsService";
+import { getAdminOverview , getBookingActivity ,   getBookingBreakdown,
+ } from "../../../Services/analyticsService";
 
 import BookingActivityChart from "./BookingActivityChart";
+import BookingBreakdown from "./BookingBreakdown";
+import BookingStatusChart from "./BookingStatusChart";
 
 import "../../../styles/AdminAnalytics.css";
 
@@ -15,6 +18,7 @@ const AdminAnalytics = () => {
   // =====================================================
 
   const [overview, setOverview] = useState(null);
+  const [bookingBreakdown, setBookingBreakdown] = useState(null);
   const [bookingActivity, setBookingActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -32,13 +36,16 @@ useEffect(() => {
       const [
         overviewResponse,
         bookingResponse,
+          breakdownResponse,
       ] = await Promise.all([
         getAdminOverview(),
         getBookingActivity(),
+        getBookingBreakdown(),
       ]);
 
       setOverview(overviewResponse.data);
       setBookingActivity(bookingResponse.data);
+      setBookingBreakdown(breakdownResponse.data);
     } catch (error) {
       console.error(
         "Admin analytics error:",
@@ -283,7 +290,21 @@ useEffect(() => {
 
 <BookingActivityChart
   data={bookingActivity}/>
-  
+{/* =====================================================
+    BOOKING BREAKDOWN
+===================================================== */}
+
+<div className="analytics-breakdown-grid">
+
+  <BookingBreakdown
+    data={bookingBreakdown}
+  />
+
+  <BookingStatusChart
+    data={bookingBreakdown}
+  />
+
+</div>
         </section>
 
       </main>

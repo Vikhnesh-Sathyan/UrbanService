@@ -450,6 +450,206 @@
 }
 
 /* =====================================================
+   BOOKING BREAKDOWN GRID
+   ===================================================== */
+
+.analytics-breakdown-grid {
+  max-width: 1200px;
+
+  margin: 24px auto 0;
+
+  display: grid;
+
+  grid-template-columns: 0.9fr 1.1fr;
+
+  gap: 24px;
+}
+
+
+/* =====================================================
+   BREAKDOWN CARD
+   ===================================================== */
+
+.analytics-breakdown-card {
+  min-width: 0;
+
+  padding: 26px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.02),
+    0 8px 30px rgba(0, 0, 0, 0.025);
+}
+
+
+/* =====================================================
+   DONUT SECTION
+   ===================================================== */
+
+.analytics-type-content {
+  min-height: 250px;
+
+  display: grid;
+
+  grid-template-columns: 1fr 0.85fr;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.analytics-donut-wrapper {
+  position: relative;
+
+  width: 100%;
+}
+
+.analytics-donut-center {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  pointer-events: none;
+}
+
+.analytics-donut-center strong {
+  color: #18181b;
+
+  font-size: 25px;
+  font-weight: 750;
+
+  line-height: 1;
+}
+
+.analytics-donut-center span {
+  margin-top: 5px;
+
+  color: #9ca3af;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+}
+
+
+/* =====================================================
+   TYPE LEGEND
+   ===================================================== */
+
+.analytics-type-legend {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+.analytics-type-item {
+  padding-bottom: 13px;
+
+  border-bottom: 1px solid #f0f0ef;
+}
+
+.analytics-type-item:last-child {
+  padding-bottom: 0;
+
+  border-bottom: none;
+}
+
+.analytics-type-name {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #6b7280;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.analytics-type-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+}
+
+.analytics-type-value {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+
+  margin-top: 6px;
+}
+
+.analytics-type-value strong {
+  color: #18181b;
+
+  font-size: 22px;
+  font-weight: 750;
+}
+
+.analytics-type-value span {
+  color: #9ca3af;
+
+  font-size: 11px;
+}
+
+
+/* =====================================================
+   STATUS CHART
+   ===================================================== */
+
+.analytics-status-chart {
+  width: 100%;
+  height: 250px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 900px) {
+
+  .analytics-breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .analytics-breakdown-card {
+    padding: 20px;
+  }
+
+  .analytics-type-content {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-donut-wrapper {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+}
+
+/* =====================================================
    RESPONSIVE
    ===================================================== */
 

@@ -129,7 +129,61 @@ const getBookingActivity = async (req, res) => {
   }
 };
 
+// =====================================================
+// GET BOOKING BREAKDOWN
+// Returns booking type and booking status statistics.
+// =====================================================
+
+const getBookingBreakdown = async (req, res) => {
+  try {
+    const [bookingTypes, bookingStatuses] =
+      await Promise.all([
+        Booking.aggregate([
+          {
+            $group: {
+              _id: "$bookingType",
+              count: {
+                $sum: 1,
+              },
+            },
+          },
+        ]),
+
+        Booking.aggregate([
+          {
+            $group: {
+              _id: "$status",
+              count: {
+                $sum: 1,
+              },
+            },
+          },
+        ]),
+      ]);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        bookingTypes,
+        bookingStatuses,
+      },
+    });
+  } catch (error) {
+    console.error(
+      "Booking breakdown analytics error:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load booking breakdown",
+    });
+  }
+};
+
 module.exports = {
   getAdminOverview,
- getBookingActivity,
+  getBookingActivity,
+  getBookingBreakdown,
+
 };

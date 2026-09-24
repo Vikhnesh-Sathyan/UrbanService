@@ -44,3 +44,17 @@ export const getBookingActivity = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET BOOKING BREAKDOWN
+// Fetches booking type and status statistics.
+// =====================================================
+
+export const getBookingBreakdown = async () => {
+  const response = await axios.get(
+    `${API}/admin/booking-breakdown`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

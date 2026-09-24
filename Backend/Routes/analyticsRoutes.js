@@ -9,6 +9,7 @@ const router = express.Router();
 const {
   getAdminOverview,
   getBookingActivity,
+  getBookingBreakdown,
 } = require("../Controllers/AnalyticsController");
 
 const authMiddleware = require("../Middleware/AuthMiddleware");
@@ -30,6 +31,13 @@ router.get(
   authMiddleware,
   roleMiddleware("admin"),
   getBookingActivity
+);
+
+router.get(
+  "/admin/booking-breakdown",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getBookingBreakdown
 );
 
 module.exports = router;
