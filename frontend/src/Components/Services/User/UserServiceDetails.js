@@ -71,8 +71,12 @@ const UserServiceDetails = () => {
   // ==========================================
 const handleBookService = () => {
   const token = localStorage.getItem("token");
+  const storedUser = localStorage.getItem("user");
 
-  // No login token
+  // =====================================================
+  // NOT LOGGED IN
+  // =====================================================
+
   if (!token) {
     alert("Please login to book this service.");
     navigate("/login");
@@ -80,29 +84,77 @@ const handleBookService = () => {
   }
 
   try {
-    // Decode JWT payload
-    const payload = JSON.parse(atob(token.split(".")[1]));
+    // ===================================================
+    // CHECK JWT EXPIRY
+    // ===================================================
 
-    // Check token expiry
-    if (payload.exp && payload.exp * 1000 < Date.now()) {
+    const payload = JSON.parse(
+      atob(token.split(".")[1])
+    );
+
+    if (
+      payload.exp &&
+      payload.exp * 1000 < Date.now()
+    ) {
       localStorage.removeItem("token");
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("user");
 
-      alert("Your session has expired. Please login again.");
+      alert(
+        "Your session has expired. Please login again."
+      );
+
       navigate("/login");
       return;
     }
 
-    // Valid token → open booking page
-    navigate(`/user/services/${serviceId}/book`, {
-      state: {
-        service,
-      },
-    });
-  } catch (error) {
-    // Invalid token
-    localStorage.removeItem("token");
+    // ===================================================
+    // CHECK USER ROLE
+    // ===================================================
 
-    alert("Please login to book this service.");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+
+      if (
+        user.role &&
+        user.role !== "user"
+      ) {
+        alert(
+          "Only customers can book services."
+        );
+
+        return;
+      }
+    }
+
+    // ===================================================
+    // CUSTOMER → BOOKING PAGE
+    // ===================================================
+
+    navigate(
+      `/user/services/${serviceId}/book`,
+      {
+        state: {
+          service,
+        },
+      }
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Book service authentication error:",
+      error
+    );
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("user");
+
+    alert(
+      "Please login to book this service."
+    );
+
     navigate("/login");
   }
 };

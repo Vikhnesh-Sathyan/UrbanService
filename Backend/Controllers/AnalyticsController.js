@@ -257,11 +257,131 @@ const getServiceAnalytics = async (req, res) => {
   }
 };
 
+// =====================================================
+// GET PROVIDER ANALYTICS
+// Returns provider summary and completed booking
+// performance for the admin dashboard.
+// =====================================================
+
+const getProviderAnalytics = async (req, res) => {
+  try {
+    // -------------------------------------------------
+    // PROVIDER SUMMARY
+    // -------------------------------------------------
+
+    const totalProviders = await User.countDocuments({
+      role: "provider",
+    });
+
+    const activeProviders = await User.countDocuments({
+      role: "provider",
+      isActive: true,
+    });
+
+    const blockedProviders = await User.countDocuments({
+      role: "provider",
+      isActive: false,
+    });
+
+
+    // -------------------------------------------------
+    // PROVIDER PERFORMANCE
+    // -------------------------------------------------
+
+    const providerPerformance = await Booking.aggregate([
+      // Only completed bookings count toward
+      // provider performance.
+      {
+        $match: {
+          status: "completed",
+        },
+      },
+
+      // Group completed bookings by provider.
+      {
+        $group: {
+          _id: "$provider",
+          completedBookings: {
+            $sum: 1,
+          },
+        },
+      },
+
+      // Get provider information.
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "provider",
+        },
+      },
+
+      // Convert provider array into object.
+      {
+        $unwind: {
+          path: "$provider",
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+
+      // Return only required analytics data.
+      {
+        $project: {
+          _id: 0,
+          providerId: "$_id",
+          providerName: "$provider.name",
+          completedBookings: 1,
+        },
+      },
+
+      // Highest completed bookings first.
+      {
+        $sort: {
+          completedBookings: -1,
+        },
+      },
+    ]);
+
+
+    // -------------------------------------------------
+    // RESPONSE
+    // -------------------------------------------------
+
+    res.status(200).json({
+      success: true,
+
+      data: {
+        summary: {
+          totalProviders,
+          activeProviders,
+          blockedProviders,
+        },
+
+        performance: providerPerformance,
+      },
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Provider analytics error:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load provider analytics",
+    });
+  }
+};
+
 module.exports = {
   getAdminOverview,
   getBookingActivity,
   getBookingBreakdown,
   getServiceAnalytics,
+  getProviderAnalytics,
 
 
 };

@@ -3,13 +3,14 @@ import React, { useEffect, useState } from "react";
 import AdminSidebar from "../../Dashboard/Admin/AdminSidebar";
 import AdminNavbar from "../../Dashboard/Admin/AdminNavbar";
 
-import { getAdminOverview , getBookingActivity ,   getBookingBreakdown, getServiceAnalytics,
+import { getAdminOverview , getBookingActivity ,   getBookingBreakdown, getServiceAnalytics, getProviderAnalytics,
  } from "../../../Services/analyticsService";
 
 import BookingActivityChart from "./BookingActivityChart";
 import BookingBreakdown from "./BookingBreakdown";
 import BookingStatusChart from "./BookingStatusChart";
 import ServiceBookingChart from "./ServiceBookingChart";
+import ProviderPerformanceChart from "./ProviderPerformanceChart";
 
 import "../../../styles/AdminAnalytics.css";
 
@@ -22,6 +23,7 @@ const AdminAnalytics = () => {
   const [bookingBreakdown, setBookingBreakdown] = useState(null);
   const [bookingActivity, setBookingActivity] = useState([]);
   const [serviceAnalytics, setServiceAnalytics] = useState([]);
+  const [providerAnalytics, setProviderAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   
@@ -40,17 +42,20 @@ useEffect(() => {
         bookingResponse,
           breakdownResponse,
           serviceResponse,
+          providerResponse
       ] = await Promise.all([
         getAdminOverview(),
         getBookingActivity(),
         getBookingBreakdown(),
         getServiceAnalytics(),
+        getProviderAnalytics(),
       ]);
 
       setOverview(overviewResponse.data);
       setBookingActivity(bookingResponse.data);
       setBookingBreakdown(breakdownResponse.data);
       setServiceAnalytics(serviceResponse.data);
+      setProviderAnalytics(providerResponse.data);
     } catch (error) {
       console.error(
         "Admin analytics error:",
@@ -317,6 +322,66 @@ useEffect(() => {
 
   <ServiceBookingChart
     data={serviceAnalytics}
+  />
+
+</div>
+
+{/* =====================================================
+    PROVIDER ANALYTICS
+===================================================== */}
+
+<div className="analytics-provider-section">
+
+  <div className="analytics-section-heading">
+
+    <div>
+      <span>PROVIDER ANALYTICS</span>
+
+      <h2>
+        Provider performance
+      </h2>
+    </div>
+
+  </div>
+
+
+  {/* Provider KPI cards */}
+
+  <div className="analytics-provider-kpi-grid">
+
+    <div className="analytics-provider-kpi-card">
+      <span>Total Providers</span>
+
+      <strong>
+        {providerAnalytics?.summary?.totalProviders || 0}
+      </strong>
+    </div>
+
+
+    <div className="analytics-provider-kpi-card">
+      <span>Active Providers</span>
+
+      <strong>
+        {providerAnalytics?.summary?.activeProviders || 0}
+      </strong>
+    </div>
+
+
+    <div className="analytics-provider-kpi-card">
+      <span>Blocked Providers</span>
+
+      <strong>
+        {providerAnalytics?.summary?.blockedProviders || 0}
+      </strong>
+    </div>
+
+  </div>
+
+
+  {/* Performance chart */}
+
+  <ProviderPerformanceChart
+    data={providerAnalytics?.performance || []}
   />
 
 </div>

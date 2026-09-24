@@ -72,3 +72,17 @@ export const getServiceAnalytics = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET PROVIDER ANALYTICS
+// Fetches provider summary and performance data.
+// =====================================================
+
+export const getProviderAnalytics = async () => {
+  const response = await axios.get(
+    `${API}/admin/providers`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};
