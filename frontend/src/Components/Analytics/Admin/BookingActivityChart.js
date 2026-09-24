@@ -10,19 +10,87 @@ import {
   Tooltip,
 } from "recharts";
 
+
+// =====================================================
+// FORMAT DATE
+// Converts YYYY-MM-DD into a clean display format.
+// Example: 2026-09-17 → Sep 17
+// =====================================================
+
+const formatDate = (dateString) => {
+  if (!dateString) {
+    return "";
+  }
+
+  const date = new Date(`${dateString}T00:00:00`);
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+};
+
+
+// =====================================================
+// CUSTOM TOOLTIP
+// =====================================================
+
+const BookingTooltip = ({
+  active,
+  payload,
+  label,
+}) => {
+  if (!active || !payload || !payload.length) {
+    return null;
+  }
+
+  return (
+    <div className="analytics-booking-tooltip">
+
+      <span className="analytics-booking-tooltip-date">
+        {formatDate(label)}
+      </span>
+
+      <div className="analytics-booking-tooltip-value">
+
+        <strong>
+          {payload[0].value}
+        </strong>
+
+        <span>
+          bookings
+        </span>
+
+      </div>
+
+    </div>
+  );
+};
+
+
+// =====================================================
+// BOOKING ACTIVITY CHART
+// =====================================================
+
 const BookingActivityChart = ({ data }) => {
-  const chartData = data.map((item) => ({
+
+  const chartData = (data || []).map((item) => ({
     date: item._id,
     bookings: item.bookings,
   }));
 
+
   return (
     <div className="analytics-chart-card">
 
-      {/* Header */}
+      {/* =================================================
+          HEADER
+      ================================================= */}
+
       <div className="analytics-chart-header">
 
         <div>
+
           <span className="analytics-chart-label">
             BOOKING ACTIVITY
           </span>
@@ -30,6 +98,7 @@ const BookingActivityChart = ({ data }) => {
           <h3>
             Booking trend
           </h3>
+
         </div>
 
         <span className="analytics-chart-description">
@@ -38,82 +107,100 @@ const BookingActivityChart = ({ data }) => {
 
       </div>
 
-      {/* Chart */}
+
+      {/* =================================================
+          CHART
+      ================================================= */}
+
       <div className="analytics-chart-wrapper">
 
         <ResponsiveContainer
           width="100%"
-          height={320}
+          height="100%"
         >
+
           <LineChart
             data={chartData}
             margin={{
-              top: 10,
-              right: 10,
-              left: -20,
-              bottom: 5,
+              top: 12,
+              right: 16,
+              left: -18,
+              bottom: 8,
             }}
           >
+
+            {/* Grid */}
 
             <CartesianGrid
               stroke="#eeeeec"
               vertical={false}
             />
 
+
+            {/* X Axis */}
+
             <XAxis
               dataKey="date"
               axisLine={false}
               tickLine={false}
+              tickFormatter={formatDate}
               tick={{
                 fill: "#9ca3af",
                 fontSize: 11,
               }}
+              tickMargin={10}
             />
+
+
+            {/* Y Axis */}
 
             <YAxis
               allowDecimals={false}
               axisLine={false}
               tickLine={false}
+              width={40}
               tick={{
                 fill: "#9ca3af",
                 fontSize: 11,
               }}
             />
 
+
+            {/* Tooltip */}
+
             <Tooltip
+              content={<BookingTooltip />}
               cursor={{
                 stroke: "#d4d4d8",
                 strokeWidth: 1,
               }}
-              contentStyle={{
-                border: "1px solid #e5e7eb",
-                borderRadius: "10px",
-                background: "#ffffff",
-                boxShadow:
-                  "0 8px 24px rgba(0,0,0,0.08)",
-              }}
-              labelStyle={{
-                color: "#6b7280",
-                fontSize: 11,
-                marginBottom: 4,
-              }}
             />
+
+
+            {/* Line */}
 
             <Line
               type="monotone"
               dataKey="bookings"
               stroke="#18181b"
-              strokeWidth={2}
+              strokeWidth={2.2}
               dot={{
-                r: 3,
+                r: 3.5,
                 fill: "#18181b",
+                stroke: "#18181b",
+                strokeWidth: 1,
               }}
               activeDot={{
                 r: 5,
+                fill: "#18181b",
+                stroke: "#ffffff",
+                strokeWidth: 2,
               }}
+              animationDuration={700}
             />
 
           </LineChart>
+
         </ResponsiveContainer>
 
       </div>

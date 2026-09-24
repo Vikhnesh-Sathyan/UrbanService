@@ -650,6 +650,62 @@
 }
 
 /* =====================================================
+   BOOKING ACTIVITY TOOLTIP
+   ===================================================== */
+
+.analytics-booking-tooltip {
+  min-width: 120px;
+
+  padding: 11px 13px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.analytics-booking-tooltip-date {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #9ca3af;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+}
+
+.analytics-booking-tooltip-value {
+  display: flex;
+  align-items: baseline;
+
+  gap: 5px;
+}
+
+.analytics-booking-tooltip-value strong {
+  color: #18181b;
+
+  font-size: 19px;
+  font-weight: 750;
+
+  line-height: 1;
+}
+
+.analytics-booking-tooltip-value span {
+  color: #6b7280;
+
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* =====================================================
    RESPONSIVE
    ===================================================== */
 
