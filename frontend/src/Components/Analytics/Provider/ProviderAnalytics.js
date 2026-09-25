@@ -11,12 +11,14 @@ import ProviderNavbar from "../../Dashboard/Provider/ProviderNavbar";
 
 import BookingActivityChart from "./BookingActivityChart";
 import ServicePerformance from "./ServicePerformance";
+import EmergencyAnalytics from "./EmergencyAnalytics";
 
 import {
   getMyProviderOverview,
   getMyBookingPerformance,
   getMyBookingActivity,
   getMyServicePerformance,
+  getMyEmergencyAnalytics,
 } from "../../../Services/providerAnalyticsService";
 
 import "../../../styles/ProviderAnalytics.css";
@@ -29,6 +31,7 @@ const ProviderAnalytics = () => {
   const [bookingPerformance, setBookingPerformance] = useState([]);
   const [bookingActivity, setBookingActivity] = useState([]);
   const [servicePerformance, setServicePerformance] = useState([]);
+  const [emergencyAnalytics, setEmergencyAnalytics] = useState(null);
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -48,11 +51,14 @@ useEffect(() => {
   performanceResponse,
   activityResponse,
   servicePerformanceResponse,
+  emergencyAnalyticsResponse
 ] = await Promise.all([
   getMyProviderOverview(),
   getMyBookingPerformance(),
   getMyBookingActivity(),
   getMyServicePerformance(),
+  getMyEmergencyAnalytics(),
+
 ]);
 
       if (overviewResponse.success) {
@@ -71,6 +77,9 @@ useEffect(() => {
         setServicePerformance(servicePerformanceResponse.data);
       }
 
+      if (emergencyAnalyticsResponse.success) {
+        setEmergencyAnalytics(emergencyAnalyticsResponse.data);
+      }
     } catch (error) {
       console.error(
         "Provider analytics error:",
@@ -310,6 +319,8 @@ return (
 
 
 <ServicePerformance data={servicePerformance} />
+
+<EmergencyAnalytics data={emergencyAnalytics} />
 
       </section>
 

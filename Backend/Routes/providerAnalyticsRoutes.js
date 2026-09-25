@@ -7,6 +7,7 @@ const {
   getMyBookingPerformance,
   getMyBookingActivity,
   getMyServicePerformance,
+  getMyEmergencyAnalytics,
 } = require("../Controllers/ProviderAnalyticsController");
 
 const authMiddleware = require("../Middleware/authMiddleware");

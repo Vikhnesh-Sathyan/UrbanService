@@ -66,3 +66,13 @@ export const getMyServicePerformance = async () => {
 
   return response.data;
 };
+
+// Fetch emergency booking analytics for the logged-in provider
+export const getMyEmergencyAnalytics = async () => {
+  const response = await axios.get(
+    `${API}/emergency-analytics`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

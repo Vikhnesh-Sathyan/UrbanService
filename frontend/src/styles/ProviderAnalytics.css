@@ -468,6 +468,158 @@
 
 
 /* =====================================================
+   EMERGENCY ANALYTICS
+   ===================================================== */
+
+.provider-emergency-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.provider-emergency-kpi {
+  min-height: 130px;
+  padding: 18px;
+  background: #f8fafc;
+  border: 1px solid #e7ebf0;
+  border-radius: 13px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.provider-emergency-kpi:hover {
+  transform: translateY(-2px);
+  background: #ffffff;
+  border-color: #dce2e9;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =====================================================
+   EMERGENCY KPI ICON
+   ===================================================== */
+
+.provider-emergency-kpi-icon {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 13px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+  background: #fff1f2;
+  color: #e11d48;
+
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   EMERGENCY KPI VALUE
+   ===================================================== */
+
+.provider-emergency-kpi strong {
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.provider-emergency-kpi small {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+
+/* =====================================================
+   EMERGENCY STATUS
+   ===================================================== */
+
+.provider-emergency-status {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+
+  margin-top: 18px;
+  padding-top: 18px;
+
+  border-top: 1px solid #eef1f5;
+}
+
+.provider-emergency-status > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 13px 15px;
+
+  background: #ffffff;
+  border: 1px solid #e8edf3;
+  border-radius: 10px;
+}
+
+.provider-emergency-status span {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.provider-emergency-status strong {
+  min-width: 30px;
+
+  padding: 4px 8px;
+
+  border-radius: 7px;
+
+  background: #f1f5f9;
+  color: #334155;
+
+  text-align: center;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   EMERGENCY RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 1100px) {
+  .provider-emergency-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+@media (max-width: 700px) {
+  .provider-emergency-status {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .provider-emergency-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .provider-emergency-kpi {
+    min-height: 115px;
+  }
+}
+/* =====================================================
    RESPONSIVE
    ===================================================== */
 
