@@ -201,9 +201,110 @@ const getMyBookingActivity = async (req, res) => {
   }
 };
 
+// =====================================================
+// GET MY SERVICE PERFORMANCE
+// Shows booking performance for each service owned by
+// the logged-in provider.
+// =====================================================
+
+const getMyServicePerformance = async (req, res) => {
+  try {
+    const providerId = req.user.id;
+
+    const servicePerformance = await Booking.aggregate([
+      {
+        $match: {
+          provider: new mongoose.Types.ObjectId(providerId),
+        },
+      },
+
+      {
+        $group: {
+          _id: "$service",
+          totalBookings: { $sum: 1 },
+
+          completedBookings: {
+            $sum: {
+              $cond: [
+                { $eq: ["$status", "completed"] },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+
+      {
+        $lookup: {
+          from: "services",
+          localField: "_id",
+          foreignField: "_id",
+          as: "service",
+        },
+      },
+
+      {
+        $unwind: "$service",
+      },
+
+      {
+        $project: {
+          _id: 1,
+          serviceName: "$service.name",
+          totalBookings: 1,
+          completedBookings: 1,
+
+          completionRate: {
+            $cond: [
+              { $gt: ["$totalBookings", 0] },
+              {
+                $round: [
+                  {
+                    $multiply: [
+                      {
+                        $divide: [
+                          "$completedBookings",
+                          "$totalBookings",
+                        ],
+                      },
+                      100,
+                    ],
+                  },
+                  0,
+                ],
+              },
+              0,
+            ],
+          },
+        },
+      },
+
+      {
+        $sort: {
+          totalBookings: -1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: servicePerformance,
+    });
+  } catch (error) {
+    console.error("Provider service performance error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load service performance",
+    });
+  }
+};
+
 module.exports = {
   getMyProviderOverview,
   getMyBookingPerformance,
   getMyBookingActivity,
+  getMyServicePerformance,
 };
 

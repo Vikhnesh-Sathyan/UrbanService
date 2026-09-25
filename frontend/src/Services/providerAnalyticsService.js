@@ -56,3 +56,13 @@ export const getMyBookingActivity = async () => {
 
   return response.data;
 };
+
+// Fetch booking performance for each service owned by the provider
+export const getMyServicePerformance = async () => {
+  const response = await axios.get(
+    `${API}/service-performance`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

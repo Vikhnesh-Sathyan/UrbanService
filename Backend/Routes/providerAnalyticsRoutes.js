@@ -6,6 +6,7 @@ const {
   getMyProviderOverview,
   getMyBookingPerformance,
   getMyBookingActivity,
+  getMyServicePerformance,
 } = require("../Controllers/ProviderAnalyticsController");
 
 const authMiddleware = require("../Middleware/authMiddleware");
@@ -39,6 +40,14 @@ router.get(
   authMiddleware,
   roleMiddleware("provider"),
   getMyBookingActivity
+);
+
+// Get performance of each service owned by the provider
+router.get(
+  "/service-performance",
+  authMiddleware,
+  roleMiddleware("provider"),
+  getMyServicePerformance
 );
 
 module.exports = router;
