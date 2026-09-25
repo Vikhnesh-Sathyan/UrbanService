@@ -5,6 +5,7 @@ const router = express.Router();
 const {
   getMyProviderOverview,
   getMyBookingPerformance,
+  getMyBookingActivity,
 } = require("../Controllers/ProviderAnalyticsController");
 
 const authMiddleware = require("../Middleware/authMiddleware");
@@ -30,6 +31,14 @@ router.get(
   authMiddleware,
   roleMiddleware("provider"),
   getMyBookingPerformance
+);
+
+// Get provider booking activity by date
+router.get(
+  "/booking-activity",
+  authMiddleware,
+  roleMiddleware("provider"),
+  getMyBookingActivity
 );
 
 module.exports = router;

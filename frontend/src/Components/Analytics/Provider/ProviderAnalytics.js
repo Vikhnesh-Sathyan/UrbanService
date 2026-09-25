@@ -9,9 +9,12 @@ import {
 
 import ProviderNavbar from "../../Dashboard/Provider/ProviderNavbar";
 
+import BookingActivityChart from "./BookingActivityChart";
+
 import {
   getMyProviderOverview,
   getMyBookingPerformance,
+  getMyBookingActivity,
 } from "../../../Services/providerAnalyticsService";
 
 import "../../../styles/ProviderAnalytics.css";
@@ -22,6 +25,7 @@ const ProviderAnalytics = () => {
   // =====================================================
 
   const [bookingPerformance, setBookingPerformance] = useState([]);
+  const [bookingActivity, setBookingActivity] = useState([]);
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -36,11 +40,15 @@ useEffect(() => {
       setLoading(true);
       setError("");
 
-      const [overviewResponse, performanceResponse] =
-        await Promise.all([
-          getMyProviderOverview(),
-          getMyBookingPerformance(),
-        ]);
+     const [
+  overviewResponse,
+  performanceResponse,
+  activityResponse,
+] = await Promise.all([
+  getMyProviderOverview(),
+  getMyBookingPerformance(),
+  getMyBookingActivity(),
+]);
 
       if (overviewResponse.success) {
         setAnalytics(overviewResponse.data);
@@ -49,6 +57,9 @@ useEffect(() => {
       if (performanceResponse.success) {
         setBookingPerformance(performanceResponse.data);
       }
+      if (activityResponse.success) {
+  setBookingActivity(activityResponse.data);
+}
     } catch (error) {
       console.error(
         "Provider analytics error:",
@@ -276,7 +287,13 @@ return (
           )}
 
         </div>
+{/* =================================================
+    BOOKING ACTIVITY
+================================================= */}
 
+<BookingActivityChart
+  data={bookingActivity}
+/>
       </section>
 
     

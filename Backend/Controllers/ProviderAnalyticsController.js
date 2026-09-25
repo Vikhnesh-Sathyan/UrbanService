@@ -155,8 +155,55 @@ const getMyBookingPerformance = async (req, res) => {
   }
 };
 
+
+// =====================================================
+// GET MY BOOKING ACTIVITY
+// Groups provider bookings by booking date.
+// Used for the Booking Activity chart.
+// =====================================================
+
+const getMyBookingActivity = async (req, res) => {
+  try {
+    const providerId = req.user.id;
+
+    const bookingActivity = await Booking.aggregate([
+      {
+        $match: {
+          provider: new mongoose.Types.ObjectId(providerId),
+        },
+      },
+
+      {
+        $group: {
+          _id: "$date",
+          count: { $sum: 1 },
+        },
+      },
+
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: bookingActivity,
+    });
+  } catch (error) {
+    console.error("Provider booking activity error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load booking activity",
+    });
+  }
+};
+
 module.exports = {
   getMyProviderOverview,
   getMyBookingPerformance,
+  getMyBookingActivity,
 };
 

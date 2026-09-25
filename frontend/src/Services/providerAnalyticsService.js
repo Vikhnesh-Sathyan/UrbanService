@@ -41,3 +41,18 @@ export const getMyBookingPerformance = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET MY BOOKING ACTIVITY
+// Fetches provider bookings grouped by booking date.
+// Used for the Booking Activity chart.
+// =====================================================
+
+export const getMyBookingActivity = async () => {
+  const response = await axios.get(
+    `${API}/booking-activity`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};
