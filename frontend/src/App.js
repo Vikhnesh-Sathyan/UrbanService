@@ -111,6 +111,12 @@ import AdminComplaints from "./Components/Services/Admin/AdminComplaints";
 import AdminAnalytics from "./Components/Analytics/Admin/AdminAnalytics";
 
 // =====================================================
+// Provider Analytics
+// =====================================================
+
+import ProviderAnalytics from "./Components/Analytics/Provider/ProviderAnalytics";
+
+// =====================================================
 // Complaint Form
 // =====================================================
 import ComplaintForm from "./Components/Services/User/ComplaintForm";
@@ -365,6 +371,15 @@ function App() {
           <Route
             path="/admin/analytics"
             element={<AdminAnalytics />}
+          />
+
+           {/* =================================================
+                PROVIDER Analytics
+          ================================================= */}
+
+          <Route
+            path="/provider/analytics"
+            element={<ProviderAnalytics />}
           />
 
         

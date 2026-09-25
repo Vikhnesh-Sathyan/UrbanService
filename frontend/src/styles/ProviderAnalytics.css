@@ -1,0 +1,326 @@
+/* =====================================================
+   PROVIDER ANALYTICS
+   ===================================================== */
+
+.provider-analytics-content {
+  padding: 32px;
+  background: #f7f8fc;
+  min-height: calc(100vh - 72px);
+}
+
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.provider-analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.provider-analytics-label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #6366f1;
+}
+
+.provider-analytics-header h1 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #111827;
+}
+
+.provider-analytics-header p {
+  margin: 10px 0 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   PROVIDER INFO
+   ===================================================== */
+
+.provider-analytics-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.provider-analytics-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.provider-analytics-profile-info strong {
+  display: block;
+  color: #111827;
+  font-size: 14px;
+}
+
+.provider-analytics-profile-info span {
+  display: block;
+  margin-top: 3px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+
+/* =====================================================
+   KPI GRID
+   ===================================================== */
+
+.provider-analytics-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.provider-analytics-kpi {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+}
+
+.provider-analytics-kpi-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.provider-analytics-kpi-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5ff;
+  color: #4f46e5;
+  font-size: 18px;
+}
+
+.provider-analytics-kpi h3 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1;
+  color: #111827;
+}
+
+.provider-analytics-kpi p {
+  margin: 10px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+
+/* =====================================================
+   ANALYTICS PANEL
+   ===================================================== */
+
+.provider-analytics-panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+}
+
+.provider-analytics-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.provider-analytics-panel-header h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 19px;
+}
+
+.provider-analytics-panel-header p {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   BOOKING STATUS GRID
+   ===================================================== */
+
+.provider-booking-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.provider-booking-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 17px 18px;
+  border: 1px solid #edf0f5;
+  border-radius: 14px;
+  background: #fafbfe;
+}
+
+.provider-booking-status-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.provider-booking-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #6366f1;
+}
+
+.provider-booking-status-name {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.provider-booking-status-count {
+  color: #111827;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+   ===================================================== */
+
+.provider-analytics-empty {
+  padding: 48px 20px;
+  text-align: center;
+  border: 1px dashed #d8dce5;
+  border-radius: 16px;
+  background: #fafbfc;
+}
+
+.provider-analytics-empty-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 21px;
+}
+
+.provider-analytics-empty h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 16px;
+}
+
+.provider-analytics-empty p {
+  margin: 7px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   LOADING / ERROR
+   ===================================================== */
+
+.provider-analytics-state {
+  padding: 80px 20px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.provider-analytics-error {
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 1100px) {
+  .provider-analytics-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .provider-booking-status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+@media (max-width: 700px) {
+  .provider-analytics-content {
+    padding: 20px;
+  }
+
+  .provider-analytics-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .provider-analytics-header h1 {
+    font-size: 26px;
+  }
+
+  .provider-analytics-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .provider-booking-status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .provider-analytics-panel {
+    padding: 18px;
+  }
+}
+
+.provider-analytics-page {
+  min-height: 100vh;
+  width: 100%;
+  background: #f7f8fc;
+}
+
+.provider-analytics-page .provider-analytics-content {
+  width: 100%;
+  box-sizing: border-box;
+}

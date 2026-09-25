@@ -6,6 +6,7 @@ import {
   FaCalendarAlt,
   FaClock,
   FaMoneyBillWave,
+  FaChartLine,
   FaUser,
   FaSignOutAlt,
 } from "react-icons/fa";
@@ -31,6 +32,11 @@ const ProviderSidebar = () => {
       name: "Bookings",
       icon: <FaCalendarAlt />,
       path: "/provider/bookings",
+    },
+    {
+      name: "Analytics",
+      icon: <FaChartLine />,
+      path: "/provider/analytics",
     },
     {
       name: "Availability",
