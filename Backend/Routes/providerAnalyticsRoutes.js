@@ -50,4 +50,11 @@ router.get(
   getMyServicePerformance
 );
 
+// Get emergency booking analytics for the provider
+router.get(
+  "/emergency-analytics",
+  authMiddleware,
+  roleMiddleware("provider"),
+  getMyEmergencyAnalytics
+);
 module.exports = router;
