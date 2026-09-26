@@ -1,3 +1,4 @@
+//displays all notifications and provides the “Mark all as read” button.
 import React from "react";
 
 import NotificationItem from "./NotificationItem";

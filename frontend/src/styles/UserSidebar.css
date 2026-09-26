@@ -1,43 +1,45 @@
-/* ==========================================
+/* =====================================================
    USER SIDEBAR
-========================================== */
+   ===================================================== */
 
 .user-sidebar {
-  width: 250px;
-  height: 100vh;
-
   position: fixed;
-  left: 0;
   top: 0;
+  left: 0;
+
+  width: 252px;
+  height: 100vh;
 
   display: flex;
   flex-direction: column;
 
   background: #ffffff;
 
-  border-right: 1px solid #e8edf3;
+  border-right: 1px solid #e8ebf0;
+
+  box-sizing: border-box;
 
   z-index: 1000;
-
-  transition: transform 0.3s ease;
 }
 
 
-/* ==========================================
+/* =====================================================
    LOGO
-========================================== */
+   ===================================================== */
 
 .user-sidebar-logo {
-  height: 80px;
+  height: 78px;
 
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: 11px;
 
-  padding: 0 24px;
+  padding: 0 22px;
 
   border-bottom: 1px solid #eef1f5;
+
+  box-sizing: border-box;
 }
 
 .user-logo-icon {
@@ -50,65 +52,90 @@
 
   border-radius: 11px;
 
-  background: #111827;
+  background: linear-gradient(
+    135deg,
+    #4f46e5,
+    #6366f1
+  );
 
   color: #ffffff;
 
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 800;
+
+  box-shadow:
+    0 5px 12px rgba(79, 70, 229, 0.2);
 }
 
-.user-sidebar-logo h2 {
+.user-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-logo-text h2 {
   margin: 0;
 
-  color: #111827;
+  font-size: 17px;
+  line-height: 1.1;
 
-  font-size: 18px;
-  font-weight: 700;
+  font-weight: 750;
+
+  color: #0f172a;
 }
 
-.user-sidebar-logo span {
-  display: block;
+.user-logo-text span {
+  margin-top: 3px;
 
-  margin-top: 2px;
+  font-size: 10px;
 
-  color: #8a94a6;
+  font-weight: 600;
 
-  font-size: 11px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
 
-  letter-spacing: 0.5px;
+  color: #94a3b8;
 }
 
 
-/* ==========================================
+/* =====================================================
    NAVIGATION
-========================================== */
+   ===================================================== */
 
 .user-sidebar-nav {
   flex: 1;
 
-  padding: 24px 14px;
+  padding: 24px 13px;
 
   overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: #d9dee7 transparent;
 }
 
 .user-nav-title {
   display: block;
 
-  margin: 0 10px 10px;
+  padding: 0 12px;
 
-  color: #9aa4b2;
+  margin: 0 0 10px;
 
   font-size: 10px;
+
   font-weight: 700;
 
   letter-spacing: 1.2px;
+
+  color: #94a3b8;
+}
+
+.user-account-title {
+  margin-top: 26px;
 }
 
 
-/* ==========================================
+/* =====================================================
    NAV ITEM
-========================================== */
+   ===================================================== */
 
 .user-nav-item {
   position: relative;
@@ -116,22 +143,26 @@
   display: flex;
   align-items: center;
 
-  gap: 13px;
+  gap: 12px;
 
   width: 100%;
 
-  padding: 12px 13px;
+  min-height: 44px;
 
-  margin-bottom: 5px;
+  margin-bottom: 4px;
+
+  padding: 0 13px;
 
   border-radius: 10px;
 
-  color: #687386;
+  box-sizing: border-box;
+
+  color: #64748b;
 
   text-decoration: none;
 
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 550;
 
   transition:
     background 0.2s ease,
@@ -140,178 +171,221 @@
 }
 
 .user-nav-item:hover {
-  background: #f5f7fa;
+  background: #f7f8fc;
 
-  color: #111827;
-
-  transform: translateX(2px);
+  color: #334155;
 }
 
 .user-nav-item.active {
-  background: #111827;
+  background: #eef2ff;
 
-  color: #ffffff;
+  color: #4338ca;
 
-  font-weight: 600;
+  font-weight: 650;
 }
 
 
-/* ==========================================
-   NAV ICON
-========================================== */
+/* =====================================================
+   ACTIVE INDICATOR
+   ===================================================== */
+
+.user-nav-item.active::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 9px;
+  bottom: 9px;
+
+  width: 3px;
+
+  border-radius: 0 4px 4px 0;
+
+  background: #4f46e5;
+}
+
+
+/* =====================================================
+   ICON
+   ===================================================== */
 
 .user-nav-icon {
-  width: 20px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 17px;
-
-  flex-shrink: 0;
-}
-
-.user-nav-item.active .user-nav-icon {
-  color: #ffffff;
-}
-
-
-/* ==========================================
-   SIDEBAR BOTTOM
-========================================== */
-
-.user-sidebar-bottom {
-  padding: 16px;
-
-  border-top: 1px solid #eef1f5;
-}
-
-
-/* ==========================================
-   SUPPORT
-========================================== */
-
-.user-sidebar-support {
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-
-  padding: 12px;
-
-  margin-bottom: 12px;
-
-  border-radius: 10px;
-
-  background: #f7f8fa;
-}
-
-.support-icon {
   width: 30px;
   height: 30px;
 
+  flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 50%;
-
-  background: #ffffff;
-
-  color: #596579;
+  border-radius: 8px;
 
   font-size: 13px;
-  font-weight: 700;
-}
 
-.user-sidebar-support strong {
-  display: block;
-
-  color: #343d4c;
-
-  font-size: 12px;
-}
-
-.user-sidebar-support span {
-  font-size: 10px;
-
-  color: #929bab;
-}
-
-
-/* ==========================================
-   LOGOUT
-========================================== */
-
-.user-logout-btn {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-
-  padding: 11px 13px;
-
-  border: none;
-
-  border-radius: 9px;
-
-  background: transparent;
-
-  color: #687386;
-
-  cursor: pointer;
-
-  font-size: 13px;
-  font-weight: 500;
-
-  text-align: left;
+  color: #94a3b8;
 
   transition:
     background 0.2s ease,
     color 0.2s ease;
 }
 
-.user-logout-btn:hover {
-  background: #fff1f1;
+.user-nav-item:hover .user-nav-icon {
+  color: #475569;
+}
 
-  color: #d14343;
+.user-nav-item.active .user-nav-icon {
+  background: #ffffff;
+
+  color: #4f46e5;
+
+  box-shadow:
+    0 2px 6px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =====================================================
+   BOTTOM SECTION
+   ===================================================== */
+
+.user-sidebar-bottom {
+  padding: 16px 14px 18px;
+
+  border-top: 1px solid #eef1f5;
+
+  background: #ffffff;
+}
+
+
+/* =====================================================
+   SUPPORT
+   ===================================================== */
+
+.user-sidebar-support {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 12px;
+
+  margin-bottom: 10px;
+
+  border-radius: 11px;
+
+  background: #f8fafc;
+
+  border: 1px solid #edf0f4;
+}
+
+.support-icon {
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #eef2ff;
+
+  color: #4f46e5;
+
+  font-size: 13px;
+}
+
+.support-content {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+.support-content strong {
+  font-size: 12px;
+
+  font-weight: 650;
+
+  color: #334155;
+}
+
+.support-content span {
+  margin-top: 2px;
+
+  font-size: 10px;
+
+  color: #94a3b8;
+}
+
+
+/* =====================================================
+   LOGOUT
+   ===================================================== */
+
+.user-logout-btn {
+  width: 100%;
+
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  border: 1px solid #e7ebf0;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #64748b;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.user-logout-btn:hover {
+  background: #fff7f7;
+
+  border-color: #fecaca;
+
+  color: #dc2626;
+
+  transform: translateY(-1px);
 }
 
 .user-logout-btn span {
-  font-size: 16px;
+  display: flex;
+
+  font-size: 13px;
 }
 
 
-/* ==========================================
-   SCROLLBAR
-========================================== */
-
-.user-sidebar-nav::-webkit-scrollbar {
-  width: 4px;
-}
-
-.user-sidebar-nav::-webkit-scrollbar-thumb {
-  background: #d9dee7;
-
-  border-radius: 10px;
-}
-
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
+/* =====================================================
+   MOBILE
+   ===================================================== */
 
 @media (max-width: 900px) {
-
   .user-sidebar {
     transform: translateX(-100%);
+
+    transition: transform 0.25s ease;
   }
 
   .user-sidebar.open {
     transform: translateX(0);
   }
-
 }

@@ -1,3 +1,5 @@
+//displays one notification and handles what happens when the user clicks it.
+
 import React from "react";
 import { FaBell, FaCheck } from "react-icons/fa";
 

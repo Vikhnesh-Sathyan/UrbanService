@@ -117,6 +117,12 @@ import AdminAnalytics from "./Components/Analytics/Admin/AdminAnalytics";
 import ProviderAnalytics from "./Components/Analytics/Provider/ProviderAnalytics";
 
 // =====================================================
+// User Analytics
+// =====================================================
+
+import UserAnalytics from "./Components/Analytics/User/UserAnalytics";
+
+// =====================================================
 // Complaint Form
 // =====================================================
 import ComplaintForm from "./Components/Services/User/ComplaintForm";
@@ -373,13 +379,22 @@ function App() {
             element={<AdminAnalytics />}
           />
 
-           {/* =================================================
+          {/* =================================================
                 PROVIDER Analytics
           ================================================= */}
 
           <Route
             path="/provider/analytics"
             element={<ProviderAnalytics />}
+          />
+
+          {/* =================================================
+                USER Analytics
+          ================================================= */}
+
+          <Route
+             path="/user/analytics"
+             element={<UserAnalytics />}
           />
 
         

@@ -1,0 +1,272 @@
+/* =========================================================
+   USER ANALYTICS PAGE
+========================================================= */
+
+.user-analytics-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.user-analytics-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 42px 42px 60px;
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.user-analytics-header {
+  margin-bottom: 30px;
+}
+
+.user-analytics-label {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  color: #6366f1;
+}
+
+.user-analytics-header h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+  color: #0f172a;
+}
+
+.user-analytics-header > p:last-child {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+
+/* =========================================================
+   KPI GRID
+========================================================= */
+
+.user-analytics-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+
+/* =========================================================
+   KPI CARD
+========================================================= */
+
+.user-analytics-kpi {
+  position: relative;
+  min-height: 145px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e7ebf0;
+  border-radius: 15px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.user-analytics-kpi::after {
+  content: "";
+  position: absolute;
+  right: -28px;
+  bottom: -28px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #eef2ff;
+  opacity: 0.55;
+}
+
+.user-analytics-kpi:hover {
+  transform: translateY(-3px);
+  border-color: #d9def0;
+  box-shadow:
+    0 12px 28px rgba(15, 23, 42, 0.07),
+    0 3px 8px rgba(15, 23, 42, 0.03);
+}
+
+
+/* =========================================================
+   KPI ICON
+========================================================= */
+
+.user-analytics-kpi-icon {
+  position: relative;
+  z-index: 1;
+
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 17px;
+
+  border-radius: 10px;
+
+  background: #eef2ff;
+  color: #4f46e5;
+
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   KPI VALUE
+========================================================= */
+
+.user-analytics-kpi h3 {
+  position: relative;
+  z-index: 1;
+
+  margin: 0;
+
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 750;
+
+  color: #0f172a;
+}
+
+
+/* =========================================================
+   KPI LABEL
+========================================================= */
+
+.user-analytics-kpi p {
+  position: relative;
+  z-index: 1;
+
+  margin: 8px 0 0;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  color: #64748b;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.user-analytics-loading {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f8fafc;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.user-analytics-error {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+
+  background: #f8fafc;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #dc2626;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  .user-analytics-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+@media (max-width: 900px) {
+  .user-analytics-content {
+    padding: 32px 26px 50px;
+  }
+
+  .user-analytics-header h1 {
+    font-size: 27px;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .user-analytics-content {
+    padding: 26px 18px 40px;
+  }
+
+  .user-analytics-header {
+    margin-bottom: 24px;
+  }
+
+  .user-analytics-header h1 {
+    font-size: 24px;
+  }
+
+  .user-analytics-header > p:last-child {
+    font-size: 13px;
+  }
+
+  .user-analytics-kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .user-analytics-kpi {
+    min-height: 125px;
+    padding: 17px;
+  }
+
+  .user-analytics-kpi-icon {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+
+  .user-analytics-kpi h3 {
+    font-size: 25px;
+  }
+}

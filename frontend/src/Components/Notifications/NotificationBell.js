@@ -1,3 +1,5 @@
+//To show the notification bell, load the user's notifications, receive new notifications in real time, show the unread count, and let the user mark notifications as read.
+
 import React, {
   useEffect,
   useRef,
@@ -28,6 +30,7 @@ const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
 
+  //→ Keeps a reference to the notification container.
   const bellRef = useRef(null);
 
   // ==========================================

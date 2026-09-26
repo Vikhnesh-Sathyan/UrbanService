@@ -1,3 +1,5 @@
+//This file manages the Socket.IO connection on the frontend for real-time notifications.
+
 import { io } from "socket.io-client";
 
 const SOCKET_URL = "http://localhost:5000";

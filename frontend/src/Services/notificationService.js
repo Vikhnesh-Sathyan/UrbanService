@@ -1,3 +1,4 @@
+//This file handles the API communication between the React frontend and the notification backend.
 import axios from "axios";
 
 const API = "http://localhost:5000/api/notifications";

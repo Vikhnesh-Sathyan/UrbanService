@@ -1,3 +1,5 @@
+//listens for new Socket.IO notifications in the background.
+
 import React, { useEffect } from "react";
 
 import {

@@ -19,8 +19,10 @@ const getMyProviderOverview = async (req, res) => {
     const providerId = req.user.id;
 
     // -------------------------------------------------
-    // PROVIDER SERVICES
+    // PROVIDER SERVICES 
     // -------------------------------------------------
+
+    // Count services belonging to this provider.
 
     const totalServices = await Service.countDocuments({
       provider: providerId,
@@ -29,6 +31,8 @@ const getMyProviderOverview = async (req, res) => {
     // -------------------------------------------------
     // PROVIDER BOOKINGS
     // -------------------------------------------------
+
+    // Counts this provider's bookings.
 
     const totalBookings = await Booking.countDocuments({
       provider: providerId,
@@ -40,6 +44,9 @@ const getMyProviderOverview = async (req, res) => {
 
     const completedBookings = await Booking.countDocuments({
       provider: providerId,
+
+      // Counts only bookings where:
+
       status: "completed",
     });
 
@@ -101,15 +108,20 @@ const getMyProviderOverview = async (req, res) => {
 // provider.
 // =====================================================
 
+// =====================================================
+// GET MY BOOKING PERFORMANCE
+// Returns the logged-in provider's bookings grouped by
+// booking status, along with the count for each status.
+// =====================================================
+
 const getMyBookingPerformance = async (req, res) => {
   try {
-    // Logged-in provider ID from JWT
+    // Get the logged-in provider's ID from the verified JWT.
     const providerId = req.user.id;
 
-    // -------------------------------------------------
-    // GROUP PROVIDER BOOKINGS BY STATUS
-    // -------------------------------------------------
-
+    // Filter only bookings that belong to this provider.
+    // ObjectId is used because MongoDB stores the provider
+    // reference as an ObjectId.
     const bookingPerformance = await Booking.aggregate([
       {
         $match: {
@@ -117,16 +129,21 @@ const getMyBookingPerformance = async (req, res) => {
         },
       },
 
+      // Group the provider's bookings by their status
+      // such as pending, accepted, completed, or rejected.
       {
         $group: {
           _id: "$status",
 
+          // Count how many bookings are in each status group.
           count: {
             $sum: 1,
           },
         },
       },
 
+      // Sort the status groups from highest booking count
+      // to lowest booking count.
       {
         $sort: {
           count: -1,
@@ -134,20 +151,19 @@ const getMyBookingPerformance = async (req, res) => {
       },
     ]);
 
-    // -------------------------------------------------
-    // RESPONSE
-    // -------------------------------------------------
-
+    // Send the booking performance data back to the frontend.
     res.status(200).json({
       success: true,
       data: bookingPerformance,
     });
   } catch (error) {
+    // Log the error for backend debugging.
     console.error(
       "Provider booking performance error:",
       error
     );
 
+    // Send a safe error response to the frontend.
     res.status(500).json({
       success: false,
       message: "Failed to load booking performance",
@@ -306,33 +322,51 @@ const getMyServicePerformance = async (req, res) => {
 // Shows emergency booking performance for the provider.
 // =====================================================
 
+// =====================================================
+// GET MY EMERGENCY ANALYTICS
+// Returns emergency booking statistics for the
+// currently logged-in provider.
+// =====================================================
+
 const getMyEmergencyAnalytics = async (req, res) => {
   try {
+    // Get the logged-in provider's ID from the verified JWT.
     const providerId = req.user.id;
 
+    // Fetch only this provider's emergency bookings.
+    // Only status and date are needed for the analytics.
     const emergencyBookings = await Booking.find({
       provider: providerId,
       bookingType: "emergency",
     }).select("status date");
 
+    // Count all emergency bookings returned from the database.
     const totalEmergencyBookings = emergencyBookings.length;
 
+    // Keep only completed bookings and count them.
     const completedEmergencyBookings = emergencyBookings.filter(
       (booking) => booking.status === "completed"
     ).length;
 
+    // Keep only pending bookings and count them.
     const pendingEmergencyBookings = emergencyBookings.filter(
       (booking) => booking.status === "pending"
     ).length;
 
+    // Keep only accepted bookings and count them.
     const acceptedEmergencyBookings = emergencyBookings.filter(
       (booking) => booking.status === "accepted"
     ).length;
 
+    // Keep only in-progress bookings and count them.
     const inProgressEmergencyBookings = emergencyBookings.filter(
       (booking) => booking.status === "in_progress"
     ).length;
 
+    // Calculate the percentage of emergency bookings
+    // that have been completed.
+    // If there are no bookings, return 0 instead of
+    // dividing by zero.
     const completionRate =
       totalEmergencyBookings > 0
         ? Math.round(
@@ -342,6 +376,7 @@ const getMyEmergencyAnalytics = async (req, res) => {
           )
         : 0;
 
+    // Send all emergency analytics to the frontend.
     res.status(200).json({
       success: true,
       data: {
@@ -354,8 +389,10 @@ const getMyEmergencyAnalytics = async (req, res) => {
       },
     });
   } catch (error) {
+    // Log the error for backend debugging.
     console.error("Provider emergency analytics error:", error);
 
+    // Send a safe error response to the frontend.
     res.status(500).json({
       success: false,
       message: "Failed to load emergency analytics",
