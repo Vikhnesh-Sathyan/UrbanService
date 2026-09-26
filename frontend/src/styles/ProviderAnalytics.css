@@ -172,63 +172,183 @@
    BOOKING PERFORMANCE
    ===================================================== */
 
+/* =====================================================
+   BOOKING PERFORMANCE — PREMIUM
+   ===================================================== */
+
 .provider-booking-status-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
+
+/* =====================================================
+   STATUS CARD
+   ===================================================== */
+
 .provider-booking-status-card {
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 66px;
-  padding: 15px 17px;
-  background: #f8fafc;
-  border: 1px solid #e8edf3;
-  border-radius: 12px;
+
+  min-height: 68px;
+  padding: 14px 16px;
+
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #f8fafc 100%
+  );
+
+  border: 1px solid #e7ebf0;
+  border-radius: 14px;
+
   box-sizing: border-box;
+
+  overflow: hidden;
+
   transition:
-    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
     border-color 0.2s ease,
-    transform 0.2s ease;
+    background 0.2s ease;
 }
 
-.provider-booking-status-card:hover {
-  background: #ffffff;
-  border-color: #dbe2ea;
-  transform: translateY(-1px);
+
+/* subtle accent line */
+
+.provider-booking-status-card::before {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+
+  width: 3px;
+
+  border-radius: 0 4px 4px 0;
+
+  background: #6366f1;
 }
+
+
+/* hover */
+
+.provider-booking-status-card:hover {
+  transform: translateY(-2px);
+
+  background: #ffffff;
+
+  border-color: #d9deea;
+
+  box-shadow:
+    0 8px 22px rgba(15, 23, 42, 0.07),
+    0 2px 5px rgba(15, 23, 42, 0.03);
+}
+
+
+/* =====================================================
+   LEFT SIDE
+   ===================================================== */
 
 .provider-booking-status-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
+
+  min-width: 0;
 }
+
+
+/* status dot */
 
 .provider-booking-status-dot {
+  position: relative;
+
   width: 9px;
   height: 9px;
+
+  flex-shrink: 0;
+
   border-radius: 50%;
-  background: #4f46e5;
+
+  background: #6366f1;
+
+  box-shadow:
+    0 0 0 4px #eef2ff;
 }
+
+
+/* status name */
 
 .provider-booking-status-name {
+  overflow: hidden;
+
   font-size: 14px;
   font-weight: 600;
+
   color: #334155;
+
   text-transform: capitalize;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+
+/* =====================================================
+   COUNT
+   ===================================================== */
+
 .provider-booking-status-count {
-  min-width: 34px;
-  text-align: center;
-  padding: 5px 9px;
-  border-radius: 8px;
+  min-width: 38px;
+
+  padding: 6px 10px;
+
+  border-radius: 9px;
+
   background: #eef2ff;
+
   color: #4338ca;
+
+  text-align: center;
+
   font-size: 13px;
   font-weight: 700;
+
+  border: 1px solid #e0e7ff;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 800px) {
+  .provider-booking-status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .provider-booking-status-card {
+    min-height: 64px;
+    padding: 13px 14px;
+  }
+
+  .provider-booking-status-name {
+    font-size: 13px;
+  }
+
+  .provider-booking-status-count {
+    min-width: 35px;
+    padding: 5px 9px;
+  }
 }
 
 

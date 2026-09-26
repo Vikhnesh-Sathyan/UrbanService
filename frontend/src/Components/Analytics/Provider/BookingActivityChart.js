@@ -13,34 +13,81 @@ import {
 
 // =====================================================
 // BOOKING ACTIVITY CHART
-// Displays the provider's booking count by date.
+// Displays the provider's booking activity for the
+// last 7 days.
 // =====================================================
 
 const BookingActivityChart = ({ data }) => {
 
-  // Convert backend data into chart-friendly data.
-  const chartData = data.map((item) => ({
-    date: item._id,
-    bookings: item.count,
-  }));
+  // =====================================================
+  // CREATE LAST 7 DAYS
+  // =====================================================
+
+  const today = new Date();
+
+  const lastSevenDays = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(today);
+
+    date.setDate(today.getDate() - i);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    const dateKey = `${year}-${month}-${day}`;
+
+    lastSevenDays.push({
+      dateKey,
+      date: date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+      bookings: 0,
+    });
+  }
+
+
+  // =====================================================
+  // ADD BACKEND BOOKING DATA
+  // =====================================================
+
+  data.forEach((item) => {
+
+    const matchingDay = lastSevenDays.find(
+      (day) => day.dateKey === item._id
+    );
+
+    if (matchingDay) {
+      matchingDay.bookings = item.count;
+    }
+  });
 
 
   // =====================================================
   // EMPTY STATE
   // =====================================================
 
-  if (chartData.length === 0) {
+  const hasBookings = lastSevenDays.some(
+    (day) => day.bookings > 0
+  );
+
+
+  if (!hasBookings) {
     return (
       <div className="provider-analytics-panel">
 
         <div className="provider-analytics-panel-header">
           <div>
             <h2>Booking Activity</h2>
+
             <p>
-              Your booking activity over time
+              Your booking activity over the last 7 days
             </p>
           </div>
         </div>
+
 
         <div className="provider-analytics-empty">
 
@@ -53,7 +100,8 @@ const BookingActivityChart = ({ data }) => {
           </h3>
 
           <p>
-            Booking activity will appear here once customers book your services.
+            Booking activity from the last 7 days
+            will appear here.
           </p>
 
         </div>
@@ -78,7 +126,7 @@ const BookingActivityChart = ({ data }) => {
           </h2>
 
           <p>
-            Your booking activity over time
+            Your booking activity over the last 7 days
           </p>
         </div>
 
@@ -89,9 +137,11 @@ const BookingActivityChart = ({ data }) => {
 
         <ResponsiveContainer width="100%" height={320}>
 
-          <LineChart data={chartData}>
+          <LineChart data={lastSevenDays}>
 
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+            />
 
             <XAxis
               dataKey="date"
@@ -106,7 +156,7 @@ const BookingActivityChart = ({ data }) => {
             <Line
               type="monotone"
               dataKey="bookings"
-              stroke="#111827"
+              stroke="#4f46e5"
               strokeWidth={3}
               dot={{ r: 4 }}
               activeDot={{ r: 6 }}
