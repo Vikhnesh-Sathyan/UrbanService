@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FaBriefcase, FaCheckCircle, FaChartLine } from "react-icons/fa";
+import { FaBriefcase } from "react-icons/fa";
 
 const ServicePerformance = ({ data }) => {
   return (
@@ -8,7 +8,7 @@ const ServicePerformance = ({ data }) => {
       <div className="provider-analytics-panel-header">
         <div>
           <h2>Service Performance</h2>
-          <p>Track the performance of each service you offer.</p>
+          <p>Compare the performance of your services.</p>
         </div>
       </div>
 
@@ -26,56 +26,62 @@ const ServicePerformance = ({ data }) => {
           </p>
         </div>
       ) : (
-        <div className="provider-service-performance-grid">
-          {data.map((service) => (
-            <div
-              className="provider-service-performance-card"
-              key={service._id}
-            >
-              <div className="provider-service-performance-header">
-                <div className="provider-service-performance-icon">
-                  <FaBriefcase />
-                </div>
+        <div className="provider-service-performance-table-wrapper">
+          <table className="provider-service-performance-table">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>Total Bookings</th>
+                <th>Completed</th>
+                <th>Completion</th>
+              </tr>
+            </thead>
 
-                <div>
-                  <h3>{service.serviceName}</h3>
-                  <p>Service performance</p>
-                </div>
-              </div>
+            <tbody>
+              {data.map((service) => (
+                <tr key={service._id}>
+                  <td>
+                    <div className="provider-service-name">
+                      <span className="provider-service-table-icon">
+                        <FaBriefcase />
+                      </span>
 
-              <div className="provider-service-performance-stats">
-                <div>
-                  <span>
-                    <FaChartLine />
-                  </span>
+                      <span>{service.serviceName}</span>
+                    </div>
+                  </td>
 
-                  <strong>{service.totalBookings}</strong>
+                  <td>
+                    <strong>{service.totalBookings}</strong>
+                  </td>
 
-                  <small>Total Bookings</small>
-                </div>
+                  <td>
+                    <strong>{service.completedBookings}</strong>
+                  </td>
 
-                <div>
-                  <span>
-                    <FaCheckCircle />
-                  </span>
+                  <td>
+                    <div className="provider-service-completion">
+                      <span className="provider-service-completion-value">
+                        {service.completedBookings} / {service.totalBookings}
+                      </span>
 
-                  <strong>{service.completedBookings}</strong>
+                      <div className="provider-service-progress">
+                        <div
+                          className="provider-service-progress-bar"
+                          style={{
+                            width: `${service.completionRate}%`,
+                          }}
+                        />
+                      </div>
 
-                  <small>Completed</small>
-                </div>
-
-                <div>
-                  <span>
-                    <FaChartLine />
-                  </span>
-
-                  <strong>{service.completionRate}%</strong>
-
-                  <small>Completion Rate</small>
-                </div>
-              </div>
-            </div>
-          ))}
+                      <span className="provider-service-completion-rate">
+                        {service.completionRate}%
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
