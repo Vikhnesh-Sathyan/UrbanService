@@ -93,8 +93,74 @@ const getMyUserBookingActivity = async (req, res) => {
   }
 };
 
+// =====================================================
+// USER SERVICE USAGE ANALYTICS
+// =====================================================
+
+const getMyUserServiceUsage = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const serviceUsage = await Booking.aggregate([
+      {
+        $match: {
+          user: new mongoose.Types.ObjectId(userId),
+        },
+      },
+
+      {
+        $group: {
+          _id: "$service",
+          bookingCount: {
+            $sum: 1,
+          },
+        },
+      },
+
+      {
+        $lookup: {
+          from: "services",
+          localField: "_id",
+          foreignField: "_id",
+          as: "service",
+        },
+      },
+
+      {
+        $unwind: "$service",
+      },
+
+      {
+        $project: {
+          _id: 1,
+          serviceName: "$service.name",
+          bookingCount: 1,
+        },
+      },
+
+      {
+        $sort: {
+          bookingCount: -1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: serviceUsage,
+    });
+  } catch (error) {
+    console.error("User service usage analytics error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load service usage analytics",
+    });
+  }
+};
 
 module.exports = {
   getMyUserOverview,
   getMyUserBookingActivity,
+  getMyUserServiceUsage,
 };

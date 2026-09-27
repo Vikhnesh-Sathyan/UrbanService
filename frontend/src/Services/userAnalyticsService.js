@@ -40,3 +40,16 @@ export const getMyUserBookingActivity = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET USER SERVICE USAGE
+// =====================================================
+
+export const getMyUserServiceUsage = async () => {
+  const response = await axios.get(
+    `${API}/service-usage`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

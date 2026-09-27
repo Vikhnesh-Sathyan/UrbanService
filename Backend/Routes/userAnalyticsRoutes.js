@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   getMyUserOverview,
   getMyUserBookingActivity,
+  getMyUserServiceUsage,
 } = require("../Controllers/UserAnalyticsController");
 
 const authMiddleware = require("../Middleware/authMiddleware");
@@ -25,5 +26,11 @@ router.get(
   getMyUserBookingActivity
 );
 
+router.get(
+  "/service-usage",
+  authMiddleware,
+  roleMiddleware("user"),
+  getMyUserServiceUsage
+);
 
 module.exports = router;

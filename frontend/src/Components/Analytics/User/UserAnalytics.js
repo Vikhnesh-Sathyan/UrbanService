@@ -10,9 +10,13 @@ import {
 import {
   getMyUserOverview,
   getMyUserBookingActivity,
+  getMyUserServiceUsage,
+
 } from "../../../Services/userAnalyticsService";
 
 import BookingActivityChart from "./BookingActivityChart";
+
+import ServiceUsage from "./ServiceUsage";
 
 import UserNavbar from "../../Dashboard/User/UserNavbar";
 
@@ -22,6 +26,7 @@ import "../../../styles/UserAnalytics.css";
 const UserAnalytics = () => {
   const [analytics, setAnalytics] = useState(null);
   const [bookingActivity, setBookingActivity] = useState([]);
+  const [serviceUsage, setServiceUsage] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -37,7 +42,8 @@ const UserAnalytics = () => {
         setError("");
 
        const overviewResponse = await getMyUserOverview();
-        const activityResponse = await getMyUserBookingActivity();
+       const activityResponse = await getMyUserBookingActivity();
+       const serviceUsageResponse = await getMyUserServiceUsage();
 
           if (overviewResponse.success) {
           setAnalytics(overviewResponse.data);
@@ -47,6 +53,9 @@ const UserAnalytics = () => {
           setBookingActivity(activityResponse.data);
           }
 
+          if (serviceUsageResponse.success) {
+          setServiceUsage(serviceUsageResponse.data);
+          }
       } catch (error) {
         console.error("User analytics error:", error);
 
@@ -202,6 +211,8 @@ const UserAnalytics = () => {
 
         <BookingActivityChart data={bookingActivity} />
 
+        <ServiceUsage data={serviceUsage} />
+        
       </main>
 
     </div>
