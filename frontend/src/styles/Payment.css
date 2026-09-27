@@ -1,0 +1,217 @@
+/* ==========================================
+   PAYMENT PAGE
+========================================== */
+
+.payment-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.payment-container {
+  width: 100%;
+  max-width: 760px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 40px;
+  box-sizing: border-box;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+}
+
+/* ==========================================
+   PAYMENT SUMMARY
+========================================== */
+
+.payment-summary {
+  text-align: center;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 30px;
+}
+
+.payment-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+
+.payment-summary h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.payment-summary p {
+  margin: 10px auto 20px;
+  max-width: 500px;
+  color: #6b7280;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.payment-amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ==========================================
+   PAYMENT FORM
+========================================== */
+
+.payment-form {
+  width: 100%;
+}
+
+.payment-form-header {
+  margin-bottom: 24px;
+}
+
+.payment-form-header h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: #111827;
+}
+
+.payment-form-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   STRIPE ELEMENT
+========================================== */
+
+.payment-element-wrapper {
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #fafafa;
+  margin-bottom: 20px;
+}
+
+/* ==========================================
+   ERROR
+========================================== */
+
+.payment-error {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 14px;
+}
+
+/* ==========================================
+   PAY BUTTON
+========================================== */
+
+.payment-submit-button {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 15px 20px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.payment-submit-button:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.payment-submit-button:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.payment-loading {
+  width: 100%;
+  max-width: 760px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 60px 40px;
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+}
+
+.payment-loading p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+/* ==========================================
+   ERROR CONTAINER
+========================================== */
+
+.payment-error-container {
+  width: 100%;
+  max-width: 760px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 50px 40px;
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+}
+
+.payment-error-container h2 {
+  margin: 0 0 10px;
+  color: #111827;
+}
+
+.payment-error-container p {
+  margin: 0;
+  color: #dc2626;
+  font-size: 15px;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 600px) {
+  .payment-page {
+    padding: 25px 15px;
+  }
+
+  .payment-container {
+    padding: 25px 20px;
+    border-radius: 16px;
+  }
+
+  .payment-summary h1 {
+    font-size: 26px;
+  }
+
+  .payment-amount {
+    font-size: 28px;
+  }
+
+  .payment-element-wrapper {
+    padding: 15px;
+  }
+}

@@ -9,19 +9,24 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const createPaymentIntent = async (req, res) => {
   try {
-    const { bookingId, amount } = req.body;
+    // Get only booking ID from frontend
+    const { bookingId } = req.body;
 
-    // Check required data
-    if (!bookingId || !amount) {
+    // Check booking ID
+    if (!bookingId) {
       return res.status(400).json({
         success: false,
-        message: "Booking ID and amount are required",
+        message: "Booking ID is required",
       });
     }
 
-    // Find booking
-    const booking = await Booking.findById(bookingId);
+    // Find booking and service price
+    const booking = await Booking.findById(bookingId).populate(
+      "service",
+      "name price"
+    );
 
+    // Check booking
     if (!booking) {
       return res.status(404).json({
         success: false,
@@ -29,40 +34,66 @@ const createPaymentIntent = async (req, res) => {
       });
     }
 
-    // Make sure the booking belongs to the logged-in user
-    if (booking.user.toString() !== req.user.id.toString()) {
+    // Make sure the booking belongs to logged-in user
+    if (
+      booking.user.toString() !==
+      req.user.id.toString()
+    ) {
       return res.status(403).json({
         success: false,
-        message: "You are not allowed to pay for this booking",
+        message:
+          "You are not allowed to pay for this booking",
       });
     }
 
-    // Create Stripe Payment Intent
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(Number(amount) * 100),
-      currency: "inr",
+    // Get price directly from database
+    const amount = Number(booking.service?.price);
 
-      automatic_payment_methods: {
-        enabled: true,
-      },
+    // Check valid service price
+    if (!amount || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid service price",
+      });
+    }
 
-      metadata: {
-        bookingId: booking._id.toString(),
-        userId: req.user.id.toString(),
-      },
-    });
+    // ==========================================
+    // CREATE STRIPE PAYMENT INTENT
+    // ==========================================
 
+    const paymentIntent =
+      await stripe.paymentIntents.create({
+        amount: Math.round(amount * 100),
+        currency: "inr",
+
+        automatic_payment_methods: {
+          enabled: true,
+        },
+
+        metadata: {
+          bookingId: booking._id.toString(),
+          userId: req.user.id.toString(),
+        },
+      });
+
+    // Send client secret to frontend
     res.status(200).json({
       success: true,
-      clientSecret: paymentIntent.client_secret,
+      clientSecret:
+        paymentIntent.client_secret,
       paymentIntentId: paymentIntent.id,
+      amount,
     });
   } catch (error) {
-    console.error("Create payment intent error:", error);
+    console.error(
+      "Create payment intent error:",
+      error
+    );
 
     res.status(500).json({
       success: false,
-      message: "Failed to create payment intent",
+      message:
+        "Failed to create payment intent",
     });
   }
 };

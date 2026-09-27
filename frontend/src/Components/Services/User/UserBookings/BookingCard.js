@@ -308,7 +308,17 @@ const BookingCard = ({
           customerLocation.longitude
         )
       : null;
+// ==========================================
+// PAYMENT
+// ==========================================
 
+const handlePayment = () => {
+  navigate(`/payment/${booking._id}`, {
+    state: {
+      amount: booking.service?.price,
+    },
+  });
+};
   return (
     <div
       className={`booking-card ${
@@ -439,6 +449,30 @@ const BookingCard = ({
           {booking.status || "pending"}
         </span>
       </p>
+
+      {/* =====================================
+        PAYMENT
+      ===================================== */}
+
+     <button
+  type="button"
+  className="booking-pay-button"
+  onClick={handlePayment}
+>
+  <span className="booking-pay-icon">💳</span>
+
+  <span className="booking-pay-content">
+    <span className="booking-pay-title">
+      Pay Now
+    </span>
+
+    <span className="booking-pay-subtitle">
+      Secure payment
+    </span>
+  </span>
+
+  <span className="booking-pay-arrow">→</span>
+</button>
 
       {/* =====================================
           PROVIDER TRACKING

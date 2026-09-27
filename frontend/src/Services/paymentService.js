@@ -20,12 +20,11 @@ const getAuthConfig = () => {
 // CREATE PAYMENT INTENT
 // ==========================================
 
-export const createPaymentIntent = async (bookingId, amount) => {
+export const createPaymentIntent = async (bookingId) => {
   const response = await axios.post(
     `${API}/create-payment-intent`,
     {
       bookingId,
-      amount,
     },
     getAuthConfig()
   );

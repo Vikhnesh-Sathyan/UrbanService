@@ -131,7 +131,7 @@ import ComplaintForm from "./Components/Services/User/ComplaintForm";
 // PAYMENT
 // =====================================================
 
-
+import PaymentPage from "./Components/Payment/PaymentPage";
 
 
 // =====================================================
@@ -394,7 +394,14 @@ function App() {
              path="/user/analytics"
              element={<UserAnalytics />}
           />
-
+          {/* =================================================
+                Payment
+          ================================================= */}
+        
+            <Route
+              path="/payment/:bookingId"
+              element={<PaymentPage />}
+            />
         
         </Routes>
       </Router>
