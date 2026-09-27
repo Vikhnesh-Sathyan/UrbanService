@@ -5,11 +5,11 @@ const {
   getMyUserOverview,
   getMyUserBookingActivity,
   getMyUserServiceUsage,
+  getMyUserBookingType,
 } = require("../Controllers/UserAnalyticsController");
 
 const authMiddleware = require("../Middleware/authMiddleware");
 const roleMiddleware = require("../Middleware/roleMiddleware");
-
 
 router.get(
   "/overview",
@@ -17,7 +17,6 @@ router.get(
   roleMiddleware("user"),
   getMyUserOverview
 );
-
 
 router.get(
   "/booking-activity",
@@ -31,6 +30,14 @@ router.get(
   authMiddleware,
   roleMiddleware("user"),
   getMyUserServiceUsage
+);
+
+// Booking type analytics: normal vs emergency
+router.get(
+  "/booking-type",
+  authMiddleware,
+  roleMiddleware("user"),
+  getMyUserBookingType
 );
 
 module.exports = router;

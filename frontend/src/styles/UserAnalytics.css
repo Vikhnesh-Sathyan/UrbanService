@@ -630,6 +630,129 @@
   }
 }
 
+/* ================================
+   BOOKING TYPE ANALYTICS
+================================ */
+
+.user-booking-type-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.user-booking-type-item {
+  width: 100%;
+}
+
+.user-booking-type-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 9px;
+}
+
+.user-booking-type-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.user-booking-type-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  font-size: 12px;
+}
+
+.user-booking-type-icon.normal {
+  background: #eef2ff;
+  border: 1px solid #e0e7ff;
+  color: #4f46e5;
+}
+
+.user-booking-type-icon.emergency {
+  background: #fff1f2;
+  border: 1px solid #ffe4e6;
+  color: #e11d48;
+}
+
+.user-booking-type-info strong {
+  min-width: 28px;
+  padding: 4px 8px;
+  border-radius: 7px;
+  background: #f1f5f9;
+  color: #334155;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.user-booking-type-bar {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #eef1f5;
+}
+
+.user-booking-type-bar-fill {
+  height: 100%;
+  min-width: 3px;
+  border-radius: inherit;
+  transition: width 0.35s ease;
+}
+
+.user-booking-type-bar-fill.normal {
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  box-shadow: 0 2px 7px rgba(79, 70, 229, 0.18);
+}
+
+.user-booking-type-bar-fill.emergency {
+  background: linear-gradient(90deg, #e11d48, #f43f5e);
+  box-shadow: 0 2px 7px rgba(225, 29, 72, 0.18);
+}
+
+.user-booking-type-percentage {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-align: right;
+}
+
+@media (max-width: 600px) {
+  .user-booking-type-list {
+    gap: 18px;
+  }
+
+  .user-booking-type-info {
+    gap: 10px;
+  }
+
+  .user-booking-type-name {
+    font-size: 12px;
+  }
+
+  .user-booking-type-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .user-booking-type-bar {
+    height: 6px;
+  }
+}
+
 /* =========================================================
    RESPONSIVE
 ========================================================= */

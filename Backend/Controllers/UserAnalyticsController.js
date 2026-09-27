@@ -159,8 +159,48 @@ const getMyUserServiceUsage = async (req, res) => {
   }
 };
 
+// Get user's booking type usage: normal vs emergency
+const getMyUserBookingType = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const bookingType = await Booking.aggregate([
+      {
+        $match: {
+          user: new mongoose.Types.ObjectId(userId),
+        },
+      },
+      {
+        $group: {
+          _id: "$bookingType",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: bookingType,
+    });
+  } catch (error) {
+    console.error("User booking type analytics error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load booking type analytics",
+    });
+  }
+};
+
 module.exports = {
   getMyUserOverview,
   getMyUserBookingActivity,
   getMyUserServiceUsage,
+  getMyUserBookingType,
+
 };

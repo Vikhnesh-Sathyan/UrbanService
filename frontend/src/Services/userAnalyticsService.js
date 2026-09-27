@@ -53,3 +53,13 @@ export const getMyUserServiceUsage = async () => {
 
   return response.data;
 };
+
+// Get user's normal vs emergency booking usage
+export const getMyUserBookingType = async () => {
+  const response = await axios.get(
+    `${API}/booking-type`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};
