@@ -1,11 +1,22 @@
 const express = require("express");
 
+// Normal booking controller
 const {
   createBooking,
-  createEmergencyBooking,
-  getMyBookings,
   cancelBooking,
   rescheduleBooking,
+} = require("../Controllers/NormalBookingController");
+
+// Emergency booking controller
+const {
+  createEmergencyBooking,
+  getNearbyEmergencyProviders,
+} = require("../Controllers/EmergencyBookingController");
+
+
+// Common booking controller
+const {
+  getMyBookings,
   getProviderBookings,
   acceptBooking,
   rejectBooking,
@@ -15,7 +26,6 @@ const {
   getAllBookings,
   addBookingReview,
   getUserBookings,
-  getNearbyEmergencyProviders,
 } = require("../Controllers/BookingController");
 
 const authMiddleware = require("../Middleware/AuthMiddleware");
