@@ -1,17 +1,14 @@
 const mongoose = require("mongoose");
-
 const Booking = require("../Models/Booking");
 
 
 // =====================================================
-// GET MY USER OVERVIEW
-// Returns analytics for the logged-in customer.
+// USER OVERVIEW ANALYTICS
 // =====================================================
 
 const getMyUserOverview = async (req, res) => {
   try {
     const userId = req.user.id;
-
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
     const totalBookings = await Booking.countDocuments({
@@ -53,6 +50,51 @@ const getMyUserOverview = async (req, res) => {
 };
 
 
+// =====================================================
+// USER BOOKING ACTIVITY
+// =====================================================
+
+const getMyUserBookingActivity = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const bookingActivity = await Booking.aggregate([
+      {
+        $match: {
+          user: new mongoose.Types.ObjectId(userId),
+        },
+      },
+      {
+        $group: {
+          _id: "$date",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: bookingActivity,
+    });
+  } catch (error) {
+    console.error("User booking activity error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load booking activity",
+    });
+  }
+};
+
+
 module.exports = {
   getMyUserOverview,
+  getMyUserBookingActivity,
 };

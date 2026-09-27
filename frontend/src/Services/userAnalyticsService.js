@@ -27,3 +27,16 @@ export const getMyUserOverview = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET USER BOOKING ACTIVITY
+// =====================================================
+
+export const getMyUserBookingActivity = async () => {
+  const response = await axios.get(
+    `${API}/booking-activity`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

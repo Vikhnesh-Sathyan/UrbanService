@@ -9,7 +9,10 @@ import {
 
 import {
   getMyUserOverview,
+  getMyUserBookingActivity,
 } from "../../../Services/userAnalyticsService";
+
+import BookingActivityChart from "./BookingActivityChart";
 
 import UserNavbar from "../../Dashboard/User/UserNavbar";
 
@@ -18,6 +21,7 @@ import "../../../styles/UserAnalytics.css";
 
 const UserAnalytics = () => {
   const [analytics, setAnalytics] = useState(null);
+  const [bookingActivity, setBookingActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -32,11 +36,17 @@ const UserAnalytics = () => {
         setLoading(true);
         setError("");
 
-        const response = await getMyUserOverview();
+       const overviewResponse = await getMyUserOverview();
+        const activityResponse = await getMyUserBookingActivity();
 
-        if (response.success) {
-          setAnalytics(response.data);
-        }
+          if (overviewResponse.success) {
+          setAnalytics(overviewResponse.data);
+          }
+
+          if (activityResponse.success) {
+          setBookingActivity(activityResponse.data);
+          }
+
       } catch (error) {
         console.error("User analytics error:", error);
 
@@ -185,6 +195,12 @@ const UserAnalytics = () => {
           </div>
 
         </div>
+
+          {/* =================================================
+            BOOKING ACTIVITY
+        ================================================= */}
+
+        <BookingActivityChart data={bookingActivity} />
 
       </main>
 
