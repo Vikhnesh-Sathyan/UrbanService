@@ -1,36 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
 import PaymentForm from "./PaymentForm";
 import { createPaymentIntent } from "../../Services/paymentService";
-
 import "../../styles/Payment.css";
-
-// ==========================================
-// STRIPE PUBLIC KEY
-// ==========================================
 
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
 );
 
 const PaymentPage = () => {
-  // Get booking ID from URL
   const { bookingId } = useParams();
 
-  // Get payment amount from navigation state
-  const location = useLocation();
-  const amount = location.state?.amount;
-
   const [clientSecret, setClientSecret] = useState("");
+  const [amount, setAmount] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  // ==========================================
-  // CREATE PAYMENT INTENT
-  // ==========================================
 
   useEffect(() => {
     const initializePayment = async () => {
@@ -38,15 +25,20 @@ const PaymentPage = () => {
         setLoading(true);
         setError("");
 
-        const response = await createPaymentIntent(
-            bookingId
-        );
+        if (!bookingId) {
+          throw new Error("Booking ID is missing.");
+        }
+
+        const response = await createPaymentIntent(bookingId);
 
         if (!response.success || !response.clientSecret) {
           throw new Error(
             response.message || "Unable to initialize payment"
           );
         }
+
+        // Amount comes securely from backend
+        setAmount(response.amount);
 
         setClientSecret(response.clientSecret);
       } catch (error) {
@@ -62,17 +54,8 @@ const PaymentPage = () => {
       }
     };
 
-    if (bookingId && amount) {
-      initializePayment();
-    } else {
-      setError("Booking information is missing.");
-      setLoading(false);
-    }
-  }, [bookingId, amount]);
-
-  // ==========================================
-  // LOADING
-  // ==========================================
+    initializePayment();
+  }, [bookingId]);
 
   if (loading) {
     return (
@@ -84,31 +67,20 @@ const PaymentPage = () => {
     );
   }
 
-  // ==========================================
-  // ERROR
-  // ==========================================
-
   if (error) {
     return (
       <div className="payment-page">
         <div className="payment-error-container">
           <h2>Payment Unavailable</h2>
-
           <p>{error}</p>
         </div>
       </div>
     );
   }
 
-  // ==========================================
-  // STRIPE PAYMENT
-  // ==========================================
-
   return (
     <div className="payment-page">
       <div className="payment-container">
-
-        {/* Payment Summary */}
         <div className="payment-summary">
           <span className="payment-label">
             SERVICE PAYMENT
@@ -125,7 +97,6 @@ const PaymentPage = () => {
           </div>
         </div>
 
-        {/* Stripe Elements */}
         {clientSecret && (
           <Elements
             stripe={stripePromise}
@@ -136,7 +107,6 @@ const PaymentPage = () => {
             <PaymentForm />
           </Elements>
         )}
-
       </div>
     </div>
   );

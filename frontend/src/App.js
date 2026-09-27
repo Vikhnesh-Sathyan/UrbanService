@@ -133,6 +133,7 @@ import ComplaintForm from "./Components/Services/User/ComplaintForm";
 
 import PaymentPage from "./Components/Payment/PaymentPage";
 
+import PaymentSuccess from "./Components/Payment/PaymentSuccess";
 
 // =====================================================
 // APP
@@ -398,10 +399,15 @@ function App() {
                 Payment
           ================================================= */}
         
-            <Route
-              path="/payment/:bookingId"
-              element={<PaymentPage />}
-            />
+           <Route
+            path="/payment/success"
+            element={<PaymentSuccess />}
+          />
+
+          <Route
+            path="/payment/:bookingId"
+            element={<PaymentPage />}
+          />
         
         </Routes>
       </Router>

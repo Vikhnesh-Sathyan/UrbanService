@@ -1,5 +1,6 @@
 const Stripe = require("stripe");
 const Booking = require("../Models/Booking");
+const Payment = require("../Models/Payment");
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -75,6 +76,22 @@ const createPaymentIntent = async (req, res) => {
           userId: req.user.id.toString(),
         },
       });
+
+      await Payment.findOneAndUpdate(
+  { stripePaymentIntentId: paymentIntent.id },
+  {
+    user: req.user.id,
+    booking: booking._id,
+    amount,
+    currency: "inr",
+    stripePaymentIntentId: paymentIntent.id,
+    status: "pending",
+  },
+  {
+    upsert: true,
+    new: true,
+  }
+);
 
     // Send client secret to frontend
     res.status(200).json({

@@ -215,3 +215,40 @@
     padding: 15px;
   }
 }
+
+.payment-success-container {
+  width: 100%;
+  max-width: 760px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 60px 40px;
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+}
+
+.payment-success-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.payment-success-container h1 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 30px;
+}
+
+.payment-success-container p {
+  margin: 0 0 25px;
+  color: #6b7280;
+  font-size: 15px;
+}

@@ -25,15 +25,31 @@ const analyticsRoutes = require("./Routes/analyticsRoutes");
 const providerAnalyticsRoutes = require("./Routes/providerAnalyticsRoutes");
 const userAnalyticsRoutes = require("./Routes/userAnalyticsRoutes");
 const paymentRoutes = require("./Routes/paymentRoutes");
-
+const {
+  handleStripeWebhook,
+} = require("./Controllers/StripeWebhookController");
 const app = express();
 
-// Middleware
 app.use(cors());
+
+// ==========================================
+// STRIPE WEBHOOK
+// ==========================================
+
+app.post(
+  "/api/payments/webhook",
+  express.raw({ type: "application/json" }),
+  handleStripeWebhook
+);
+
 app.use(express.json());
 
-// Static folder for uploaded images
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(
+  "/uploads",
+  express.static(
+    path.join(__dirname, "uploads")
+  )
+);
 
 // Test route
 app.get("/", (req, res) => {
