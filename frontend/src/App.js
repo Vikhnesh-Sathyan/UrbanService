@@ -131,7 +131,6 @@ import ComplaintForm from "./Components/Services/User/ComplaintForm";
 // PAYMENT
 // =====================================================
 
-import StripeProvider from "./Components/Payment/StripeProvider";
 
 
 
@@ -141,7 +140,6 @@ import StripeProvider from "./Components/Payment/StripeProvider";
 
 function App() {
   return (
-    <StripeProvider>
       <Router>
         
           <NotificationListener />
@@ -400,7 +398,6 @@ function App() {
         
         </Routes>
       </Router>
-    </StripeProvider>
   );
 }
 
