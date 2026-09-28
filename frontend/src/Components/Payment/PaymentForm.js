@@ -5,7 +5,7 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 
-const PaymentForm = () => {
+const PaymentForm = ({ bookingId }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -25,8 +25,7 @@ const PaymentForm = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/payment/success`,
-      },
+      return_url: `${window.location.origin}/payment/success?bookingId=${bookingId}`,      },
     });
 
     if (error) {

@@ -1,3 +1,4 @@
+
 const Stripe = require("stripe");
 const Booking = require("../Models/Booking");
 const Payment = require("../Models/Payment");
@@ -8,9 +9,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // CREATE PAYMENT INTENT
 // ==========================================
 
+// ==========================================
+// CREATE PAYMENT INTENT
+// ==========================================
+
 const createPaymentIntent = async (req, res) => {
   try {
-    // Get only booking ID from frontend
+    // Get booking ID from frontend
     const { bookingId } = req.body;
 
     // Check booking ID
@@ -21,7 +26,10 @@ const createPaymentIntent = async (req, res) => {
       });
     }
 
-    // Find booking and service price
+    // ==========================================
+    // FIND BOOKING + SERVICE PRICE
+    // ==========================================
+
     const booking = await Booking.findById(bookingId).populate(
       "service",
       "name price"
@@ -35,7 +43,10 @@ const createPaymentIntent = async (req, res) => {
       });
     }
 
-    // Make sure the booking belongs to logged-in user
+    // ==========================================
+    // CHECK BOOKING OWNERSHIP
+    // ==========================================
+
     if (
       booking.user.toString() !==
       req.user.id.toString()
@@ -47,7 +58,70 @@ const createPaymentIntent = async (req, res) => {
       });
     }
 
-    // Get price directly from database
+    // ==========================================
+    // CHECK ALREADY SUCCESSFUL PAYMENT
+    // ==========================================
+
+    const successfulPayment = await Payment.findOne({
+      booking: booking._id,
+      user: req.user.id,
+      status: "succeeded",
+    });
+
+    // Payment already completed
+    if (successfulPayment) {
+      return res.status(409).json({
+        success: false,
+        message: "This booking has already been paid",
+      });
+    }
+
+    // ==========================================
+    // CHECK EXISTING PENDING PAYMENT
+    // ==========================================
+
+    const existingPayment = await Payment.findOne({
+      booking: booking._id,
+      user: req.user.id,
+      status: "pending",
+    }).sort({ createdAt: -1 });
+
+    // ==========================================
+    // REUSE EXISTING STRIPE PAYMENT INTENT
+    // ==========================================
+
+    if (existingPayment) {
+      try {
+        const existingIntent =
+          await stripe.paymentIntents.retrieve(
+            existingPayment.stripePaymentIntentId
+          );
+
+        // Reuse if payment is still active
+        if (
+          existingIntent.status !== "canceled" &&
+          existingIntent.status !== "succeeded"
+        ) {
+          return res.status(200).json({
+            success: true,
+            clientSecret: existingIntent.client_secret,
+            paymentIntentId: existingIntent.id,
+            amount: existingPayment.amount,
+            reused: true,
+          });
+        }
+      } catch (error) {
+        console.error(
+          "Existing PaymentIntent retrieval error:",
+          error.message
+        );
+      }
+    }
+
+    // ==========================================
+    // GET PRICE FROM DATABASE
+    // ==========================================
+
     const amount = Number(booking.service?.price);
 
     // Check valid service price
@@ -59,7 +133,7 @@ const createPaymentIntent = async (req, res) => {
     }
 
     // ==========================================
-    // CREATE STRIPE PAYMENT INTENT
+    // CREATE NEW STRIPE PAYMENT INTENT
     // ==========================================
 
     const paymentIntent =
@@ -77,29 +151,38 @@ const createPaymentIntent = async (req, res) => {
         },
       });
 
-      await Payment.findOneAndUpdate(
-  { stripePaymentIntentId: paymentIntent.id },
-  {
-    user: req.user.id,
-    booking: booking._id,
-    amount,
-    currency: "inr",
-    stripePaymentIntentId: paymentIntent.id,
-    status: "pending",
-  },
-  {
-    upsert: true,
-    new: true,
-  }
-);
+    // ==========================================
+    // SAVE PAYMENT RECORD
+    // ==========================================
 
-    // Send client secret to frontend
-    res.status(200).json({
+    await Payment.findOneAndUpdate(
+      {
+        stripePaymentIntentId: paymentIntent.id,
+      },
+      {
+        user: req.user.id,
+        booking: booking._id,
+        amount,
+        currency: "inr",
+        stripePaymentIntentId: paymentIntent.id,
+        status: "pending",
+      },
+      {
+        upsert: true,
+        new: true,
+      }
+    );
+
+    // ==========================================
+    // SEND CLIENT SECRET TO FRONTEND
+    // ==========================================
+
+    return res.status(200).json({
       success: true,
-      clientSecret:
-        paymentIntent.client_secret,
+      clientSecret: paymentIntent.client_secret,
       paymentIntentId: paymentIntent.id,
       amount,
+      reused: false,
     });
   } catch (error) {
     console.error(
@@ -107,7 +190,7 @@ const createPaymentIntent = async (req, res) => {
       error
     );
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message:
         "Failed to create payment intent",
@@ -115,6 +198,114 @@ const createPaymentIntent = async (req, res) => {
   }
 };
 
+// ==========================================
+// GET PAYMENT STATUS
+// ==========================================
+
+const getPaymentStatus = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+
+    // Check booking ID
+    if (!bookingId) {
+      return res.status(400).json({
+        success: false,
+        message: "Booking ID is required",
+      });
+    }
+
+    /*
+      First check whether this booking already has
+      a successful payment.
+
+      This prevents a newer pending payment record
+      from hiding an earlier successful payment.
+    */
+
+    const successfulPayment = await Payment.findOne({
+      booking: bookingId,
+      user: req.user.id,
+      status: "succeeded",
+    }).sort({ updatedAt: -1 });
+
+    // ==========================================
+    // SUCCESSFUL PAYMENT FOUND
+    // ==========================================
+
+    if (successfulPayment) {
+      return res.status(200).json({
+        success: true,
+        payment: {
+          id: successfulPayment._id,
+          booking: successfulPayment.booking,
+          amount: successfulPayment.amount,
+          currency: successfulPayment.currency,
+          stripePaymentIntentId:
+            successfulPayment.stripePaymentIntentId,
+          status: successfulPayment.status,
+          createdAt: successfulPayment.createdAt,
+        },
+      });
+    }
+
+    /*
+      No successful payment found.
+
+      Now check the latest payment record.
+      This can be pending or failed.
+    */
+
+    const latestPayment = await Payment.findOne({
+      booking: bookingId,
+      user: req.user.id,
+    }).sort({ createdAt: -1 });
+
+    // ==========================================
+    // NO PAYMENT FOUND
+    // ==========================================
+
+    if (!latestPayment) {
+      return res.status(404).json({
+        success: false,
+        message: "Payment not found",
+      });
+    }
+
+    // ==========================================
+    // RETURN LATEST PAYMENT
+    // ==========================================
+
+    return res.status(200).json({
+      success: true,
+      payment: {
+        id: latestPayment._id,
+        booking: latestPayment.booking,
+        amount: latestPayment.amount,
+        currency: latestPayment.currency,
+        stripePaymentIntentId:
+          latestPayment.stripePaymentIntentId,
+        status: latestPayment.status,
+        createdAt: latestPayment.createdAt,
+      },
+    });
+  } catch (error) {
+    console.error(
+      "Get payment status error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get payment status",
+    });
+  }
+};
+
+// ==========================================
+// EXPORT CONTROLLERS
+// ==========================================
+
 module.exports = {
   createPaymentIntent,
+  getPaymentStatus,
 };

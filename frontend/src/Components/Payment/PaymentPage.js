@@ -104,7 +104,7 @@ const PaymentPage = () => {
               clientSecret,
             }}
           >
-            <PaymentForm />
+            <PaymentForm bookingId={bookingId} />
           </Elements>
         )}
       </div>

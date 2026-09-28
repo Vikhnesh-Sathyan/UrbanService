@@ -31,3 +31,13 @@ export const createPaymentIntent = async (bookingId) => {
 
   return response.data;
 };
+
+// Get payment status for a booking
+export const getPaymentStatus = async (bookingId) => {
+  const response = await axios.get(
+    `${API}/booking/${bookingId}`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

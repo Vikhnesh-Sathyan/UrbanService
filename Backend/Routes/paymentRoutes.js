@@ -2,9 +2,10 @@ const express = require("express");
 
 const {
   createPaymentIntent,
+  getPaymentStatus,
 } = require("../Controllers/PaymentController");
 
-const authMiddleware = require("../Middleware/authMiddleware");
+const authMiddleware = require("../Middleware/AuthMiddleware");
 const roleMiddleware = require("../Middleware/roleMiddleware");
 
 const router = express.Router();
@@ -15,6 +16,13 @@ router.post(
   authMiddleware,
   roleMiddleware("user"),
   createPaymentIntent
+);
+
+router.get(
+  "/booking/:bookingId",
+  authMiddleware,
+  roleMiddleware("user"),
+  getPaymentStatus
 );
 
 module.exports = router;
