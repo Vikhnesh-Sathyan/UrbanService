@@ -3,14 +3,18 @@ const express = require("express");
 const {
   createPaymentIntent,
   getPaymentStatus,
+  refundPayment,
 } = require("../Controllers/PaymentController");
 
-const authMiddleware = require("../Middleware/AuthMiddleware");
+const authMiddleware = require("../Middleware/authMiddleware");
 const roleMiddleware = require("../Middleware/roleMiddleware");
 
 const router = express.Router();
 
-// Create Stripe Payment Intent
+// ==========================================
+// CREATE PAYMENT
+// ==========================================
+
 router.post(
   "/create-payment-intent",
   authMiddleware,
@@ -18,11 +22,26 @@ router.post(
   createPaymentIntent
 );
 
+// ==========================================
+// GET PAYMENT STATUS
+// ==========================================
+
 router.get(
   "/booking/:bookingId",
   authMiddleware,
   roleMiddleware("user"),
   getPaymentStatus
+);
+
+// ==========================================
+// REFUND PAYMENT
+// ==========================================
+
+router.post(
+  "/refund/:paymentId",
+  authMiddleware,
+  roleMiddleware("user"),
+  refundPayment
 );
 
 module.exports = router;

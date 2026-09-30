@@ -302,10 +302,94 @@ const getPaymentStatus = async (req, res) => {
 };
 
 // ==========================================
+// REFUND PAYMENT
+// ==========================================
+
+const refundPayment = async (req, res) => {
+  try {
+    const { paymentId } = req.params;
+
+    // Check payment ID
+    if (!paymentId) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment ID is required",
+      });
+    }
+
+    // Find payment belonging to logged-in user
+    const payment = await Payment.findOne({
+      _id: paymentId,
+      user: req.user.id,
+    });
+
+    // Check payment
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: "Payment not found",
+      });
+    }
+
+    // Only successful payments can be refunded
+    if (payment.status !== "succeeded") {
+      return res.status(400).json({
+        success: false,
+        message: "Only successful payments can be refunded",
+      });
+    }
+
+    // ==========================================
+    // CREATE STRIPE REFUND
+    // ==========================================
+
+    const refund = await stripe.refunds.create({
+      payment_intent: payment.stripePaymentIntentId,
+    });
+
+    // ==========================================
+    // UPDATE PAYMENT STATUS
+    // ==========================================
+
+    payment.status = "refunded";
+
+    await payment.save();
+
+    // ==========================================
+    // SEND RESPONSE
+    // ==========================================
+
+    return res.status(200).json({
+      success: true,
+      message: "Payment refunded successfully",
+      refundId: refund.id,
+      payment: {
+        id: payment._id,
+        booking: payment.booking,
+        amount: payment.amount,
+        currency: payment.currency,
+        status: payment.status,
+      },
+    });
+  } catch (error) {
+    console.error(
+      "Refund payment error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to refund payment",
+    });
+  }
+};
+
+// ==========================================
 // EXPORT CONTROLLERS
 // ==========================================
 
 module.exports = {
   createPaymentIntent,
   getPaymentStatus,
+  refundPayment,
 };

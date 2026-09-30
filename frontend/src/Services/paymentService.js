@@ -41,3 +41,17 @@ export const getPaymentStatus = async (bookingId) => {
 
   return response.data;
 };
+
+// ==========================================
+// REFUND PAYMENT
+// ==========================================
+
+export const refundPayment = async (paymentId) => {
+  const response = await axios.post(
+    `${API}/refund/${paymentId}`,
+    {},
+    getAuthConfig()
+  );
+
+  return response.data;
+};
