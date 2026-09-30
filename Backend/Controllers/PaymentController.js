@@ -385,6 +385,53 @@ const refundPayment = async (req, res) => {
 };
 
 // ==========================================
+// GET PAYMENT HISTORY
+// ==========================================
+
+const getPaymentHistory = async (req, res) => {
+  try {
+    // Find all payments of logged-in user
+    const payments = await Payment.find({
+      user: req.user.id,
+    })
+      .populate({
+        path: "booking",
+        select: "date time bookingType service provider",
+        populate: [
+          {
+            path: "service",
+            select: "name",
+          },
+          {
+            path: "provider",
+            select: "name",
+          },
+        ],
+      })
+      .sort({ createdAt: -1 });
+
+    // ==========================================
+    // SEND PAYMENT HISTORY
+    // ==========================================
+
+    return res.status(200).json({
+      success: true,
+      payments,
+    });
+  } catch (error) {
+    console.error(
+      "Get payment history error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get payment history",
+    });
+  }
+};
+
+// ==========================================
 // EXPORT CONTROLLERS
 // ==========================================
 
@@ -392,4 +439,5 @@ module.exports = {
   createPaymentIntent,
   getPaymentStatus,
   refundPayment,
+  getPaymentHistory,
 };

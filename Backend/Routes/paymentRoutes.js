@@ -4,6 +4,7 @@ const {
   createPaymentIntent,
   getPaymentStatus,
   refundPayment,
+  getPaymentHistory,
 } = require("../Controllers/PaymentController");
 
 const authMiddleware = require("../Middleware/authMiddleware");
@@ -42,6 +43,17 @@ router.post(
   authMiddleware,
   roleMiddleware("user"),
   refundPayment
+);
+
+// ==========================================
+// GET PAYMENT HISTORY
+// ==========================================
+
+router.get(
+  "/history",
+  authMiddleware,
+  roleMiddleware("user"),
+  getPaymentHistory
 );
 
 module.exports = router;

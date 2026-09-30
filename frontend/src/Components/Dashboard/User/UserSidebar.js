@@ -10,6 +10,7 @@ import {
   FaUser,
   FaQuestionCircle,
   FaSignOutAlt,
+  FaCreditCard,
 } from "react-icons/fa";
 
 import "../../../styles/UserSidebar.css";
@@ -132,7 +133,29 @@ const UserSidebar = ({ isOpen, onClose }) => {
           </span>
         </NavLink>
 
+{/* ==========================================
+    PAYMENTS
+========================================== */}
 
+<span className="user-nav-title user-payments-title">
+  PAYMENTS
+</span>
+
+<NavLink
+  to="/user/payments"
+  className={({ isActive }) =>
+    `user-nav-item ${isActive ? "active" : ""}`
+  }
+  onClick={onClose}
+>
+  <span className="user-nav-icon">
+    <FaCreditCard />
+  </span>
+
+  <span>
+    Payment History
+  </span>
+</NavLink>
         {/* ANALYTICS */}
 
         <NavLink

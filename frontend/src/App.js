@@ -135,6 +135,8 @@ import PaymentPage from "./Components/Payment/PaymentPage";
 
 import PaymentSuccess from "./Components/Payment/PaymentSuccess";
 
+import PaymentHistory from "./Components/Payment/PaymentHistory";
+
 // =====================================================
 // APP
 // =====================================================
@@ -408,6 +410,12 @@ function App() {
             path="/payment/:bookingId"
             element={<PaymentPage />}
           />
+
+          <Route
+            path="/user/payments"
+            element={
+            <PaymentHistory />}
+/>
         
         </Routes>
       </Router>

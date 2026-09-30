@@ -55,3 +55,16 @@ export const refundPayment = async (paymentId) => {
 
   return response.data;
 };
+
+// ==========================================
+// GET PAYMENT HISTORY
+// ==========================================
+
+export const getPaymentHistory = async () => {
+  const response = await axios.get(
+    `${API}/history`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};
