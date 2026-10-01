@@ -6,6 +6,7 @@ const {
   refundPayment,
   getPaymentHistory,
   getProviderEarnings,
+  getPaymentReceipt,
 } = require("../Controllers/PaymentController");
 
 const authMiddleware = require("../Middleware/authMiddleware");
@@ -66,6 +67,17 @@ router.get(
   authMiddleware,
   roleMiddleware("provider"),
   getProviderEarnings
+);
+
+// =====================================================
+// PAYMENT RECEIPT
+// =====================================================
+
+router.get(
+  "/receipt/:paymentId",
+  authMiddleware,
+  roleMiddleware("user"),
+  getPaymentReceipt
 );
 
 module.exports = router;

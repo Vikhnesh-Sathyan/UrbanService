@@ -507,6 +507,90 @@ const getProviderEarnings = async (req, res) => {
   }
 };
 
+// =====================================================
+// GET PAYMENT RECEIPT
+// =====================================================
+
+const getPaymentReceipt = async (req, res) => {
+  try {
+    const { paymentId } = req.params;
+
+    if (!paymentId) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment ID is required",
+      });
+    }
+
+    const payment = await Payment.findOne({
+      _id: paymentId,
+      user: req.user.id,
+    })
+      .populate({
+        path: "booking",
+        select:
+          "date time bookingType phone notes service provider",
+        populate: [
+          {
+            path: "service",
+            select: "name price",
+          },
+          {
+            path: "provider",
+            select: "name",
+          },
+        ],
+      })
+      .lean();
+
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: "Payment not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      receipt: {
+        paymentId: payment._id,
+        stripePaymentIntentId:
+          payment.stripePaymentIntentId,
+        amount: payment.amount,
+        currency: payment.currency,
+        status: payment.status,
+        paymentDate: payment.createdAt,
+
+        booking: payment.booking
+          ? {
+              date: payment.booking.date,
+              time: payment.booking.time,
+              bookingType:
+                payment.booking.bookingType,
+
+              service:
+                payment.booking.service?.name ||
+                "Service",
+
+              provider:
+                payment.booking.provider?.name ||
+                "Provider",
+            }
+          : null,
+      },
+    });
+  } catch (error) {
+    console.error(
+      "Get payment receipt error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get payment receipt",
+    });
+  }
+};
 // ==========================================
 // EXPORT CONTROLLERS
 // ==========================================
@@ -517,4 +601,5 @@ module.exports = {
   refundPayment,
   getPaymentHistory,
   getProviderEarnings,
+  getPaymentReceipt,
 };

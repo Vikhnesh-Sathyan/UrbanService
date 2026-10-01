@@ -81,3 +81,16 @@ export const getProviderEarnings = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET PAYMENT RECEIPT
+// =====================================================
+
+export const getPaymentReceipt = async (paymentId) => {
+  const response = await axios.get(
+    `${API}/receipt/${paymentId}`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

@@ -239,7 +239,20 @@ const PaymentHistory = () => {
                 </span>
 
               </div>
+<div className="payment-history-actions">
 
+  <button
+    type="button"
+    className="payment-receipt-button"
+    onClick={() =>
+      window.location.href =
+        `/user/payment-receipt/${payment._id}`
+    }
+  >
+    View Receipt
+  </button>
+
+</div>
             </div>
           ))}
 

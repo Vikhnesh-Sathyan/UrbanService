@@ -1,0 +1,206 @@
+/* ==========================================
+   PAYMENT RECEIPT
+========================================== */
+
+.payment-receipt-page {
+  min-height: 100vh;
+  padding: 40px 24px;
+  background: #f6f7f9;
+}
+
+.payment-receipt-card {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  padding: 40px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.payment-receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.payment-receipt-header h1 {
+  margin: 8px 0;
+  font-size: 32px;
+}
+
+.payment-receipt-header p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.payment-receipt-status {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.payment-receipt-status.succeeded {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.payment-receipt-status.refunded {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.payment-receipt-status.pending {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.payment-receipt-status.failed {
+  background: #fef2f2;
+  color: #b42318;
+}
+
+/* ==========================================
+   AMOUNT
+========================================== */
+
+.payment-receipt-amount {
+  padding: 32px 0;
+  text-align: center;
+}
+
+.payment-receipt-amount span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #6b7280;
+}
+
+.payment-receipt-amount strong {
+  font-size: 40px;
+}
+
+/* ==========================================
+   SECTIONS
+========================================== */
+
+.payment-receipt-section {
+  padding: 26px 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.payment-receipt-section-title {
+  margin-bottom: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #6b7280;
+}
+
+.payment-receipt-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.payment-receipt-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.payment-receipt-grid span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.payment-receipt-grid strong {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.payment-receipt-footer {
+  margin-top: 8px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.payment-receipt-footer p {
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+
+.payment-receipt-footer span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ==========================================
+   LOADING / ERROR
+========================================== */
+
+.payment-receipt-state,
+.payment-receipt-error {
+  width: min(700px, 100%);
+  margin: 80px auto;
+  padding: 40px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+}
+
+.payment-receipt-error h1 {
+  margin: 10px 0;
+}
+
+.payment-receipt-error p {
+  color: #6b7280;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 700px) {
+  .payment-receipt-page {
+    padding: 20px 14px;
+  }
+
+  .payment-receipt-card {
+    padding: 24px;
+  }
+
+  .payment-receipt-header {
+    flex-direction: column;
+  }
+
+  .payment-receipt-header h1 {
+    font-size: 26px;
+  }
+
+  .payment-receipt-amount strong {
+    font-size: 32px;
+  }
+
+  .payment-receipt-grid {
+    grid-template-columns: 1fr;
+  }
+}
