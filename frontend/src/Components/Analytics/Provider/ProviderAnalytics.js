@@ -21,6 +21,10 @@ import {
   getMyEmergencyAnalytics,
 } from "../../../Services/providerAnalyticsService";
 
+import {
+  getProviderEarnings,
+} from "../../../Services/paymentService";
+
 import "../../../styles/ProviderAnalytics.css";
 
 const ProviderAnalytics = () => {
@@ -35,6 +39,14 @@ const ProviderAnalytics = () => {
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [earnings, setEarnings] = useState({
+  totalPaid: 0,
+  totalRefunded: 0,
+  netEarnings: 0,
+  successfulPayments: 0,
+  refundedPayments: 0,
+});
   
 
   // =====================================================
@@ -51,14 +63,15 @@ useEffect(() => {
   performanceResponse,
   activityResponse,
   servicePerformanceResponse,
-  emergencyAnalyticsResponse
+  emergencyAnalyticsResponse,
+  earningsResponse,
 ] = await Promise.all([
   getMyProviderOverview(),
   getMyBookingPerformance(),
   getMyBookingActivity(),
   getMyServicePerformance(),
   getMyEmergencyAnalytics(),
-
+  getProviderEarnings(),
 ]);
 
       if (overviewResponse.success) {
@@ -80,6 +93,11 @@ useEffect(() => {
       if (emergencyAnalyticsResponse.success) {
         setEmergencyAnalytics(emergencyAnalyticsResponse.data);
       }
+
+      if (earningsResponse.success) {
+        setEarnings(earningsResponse.earnings);
+      }
+
     } catch (error) {
       console.error(
         "Provider analytics error:",
@@ -230,7 +248,94 @@ return (
           </div>
 
         </div>
+<div className="provider-analytics-kpi-grid">
 
+  {/* NET EARNINGS */}
+  <div className="provider-analytics-kpi">
+
+    <div className="provider-analytics-kpi-top">
+      <div className="provider-analytics-kpi-icon">
+        ₹
+      </div>
+    </div>
+
+    <h3>
+      ₹{Number(
+        earnings.netEarnings
+      ).toFixed(2)}
+    </h3>
+
+    <p>
+      Net Earnings
+    </p>
+
+  </div>
+
+
+  {/* TOTAL REVENUE */}
+  <div className="provider-analytics-kpi">
+
+    <div className="provider-analytics-kpi-top">
+      <div className="provider-analytics-kpi-icon">
+        ₹
+      </div>
+    </div>
+
+    <h3>
+      ₹{Number(
+        earnings.totalPaid
+      ).toFixed(2)}
+    </h3>
+
+    <p>
+      Total Revenue
+    </p>
+
+  </div>
+
+
+  {/* REFUNDED */}
+  <div className="provider-analytics-kpi">
+
+    <div className="provider-analytics-kpi-top">
+      <div className="provider-analytics-kpi-icon">
+        ₹
+      </div>
+    </div>
+
+    <h3>
+      ₹{Number(
+        earnings.totalRefunded
+      ).toFixed(2)}
+    </h3>
+
+    <p>
+      Refunded
+    </p>
+
+  </div>
+
+
+  {/* SUCCESSFUL PAYMENTS */}
+  <div className="provider-analytics-kpi">
+
+    <div className="provider-analytics-kpi-top">
+      <div className="provider-analytics-kpi-icon">
+        #
+      </div>
+    </div>
+
+    <h3>
+      {earnings.successfulPayments}
+    </h3>
+
+    <p>
+      Successful Payments
+    </p>
+
+  </div>
+
+</div>
 
         {/* =================================================
             BOOKING PERFORMANCE

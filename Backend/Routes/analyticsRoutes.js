@@ -12,8 +12,8 @@ const {
   getBookingBreakdown,
   getServiceAnalytics,
   getProviderAnalytics,
-  getComplaintAnalytics
-
+  getComplaintAnalytics,
+  getPaymentAnalytics,
 } = require("../Controllers/AnalyticsController");
 
 const authMiddleware = require("../Middleware/AuthMiddleware");
@@ -75,6 +75,17 @@ router.get(
   authMiddleware,
   roleMiddleware("admin"),
   getComplaintAnalytics
+);
+
+// =====================================================
+// PAYMENT ANALYTICS
+// =====================================================
+
+router.get(
+  "/payments",
+  authMiddleware,
+  roleMiddleware("admin"),
+  getPaymentAnalytics
 );
 
 module.exports = router;

@@ -6,6 +6,7 @@
 const User = require("../Models/User");
 const Booking = require("../Models/Booking");
 const Complaint = require("../Models/Complaint");
+const Payment = require("../Models/Payment");
 
 // =====================================================
 // GET ADMIN OVERVIEW
@@ -458,6 +459,97 @@ const getComplaintAnalytics = async (req, res) => {
   }
 };
 
+// =====================================================
+// GET PAYMENT ANALYTICS
+// Returns platform-level payment and revenue statistics.
+// =====================================================
+
+const getPaymentAnalytics = async (req, res) => {
+  try {
+    const [
+      successfulPayments,
+      refundedPayments,
+      successfulRevenue,
+      refundedAmount,
+    ] = await Promise.all([
+      // Count successful payments
+      Payment.countDocuments({
+        status: "succeeded",
+      }),
+
+      // Count refunded payments
+      Payment.countDocuments({
+        status: "refunded",
+      }),
+
+      // Calculate successful payment revenue
+      Payment.aggregate([
+        {
+          $match: {
+            status: "succeeded",
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: {
+              $sum: "$amount",
+            },
+          },
+        },
+      ]),
+
+      // Calculate refunded amount
+      Payment.aggregate([
+        {
+          $match: {
+            status: "refunded",
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: {
+              $sum: "$amount",
+            },
+          },
+        },
+      ]),
+    ]);
+
+    const totalRevenue =
+      successfulRevenue[0]?.total || 0;
+
+    const totalRefunded =
+      refundedAmount[0]?.total || 0;
+
+    const netRevenue =
+      totalRevenue - totalRefunded;
+
+    return res.status(200).json({
+      success: true,
+
+      data: {
+        totalRevenue,
+        totalRefunded,
+        netRevenue,
+        successfulPayments,
+        refundedPayments,
+      },
+    });
+  } catch (error) {
+    console.error(
+      "Payment analytics error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to load payment analytics",
+    });
+  }
+};
+
 module.exports = {
   getAdminOverview,
   getBookingActivity,
@@ -465,5 +557,5 @@ module.exports = {
   getServiceAnalytics,
   getProviderAnalytics,
   getComplaintAnalytics,
-
+  getPaymentAnalytics,
 };

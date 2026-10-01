@@ -17,7 +17,7 @@ const getAuthConfig = () => {
 };
 
 // =====================================================
-// GET MY PROVIDER ANALYTICS
+// GET MY PROVIDER OVERVIEW
 // =====================================================
 
 export const getMyProviderOverview = async () => {
@@ -44,8 +44,6 @@ export const getMyBookingPerformance = async () => {
 
 // =====================================================
 // GET MY BOOKING ACTIVITY
-// Fetches provider bookings grouped by booking date.
-// Used for the Booking Activity chart.
 // =====================================================
 
 export const getMyBookingActivity = async () => {
@@ -57,7 +55,10 @@ export const getMyBookingActivity = async () => {
   return response.data;
 };
 
-// Fetch booking performance for each service owned by the provider
+// =====================================================
+// GET MY SERVICE PERFORMANCE
+// =====================================================
+
 export const getMyServicePerformance = async () => {
   const response = await axios.get(
     `${API}/service-performance`,
@@ -67,7 +68,10 @@ export const getMyServicePerformance = async () => {
   return response.data;
 };
 
-// Fetch emergency booking analytics for the logged-in provider
+// =====================================================
+// GET MY EMERGENCY ANALYTICS
+// =====================================================
+
 export const getMyEmergencyAnalytics = async () => {
   const response = await axios.get(
     `${API}/emergency-analytics`,

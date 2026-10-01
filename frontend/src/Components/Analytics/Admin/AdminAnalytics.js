@@ -3,8 +3,15 @@ import React, { useEffect, useState } from "react";
 import AdminSidebar from "../../Dashboard/Admin/AdminSidebar";
 import AdminNavbar from "../../Dashboard/Admin/AdminNavbar";
 
-import { getAdminOverview , getBookingActivity ,   getBookingBreakdown, getServiceAnalytics, getProviderAnalytics , getComplaintAnalytics,
- } from "../../../Services/analyticsService";
+import {
+  getAdminOverview,
+  getBookingActivity,
+  getBookingBreakdown,
+  getServiceAnalytics,
+  getProviderAnalytics,
+  getComplaintAnalytics,
+  getPaymentAnalytics,
+} from "../../../Services/analyticsService";
 
 import BookingActivityChart from "./BookingActivityChart";
 import BookingBreakdown from "./BookingBreakdown";
@@ -13,6 +20,7 @@ import ServiceBookingChart from "./ServiceBookingChart";
 import ProviderPerformanceChart from "./ProviderPerformanceChart";
 import ComplaintStatusSummary from "./ComplaintStatusSummary";
 import ComplaintReasonChart from "./ComplaintReasonChart";
+
 import "../../../styles/AdminAnalytics.css";
 
 const AdminAnalytics = () => {
@@ -26,58 +34,99 @@ const AdminAnalytics = () => {
   const [serviceAnalytics, setServiceAnalytics] = useState([]);
   const [providerAnalytics, setProviderAnalytics] = useState(null);
   const [complaintAnalytics, setComplaintAnalytics] = useState(null);
+
+  const [paymentAnalytics, setPaymentAnalytics] = useState({
+    totalRevenue: 0,
+    totalRefunded: 0,
+    netRevenue: 0,
+    successfulPayments: 0,
+    refundedPayments: 0,
+  });
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
 
   // =====================================================
   // LOAD ADMIN ANALYTICS
   // =====================================================
-useEffect(() => {
-  const loadAnalytics = async () => {
-    try {
-      setLoading(true);
-      setError("");
 
-      const [
-        overviewResponse,
-        bookingResponse,
+  useEffect(() => {
+    const loadAnalytics = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const [
+          overviewResponse,
+          bookingResponse,
           breakdownResponse,
           serviceResponse,
           providerResponse,
-          complaintResponse
-      ] = await Promise.all([
-        getAdminOverview(),
-        getBookingActivity(),
-        getBookingBreakdown(),
-        getServiceAnalytics(),
-        getProviderAnalytics(),
-        getComplaintAnalytics(),
-      ]);
+          complaintResponse,
+          paymentResponse,
+        ] = await Promise.all([
+          getAdminOverview(),
+          getBookingActivity(),
+          getBookingBreakdown(),
+          getServiceAnalytics(),
+          getProviderAnalytics(),
+          getComplaintAnalytics(),
+          getPaymentAnalytics(),
+        ]);
 
-      setOverview(overviewResponse.data);
-      setBookingActivity(bookingResponse.data);
-      setBookingBreakdown(breakdownResponse.data);
-      setServiceAnalytics(serviceResponse.data);
-      setProviderAnalytics(providerResponse.data);
-      setComplaintAnalytics(complaintResponse.data);
-    } catch (error) {
-      console.error(
-        "Admin analytics error:",
-        error
-      );
+        // -------------------------------------------------
+        // STORE ANALYTICS DATA
+        // -------------------------------------------------
 
-      setError(
-        error.response?.data?.message ||
-          "Failed to load analytics."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+        setOverview(overviewResponse.data);
 
-  loadAnalytics();
-}, []);
+        setBookingActivity(
+          bookingResponse.data
+        );
+
+        setBookingBreakdown(
+          breakdownResponse.data
+        );
+
+        setServiceAnalytics(
+          serviceResponse.data
+        );
+
+        setProviderAnalytics(
+          providerResponse.data
+        );
+
+        setComplaintAnalytics(
+          complaintResponse.data
+        );
+
+        // -------------------------------------------------
+        // PAYMENT ANALYTICS
+        // -------------------------------------------------
+
+        if (paymentResponse.success) {
+          setPaymentAnalytics(
+            paymentResponse.data
+          );
+        }
+
+      } catch (error) {
+        console.error(
+          "Admin analytics error:",
+          error
+        );
+
+        setError(
+          error.response?.data?.message ||
+            "Failed to load analytics."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAnalytics();
+  }, []);
 
   // =====================================================
   // LOADING STATE
@@ -96,11 +145,13 @@ useEffect(() => {
           <section className="admin-analytics-content">
 
             <div className="admin-analytics-state">
+
               <div className="admin-analytics-loader" />
 
               <p>
                 Loading analytics...
               </p>
+
             </div>
 
           </section>
@@ -166,7 +217,10 @@ useEffect(() => {
         {/* Analytics Content */}
         <section className="admin-analytics-content">
 
-          {/* Header */}
+          {/* =====================================================
+              HEADER
+          ===================================================== */}
+
           <div className="admin-analytics-header">
 
             <span className="admin-label">
@@ -178,254 +232,430 @@ useEffect(() => {
             </h1>
 
             <p>
-              Monitor bookings, services, providers and
-              complaints across UrbanService.
+              Monitor bookings, services, providers,
+              payments and complaints across
+              UrbanService.
             </p>
 
           </div>
 
-{/* =====================================================
-    OVERVIEW
-===================================================== */}
+          {/* =====================================================
+              OVERVIEW
+          ===================================================== */}
 
-<div className="admin-analytics-overview">
+          <div className="admin-analytics-overview">
 
-  <div className="analytics-section-heading">
-    <div>
-      <span>OVERVIEW</span>
-      <h2>Platform performance</h2>
-    </div>
+            <div className="analytics-section-heading">
 
-    <span className="analytics-live-indicator">
-      <span></span>
-      Live data
-    </span>
-  </div>
+              <div>
 
-  <div className="analytics-kpi-grid">
+                <span>
+                  OVERVIEW
+                </span>
 
-    {/* Total Users */}
-    <div className="analytics-kpi-card">
+                <h2>
+                  Platform performance
+                </h2>
 
-      <div className="analytics-kpi-top">
-        <span className="analytics-kpi-label">
-          Total Users
-        </span>
+              </div>
 
-        <span className="analytics-kpi-index">
-          01
-        </span>
-      </div>
+              <span className="analytics-live-indicator">
+                <span></span>
+                Live data
+              </span>
 
-      <div className="analytics-kpi-value">
-        {overview.totalUsers}
-      </div>
+            </div>
 
-      <div className="analytics-kpi-footer">
-        Registered customers
-      </div>
+            <div className="analytics-kpi-grid">
 
-    </div>
+              {/* Total Users */}
+              <div className="analytics-kpi-card">
 
+                <div className="analytics-kpi-top">
 
-    {/* Total Providers */}
-    <div className="analytics-kpi-card">
+                  <span className="analytics-kpi-label">
+                    Total Users
+                  </span>
 
-      <div className="analytics-kpi-top">
-        <span className="analytics-kpi-label">
-          Total Providers
-        </span>
+                  <span className="analytics-kpi-index">
+                    01
+                  </span>
 
-        <span className="analytics-kpi-index">
-          02
-        </span>
-      </div>
+                </div>
 
-      <div className="analytics-kpi-value">
-        {overview.totalProviders}
-      </div>
+                <div className="analytics-kpi-value">
+                  {overview.totalUsers}
+                </div>
 
-      <div className="analytics-kpi-footer">
-        Service professionals
-      </div>
+                <div className="analytics-kpi-footer">
+                  Registered customers
+                </div>
 
-    </div>
+              </div>
 
+              {/* Total Providers */}
+              <div className="analytics-kpi-card">
 
-    {/* Total Bookings */}
-    <div className="analytics-kpi-card">
+                <div className="analytics-kpi-top">
 
-      <div className="analytics-kpi-top">
-        <span className="analytics-kpi-label">
-          Total Bookings
-        </span>
+                  <span className="analytics-kpi-label">
+                    Total Providers
+                  </span>
 
-        <span className="analytics-kpi-index">
-          03
-        </span>
-      </div>
+                  <span className="analytics-kpi-index">
+                    02
+                  </span>
 
-      <div className="analytics-kpi-value">
-        {overview.totalBookings}
-      </div>
+                </div>
 
-      <div className="analytics-kpi-footer">
-        All booking requests
-      </div>
+                <div className="analytics-kpi-value">
+                  {overview.totalProviders}
+                </div>
 
-    </div>
+                <div className="analytics-kpi-footer">
+                  Service professionals
+                </div>
 
+              </div>
 
-    {/* Completed */}
-    <div className="analytics-kpi-card">
+              {/* Total Bookings */}
+              <div className="analytics-kpi-card">
 
-      <div className="analytics-kpi-top">
-        <span className="analytics-kpi-label">
-          Completed
-        </span>
+                <div className="analytics-kpi-top">
 
-        <span className="analytics-kpi-index">
-          04
-        </span>
-      </div>
+                  <span className="analytics-kpi-label">
+                    Total Bookings
+                  </span>
 
-      <div className="analytics-kpi-value">
-        {overview.completedBookings}
-      </div>
+                  <span className="analytics-kpi-index">
+                    03
+                  </span>
 
-      <div className="analytics-kpi-footer">
-        Successfully completed
-      </div>
+                </div>
 
-    </div>
+                <div className="analytics-kpi-value">
+                  {overview.totalBookings}
+                </div>
 
-  </div>
+                <div className="analytics-kpi-footer">
+                  All booking requests
+                </div>
 
-</div>
+              </div>
 
-<BookingActivityChart
-  data={bookingActivity}/>
-{/* =====================================================
-    BOOKING BREAKDOWN
-===================================================== */}
+              {/* Completed */}
+              <div className="analytics-kpi-card">
 
-<div className="analytics-breakdown-grid">
+                <div className="analytics-kpi-top">
 
-  <BookingBreakdown
-    data={bookingBreakdown}
-  />
+                  <span className="analytics-kpi-label">
+                    Completed
+                  </span>
 
-  <BookingStatusChart
-    data={bookingBreakdown}
-  />
+                  <span className="analytics-kpi-index">
+                    04
+                  </span>
 
-  {/* =====================================================
-    SERVICE ANALYTICS
-===================================================== */}
+                </div>
 
-<div className="analytics-service-section">
+                <div className="analytics-kpi-value">
+                  {overview.completedBookings}
+                </div>
 
-  <ServiceBookingChart
-    data={serviceAnalytics}
-  />
+                <div className="analytics-kpi-footer">
+                  Successfully completed
+                </div>
 
-</div>
+              </div>
 
-{/* =====================================================
-    PROVIDER ANALYTICS
-===================================================== */}
+            </div>
 
-<div className="analytics-provider-section">
+          </div>
 
-  <div className="analytics-section-heading">
+          {/* =====================================================
+              PAYMENT & REVENUE
+          ===================================================== */}
 
-    <div>
-      <span>PROVIDER ANALYTICS</span>
+          <div className="admin-analytics-overview">
 
-      <h2>
-        Provider performance
-      </h2>
-    </div>
+            <div className="analytics-section-heading">
 
-  </div>
+              <div>
 
+                <span>
+                  FINANCIAL OVERVIEW
+                </span>
 
-  {/* Provider KPI cards */}
+                <h2>
+                  Payments & Revenue
+                </h2>
 
-  <div className="analytics-provider-kpi-grid">
+              </div>
 
-    <div className="analytics-provider-kpi-card">
-      <span>Total Providers</span>
+              <span className="analytics-live-indicator">
+                <span></span>
+                Payment data
+              </span>
 
-      <strong>
-        {providerAnalytics?.summary?.totalProviders || 0}
-      </strong>
-    </div>
+            </div>
 
+            <div className="analytics-kpi-grid">
 
-    <div className="analytics-provider-kpi-card">
-      <span>Active Providers</span>
+              {/* Total Revenue */}
+              <div className="analytics-kpi-card">
 
-      <strong>
-        {providerAnalytics?.summary?.activeProviders || 0}
-      </strong>
-    </div>
+                <div className="analytics-kpi-top">
 
+                  <span className="analytics-kpi-label">
+                    Total Revenue
+                  </span>
 
-    <div className="analytics-provider-kpi-card">
-      <span>Blocked Providers</span>
+                  <span className="analytics-kpi-index">
+                    01
+                  </span>
 
-      <strong>
-        {providerAnalytics?.summary?.blockedProviders || 0}
-      </strong>
-    </div>
+                </div>
 
-  </div>
+                <div className="analytics-kpi-value">
+                  ₹
+                  {Number(
+                    paymentAnalytics.totalRevenue
+                  ).toFixed(2)}
+                </div>
 
+                <div className="analytics-kpi-footer">
+                  Successful customer payments
+                </div>
 
-  {/* Performance chart */}
+              </div>
 
-  <ProviderPerformanceChart
-    data={providerAnalytics?.performance || []}
-  />
+              {/* Refunded */}
+              <div className="analytics-kpi-card">
 
-  {/* =====================================================
-    COMPLAINT ANALYTICS
-===================================================== */}
+                <div className="analytics-kpi-top">
 
-<div className="analytics-complaint-section">
+                  <span className="analytics-kpi-label">
+                    Refunded
+                  </span>
 
-  <div className="analytics-section-heading">
+                  <span className="analytics-kpi-index">
+                    02
+                  </span>
 
-    <div>
+                </div>
 
-      <span>
-        COMPLAINT ANALYTICS
-      </span>
+                <div className="analytics-kpi-value">
+                  ₹
+                  {Number(
+                    paymentAnalytics.totalRefunded
+                  ).toFixed(2)}
+                </div>
 
-      <h2>
-        Customer issue insights
-      </h2>
+                <div className="analytics-kpi-footer">
+                  Amount returned to customers
+                </div>
 
-    </div>
+              </div>
 
-  </div>
+              {/* Net Revenue */}
+              <div className="analytics-kpi-card">
 
+                <div className="analytics-kpi-top">
 
-  <ComplaintStatusSummary
-    data={complaintAnalytics}
-  />
+                  <span className="analytics-kpi-label">
+                    Net Revenue
+                  </span>
 
+                  <span className="analytics-kpi-index">
+                    03
+                  </span>
 
-  <ComplaintReasonChart
-    data={complaintAnalytics}
-  />
+                </div>
 
-</div>
+                <div className="analytics-kpi-value">
+                  ₹
+                  {Number(
+                    paymentAnalytics.netRevenue
+                  ).toFixed(2)}
+                </div>
 
-</div>
+                <div className="analytics-kpi-footer">
+                  Revenue after refunds
+                </div>
 
-</div>
+              </div>
+
+              {/* Successful Payments */}
+              <div className="analytics-kpi-card">
+
+                <div className="analytics-kpi-top">
+
+                  <span className="analytics-kpi-label">
+                    Successful Payments
+                  </span>
+
+                  <span className="analytics-kpi-index">
+                    04
+                  </span>
+
+                </div>
+
+                <div className="analytics-kpi-value">
+                  {paymentAnalytics.successfulPayments}
+                </div>
+
+                <div className="analytics-kpi-footer">
+                  Completed transactions
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* =====================================================
+              BOOKING ACTIVITY
+          ===================================================== */}
+
+          <BookingActivityChart
+            data={bookingActivity}
+          />
+
+          {/* =====================================================
+              BOOKING BREAKDOWN
+          ===================================================== */}
+
+          <div className="analytics-breakdown-grid">
+
+            <BookingBreakdown
+              data={bookingBreakdown}
+            />
+
+            <BookingStatusChart
+              data={bookingBreakdown}
+            />
+
+          </div>
+
+          {/* =====================================================
+              SERVICE ANALYTICS
+          ===================================================== */}
+
+          <div className="analytics-service-section">
+
+            <ServiceBookingChart
+              data={serviceAnalytics}
+            />
+
+          </div>
+
+          {/* =====================================================
+              PROVIDER ANALYTICS
+          ===================================================== */}
+
+          <div className="analytics-provider-section">
+
+            <div className="analytics-section-heading">
+
+              <div>
+
+                <span>
+                  PROVIDER ANALYTICS
+                </span>
+
+                <h2>
+                  Provider performance
+                </h2>
+
+              </div>
+
+            </div>
+
+            {/* Provider KPI cards */}
+
+            <div className="analytics-provider-kpi-grid">
+
+              <div className="analytics-provider-kpi-card">
+
+                <span>
+                  Total Providers
+                </span>
+
+                <strong>
+                  {providerAnalytics?.summary?.totalProviders || 0}
+                </strong>
+
+              </div>
+
+              <div className="analytics-provider-kpi-card">
+
+                <span>
+                  Active Providers
+                </span>
+
+                <strong>
+                  {providerAnalytics?.summary?.activeProviders || 0}
+                </strong>
+
+              </div>
+
+              <div className="analytics-provider-kpi-card">
+
+                <span>
+                  Blocked Providers
+                </span>
+
+                <strong>
+                  {providerAnalytics?.summary?.blockedProviders || 0}
+                </strong>
+
+              </div>
+
+            </div>
+
+            {/* Performance chart */}
+
+            <ProviderPerformanceChart
+              data={
+                providerAnalytics?.performance || []
+              }
+            />
+
+          </div>
+
+          {/* =====================================================
+              COMPLAINT ANALYTICS
+          ===================================================== */}
+
+          <div className="analytics-complaint-section">
+
+            <div className="analytics-section-heading">
+
+              <div>
+
+                <span>
+                  COMPLAINT ANALYTICS
+                </span>
+
+                <h2>
+                  Customer issue insights
+                </h2>
+
+              </div>
+
+            </div>
+
+            <ComplaintStatusSummary
+              data={complaintAnalytics}
+            />
+
+            <ComplaintReasonChart
+              data={complaintAnalytics}
+            />
+
+          </div>
+
         </section>
 
       </main>
@@ -433,6 +663,5 @@ useEffect(() => {
     </div>
   );
 };
-
 
 export default AdminAnalytics;

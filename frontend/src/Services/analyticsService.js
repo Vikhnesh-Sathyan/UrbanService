@@ -100,3 +100,16 @@ export const getComplaintAnalytics = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET PAYMENT ANALYTICS
+// =====================================================
+
+export const getPaymentAnalytics = async () => {
+  const response = await axios.get(
+    `${API}/payments`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};
