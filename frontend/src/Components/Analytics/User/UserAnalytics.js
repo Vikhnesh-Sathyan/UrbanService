@@ -38,47 +38,60 @@ const UserAnalytics = () => {
   // LOAD USER ANALYTICS
   // =====================================================
 
-  useEffect(() => {
-    const loadAnalytics = async () => {
-      try {
-        setLoading(true);
-        setError("");
+// =====================================================
+// LOAD USER ANALYTICS
+// =====================================================
 
-       const overviewResponse = await getMyUserOverview();
-       const activityResponse = await getMyUserBookingActivity();
-       const serviceUsageResponse = await getMyUserServiceUsage();
-       const bookingTypeResponse = await getMyUserBookingType();
+useEffect(() => {
+  const loadAnalytics = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-          if (overviewResponse.success) {
-          setAnalytics(overviewResponse.data);
-          }
+      const [
+        overviewResponse,
+        activityResponse,
+        serviceUsageResponse,
+        bookingTypeResponse,
+      ] = await Promise.all([
+        getMyUserOverview(),
+        getMyUserBookingActivity(),
+        getMyUserServiceUsage(),
+        getMyUserBookingType(),
+      ]);
 
-          if (activityResponse.success) {
-          setBookingActivity(activityResponse.data);
-          }
-
-          if (serviceUsageResponse.success) {
-          setServiceUsage(serviceUsageResponse.data);
-          }
-
-          if (bookingTypeResponse.success) {
-          setBookingType(bookingTypeResponse.data);
-          }
-
-      } catch (error) {
-        console.error("User analytics error:", error);
-
-        setError(
-          error.response?.data?.message ||
-            "Failed to load user analytics."
-        );
-      } finally {
-        setLoading(false);
+      if (overviewResponse.success) {
+        setAnalytics(overviewResponse.data);
       }
-    };
 
-    loadAnalytics();
-  }, []);
+      if (activityResponse.success) {
+        setBookingActivity(activityResponse.data);
+      }
+
+      if (serviceUsageResponse.success) {
+        setServiceUsage(serviceUsageResponse.data);
+      }
+
+      if (bookingTypeResponse.success) {
+        setBookingType(bookingTypeResponse.data);
+      }
+    } catch (error) {
+      console.error(
+        "User analytics error:",
+        error
+      );
+
+      setError(
+        error.response?.data?.message ||
+          "Failed to load user analytics."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadAnalytics();
+}, []);
 
 
   // =====================================================
