@@ -137,6 +137,8 @@ import PaymentSuccess from "./Components/Payment/PaymentSuccess";
 
 import PaymentHistory from "./Components/Payment/PaymentHistory";
 
+import ProviderPayments from "./Components/Services/Provider/ProviderPayments";
+
 // =====================================================
 // APP
 // =====================================================
@@ -415,7 +417,12 @@ function App() {
             path="/user/payments"
             element={
             <PaymentHistory />}
-/>
+          />
+
+          <Route
+            path="/provider/payments"
+            element={<ProviderPayments />}
+          />
         
         </Routes>
       </Router>

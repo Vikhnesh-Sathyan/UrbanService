@@ -431,6 +431,82 @@ const getPaymentHistory = async (req, res) => {
   }
 };
 
+// =====================================================
+// GET PROVIDER EARNINGS
+// =====================================================
+
+const getProviderEarnings = async (req, res) => {
+  try {
+    const providerId = req.user.id;
+
+    // Get all payments and connect them with their booking
+    const payments = await Payment.find({
+      status: { $in: ["succeeded", "refunded"] },
+    })
+      .populate({
+        path: "booking",
+        select: "provider",
+      })
+      .lean();
+
+    // Keep only payments belonging to this provider
+    const providerPayments = payments.filter(
+      (payment) =>
+        payment.booking &&
+        payment.booking.provider &&
+        payment.booking.provider.toString() ===
+          providerId.toString()
+    );
+
+    // Calculate earnings
+    const totalPaid = providerPayments
+      .filter((payment) => payment.status === "succeeded")
+      .reduce(
+        (total, payment) => total + payment.amount,
+        0
+      );
+
+    const totalRefunded = providerPayments
+      .filter((payment) => payment.status === "refunded")
+      .reduce(
+        (total, payment) => total + payment.amount,
+        0
+      );
+
+    const netEarnings =
+      totalPaid - totalRefunded;
+
+    return res.status(200).json({
+      success: true,
+      earnings: {
+        totalPaid,
+        totalRefunded,
+        netEarnings,
+        successfulPayments:
+          providerPayments.filter(
+            (payment) =>
+              payment.status === "succeeded"
+          ).length,
+        refundedPayments:
+          providerPayments.filter(
+            (payment) =>
+              payment.status === "refunded"
+          ).length,
+      },
+    });
+  } catch (error) {
+    console.error(
+      "Get provider earnings error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get provider earnings",
+    });
+  }
+};
+
 // ==========================================
 // EXPORT CONTROLLERS
 // ==========================================
@@ -440,4 +516,5 @@ module.exports = {
   getPaymentStatus,
   refundPayment,
   getPaymentHistory,
+  getProviderEarnings,
 };

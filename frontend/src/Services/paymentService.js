@@ -68,3 +68,16 @@ export const getPaymentHistory = async () => {
 
   return response.data;
 };
+
+// =====================================================
+// GET PROVIDER EARNINGS
+// =====================================================
+
+export const getProviderEarnings = async () => {
+  const response = await axios.get(
+    `${API}/provider/earnings`,
+    getAuthConfig()
+  );
+
+  return response.data;
+};

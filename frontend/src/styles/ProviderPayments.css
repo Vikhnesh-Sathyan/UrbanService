@@ -1,0 +1,121 @@
+.provider-payments-page {
+  padding: 32px;
+}
+
+.provider-payments-header {
+  margin-bottom: 28px;
+}
+
+.provider-payments-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #777;
+}
+
+.provider-payments-header h1 {
+  margin: 8px 0;
+  font-size: 30px;
+}
+
+.provider-payments-header p {
+  margin: 0;
+  color: #777;
+}
+
+.provider-earnings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.provider-earning-card {
+  padding: 26px;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.provider-earning-card.primary {
+  background: #111827;
+  color: #fff;
+}
+
+.provider-earning-card span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.provider-earning-card h2 {
+  margin: 18px 0 8px;
+  font-size: 30px;
+}
+
+.provider-earning-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #777;
+}
+
+.provider-earning-card.primary p {
+  color: #cbd5e1;
+}
+
+.provider-payment-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.provider-payment-summary div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 26px;
+}
+
+.provider-payment-summary div + div {
+  border-left: 1px solid #e5e7eb;
+}
+
+.provider-payment-summary span {
+  color: #777;
+  font-size: 14px;
+}
+
+.provider-payment-summary strong {
+  font-size: 20px;
+}
+
+.provider-payments-error {
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #fff1f2;
+  color: #b42318;
+}
+
+@media (max-width: 900px) {
+  .provider-earnings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .provider-payments-page {
+    padding: 20px;
+  }
+
+  .provider-payment-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .provider-payment-summary div + div {
+    border-left: none;
+    border-top: 1px solid #e5e7eb;
+  }
+}

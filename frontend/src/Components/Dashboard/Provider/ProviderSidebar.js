@@ -86,9 +86,11 @@ const ProviderSidebar = () => {
         {menuItems.map((item) => (
           <button
             key={item.path}
-            className={`provider-nav-item ${
-              location.pathname === item.path ? "active" : ""
-            }`}
+           className={`provider-nav-item ${
+  location.pathname.startsWith(item.path)
+    ? "active"
+    : ""
+}`}
             onClick={() => navigate(item.path)}
           >
             <span className="provider-nav-icon">
