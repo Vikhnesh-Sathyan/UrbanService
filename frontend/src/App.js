@@ -11,6 +11,7 @@ import {
 
 import Login from "./Components/Auth/Login";
 import Register from "./Components/Auth/Register";
+import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 
 // =====================================================
 // HOME
@@ -254,7 +255,11 @@ function App() {
           {/* User Dashboard */}
           <Route
             path="/user/dashboard"
-            element={<UserDashboard />}
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
+              </ProtectedRoute>
+            }
           />
 
 

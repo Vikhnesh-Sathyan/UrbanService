@@ -81,9 +81,13 @@ const ProviderDashboard = () => {
               </p>
             </div>
 
-            <button className="add-service-button">
-              + Add Service
-            </button>
+           <button
+            type="button"
+            className="add-service-button"
+            onClick={() => navigate("/provider/services")}
+          >
+                  + Add Service 
+          </button>
 
           </div>
 

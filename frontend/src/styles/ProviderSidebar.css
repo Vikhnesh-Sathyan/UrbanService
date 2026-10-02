@@ -4,24 +4,27 @@
 
 .provider-sidebar {
   width: 250px;
-  height: 100vh;
 
+  /* top + bottom + dvh so it always fits the visible screen */
   position: fixed;
-  left: 0;
   top: 0;
+  bottom: 0;
+  left: 0;
+  height: 100vh;   /* fallback for older browsers */
+  height: 100dvh;  /* ignores mobile browser toolbars */
 
   display: flex;
   flex-direction: column;
-
-  padding: 28px 16px;
+  padding: 24px 16px 16px;
+  box-sizing: border-box;
 
   background: #0d1426;
-
   border-right: 1px solid rgba(255, 255, 255, 0.07);
 
   color: #f8fafc;
-
   z-index: 100;
+
+  /* overflow: hidden removed so nothing gets clipped */
 
   font-family:
     Inter,
@@ -39,6 +42,7 @@
 
 .provider-brand {
   height: 52px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
@@ -47,7 +51,7 @@
 
   padding: 0 10px;
 
-  margin-bottom: 42px;
+  margin-bottom: 32px;
 }
 
 
@@ -108,6 +112,8 @@
 ===================================================== */
 
 .sidebar-section-title {
+  flex-shrink: 0;
+
   padding: 0 12px;
 
   margin-bottom: 10px;
@@ -122,20 +128,66 @@
 
 
 /* =====================================================
-   NAVIGATION
+   NAVIGATION (scrolls on its own if screen is short)
 ===================================================== */
 
 .provider-nav {
   display: flex;
   flex-direction: column;
+  gap: 3px;                 /* the small gap between buttons, adjust to taste */
 
-  gap: 4px;
+  flex: 1 1 auto;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.provider-nav-item {
+  width: 100%;
+  min-height: 43px;
+  max-height: 72px;         /* stops buttons from getting too tall on big screens */
+
+  flex: 1 1 0;              /* each button grows equally to fill the sidebar */
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #94a3b8;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+/* thin scrollbar */
+.provider-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.provider-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
 }
 
 
 .provider-nav-item {
   width: 100%;
   min-height: 43px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
@@ -228,19 +280,20 @@
 
 
 /* =====================================================
-   SIDEBAR BOTTOM
+   SIDEBAR BOTTOM (always visible)
 ===================================================== */
 
 .sidebar-bottom {
-  margin-top: auto;
+  flex-shrink: 0;   /* never squeezed out */
 
-  padding-top: 18px;
+  margin-top: 12px;
+  padding-top: 12px;
+  padding-bottom: env(safe-area-inset-bottom, 0px); /* phone home bar */
 
   border-top: 1px solid rgba(255, 255, 255, 0.07);
 
   display: flex;
   flex-direction: column;
-
   gap: 4px;
 }
 
@@ -252,6 +305,7 @@
 .provider-logout {
   width: 100%;
   height: 43px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
@@ -295,7 +349,51 @@
 
 
 /* =====================================================
-   RESPONSIVE
+   SHORT SCREENS: tighten spacing so everything fits
+===================================================== */
+
+@media (max-height: 760px) {
+  .provider-sidebar {
+    padding: 16px 14px 12px;
+  }
+
+  .provider-brand {
+    margin-bottom: 20px;
+  }
+
+  .provider-nav-item {
+    min-height: 38px;
+  }
+
+  .provider-logout {
+    height: 38px;
+  }
+}
+
+
+@media (max-height: 560px) {
+  .provider-brand {
+    height: 44px;
+    margin-bottom: 12px;
+  }
+
+  .sidebar-section-title {
+    display: none;
+  }
+
+  .provider-nav-item {
+    min-height: 34px;
+    font-size: 12px;
+  }
+
+  .provider-logout {
+    height: 34px;
+  }
+}
+
+
+/* =====================================================
+   RESPONSIVE (width)
 ===================================================== */
 
 @media (max-width: 1100px) {
@@ -317,18 +415,16 @@
     width: 100%;
 
     height: auto;
-
     position: relative;
 
     padding: 16px;
 
     border-right: none;
-
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   }
 
   .provider-brand {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .provider-nav {
@@ -337,10 +433,12 @@
     grid-template-columns: repeat(2, 1fr);
 
     gap: 5px;
+
+    overflow: visible;   /* show all buttons, no inner scroll */
   }
 
   .sidebar-bottom {
-    margin-top: 15px;
+    margin-top: 12px;
   }
 }
 

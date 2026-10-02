@@ -23,7 +23,7 @@ const UserSidebar = ({ isOpen, onClose }) => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("user");
 
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   return (

@@ -55,11 +55,14 @@ const ProviderSidebar = () => {
     },
   ];
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/login");
-  };
+// Logout provider and prevent returning to dashboard using browser Back
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  localStorage.removeItem("isLoggedIn");
+
+  navigate("/login", { replace: true });
+};
 
   return (
     <aside className="provider-sidebar">
