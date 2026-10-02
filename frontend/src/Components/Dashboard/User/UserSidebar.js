@@ -158,6 +158,10 @@ const UserSidebar = ({ isOpen, onClose }) => {
 </NavLink>
         {/* ANALYTICS */}
 
+        <span className="user-nav-title user-payments-title">
+  ANALYTICS
+</span>
+
         <NavLink
           to="/user/analytics"
           className={({ isActive }) =>
