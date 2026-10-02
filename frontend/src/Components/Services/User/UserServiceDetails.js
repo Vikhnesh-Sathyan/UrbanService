@@ -1,4 +1,8 @@
-import React from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
 import {
   useLocation,
   useNavigate,
@@ -7,13 +11,85 @@ import {
 
 import "../../../styles/UserServiceDetails.css";
 
+import {
+  getServiceById,
+} from "../../../Services/serviceService";
+
 const UserServiceDetails = () => {
   const { serviceId } = useParams();
+
   const location = useLocation();
+
   const navigate = useNavigate();
 
-  // Service passed from UserServicePage
-  const service = location.state?.service;
+  // ==========================================
+  // SERVICE STATE
+  // ==========================================
+
+  const [service, setService] =
+    useState(location.state?.service || null);
+
+  const [loading, setLoading] =
+    useState(!location.state?.service);
+
+  // ==========================================
+  // FETCH SERVICE
+  // Used when page is opened directly
+  // ==========================================
+
+  useEffect(() => {
+    const loadService = async () => {
+      // Service already came from User Services page
+      if (location.state?.service) {
+        setService(location.state.service);
+        setLoading(false);
+        return;
+      }
+
+      // No service in navigation state
+      // Fetch it using serviceId
+      try {
+        setLoading(true);
+
+        const response =
+          await getServiceById(serviceId);
+
+        // Backend may return service directly
+        // or inside response.service
+        const fetchedService =
+          response?.service || response;
+
+        setService(fetchedService);
+      } catch (error) {
+        console.error(
+          "Failed to fetch service:",
+          error
+        );
+
+        setService(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (serviceId) {
+      loadService();
+    }
+  }, [serviceId, location.state]);
+
+  // ==========================================
+  // LOADING
+  // ==========================================
+
+  if (loading) {
+    return (
+      <div className="service-details-page">
+        <div className="service-not-found">
+          <h2>Loading Service...</h2>
+        </div>
+      </div>
+    );
+  }
 
   // ==========================================
   // SERVICE NOT FOUND
@@ -22,24 +98,27 @@ const UserServiceDetails = () => {
   if (!service) {
     return (
       <div className="service-details-page">
-
         <div className="service-not-found">
 
-          <h2>Service Not Found</h2>
+          <h2>
+            Service Not Found
+          </h2>
 
           <p>
-            This service may no longer be available.
+            This service may no longer be
+            available.
           </p>
 
           <button
             type="button"
-            onClick={() => navigate("/user/services")}
+            onClick={() =>
+              navigate("/user/services")
+            }
           >
             ← Back to Services
           </button>
 
         </div>
-
       </div>
     );
   }
@@ -49,10 +128,12 @@ const UserServiceDetails = () => {
   // ==========================================
 
   const providerName =
-    service.provider?.name || "Unknown Provider";
+    service.provider?.name ||
+    "Unknown Provider";
 
   const providerEmail =
-    service.provider?.email || "Email not available";
+    service.provider?.email ||
+    "Email not available";
 
   const providerAvailability =
     service.provider?.availability;
@@ -69,95 +150,107 @@ const UserServiceDetails = () => {
   // ==========================================
   // BOOK SERVICE
   // ==========================================
-const handleBookService = () => {
-  const token = localStorage.getItem("token");
-  const storedUser = localStorage.getItem("user");
 
-  // =====================================================
-  // NOT LOGGED IN
-  // =====================================================
+  const handleBookService = () => {
+    const token =
+      localStorage.getItem("token");
 
-  if (!token) {
-    alert("Please login to book this service.");
-    navigate("/login");
-    return;
-  }
+    const storedUser =
+      localStorage.getItem("user");
 
-  try {
-    // ===================================================
-    // CHECK JWT EXPIRY
-    // ===================================================
+    // ========================================
+    // NOT LOGGED IN
+    // ========================================
 
-    const payload = JSON.parse(
-      atob(token.split(".")[1])
-    );
-
-    if (
-      payload.exp &&
-      payload.exp * 1000 < Date.now()
-    ) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("user");
-
+    if (!token) {
       alert(
-        "Your session has expired. Please login again."
+        "Please login to book this service."
       );
 
       navigate("/login");
+
       return;
     }
 
-    // ===================================================
-    // CHECK USER ROLE
-    // ===================================================
+    try {
+      // ======================================
+      // CHECK JWT EXPIRY
+      // ======================================
 
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
+      const payload = JSON.parse(
+        atob(token.split(".")[1])
+      );
 
       if (
-        user.role &&
-        user.role !== "user"
+        payload.exp &&
+        payload.exp * 1000 < Date.now()
       ) {
-        alert(
-          "Only customers can book services."
+        localStorage.removeItem("token");
+        localStorage.removeItem(
+          "isLoggedIn"
         );
+        localStorage.removeItem("user");
+
+        alert(
+          "Your session has expired. Please login again."
+        );
+
+        navigate("/login");
 
         return;
       }
-    }
 
-    // ===================================================
-    // CUSTOMER → BOOKING PAGE
-    // ===================================================
+      // ======================================
+      // CHECK USER ROLE
+      // ======================================
 
-    navigate(
-      `/user/services/${serviceId}/book`,
-      {
-        state: {
-          service,
-        },
+      if (storedUser) {
+        const user =
+          JSON.parse(storedUser);
+
+        if (
+          user.role &&
+          user.role !== "user"
+        ) {
+          alert(
+            "Only customers can book services."
+          );
+
+          return;
+        }
       }
-    );
 
-  } catch (error) {
+      // ======================================
+      // CUSTOMER → BOOKING PAGE
+      // ======================================
 
-    console.error(
-      "Book service authentication error:",
-      error
-    );
+      navigate(
+        `/user/services/${serviceId}/book`,
+        {
+          state: {
+            service,
+          },
+        }
+      );
+    } catch (error) {
+      console.error(
+        "Book service authentication error:",
+        error
+      );
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      localStorage.removeItem(
+        "isLoggedIn"
+      );
+      localStorage.removeItem("user");
 
-    alert(
-      "Please login to book this service."
-    );
+      alert(
+        "Please login to book this service."
+      );
 
-    navigate("/login");
-  }
-};
+      navigate("/login");
+    }
+  };
 
   // ==========================================
   // PAGE
@@ -173,11 +266,12 @@ const handleBookService = () => {
       <button
         type="button"
         className="service-details-back"
-        onClick={() => navigate("/user/services")}
+        onClick={() =>
+          navigate("/user/services")
+        }
       >
         ← Back to Services
       </button>
-
 
       {/* ======================================
           SERVICE DETAILS CARD
@@ -194,22 +288,17 @@ const handleBookService = () => {
           <div className="service-details-image">
 
             {service.image ? (
-
               <img
                 src={`http://localhost:5000/uploads/${service.image}`}
                 alt={service.name}
               />
-
             ) : (
-
               <div className="service-details-no-image">
                 No Image
               </div>
-
             )}
 
           </div>
-
 
           {/* ======================================
               SERVICE INFORMATION
@@ -220,16 +309,15 @@ const handleBookService = () => {
             {/* CATEGORY */}
 
             <span className="service-details-category">
-              {service.category || "Service"}
+              {service.category ||
+                "Service"}
             </span>
-
 
             {/* SERVICE NAME */}
 
             <h1>
               {service.name}
             </h1>
-
 
             {/* PRICE */}
 
@@ -245,7 +333,6 @@ const handleBookService = () => {
 
             </div>
 
-
             {/* DESCRIPTION */}
 
             <p className="service-details-description">
@@ -253,13 +340,11 @@ const handleBookService = () => {
                 "No description available for this service."}
             </p>
 
-
             {/* ==================================
                 DETAILED DESCRIPTION
             ================================== */}
 
             {service.detailedDescription && (
-
               <div className="service-details-about">
 
                 <h3>
@@ -271,14 +356,11 @@ const handleBookService = () => {
                 </p>
 
               </div>
-
             )}
-
 
             {/* DIVIDER */}
 
             <div className="service-details-divider" />
-
 
             {/* ==================================
                 PROVIDER
@@ -300,7 +382,6 @@ const handleBookService = () => {
                     .toUpperCase()}
                 </div>
 
-
                 {/* PROVIDER INFORMATION */}
 
                 <div className="service-provider-info">
@@ -319,7 +400,6 @@ const handleBookService = () => {
 
             </div>
 
-
             {/* ==================================
                 PROVIDER AVAILABILITY
             ================================== */}
@@ -330,10 +410,9 @@ const handleBookService = () => {
                 Provider Availability
               </h3>
 
-              {availableDays.length > 0 ? (
-
+              {availableDays.length >
+              0 ? (
                 <>
-
                   {/* AVAILABLE DAYS */}
 
                   <p>
@@ -342,16 +421,15 @@ const handleBookService = () => {
 
                   <div className="availability-days">
 
-                    {availableDays.map((day) => (
-
-                      <span key={day}>
-                        {day}
-                      </span>
-
-                    ))}
+                    {availableDays.map(
+                      (day) => (
+                        <span key={day}>
+                          {day}
+                        </span>
+                      )
+                    )}
 
                   </div>
-
 
                   {/* WORKING HOURS */}
 
@@ -359,34 +437,28 @@ const handleBookService = () => {
                     Working Hours
                   </p>
 
-                  {startTime && endTime ? (
-
+                  {startTime &&
+                  endTime ? (
                     <strong>
                       {startTime}
                       {" — "}
                       {endTime}
                     </strong>
-
                   ) : (
-
                     <span>
-                      Working hours not configured.
+                      Working hours not
+                      configured.
                     </span>
-
                   )}
-
                 </>
-
               ) : (
-
                 <p>
-                  Provider availability is not configured.
+                  Provider availability
+                  is not configured.
                 </p>
-
               )}
 
             </div>
-
 
             {/* ==================================
                 BOOK SERVICE
@@ -395,7 +467,9 @@ const handleBookService = () => {
             <button
               type="button"
               className="service-book-button"
-              onClick={handleBookService}
+              onClick={
+                handleBookService
+              }
             >
               Book Service →
             </button>

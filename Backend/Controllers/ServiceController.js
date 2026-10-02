@@ -1463,6 +1463,7 @@ const updateSuggestedMaterials = async (req, res) => {
     });
   }
 };
+
 // =====================================================
 // EXPORTS
 // =====================================================
@@ -1496,4 +1497,5 @@ module.exports = {
   getServiceSubCategories,
 
   updateSuggestedMaterials,
+
 };

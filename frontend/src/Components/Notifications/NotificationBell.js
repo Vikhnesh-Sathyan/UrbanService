@@ -142,7 +142,7 @@ const NotificationBell = () => {
     }
   };
 
-  // ==========================================
+// ==========================================
 // HANDLE NOTIFICATION CLICK
 // ==========================================
 
@@ -159,6 +159,19 @@ const handleNotificationClick = (
     )
   ) {
     navigate("/provider/bookings");
+    return;
+  }
+
+  // Automatic service follow-up notification
+  if (
+    notification.message?.includes(
+      "It's time to consider booking"
+    ) &&
+    notification.booking?.service?._id
+  ) {
+    navigate(
+  `/user/services/${notification.booking.service._id}`
+);
   }
 };
 

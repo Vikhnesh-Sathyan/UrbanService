@@ -51,6 +51,21 @@ export const getMyServices = async () => {
   return [];
 };
 
+// ==========================================
+// GET SERVICE BY ID
+// Used when opening Service Details directly
+// ==========================================
+
+export const getServiceById = async (
+  serviceId
+) => {
+  const response = await axios.get(
+    `${API}/${serviceId}`
+  );
+
+  return response.data;
+};
+
 
 // ==========================================
 // GET ALL ACTIVE CATEGORIES

@@ -277,7 +277,7 @@ const updateBookingStatus = async (req, res) => {
     booking.status = status;
 
     await booking.save();
-
+    
     res.status(200).json({
       message: "Booking status updated successfully",
       booking,

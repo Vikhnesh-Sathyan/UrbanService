@@ -4,9 +4,17 @@ const Notification = require("../Models/Notification");
 const getMyNotifications = async (req, res) => {
   try {
     const notifications = await Notification.find({
-      recipient: req.user.id,
-    })
-      .sort({ createdAt: -1 });
+  recipient: req.user.id,
+})
+  .populate({
+    path: "booking",
+    select: "service",
+    populate: {
+      path: "service",
+      select: "_id name",
+    },
+  })
+  .sort({ createdAt: -1 });
 
     res.status(200).json({
       notifications,

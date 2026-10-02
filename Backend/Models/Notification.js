@@ -32,8 +32,9 @@ const notificationSchema = new mongoose.Schema(
         "review",
         "account",
         "help",
+        "follow_up",
         "general",
-      ],
+     ],
       default: "general",
     },
 

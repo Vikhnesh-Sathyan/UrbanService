@@ -1,9 +1,18 @@
-import React, { useEffect, useRef } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
 import { useNavigate } from "react-router-dom";
 
 import {
   updateProviderLocation,
 } from "../../../../Services/bookingService";
+
+import {
+  scheduleServiceFollowUp,
+} from "../../../../Services/serviceFollowUpService";
 
 const ProviderBookingCard = ({
   booking,
@@ -11,8 +20,23 @@ const ProviderBookingCard = ({
   onReject,
   onStatusUpdate,
 }) => {
-
   const navigate = useNavigate();
+
+  // ==========================================
+  // FOLLOW-UP STATE
+  // ==========================================
+
+  const [showFollowUp, setShowFollowUp] =
+    useState(false);
+
+  const [followUpValue, setFollowUpValue] =
+    useState("");
+
+  const [followUpUnit, setFollowUpUnit] =
+    useState("days");
+
+  const [followUpLoading, setFollowUpLoading] =
+    useState(false);
 
   // ==========================================
   // GPS WATCH ID
@@ -22,7 +46,6 @@ const ProviderBookingCard = ({
 
   const isEmergency =
     booking.bookingType === "emergency";
-
 
   // ==========================================
   // START LOCATION TRACKING
@@ -106,7 +129,6 @@ const ProviderBookingCard = ({
       );
   };
 
-
   // ==========================================
   // STOP LOCATION TRACKING
   // ==========================================
@@ -125,7 +147,6 @@ const ProviderBookingCard = ({
     }
   };
 
-
   // ==========================================
   // TRACK BASED ON BOOKING STATUS
   // ==========================================
@@ -142,7 +163,6 @@ const ProviderBookingCard = ({
       stopLocationTracking();
     };
   }, [booking.status, booking._id]);
-
 
   // ==========================================
   // STATUS CLASS
@@ -173,6 +193,49 @@ const ProviderBookingCard = ({
     }
   };
 
+  // ==========================================
+  // SCHEDULE FOLLOW-UP
+  // ==========================================
+
+  const handleScheduleFollowUp = async () => {
+    if (
+      !followUpValue ||
+      Number(followUpValue) <= 0
+    ) {
+      alert("Enter a valid follow-up time.");
+      return;
+    }
+
+    try {
+      setFollowUpLoading(true);
+
+      await scheduleServiceFollowUp(
+        booking._id,
+        Number(followUpValue),
+        followUpUnit
+      );
+
+      alert(
+        "Follow-up scheduled successfully."
+      );
+
+      setShowFollowUp(false);
+      setFollowUpValue("");
+      setFollowUpUnit("days");
+    } catch (error) {
+      console.error(
+        "Schedule follow-up error:",
+        error
+      );
+
+      alert(
+        error.response?.data?.message ||
+          "Failed to schedule follow-up."
+      );
+    } finally {
+      setFollowUpLoading(false);
+    }
+  };
 
   return (
     <div
@@ -182,7 +245,6 @@ const ProviderBookingCard = ({
           : ""
       }`}
     >
-
       {/* =====================================
           EMERGENCY BADGE
       ===================================== */}
@@ -193,7 +255,6 @@ const ProviderBookingCard = ({
         </div>
       )}
 
-
       {/* =====================================
           SERVICE
       ===================================== */}
@@ -201,7 +262,6 @@ const ProviderBookingCard = ({
       <h3>
         {booking.service?.name || "Service"}
       </h3>
-
 
       {/* =====================================
           EMERGENCY MESSAGE
@@ -214,11 +274,11 @@ const ProviderBookingCard = ({
           </strong>
 
           <span>
-            Customer needs this service as soon as possible.
+            Customer needs this service as soon
+            as possible.
           </span>
         </div>
       )}
-
 
       {/* =====================================
           CUSTOMER
@@ -229,26 +289,23 @@ const ProviderBookingCard = ({
         {booking.user?.name || "Unknown"}
       </p>
 
-
       {/* =====================================
           EMAIL
       ===================================== */}
 
       <p>
         Email:{" "}
-        {booking.user?.email || "Not available"}
+        {booking.user?.email ||
+          "Not available"}
       </p>
-
 
       {/* =====================================
           PHONE
       ===================================== */}
 
       <p>
-        Phone:{" "}
-        {booking.phone || "-"}
+        Phone: {booking.phone || "-"}
       </p>
-
 
       {/* =====================================
           DATE / TIME
@@ -263,23 +320,21 @@ const ProviderBookingCard = ({
           </p>
 
           <small>
-            Emergency request was created immediately.
+            Emergency request was created
+            immediately.
           </small>
         </div>
       ) : (
         <>
           <p>
-            Date:{" "}
-            {booking.date || "-"}
+            Date: {booking.date || "-"}
           </p>
 
           <p>
-            Time:{" "}
-            {booking.time || "-"}
+            Time: {booking.time || "-"}
           </p>
         </>
       )}
-
 
       {/* =====================================
           PRICE
@@ -289,7 +344,6 @@ const ProviderBookingCard = ({
         Price: ₹
         {booking.service?.price || 0}
       </p>
-
 
       {/* =====================================
           STATUS
@@ -307,50 +361,54 @@ const ProviderBookingCard = ({
         </span>
       </p>
 
-
       {/* =====================================
           NOTES
       ===================================== */}
 
       {booking.notes && (
         <p>
-          Notes:{" "}
-          {booking.notes}
+          Notes: {booking.notes}
         </p>
       )}
 
       {/* =====================================
-    EMERGENCY CUSTOMER LOCATION
-===================================== */}
+          EMERGENCY CUSTOMER LOCATION
+      ===================================== */}
 
-{isEmergency &&
-  booking.customerLocation?.latitude !== null &&
-  booking.customerLocation?.longitude !== null && (
-    <div className="provider-emergency-location">
-      <strong>📍 Customer Location Available</strong>
+      {isEmergency &&
+        booking.customerLocation?.latitude !==
+          null &&
+        booking.customerLocation?.longitude !==
+          null && (
+          <div className="provider-emergency-location">
+            <strong>
+              📍 Customer Location Available
+            </strong>
 
-      <p>
-        Customer location was captured when the
-        emergency request was created.
-      </p>
+            <p>
+              Customer location was captured
+              when the emergency request was
+              created.
+            </p>
 
-      <button
-        type="button"
-        onClick={() => {
-          const { latitude, longitude } =
-            booking.customerLocation;
+            <button
+              type="button"
+              onClick={() => {
+                const {
+                  latitude,
+                  longitude,
+                } = booking.customerLocation;
 
-          window.open(
-            `https://www.google.com/maps?q=${latitude},${longitude}`,
-            "_blank"
-          );
-        }}
-      >
-        Open Customer Location
-      </button>
-    </div>
-  )}
-
+                window.open(
+                  `https://www.google.com/maps?q=${latitude},${longitude}`,
+                  "_blank"
+                );
+              }}
+            >
+              Open Customer Location
+            </button>
+          </div>
+        )}
 
       {/* =====================================
           CUSTOMER REVIEW
@@ -359,7 +417,6 @@ const ProviderBookingCard = ({
       {booking.status === "completed" &&
         booking.rating && (
           <div className="provider-customer-review">
-
             <h4>
               Customer Review
             </h4>
@@ -375,10 +432,8 @@ const ProviderBookingCard = ({
                 "{booking.review}"
               </p>
             )}
-
           </div>
         )}
-
 
       {/* =====================================
           PENDING ACTIONS
@@ -386,7 +441,6 @@ const ProviderBookingCard = ({
 
       {booking.status === "pending" && (
         <div className="provider-booking-actions">
-
           <button
             type="button"
             className={
@@ -403,7 +457,6 @@ const ProviderBookingCard = ({
               : "Accept"}
           </button>
 
-
           <button
             type="button"
             onClick={() =>
@@ -412,88 +465,173 @@ const ProviderBookingCard = ({
           >
             Reject
           </button>
-
         </div>
       )}
-
 
       {/* =====================================
           ACCEPTED ACTION
       ===================================== */}
-{booking.status === "accepted" && (
-  <div className="provider-booking-actions">
 
-    <button
-      type="button"
-      onClick={() =>
-        navigate(
-          `/provider/material-preparation/${booking._id}`
-        )
-      }
-    >
-      Material Preparation
-    </button>
+      {booking.status === "accepted" && (
+        <div className="provider-booking-actions">
+          <button
+            type="button"
+            onClick={() =>
+              navigate(
+                `/provider/material-preparation/${booking._id}`
+              )
+            }
+          >
+            Material Preparation
+          </button>
 
-    <button
-      type="button"
-      onClick={() =>
-        onStatusUpdate(
-          booking._id,
-          "in_progress"
-        )
-      }
-    >
-      Start Service
-    </button>
-
-  </div>
-)}
-
+          <button
+            type="button"
+            onClick={() =>
+              onStatusUpdate(
+                booking._id,
+                "in_progress"
+              )
+            }
+          >
+            Start Service
+          </button>
+        </div>
+      )}
 
       {/* =====================================
           IN PROGRESS ACTION
       ===================================== */}
 
-{booking.status === "in_progress" && (
-  <div className="provider-booking-actions">
+      {booking.status === "in_progress" && (
+        <div className="provider-booking-actions">
+          <button
+            type="button"
+            onClick={() =>
+              navigate(
+                `/provider/material-preparation/${booking._id}`
+              )
+            }
+          >
+            Material Preparation
+          </button>
 
-    <button
-      type="button"
-      onClick={() =>
-        navigate(
-          `/provider/material-preparation/${booking._id}`
-        )
-      }
-    >
-      Material Preparation
-    </button>
-
-    <button
-      type="button"
-      onClick={() =>
-        onStatusUpdate(
-          booking._id,
-          "completed"
-        )
-      }
-    >
-      Complete Service
-    </button>
-
-  </div>
-)}
-
-
-      {/* =====================================
-          COMPLETED
-      ===================================== */}
-
-      {booking.status === "completed" && (
-        <div className="provider-completed-message">
-          ✓ Service completed
+          <button
+            type="button"
+            onClick={() =>
+              onStatusUpdate(
+                booking._id,
+                "completed"
+              )
+            }
+          >
+            Complete Service
+          </button>
         </div>
       )}
 
+      {/* =====================================
+          COMPLETED + FOLLOW-UP
+      ===================================== */}
+
+      {booking.status === "completed" && (
+        <div className="provider-completed-section">
+          <div className="provider-completed-message">
+            ✓ Service completed
+          </div>
+
+          {/* Show Follow-up button */}
+          {!showFollowUp && (
+            <button
+              type="button"
+              onClick={() =>
+                setShowFollowUp(true)
+              }
+            >
+              Follow-up
+            </button>
+          )}
+
+          {/* Follow-up form */}
+          {showFollowUp && (
+            <div className="provider-follow-up-form">
+              <h4>
+                Schedule Follow-up
+              </h4>
+
+              <p>
+                Choose when the customer should
+                receive a reminder to book this
+                service again.
+              </p>
+
+              <div className="provider-follow-up-inputs">
+                <input
+                  type="number"
+                  min="1"
+                  value={followUpValue}
+                  onChange={(e) =>
+                    setFollowUpValue(
+                      e.target.value
+                    )
+                  }
+                  placeholder="Enter time"
+                />
+
+                <select
+                  value={followUpUnit}
+                  onChange={(e) =>
+                    setFollowUpUnit(
+                      e.target.value
+                    )
+                  }
+                >
+                  <option value="minutes">
+                    Minutes
+                  </option>
+
+                  <option value="hours">
+                    Hours
+                  </option>
+
+                  <option value="days">
+                    Days
+                  </option>
+
+                  <option value="weeks">
+                    Weeks
+                  </option>
+                </select>
+              </div>
+
+              <div className="provider-follow-up-actions">
+                <button
+                  type="button"
+                  onClick={
+                    handleScheduleFollowUp
+                  }
+                  disabled={followUpLoading}
+                >
+                  {followUpLoading
+                    ? "Scheduling..."
+                    : "Schedule Follow-up"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowFollowUp(false);
+                    setFollowUpValue("");
+                  }}
+                  disabled={followUpLoading}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* =====================================
           REJECTED
@@ -505,7 +643,6 @@ const ProviderBookingCard = ({
         </div>
       )}
 
-
       {/* =====================================
           CANCELLED
       ===================================== */}
@@ -515,7 +652,6 @@ const ProviderBookingCard = ({
           Booking cancelled
         </div>
       )}
-
     </div>
   );
 };

@@ -27,6 +27,8 @@ const userAnalyticsRoutes = require("./Routes/userAnalyticsRoutes");
 const paymentRoutes = require("./Routes/paymentRoutes");
 const {handleStripeWebhook,} = require("./Controllers/StripeWebhookController");
 const materialPreparationRoutes = require("./Routes/materialPreparationRoutes");
+const serviceFollowUpRoutes = require("./Routes/serviceFollowUpRoutes");
+const startServiceFollowUpScheduler = require("./Utils/serviceFollowUpScheduler");
 
 const app = express();
 
@@ -73,12 +75,15 @@ app.use("/api/provider-analytics", providerAnalyticsRoutes);
 app.use("/api/user-analytics", userAnalyticsRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/material-preparation", materialPreparationRoutes);
+app.use( "/api/service-follow-ups",serviceFollowUpRoutes);
 
 
 
 
+// ==========================================
+// CONNECT TO MONGODB AND START SERVER
+// ==========================================
 
-// Connect to MongoDB and start server
 const PORT = process.env.PORT || 5000;
 
 mongoose
@@ -86,24 +91,40 @@ mongoose
   .then(() => {
     console.log("✅ MongoDB connected");
 
-  const server = http.createServer(app);
+    // Start automatic service follow-up checker
+    startServiceFollowUpScheduler();
 
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-  },
-});
+    // Create HTTP server
+    const server = http.createServer(app);
 
-setupNotificationSocket(io);
+    // Create Socket.IO server
+    const io = new Server(server, {
+      cors: {
+        origin: "http://localhost:3000",
+        methods: [
+          "GET",
+          "POST",
+          "PATCH",
+          "PUT",
+          "DELETE",
+        ],
+      },
+    });
 
-app.set("io", io);
+    // Setup notification socket
+    setupNotificationSocket(io);
 
+    // Make Socket.IO available throughout the app
+    app.set("io", io);
 
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+    // Start server
+    server.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
   })
   .catch((err) => {
-    console.error("❌ MongoDB connection error:", err);
+    console.error(
+      "❌ MongoDB connection error:",
+      err
+    );
   });

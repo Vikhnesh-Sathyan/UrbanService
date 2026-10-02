@@ -783,6 +783,132 @@
   opacity: 0.9;
 }
 
+/* ==========================================
+   FOLLOW-UP SECTION
+========================================== */
+
+.provider-completed-section {
+  margin-top: 16px;
+}
+
+
+/* ==========================================
+   FOLLOW-UP BUTTON
+========================================== */
+
+.provider-completed-section > button {
+  margin-top: 10px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.provider-completed-section > button:hover {
+  background: #1d4ed8;
+}
+
+
+/* ==========================================
+   FOLLOW-UP FORM
+========================================== */
+
+.provider-follow-up-form {
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+.provider-follow-up-form h4 {
+  margin: 0 0 8px;
+}
+
+.provider-follow-up-form p {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+
+/* ==========================================
+   FOLLOW-UP INPUTS
+========================================== */
+
+.provider-follow-up-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.provider-follow-up-inputs input,
+.provider-follow-up-inputs select {
+  padding: 9px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+.provider-follow-up-inputs input {
+  width: 120px;
+}
+
+.provider-follow-up-inputs select {
+  flex: 1;
+}
+
+
+/* ==========================================
+   FOLLOW-UP ACTIONS
+========================================== */
+
+.provider-follow-up-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.provider-follow-up-actions button {
+  padding: 9px 15px;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.provider-follow-up-actions button:first-child {
+  background: #2563eb;
+  color: white;
+}
+
+.provider-follow-up-actions button:first-child:hover {
+  background: #1d4ed8;
+}
+
+.provider-follow-up-actions button:last-child {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.provider-follow-up-actions button:last-child:hover {
+  background: #d1d5db;
+}
+
+
+/* ==========================================
+   DISABLED BUTTON
+========================================== */
+
+.provider-follow-up-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 /* =========================================================
    RESPONSIVE
