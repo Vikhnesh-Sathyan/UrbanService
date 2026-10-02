@@ -219,15 +219,15 @@ const UserSidebar = ({ isOpen, onClose }) => {
             <FaQuestionCircle />
           </div>
 
-          <div className="support-content">
-            <strong>
-              Need Help?
-            </strong>
+        <div
+  className="support-content"
+  onClick={() => navigate("/help")}
+  style={{ cursor: "pointer" }}
+>
+  <strong>Need Help?</strong>
 
-            <span>
-              Contact support
-            </span>
-          </div>
+  <span>Get Help & Contact Support</span>
+</div>
 
         </div>
 
