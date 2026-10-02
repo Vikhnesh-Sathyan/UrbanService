@@ -1,0 +1,51 @@
+problem_description,service_name,issue,complexity,actual_cost,actual_duration_minutes
+"AC is running but not cooling and water is leaking",AC Repair,Water leakage,Medium,800,90
+"AC is not cooling properly",AC Repair,Weak cooling,Medium,700,75
+"AC is making a loud noise while running",AC Repair,Abnormal noise,Medium,900,90
+"AC is not turning on",AC Repair,Power issue,Complex,1200,90
+"AC has ice forming on the pipe",AC Repair,Ice formation,Medium,850,90
+"AC is leaking water from the indoor unit",AC Repair,Water leakage,Medium,750,75
+"AC is cooling very slowly",AC Repair,Weak cooling,Simple,600,60
+"AC is making unusual sounds and stopping frequently",AC Repair,Operational issue,Complex,1100,120
+"AC remote works but the AC does not start",AC Repair,Control issue,Simple,500,45
+"AC is running continuously but room is still hot",AC Repair,Poor cooling,Medium,900,90
+"TV turns on but there is no picture",TV Repair,No display,Medium,1200,90
+"TV screen is completely black",TV Repair,No display,Medium,1100,90
+"TV has sound but no picture",TV Repair,Display issue,Medium,1300,90
+"TV is not turning on",TV Repair,Power issue,Medium,1000,75
+"TV screen is flickering",TV Repair,Screen flickering,Medium,1400,90
+"TV has no sound",TV Repair,Audio issue,Simple,700,60
+"TV is showing lines on the screen",TV Repair,Display lines,Complex,1800,120
+"TV keeps restarting automatically",TV Repair,Restarting issue,Medium,1000,90
+"TV remote is not working",TV Repair,Remote issue,Simple,400,45
+"TV screen has very low brightness",TV Repair,Brightness issue,Medium,900,75
+"Washing machine is not draining water",Washing Machine Repair,Drainage problem,Medium,900,75
+"Washing machine is not starting",Washing Machine Repair,Power issue,Medium,800,60
+"Washing machine is making loud noise",Washing Machine Repair,Abnormal noise,Medium,1000,90
+"Washing machine is leaking water",Washing Machine Repair,Water leakage,Medium,850,75
+"Washing machine drum is not rotating",Washing Machine Repair,Drum problem,Complex,1300,120
+"Washing machine is vibrating heavily",Washing Machine Repair,Vibration issue,Medium,900,75
+"Washing machine is not filling with water",Washing Machine Repair,Water supply issue,Medium,800,75
+"Washing machine stops during washing",Washing Machine Repair,Operational issue,Medium,950,90
+"Washing machine is not spinning",Washing Machine Repair,Spin problem,Medium,1000,90
+"Washing machine displays an error code",Washing Machine Repair,Error issue,Medium,850,60
+"Sofa needs regular cleaning",Sofa Cleaning,General cleaning,Simple,600,60
+"Sofa has heavy dust and dirt",Sofa Cleaning,Deep cleaning,Medium,900,90
+"Sofa has food stains",Sofa Cleaning,Stain removal,Medium,800,75
+"Sofa has coffee stains",Sofa Cleaning,Stain removal,Medium,850,75
+"Sofa has bad smell",Sofa Cleaning,Odor removal,Medium,800,75
+"Sofa has not been cleaned for a long time",Sofa Cleaning,Deep cleaning,Complex,1200,120
+"Need cleaning for a large sofa",Sofa Cleaning,Large sofa cleaning,Medium,1000,90
+"Sofa has multiple stains",Sofa Cleaning,Multiple stains,Medium,950,90
+"Need deep cleaning for fabric sofa",Sofa Cleaning,Fabric cleaning,Medium,900,90
+"Need sofa cleaning after moving house",Sofa Cleaning,Deep cleaning,Complex,1100,120
+"Need a simple haircut at home",Hair Cut,Hair cutting,Simple,400,45
+"Need a basic men's haircut",Hair Cut,Hair cutting,Simple,350,30
+"Need a women's haircut at home",Hair Cut,Hair cutting,Simple,500,45
+"Need a haircut and trimming",Hair Cut,Haircut and trimming,Simple,450,45
+"Need a layered haircut",Hair Cut,Layered haircut,Medium,600,60
+"Need a haircut for a child",Hair Cut,Child haircut,Simple,300,30
+"Need a haircut with styling",Hair Cut,Haircut and styling,Medium,650,60
+"Need a short haircut",Hair Cut,Short haircut,Simple,400,30
+"Need a haircut with beard trimming",Hair Cut,Haircut and beard trimming,Medium,550,45
+"Need a complete haircut service at home",Hair Cut,Haircut service,Medium,500,45

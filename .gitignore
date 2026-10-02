@@ -28,3 +28,10 @@ yarn-error.log*
 # Testing coverage
 /frontend/coverage
 /Backend/coverage
+
+# Python virtual environment
+Backend/ML/venv/
+
+# Python cache
+__pycache__/
+*.pyc
