@@ -9,6 +9,13 @@ const notificationSchema = new mongoose.Schema(
       required: true,
     },
 
+    // Booking related to this notification
+    booking: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking",
+      default: null,
+    },
+
     // Notification message
     message: {
       type: String,

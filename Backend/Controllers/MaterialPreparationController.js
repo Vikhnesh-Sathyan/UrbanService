@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const MaterialPreparation = require("../Models/MaterialPreparation");
 const Booking = require("../Models/Booking");
 const Service = require("../Models/Service");
+const Notification = require("../Models/Notification");
 
 // =====================================================
 // CREATE MATERIAL PREPARATION
@@ -124,13 +125,14 @@ const getMaterialPreparation = async (req, res) => {
     const providerId = req.user.id;
     const { bookingId } = req.params;
 
-    // Find preparation belonging to provider
+    // Find material preparation and related booking
     const materialPreparation =
       await MaterialPreparation.findOne({
         booking: bookingId,
         provider: providerId,
       }).populate({
         path: "booking",
+        select: "user service",
         populate: {
           path: "service",
           select: "name",
@@ -173,15 +175,21 @@ const updateMaterialPreparation = async (req, res) => {
 
     const {
       materials,
-      preparationStatus,
       providerNotes,
     } = req.body;
 
-    // Find provider's preparation record
+    // Find provider's preparation and related booking
     const materialPreparation =
       await MaterialPreparation.findOne({
         booking: bookingId,
         provider: providerId,
+      }).populate({
+        path: "booking",
+        select: "user service",
+        populate: {
+          path: "service",
+          select: "name",
+        },
       });
 
     if (!materialPreparation) {
@@ -191,16 +199,58 @@ const updateMaterialPreparation = async (req, res) => {
       });
     }
 
-    // Update only provided fields
+    // Update materials
     if (materials !== undefined) {
       materialPreparation.materials = materials;
     }
 
-    if (preparationStatus !== undefined) {
+    // Calculate preparation status from actual material statuses
+    const allReady =
+      materialPreparation.materials.length > 0 &&
+      materialPreparation.materials.every(
+        (item) => item.status === "ready"
+      );
+
+    const anyPrepared =
+      materialPreparation.materials.some(
+        (item) =>
+          item.status === "need_to_buy" ||
+          item.status === "ready"
+      );
+
+    // Automatically update overall preparation status
+    if (allReady) {
+      materialPreparation.preparationStatus = "ready";
+
+      // Notify customer once when provider preparation is ready
+      const existingNotification =
+        await Notification.findOne({
+          recipient: materialPreparation.booking.user,
+          booking: bookingId,
+          type: "booking",
+        });
+
+      if (!existingNotification) {
+        const serviceName =
+          materialPreparation.booking.service?.name ||
+          "your service";
+
+        await Notification.create({
+          recipient: materialPreparation.booking.user,
+          booking: bookingId,
+          message: `Provider Preparation Ready. Your provider has prepared the required materials for ${serviceName}.`,
+          type: "booking",
+        });
+      }
+    } else if (anyPrepared) {
       materialPreparation.preparationStatus =
-        preparationStatus;
+        "preparing";
+    } else {
+      materialPreparation.preparationStatus =
+        "pending";
     }
 
+    // Update provider notes
     if (providerNotes !== undefined) {
       materialPreparation.providerNotes = providerNotes;
     }
@@ -209,7 +259,8 @@ const updateMaterialPreparation = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Material preparation updated successfully",
+      message:
+        "Material preparation updated successfully",
       data: materialPreparation,
     });
   } catch (error) {
@@ -220,7 +271,8 @@ const updateMaterialPreparation = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Failed to update material preparation",
+      message:
+        "Failed to update material preparation",
     });
   }
 };
@@ -228,11 +280,6 @@ const updateMaterialPreparation = async (req, res) => {
 // =====================================================
 // UPDATE MATERIAL ITEM
 // Provider marks an individual material as prepared
-// =====================================================
-
-// =====================================================
-// UPDATE MATERIAL ITEM
-// Provider updates an individual material status
 // =====================================================
 
 const updateMaterialItem = async (req, res) => {
@@ -255,11 +302,18 @@ const updateMaterialItem = async (req, res) => {
       });
     }
 
-    // Find provider's material preparation
+    // Find provider's material preparation and related booking
     const materialPreparation =
       await MaterialPreparation.findOne({
         booking: bookingId,
         provider: providerId,
+      }).populate({
+        path: "booking",
+        select: "user service",
+        populate: {
+          path: "service",
+          select: "name",
+        },
       });
 
     if (!materialPreparation) {
@@ -299,11 +353,35 @@ const updateMaterialItem = async (req, res) => {
 
     // Automatically update overall preparation status
     if (allReady) {
-      materialPreparation.preparationStatus = "ready";
+      materialPreparation.preparationStatus =
+        "ready";
+
+      // Notify customer once when provider preparation is ready
+      const existingNotification =
+        await Notification.findOne({
+          recipient: materialPreparation.booking.user,
+          booking: bookingId,
+          type: "booking",
+        });
+
+      if (!existingNotification) {
+        const serviceName =
+          materialPreparation.booking.service?.name ||
+          "your service";
+
+        await Notification.create({
+          recipient: materialPreparation.booking.user,
+          booking: bookingId,
+          message: `Provider Preparation Ready. Your provider has prepared the required materials for ${serviceName}.`,
+          type: "booking",
+        });
+      }
     } else if (anyPrepared) {
-      materialPreparation.preparationStatus = "preparing";
+      materialPreparation.preparationStatus =
+        "preparing";
     } else {
-      materialPreparation.preparationStatus = "pending";
+      materialPreparation.preparationStatus =
+        "pending";
     }
 
     await materialPreparation.save();
@@ -321,7 +399,8 @@ const updateMaterialItem = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Failed to update material status",
+      message:
+        "Failed to update material status",
     });
   }
 };
