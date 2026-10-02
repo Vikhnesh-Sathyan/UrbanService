@@ -49,6 +49,33 @@ const serviceSchema = new mongoose.Schema({
     required: true,
   },
 
+  // =====================================================
+  // SUGGESTED MATERIALS
+  // Materials configured by admin for this service
+  // =====================================================
+
+  suggestedMaterials: [
+    {
+      name: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+
+      defaultQuantity: {
+        type: Number,
+        required: true,
+        min: 1,
+      },
+
+      unit: {
+        type: String,
+        default: "piece",
+        trim: true,
+      },
+    },
+  ],
+
 });
 
 module.exports = mongoose.model("Service", serviceSchema);

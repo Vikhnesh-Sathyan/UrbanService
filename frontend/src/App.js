@@ -43,6 +43,12 @@ import ProviderAvailability from "./Components/Services/Provider/ProviderAvailab
 import ProviderProfile from "./Components/Profile/ProviderProfile";
 
 // =====================================================
+// PROVIDER → MATERIAL PREPARATION
+// =====================================================
+
+import MaterialPreparation from "./Components/MaterialPreparation/MaterialPreparation";
+
+// =====================================================
 // USER / CUSTOMER
 // =====================================================
 
@@ -217,6 +223,13 @@ function App() {
           <Route
             path="/provider/bookings"
             element={<ProviderBookingsPage />}
+          />
+
+          {/* ---------------- Provider Material Preparation ---------------- */}
+
+          <Route
+            path="/provider/material-preparation/:bookingId"
+            element={<MaterialPreparation />}
           />
 
           {/* ---------------- Provider Availability ---------------- */}

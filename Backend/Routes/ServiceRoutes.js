@@ -19,6 +19,7 @@ const {
   updateService,
   deleteService,
   resubmitService,
+  updateSuggestedMaterials,
 } = require("../Controllers/ServiceController");
 
 const router = express.Router();
@@ -112,6 +113,14 @@ router.patch(
   authMiddleware,
   roleMiddleware("admin"),
   rejectService
+);
+
+// Admin can configure suggested materials
+router.patch(
+  "/:id/suggested-materials",
+  authMiddleware,
+  roleMiddleware("admin"),
+  updateSuggestedMaterials
 );
 
 // ==================== PUBLIC ROUTES ====================

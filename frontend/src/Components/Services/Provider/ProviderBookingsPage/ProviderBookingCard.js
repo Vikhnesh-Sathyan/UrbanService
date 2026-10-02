@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   updateProviderLocation,
@@ -10,6 +11,9 @@ const ProviderBookingCard = ({
   onReject,
   onStatusUpdate,
 }) => {
+
+  const navigate = useNavigate();
+
   // ==========================================
   // GPS WATCH ID
   // ==========================================
@@ -416,47 +420,68 @@ const ProviderBookingCard = ({
       {/* =====================================
           ACCEPTED ACTION
       ===================================== */}
+{booking.status === "accepted" && (
+  <div className="provider-booking-actions">
 
-      {booking.status === "accepted" && (
-        <div className="provider-booking-actions">
+    <button
+      type="button"
+      onClick={() =>
+        navigate(
+          `/provider/material-preparation/${booking._id}`
+        )
+      }
+    >
+      Material Preparation
+    </button>
 
-          <button
-            type="button"
-            onClick={() =>
-              onStatusUpdate(
-                booking._id,
-                "in_progress"
-              )
-            }
-          >
-            Start Service
-          </button>
+    <button
+      type="button"
+      onClick={() =>
+        onStatusUpdate(
+          booking._id,
+          "in_progress"
+        )
+      }
+    >
+      Start Service
+    </button>
 
-        </div>
-      )}
+  </div>
+)}
 
 
       {/* =====================================
           IN PROGRESS ACTION
       ===================================== */}
 
-      {booking.status === "in_progress" && (
-        <div className="provider-booking-actions">
+{booking.status === "in_progress" && (
+  <div className="provider-booking-actions">
 
-          <button
-            type="button"
-            onClick={() =>
-              onStatusUpdate(
-                booking._id,
-                "completed"
-              )
-            }
-          >
-            Complete Service
-          </button>
+    <button
+      type="button"
+      onClick={() =>
+        navigate(
+          `/provider/material-preparation/${booking._id}`
+        )
+      }
+    >
+      Material Preparation
+    </button>
 
-        </div>
-      )}
+    <button
+      type="button"
+      onClick={() =>
+        onStatusUpdate(
+          booking._id,
+          "completed"
+        )
+      }
+    >
+      Complete Service
+    </button>
+
+  </div>
+)}
 
 
       {/* =====================================

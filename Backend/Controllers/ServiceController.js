@@ -1366,6 +1366,103 @@ const getServiceSubCategories = async (req, res) => {
   }
 };
 
+
+// =====================================================
+// UPDATE SUGGESTED MATERIALS
+// Admin configures default materials for a service
+// =====================================================
+
+const updateSuggestedMaterials = async (req, res) => {
+  try {
+    const { suggestedMaterials } = req.body;
+
+    // Validate materials array
+    if (!Array.isArray(suggestedMaterials)) {
+      return res.status(400).json({
+        message: "Suggested materials must be an array",
+      });
+    }
+
+    // Validate each material
+    for (const material of suggestedMaterials) {
+      if (
+        !material.name ||
+        material.name.trim() === ""
+      ) {
+        return res.status(400).json({
+          message: "Material name is required",
+        });
+      }
+
+      if (
+        !material.defaultQuantity ||
+        material.defaultQuantity < 1
+      ) {
+        return res.status(400).json({
+          message:
+            "Material quantity must be at least 1",
+        });
+      }
+
+      if (
+        !material.unit ||
+        material.unit.trim() === ""
+      ) {
+        return res.status(400).json({
+          message: "Material unit is required",
+        });
+      }
+    }
+
+    // Find service
+    const service = await Service.findById(
+      req.params.id
+    );
+
+    if (!service) {
+      return res.status(404).json({
+        message: "Service not found",
+      });
+    }
+
+    // Admin only
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        message:
+          "Only admin can configure suggested materials",
+      });
+    }
+
+    // Save suggested materials
+    service.suggestedMaterials =
+      suggestedMaterials.map((material) => ({
+        name: material.name.trim(),
+        defaultQuantity: Number(
+          material.defaultQuantity
+        ),
+        unit: material.unit.trim(),
+      }));
+
+    await service.save();
+
+    res.status(200).json({
+      message:
+        "Suggested materials updated successfully",
+      service,
+    });
+
+  } catch (error) {
+    console.error(
+      "Update suggested materials error:",
+      error
+    );
+
+    res.status(500).json({
+      message:
+        "Failed to update suggested materials",
+    });
+  }
+};
 // =====================================================
 // EXPORTS
 // =====================================================
@@ -1398,4 +1495,5 @@ module.exports = {
 
   getServiceSubCategories,
 
+  updateSuggestedMaterials,
 };

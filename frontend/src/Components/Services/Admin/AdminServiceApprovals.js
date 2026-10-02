@@ -16,6 +16,11 @@ const AdminServiceApprovals = () => {
   const [rejectServiceId, setRejectServiceId] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("");
 
+  // Suggested materials state
+const [materialServiceId, setMaterialServiceId] = useState(null);
+const [suggestedMaterials, setSuggestedMaterials] = useState([]);
+const [savingMaterials, setSavingMaterials] = useState(false);
+
   // ========================================
   // AUTH CONFIG
   // ========================================
@@ -123,6 +128,134 @@ const AdminServiceApprovals = () => {
     setRejectServiceId(null);
     setRejectionReason("");
   };
+
+  // ========================================
+// OPEN MATERIAL CONFIGURATION
+// ========================================
+
+const openMaterialConfiguration = (service) => {
+  setMaterialServiceId(service._id);
+
+  setSuggestedMaterials(
+    service.suggestedMaterials || []
+  );
+};
+
+// ========================================
+// CLOSE MATERIAL CONFIGURATION
+// ========================================
+
+const closeMaterialConfiguration = () => {
+  setMaterialServiceId(null);
+  setSuggestedMaterials([]);
+};
+
+// ========================================
+// ADD SUGGESTED MATERIAL
+// ========================================
+
+const handleAddSuggestedMaterial = () => {
+  setSuggestedMaterials([
+    ...suggestedMaterials,
+    {
+      name: "",
+      defaultQuantity: 1,
+      unit: "piece",
+    },
+  ]);
+};
+
+// ========================================
+// UPDATE SUGGESTED MATERIAL
+// ========================================
+
+const handleSuggestedMaterialChange = (
+  index,
+  field,
+  value
+) => {
+  const updatedMaterials = [
+    ...suggestedMaterials,
+  ];
+
+  updatedMaterials[index] = {
+    ...updatedMaterials[index],
+    [field]: value,
+  };
+
+  setSuggestedMaterials(updatedMaterials);
+};
+
+// ========================================
+// REMOVE SUGGESTED MATERIAL
+// ========================================
+
+const handleRemoveSuggestedMaterial = (index) => {
+  const updatedMaterials =
+    suggestedMaterials.filter(
+      (_, materialIndex) =>
+        materialIndex !== index
+    );
+
+  setSuggestedMaterials(updatedMaterials);
+};
+
+// ========================================
+// SAVE SUGGESTED MATERIALS
+// ========================================
+
+const handleSaveSuggestedMaterials = async () => {
+  try {
+    setSavingMaterials(true);
+
+    const invalidMaterial =
+      suggestedMaterials.some(
+        (material) =>
+          !material.name.trim() ||
+          !material.defaultQuantity ||
+          material.defaultQuantity < 1 ||
+          !material.unit.trim()
+      );
+
+    if (invalidMaterial) {
+      alert(
+        "Please enter valid details for every material."
+      );
+
+      return;
+    }
+
+    await axios.patch(
+      `${API}/${materialServiceId}/suggested-materials`,
+      {
+        suggestedMaterials,
+      },
+      authConfig
+    );
+
+    alert(
+      "Suggested materials saved successfully."
+    );
+
+    closeMaterialConfiguration();
+
+    await loadPendingServices();
+
+  } catch (error) {
+    console.error(
+      "Save suggested materials error:",
+      error
+    );
+
+    alert(
+      error.response?.data?.message ||
+        "Failed to save suggested materials."
+    );
+
+  } finally {
+    setSavingMaterials(false);
+  }
+};
 
   // ========================================
   // REJECT SERVICE
@@ -414,7 +547,71 @@ const AdminServiceApprovals = () => {
                     "Unknown Provider"}
 
                 </p>
+                      {/* ========================================
+    SUGGESTED MATERIALS
+======================================== */}
 
+<div className="admin-suggested-materials">
+
+  <div className="admin-material-header">
+
+    <div>
+      <h3>
+        Suggested Materials
+      </h3>
+
+      <p>
+        Configure the default materials
+        for this service.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      onClick={() =>
+        openMaterialConfiguration(service)
+      }
+    >
+      Configure
+    </button>
+
+  </div>
+
+  {service.suggestedMaterials?.length > 0 ? (
+
+    <div className="admin-material-preview">
+
+      {service.suggestedMaterials.map(
+        (material, index) => (
+
+          <div
+            key={index}
+            className="admin-material-preview-item"
+          >
+            <span>
+              {material.name}
+            </span>
+
+            <span>
+              {material.defaultQuantity}{" "}
+              {material.unit}
+            </span>
+          </div>
+
+        )
+      )}
+
+    </div>
+
+  ) : (
+
+    <p className="admin-no-materials">
+      No materials configured yet.
+    </p>
+
+  )}
+
+</div>
                 {/* ========================================
                     ACTIONS
                 ======================================== */}
@@ -460,6 +657,167 @@ const AdminServiceApprovals = () => {
         </div>
 
       )}
+
+      {/* ========================================
+    MATERIAL CONFIGURATION PANEL
+======================================== */}
+
+{materialServiceId && (
+
+  <div className="admin-material-config-card">
+
+    <div className="admin-material-config-header">
+
+      <div>
+
+        <span className="admin-label">
+          SERVICE CONFIGURATION
+        </span>
+
+        <h2>
+          Suggested Materials
+        </h2>
+
+        <p>
+          Configure the default materials
+          providers should prepare for this service.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        onClick={closeMaterialConfiguration}
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div className="admin-material-config-list">
+
+      {suggestedMaterials.map(
+        (material, index) => (
+
+          <div
+            key={index}
+            className="admin-material-config-row"
+          >
+
+            <div>
+              <label>
+                Material
+              </label>
+
+              <input
+                type="text"
+                value={material.name}
+                placeholder="e.g. Copper Pipe"
+                onChange={(e) =>
+                  handleSuggestedMaterialChange(
+                    index,
+                    "name",
+                    e.target.value
+                  )
+                }
+              />
+            </div>
+
+            <div>
+              <label>
+                Quantity
+              </label>
+
+              <input
+                type="number"
+                min="1"
+                value={
+                  material.defaultQuantity
+                }
+                onChange={(e) =>
+                  handleSuggestedMaterialChange(
+                    index,
+                    "defaultQuantity",
+                    Number(e.target.value)
+                  )
+                }
+              />
+            </div>
+
+            <div>
+              <label>
+                Unit
+              </label>
+
+              <input
+                type="text"
+                value={material.unit}
+                placeholder="piece"
+                onChange={(e) =>
+                  handleSuggestedMaterialChange(
+                    index,
+                    "unit",
+                    e.target.value
+                  )
+                }
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                handleRemoveSuggestedMaterial(
+                  index
+                )
+              }
+            >
+              Remove
+            </button>
+
+          </div>
+
+        )
+      )}
+
+    </div>
+
+    <button
+      type="button"
+      onClick={
+        handleAddSuggestedMaterial
+      }
+    >
+      + Add Material
+    </button>
+
+    <div className="admin-material-config-actions">
+
+      <button
+        type="button"
+        onClick={
+          closeMaterialConfiguration
+        }
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        onClick={
+          handleSaveSuggestedMaterials
+        }
+        disabled={savingMaterials}
+      >
+        {savingMaterials
+          ? "Saving..."
+          : "Save Materials"}
+      </button>
+
+    </div>
+
+  </div>
+
+)}
 
     </div>
   );

@@ -25,9 +25,9 @@ const analyticsRoutes = require("./Routes/analyticsRoutes");
 const providerAnalyticsRoutes = require("./Routes/providerAnalyticsRoutes");
 const userAnalyticsRoutes = require("./Routes/userAnalyticsRoutes");
 const paymentRoutes = require("./Routes/paymentRoutes");
-const {
-  handleStripeWebhook,
-} = require("./Controllers/StripeWebhookController");
+const {handleStripeWebhook,} = require("./Controllers/StripeWebhookController");
+const materialPreparationRoutes = require("./Routes/materialPreparationRoutes");
+
 const app = express();
 
 app.use(cors());
@@ -72,6 +72,12 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/provider-analytics", providerAnalyticsRoutes);
 app.use("/api/user-analytics", userAnalyticsRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/material-preparation", materialPreparationRoutes);
+
+
+
+
+
 // Connect to MongoDB and start server
 const PORT = process.env.PORT || 5000;
 
