@@ -66,6 +66,24 @@ export const getServiceById = async (
   return response.data;
 };
 
+// ==========================================
+// GET ALL AVAILABLE SERVICES
+// Used on the user dashboard
+// ==========================================
+
+export const getServices = async () => {
+  const response = await axios.get(API);
+
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+
+  if (Array.isArray(response.data?.services)) {
+    return response.data.services;
+  }
+
+  return [];
+};
 
 // ==========================================
 // GET ALL ACTIVE CATEGORIES

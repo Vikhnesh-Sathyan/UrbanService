@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import {
+  getMyUserOverview,
+} from "../../../Services/userAnalyticsService";
+
+import {
+  getServices,
+} from "../../../Services/serviceService";
 
 import "../../../styles/UserDashboardHome.css";
 
 const UserDashboardHome = () => {
   const navigate = useNavigate();
+
+  const [availableServices, setAvailableServices] = useState(0);
+  const [myBookings, setMyBookings] = useState(0);
+  const [completedBookings, setCompletedBookings] = useState(0);
 
   const storedUser = localStorage.getItem("user");
 
@@ -17,6 +29,41 @@ const UserDashboardHome = () => {
   }
 
   const userName = user?.name || "Customer";
+
+  useEffect(() => {
+  const loadDashboardStats = async () => {
+    try {
+      // Load user's booking statistics
+      const overviewResponse =
+        await getMyUserOverview();
+
+      if (overviewResponse?.data) {
+        setMyBookings(
+          overviewResponse.data.totalBookings || 0
+        );
+
+        setCompletedBookings(
+          overviewResponse.data.completedBookings || 0
+        );
+      }
+
+      // Load available services
+      const servicesResponse =
+        await getServices();
+
+      setAvailableServices(
+        servicesResponse.length
+      );
+    } catch (error) {
+      console.error(
+        "Failed to load dashboard stats:",
+        error
+      );
+    }
+  };
+
+  loadDashboardStats();
+}, []);
 
   return (
     <section className="user-dashboard-home">
@@ -89,9 +136,9 @@ const UserDashboardHome = () => {
               Available Services
             </span>
 
-            <strong>
-              —
-            </strong>
+           <strong>
+            {availableServices}
+          </strong>
 
           </div>
 
@@ -113,7 +160,7 @@ const UserDashboardHome = () => {
             </span>
 
             <strong>
-              —
+              {myBookings}    
             </strong>
 
           </div>
@@ -136,7 +183,7 @@ const UserDashboardHome = () => {
             </span>
 
             <strong>
-              —
+              {completedBookings}
             </strong>
 
           </div>
