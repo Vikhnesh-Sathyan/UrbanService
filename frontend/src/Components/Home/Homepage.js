@@ -4,7 +4,7 @@ import Hero from "./Hero";
 import Services from "./Services";
 import HowItWorks from "./HowItWorks";
 import WhyChooseUs from "./WhyChooseUs";
-
+import Footer from "./Footer";
 
 function Homepage() {
   return (
@@ -19,6 +19,8 @@ function Homepage() {
 
       <WhyChooseUs />
 
+      <Footer />
+      
     </div>
   );
 }

@@ -1,0 +1,122 @@
+/* ==========================================
+   LEGAL PAGES
+========================================== */
+
+.legal-page {
+  min-height: 100vh;
+
+  padding: 90px 22px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(37, 99, 235, 0.08),
+      transparent 40%
+    ),
+    #f8fafc;
+}
+
+.legal-container {
+  max-width: 850px;
+
+  margin: 0 auto;
+
+  padding: 55px 60px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.06);
+}
+
+.legal-label {
+  display: inline-block;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.8px;
+
+  color: #2563eb;
+}
+
+.legal-container h1 {
+  margin: 15px 0;
+
+  font-size: 46px;
+
+  line-height: 1.1;
+
+  letter-spacing: -1.8px;
+}
+
+.legal-intro {
+  margin: 0 0 45px;
+
+  padding-bottom: 30px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  color: #64748b;
+
+  font-size: 15px;
+
+  line-height: 1.8;
+}
+
+.legal-container section {
+  margin-bottom: 34px;
+}
+
+.legal-container section:last-child {
+  margin-bottom: 0;
+}
+
+.legal-container h2 {
+  margin: 0 0 10px;
+
+  font-size: 19px;
+
+  letter-spacing: -0.3px;
+}
+
+.legal-container section p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  line-height: 1.85;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 650px) {
+
+  .legal-page {
+    padding: 55px 18px;
+  }
+
+  .legal-container {
+    padding: 35px 25px;
+
+    border-radius: 14px;
+  }
+
+  .legal-container h1 {
+    font-size: 36px;
+  }
+
+  .legal-intro {
+    margin-bottom: 35px;
+  }
+}

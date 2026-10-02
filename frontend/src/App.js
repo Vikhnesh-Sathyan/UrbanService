@@ -18,6 +18,18 @@ import Register from "./Components/Auth/Register";
 
 import Homepage from "./Components/Home/Homepage";
 
+import AboutUs from "./Components/Home/AboutUs";
+
+import Professionals from "./Components/Home/Professionals";
+
+import ContactUs from "./Components/Home/ContactUs";
+
+import HelpCenter from "./Components/Home/HelpCenter";
+
+import PrivacyPolicy from "./Components/Home/PrivacyPolicy";
+
+import TermsOfService from "./Components/Home/TermsOfService";
+
 // =====================================================
 // DASHBOARDS
 // =====================================================
@@ -168,6 +180,26 @@ function App() {
             element={<Homepage />}
           />
 
+          <Route 
+            path="/about" 
+            element={<AboutUs />}
+          />
+
+          <Route
+            path="/professionals"
+            element={<Professionals />}
+          />
+
+          <Route
+            path="/privacy"
+            element={<PrivacyPolicy />}
+          />
+
+          <Route
+            path="/terms"
+            element={<TermsOfService />}
+          />
+         
 
           {/* =================================================
               AUTH
@@ -183,6 +215,25 @@ function App() {
             element={<Register />}
           />
 
+          <Route
+            path="/contact"
+            element={<ContactUs />}
+          />
+
+          <Route
+            path="/help"
+            element={<HelpCenter />}
+          />
+
+          <Route
+            path="/privacy-policy"
+            element={<PrivacyPolicy />}
+          />
+
+          <Route
+            path="/terms-of-service"
+            element={<TermsOfService />}    
+          />
 
           {/* =================================================
               DASHBOARDS

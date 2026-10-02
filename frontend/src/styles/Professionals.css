@@ -1,0 +1,257 @@
+/* ==========================================
+   PROFESSIONALS PAGE
+========================================== */
+
+.info-page {
+  min-height: 100vh;
+
+  background: #ffffff;
+
+  color: #0f172a;
+}
+
+
+/* ==========================================
+   HERO
+========================================== */
+
+.info-hero {
+  padding: 105px 30px 100px;
+
+  background:
+    radial-gradient(
+      circle at 85% 30%,
+      rgba(37, 99, 235, 0.12),
+      transparent 35%
+    ),
+    #f8fafc;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-hero > * {
+  max-width: 1050px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info-label {
+  display: inline-block;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.8px;
+
+  color: #2563eb;
+}
+
+.info-hero h1 {
+  margin-top: 18px;
+  margin-bottom: 20px;
+
+  font-size: clamp(44px, 6vw, 70px);
+
+  line-height: 1.05;
+
+  letter-spacing: -2.5px;
+}
+
+.info-hero h1 span {
+  color: #2563eb;
+}
+
+.info-hero p {
+  max-width: 620px;
+
+  color: #64748b;
+
+  font-size: 16px;
+
+  line-height: 1.8;
+}
+
+
+/* ==========================================
+   PROFESSIONAL CARDS
+========================================== */
+
+.professionals-section {
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 100px 30px;
+}
+
+.professionals-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 22px;
+}
+
+.professional-card {
+  padding: 34px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  transition: 0.25s ease;
+}
+
+.professional-card:hover {
+  transform: translateY(-6px);
+
+  border-color: #bfdbfe;
+
+  box-shadow:
+    0 20px 45px rgba(15, 23, 42, 0.08);
+}
+
+.professional-icon {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 19px;
+}
+
+.professional-card h3 {
+  margin: 22px 0 10px;
+
+  font-size: 18px;
+}
+
+.professional-card p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+
+/* ==========================================
+   CTA
+========================================== */
+
+.info-cta {
+  max-width: 1050px;
+
+  margin: 0 auto 90px;
+
+  padding: 42px 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  border-radius: 18px;
+
+  background: #0f172a;
+}
+
+.info-cta h2 {
+  margin: 0 0 8px;
+
+  color: #ffffff;
+
+  font-size: 27px;
+}
+
+.info-cta p {
+  margin: 0;
+
+  color: #94a3b8;
+
+  font-size: 14px;
+}
+
+.info-cta a {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 13px 20px;
+
+  background: #2563eb;
+
+  color: #ffffff;
+
+  border-radius: 8px;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  transition: 0.25s ease;
+}
+
+.info-cta a:hover {
+  background: #1d4ed8;
+
+  transform: translateY(-2px);
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 800px) {
+
+  .professionals-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-cta {
+    margin: 0 22px 70px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+}
+
+
+@media (max-width: 550px) {
+
+  .info-hero {
+    padding: 75px 22px;
+  }
+
+  .professionals-section {
+    padding: 70px 22px;
+  }
+
+  .info-cta {
+    padding: 32px 26px;
+  }
+}

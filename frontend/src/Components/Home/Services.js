@@ -19,49 +19,42 @@ const categories = [
     icon: <FaSpa />,
     title: "Women's Salon & Spa",
     description: "Beauty, spa treatments, facials and massages.",
-    path: "/womens-salon",
     color: "pink",
   },
   {
     icon: <FaUserTie />,
     title: "Men's Salon & Massage",
     description: "Professional grooming, haircuts and massages.",
-    path: "/mens-salon",
     color: "blue",
   },
   {
     icon: <FaSnowflake />,
     title: "AC & Appliance Repair",
     description: "Reliable repair and maintenance for appliances.",
-    path: "/ac-repair",
     color: "cyan",
   },
   {
     icon: <FaBroom />,
     title: "Cleaning & Pest Control",
     description: "Keep your home clean, fresh and pest-free.",
-    path: "/cleaning",
     color: "green",
   },
   {
     icon: <FaTools />,
     title: "Electrician, Plumber & Carpenter",
     description: "Skilled professionals for essential home repairs.",
-    path: "/electrician",
     color: "orange",
   },
   {
     icon: <FaTint />,
     title: "Water Purifier",
     description: "Installation, repair and maintenance services.",
-    path: "/water-purifier",
     color: "aqua",
   },
   {
     icon: <FaPaintRoller />,
     title: "Walls & Rooms Painting",
     description: "Transform your space with professional painting.",
-    path: "/painting",
     color: "purple",
     isNew: true,
   },
@@ -69,13 +62,11 @@ const categories = [
     icon: <FaLayerGroup />,
     title: "Wall Panels",
     description: "Stylish decorative wall panel installation.",
-    path: "/wall-panels",
     color: "brown",
   },
 ];
 
 function Services() {
-  const navigate = useNavigate();
 
   return (
     <section className="services-section">
@@ -109,7 +100,6 @@ function Services() {
           <div
             className={`service-card service-${item.color}`}
             key={index}
-            onClick={() => navigate(item.path)}
           >
 
             {/* New Badge */}
