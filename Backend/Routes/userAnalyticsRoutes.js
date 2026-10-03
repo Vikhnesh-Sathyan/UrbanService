@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {
   getMyUserOverview,
-  getMyUserBookingActivity,
+  getMyUserBookingStatus,
   getMyUserServiceUsage,
   getMyUserBookingType,
 } = require("../Controllers/UserAnalyticsController");
@@ -19,10 +19,10 @@ router.get(
 );
 
 router.get(
-  "/booking-activity",
+  "/booking-status",
   authMiddleware,
   roleMiddleware("user"),
-  getMyUserBookingActivity
+  getMyUserBookingStatus
 );
 
 router.get(

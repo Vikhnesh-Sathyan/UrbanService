@@ -9,90 +9,111 @@ const RescheduleForm = ({
   onSubmit,
   onClose,
 }) => {
-
   return (
+    <div className="reschedule-modal-overlay">
 
-    <div className="reschedule-form-container">
+      <div className="reschedule-modal">
 
-      <h2>
-        Reschedule Booking
-      </h2>
+        {/* HEADER */}
 
+        <div className="reschedule-modal-header">
+          <div>
+            <span className="reschedule-eyebrow">
+              BOOKING UPDATE
+            </span>
 
-      <form onSubmit={onSubmit}>
+            <h2>Reschedule Booking</h2>
 
-        {/* DATE */}
+            <p>
+              Choose a new date and time for your service.
+            </p>
+          </div>
 
-        <div>
-
-          <label>
-            New Date
-          </label>
-
-          <input
-            type="date"
-            value={newDate}
-            min={
-              new Date()
-                .toISOString()
-                .split("T")[0]
-            }
-            onChange={(e) =>
-              setNewDate(e.target.value)
-            }
-            required
-          />
-
+          <button
+            type="button"
+            className="reschedule-close"
+            onClick={onClose}
+            disabled={loading}
+          >
+            ×
+          </button>
         </div>
 
 
-        {/* TIME */}
+        {/* FORM */}
 
-        <div>
+        <form onSubmit={onSubmit}>
 
-          <label>
-            New Time
-          </label>
+          <div className="reschedule-field">
 
-          <input
-            type="time"
-            value={newTime}
-            onChange={(e) =>
-              setNewTime(e.target.value)
-            }
-            required
-          />
+            <label>
+              New Date
+            </label>
 
-        </div>
+            <input
+              type="date"
+              value={newDate}
+              min={
+                new Date()
+                  .toISOString()
+                  .split("T")[0]
+              }
+              onChange={(e) =>
+                setNewDate(e.target.value)
+              }
+              required
+            />
 
-
-        {/* CONFIRM */}
-
-        <button
-          type="submit"
-          disabled={loading}
-        >
-          {loading
-            ? "Updating..."
-            : "Confirm Reschedule"}
-        </button>
+          </div>
 
 
-        {/* CLOSE */}
+          <div className="reschedule-field">
 
-        <button
-          type="button"
-          disabled={loading}
-          onClick={onClose}
-        >
-          Close
-        </button>
+            <label>
+              New Time
+            </label>
 
-      </form>
+            <input
+              type="time"
+              value={newTime}
+              onChange={(e) =>
+                setNewTime(e.target.value)
+              }
+              required
+            />
+
+          </div>
+
+
+          <div className="reschedule-actions">
+
+            <button
+              type="button"
+              className="reschedule-cancel"
+              disabled={loading}
+              onClick={onClose}
+            >
+              Close
+            </button>
+
+            <button
+              type="submit"
+              className="reschedule-submit"
+              disabled={loading}
+            >
+              {loading
+                ? "Updating..."
+                : "Confirm Reschedule"}
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
 
     </div>
   );
 };
-
 
 export default RescheduleForm;

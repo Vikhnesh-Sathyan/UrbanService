@@ -51,44 +51,51 @@ const getMyUserOverview = async (req, res) => {
 
 
 // =====================================================
-// USER BOOKING ACTIVITY
+// GET MY BOOKING STATUS OVERVIEW
+// Shows how many bookings are in each current status
 // =====================================================
 
-const getMyUserBookingActivity = async (req, res) => {
+const getMyUserBookingStatus = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const bookingActivity = await Booking.aggregate([
+    const bookingStatus = await Booking.aggregate([
       {
         $match: {
           user: new mongoose.Types.ObjectId(userId),
         },
       },
+
       {
         $group: {
-          _id: "$date",
+          _id: "$status",
           count: {
             $sum: 1,
           },
         },
       },
+
       {
         $sort: {
-          _id: 1,
+          count: -1,
         },
       },
     ]);
 
     res.status(200).json({
       success: true,
-      data: bookingActivity,
+      data: bookingStatus,
     });
+
   } catch (error) {
-    console.error("User booking activity error:", error);
+    console.error(
+      "User booking status analytics error:",
+      error
+    );
 
     res.status(500).json({
       success: false,
-      message: "Failed to load booking activity",
+      message: "Failed to load booking status analytics",
     });
   }
 };
@@ -199,8 +206,7 @@ const getMyUserBookingType = async (req, res) => {
 
 module.exports = {
   getMyUserOverview,
-  getMyUserBookingActivity,
+  getMyUserBookingStatus,
   getMyUserServiceUsage,
   getMyUserBookingType,
-
 };

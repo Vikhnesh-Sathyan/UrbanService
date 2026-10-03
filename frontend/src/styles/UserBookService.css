@@ -1,1121 +1,857 @@
-/* ==========================================
-   BOOK SERVICE PAGE
-========================================== */
+/* =========================================================
+   UserBookService.css  —  PREMIUM EDITION
+   Midnight navy + champagne gold (normal booking)
+   Deep ruby accent (emergency booking)
+   Fraunces headings, Manrope body
+   ========================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap");
 
 .user-book-service-page {
+  --night-950: #070b18;
+  --night-900: #0b1226;
+  --night-800: #121b38;
+  --night-700: #1c2850;
+  --pearl: #f6f4ef;
+  --pearl-2: #efece4;
+  --white: #ffffff;
+  --line: #e4e0d5;
+  --ink: #0d1324;
+  --ink-2: #4b5368;
+  --ink-3: #8a90a2;
+  --gold-1: #f3dfa2;
+  --gold-2: #d8b25a;
+  --gold-3: #a8802f;
+  --gold-grad: linear-gradient(135deg, #f6e5ae 0%, #d8b25a 45%, #a8802f 100%);
+  --ruby-700: #8f1d1d;
+  --ruby-600: #c4302b;
+  --ruby-300: #f2a39d;
+  --ruby-100: #fdeceb;
+  --ruby-grad: linear-gradient(135deg, #e0524b 0%, #c4302b 50%, #8f1d1d 100%);
+  --green-600: #1f9d62;
+
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --body: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --r-sm: 14px;
+  --r-md: 18px;
+  --r-lg: 28px;
+  --r-xl: 34px;
+  --pill: 999px;
+  --ease: cubic-bezier(0.22, 0.8, 0.28, 1);
+
+  --sh-1: 0 1px 2px rgba(13, 19, 36, 0.05), 0 4px 14px rgba(13, 19, 36, 0.05);
+  --sh-2: 0 2px 4px rgba(13, 19, 36, 0.04), 0 12px 28px rgba(13, 19, 36, 0.09), 0 28px 56px rgba(13, 19, 36, 0.06);
+
+  position: relative;
   min-height: 100vh;
-  padding: 32px 6%;
-  background: #f7f8fc;
-  color: #111827;
-  box-sizing: border-box;
+  padding: 36px clamp(16px, 4vw, 56px) 96px;
+  background:
+    radial-gradient(900px 420px at 92% -6%, rgba(216, 178, 90, 0.13), transparent 62%),
+    var(--pearl);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
+.user-book-service-page *,
+.user-book-service-page *::before,
+.user-book-service-page *::after { box-sizing: border-box; }
 
-/* ==========================================
-   BACK BUTTON
-========================================== */
+.user-book-service-page h1,
+.user-book-service-page h2,
+.user-book-service-page h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.user-book-service-page p { margin: 0; }
+.user-book-service-page button,
+.user-book-service-page input,
+.user-book-service-page textarea { font-family: inherit; }
+.user-book-service-page button { cursor: pointer; }
+.user-book-service-page :focus-visible {
+  outline: 2px solid var(--gold-2);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   BACK + HEADER
+   ========================================================= */
 
 .user-book-back {
-  border: none;
-  background: transparent;
-  color: #64748b;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 8px 0;
-  margin-bottom: 24px;
-  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  margin: 0 auto 28px max(0px, calc((100% - 1240px) / 2));
+  padding: 11px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--pill);
+  background: var(--white);
+  box-shadow: var(--sh-1);
+  color: var(--night-900);
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: all 0.3s var(--ease);
 }
-
 .user-book-back:hover {
-  color: #4f46e5;
-  transform: translateX(-3px);
+  background: var(--night-900);
+  border-color: var(--night-900);
+  color: var(--gold-1);
+  transform: translateX(-4px);
 }
-
-
-/* ==========================================
-   HEADER
-========================================== */
 
 .user-book-header {
-  max-width: 1180px;
-  margin: 0 auto 28px;
+  max-width: 1240px;
+  margin: 0 auto 40px;
 }
-
 .user-book-header h1 {
-  margin: 0;
-  font-size: 38px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  color: #0f172a;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  letter-spacing: -0.03em;
+  color: var(--night-900);
 }
-
+.user-book-header h1::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 2px;
+  margin-top: 20px;
+  background: var(--gold-grad);
+  border-radius: 2px;
+}
 .user-book-header p {
-  margin: 10px 0 0;
-  color: #64748b;
-  font-size: 16px;
+  margin-top: 18px;
+  max-width: 52ch;
+  font-size: 1.08rem;
+  color: var(--ink-2);
 }
 
-
-/* ==========================================
-   MAIN BOOKING LAYOUT
-========================================== */
+/* =========================================================
+   LAYOUT
+   ========================================================= */
 
 .user-book-layout {
-  max-width: 1180px;
-  margin: 0 auto;
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 24px;
+  grid-template-columns: 400px minmax(0, 1fr);
+  gap: 36px;
   align-items: start;
+  max-width: 1240px;
+  margin: 0 auto;
 }
 
-
-/* ==========================================
+/* =========================================================
    SERVICE SUMMARY CARD
-========================================== */
+   ========================================================= */
 
 .user-book-service-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 22px;
+  position: sticky;
+  top: 24px;
   overflow: hidden;
-  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-2);
 }
 
 .user-book-service-image {
-  width: 100%;
-  height: 260px;
-  background: #eef0f6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  height: 230px;
   overflow: hidden;
+  background: var(--night-800);
 }
-
+.user-book-service-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 55%, rgba(7, 11, 24, 0.4));
+}
 .user-book-service-image img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  object-position: center 30%;
 }
-
 .user-book-no-image {
-  color: #94a3b8;
-  font-size: 16px;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, var(--night-700), var(--night-950));
+  color: rgba(255, 255, 255, 0.45);
   font-weight: 600;
 }
 
-
-/* ==========================================
-   SERVICE INFORMATION
-========================================== */
-
 .user-book-service-info {
-  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 26px 26px 28px;
 }
 
 .user-book-category {
-  display: inline-flex;
-  padding: 7px 12px;
-  border-radius: 9px;
-  background: #eef2ff;
-  color: #4f46e5;
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 15px;
+  padding: 7px 16px;
+  border-radius: var(--pill);
+  background: linear-gradient(#fffaf0, #fbf3de) padding-box, var(--gold-grad) border-box;
+  border: 1px solid transparent;
+  color: var(--gold-3);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
 }
 
 .user-book-service-info h2 {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 800;
-  color: #0f172a;
+  margin-top: 8px;
+  font-size: 1.9rem;
+  color: var(--night-900);
 }
 
 .user-book-price {
-  margin-top: 15px;
-  font-size: 27px;
-  font-weight: 800;
-  color: #0f172a;
+  margin-top: 6px;
+  font-family: var(--display);
+  font-size: 2.3rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--night-900);
 }
-
 .user-book-price-label {
-  display: block;
-  margin-top: 3px;
-  color: #94a3b8;
-  font-size: 13px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-3);
 }
 
+/* provider */
 .user-book-provider {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--pearl);
 }
-
 .user-book-provider-label {
-  color: #64748b;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
 }
-
 .user-book-provider-name {
-  margin-top: 8px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #111827;
+  margin-top: 4px;
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--night-900);
 }
 
+/* availability */
+.user-book-availability {
+  width: 100%;
+  margin-top: 6px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background:
+    radial-gradient(360px 140px at 100% 0%, rgba(216, 178, 90, 0.14), transparent 70%),
+    var(--white);
+}
+.user-book-availability-title {
+  margin-bottom: 14px;
+  font-family: var(--display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--night-900);
+}
+.user-book-availability-label {
+  margin: 12px 0 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+.user-book-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.user-book-days span {
+  padding: 7px 14px;
+  border-radius: var(--pill);
+  background: var(--night-900);
+  color: var(--gold-1);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.user-book-availability strong {
+  display: block;
+  font-family: var(--display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--night-900);
+}
 
-/* ==========================================
+/* =========================================================
    BOOKING FORM CARD
-========================================== */
+   ========================================================= */
 
 .user-book-form-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 22px;
-  padding: 32px;
-  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
+  position: relative;
+  padding: 44px 44px 48px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-2);
+  overflow: hidden;
+  transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
-
-.user-book-form-card h2 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 800;
-  color: #0f172a;
+.user-book-form-card::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 4px;
+  background: var(--gold-grad);
+  transition: background 0.4s var(--ease);
 }
+.user-book-form-card.emergency-mode {
+  border-color: rgba(196, 48, 43, 0.35);
+  box-shadow: 0 2px 4px rgba(13, 19, 36, 0.04), 0 12px 28px rgba(196, 48, 43, 0.1), 0 28px 56px rgba(13, 19, 36, 0.06);
+}
+.user-book-form-card.emergency-mode::before { background: var(--ruby-grad); }
 
+.user-book-form-card > h2 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  color: var(--night-900);
+}
 .user-book-form-subtitle {
-  margin: 7px 0 25px;
-  color: #94a3b8;
-  font-size: 14px;
-}
-
-
-/* ==========================================
-   FORM GROUP
-========================================== */
-
-.user-book-form-group {
-  margin-bottom: 20px;
-}
-
-.user-book-form-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: #334155;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-
-/* ==========================================
-   INPUTS
-========================================== */
-
-.user-book-form-group input,
-.user-book-form-group textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 13px 14px;
-  border: 1px solid #dbe1ea;
-  border-radius: 11px;
-  background: #ffffff;
-  color: #111827;
-  font-size: 14px;
-  font-family: inherit;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-.user-book-form-group input {
-  height: 48px;
-}
-
-.user-book-form-group textarea {
-  min-height: 110px;
-  resize: vertical;
-}
-
-.user-book-form-group input::placeholder,
-.user-book-form-group textarea::placeholder {
-  color: #a1a9b8;
-}
-
-.user-book-form-group input:focus,
-.user-book-form-group textarea:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.10);
-}
-
-
-/* ==========================================
-   DATE + TIME
-========================================== */
-
-.user-book-date-time {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-
-/* ==========================================
-   CONFIRM BUTTON
-========================================== */
-
-.user-book-submit {
-  width: 100%;
-  margin-top: 8px;
-  padding: 15px 20px;
-  border: none;
-  border-radius: 12px;
-  background: #111827;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.user-book-submit:hover:not(:disabled) {
-  background: #4f46e5;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.22);
-}
-
-.user-book-submit:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.user-book-submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-
-/* ==========================================
-   SERVICE NOT FOUND
-========================================== */
-
-.user-book-not-found {
-  max-width: 600px;
-  margin: 100px auto;
-  padding: 45px;
-  text-align: center;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 20px;
-  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
-}
-
-.user-book-not-found h2 {
-  margin: 0 0 10px;
-  color: #0f172a;
-}
-
-.user-book-not-found p {
-  margin-bottom: 24px;
-  color: #64748b;
-}
-
-.user-book-not-found button {
-  border: none;
-  padding: 12px 20px;
-  border-radius: 10px;
-  background: #111827;
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* ==========================================
-   PROVIDER AVAILABILITY
-========================================== */
-
-.user-book-availability {
-
-  margin-top: 24px;
-
-  padding-top: 20px;
-
-  border-top: 1px solid #e5e7eb;
-
-}
-
-.user-book-availability-title {
-
-  margin-bottom: 14px;
-
-  color: #0f172a;
-
-  font-size: 15px;
-
-  font-weight: 800;
-
-}
-
-.user-book-availability-label {
-
-  margin-top: 14px;
-
-  margin-bottom: 8px;
-
-  color: #64748b;
-
-  font-size: 12px;
-
-  font-weight: 700;
-
-  text-transform: uppercase;
-
-  letter-spacing: 0.5px;
-
-}
-
-
-/* ==========================================
-   AVAILABLE DAYS
-========================================== */
-
-.user-book-days {
-
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 7px;
-
-}
-
-.user-book-days span {
-
-  padding: 6px 10px;
-
-  border-radius: 8px;
-
-  background: #eef2ff;
-
-  color: #4f46e5;
-
-  font-size: 12px;
-
-  font-weight: 700;
-
-}
-
-
-/* ==========================================
-   WORKING HOURS
-========================================== */
-
-.user-book-availability strong {
-
-  display: block;
-
-  color: #111827;
-
-  font-size: 17px;
-
-}
-
-
-/* ==========================================
-   FORM HELP TEXT
-========================================== */
-
-.user-book-help {
-
-  display: block;
-
-  margin-top: 7px;
-
-  color: #94a3b8;
-
-  font-size: 12px;
-
-  line-height: 1.5;
-
-}
-
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
-@media (max-width: 900px) {
-
-  .user-book-service-page {
-    padding: 24px;
-  }
-
-  .user-book-layout {
-    grid-template-columns: 1fr;
-  }
-
-}
-
-
-@media (max-width: 600px) {
-
-  .user-book-service-page {
-    padding: 16px;
-  }
-
-  .user-book-header h1 {
-    font-size: 30px;
-  }
-
-  .user-book-form-card {
-    padding: 24px;
-  }
-
-  .user-book-service-info {
-    padding: 24px;
-  }
-
-  .user-book-date-time {
-    grid-template-columns: 1fr;
-  }
-
+  margin-top: 10px;
+  color: var(--ink-2);
 }
 
 /* =========================================================
-   PREMIUM BOOKING TYPE SELECTION
-========================================================= */
+   BOOKING TYPE
+   ========================================================= */
 
 .user-book-type-section {
-  margin-bottom: 28px;
+  margin-top: 32px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--pearl);
 }
-
-.user-book-type-header {
-  margin-bottom: 14px;
-}
-
+.user-book-type-header { margin-bottom: 22px; }
 .user-book-section-label {
-  display: block;
-  margin-bottom: 6px;
-  color: #64748b;
-  font-size: 11px;
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 1.2px;
+  letter-spacing: 0.16em;
+  color: var(--gold-3);
 }
-
 .user-book-type-header h3 {
-  margin: 0;
-  color: #0f172a;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--night-900);
 }
-
 .user-book-type-header p {
-  margin: 5px 0 0;
-  color: #64748b;
-  font-size: 13px;
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: var(--ink-2);
 }
-
-
-/* =========================================================
-   BOOKING TYPE CARDS
-========================================================= */
 
 .user-book-type-selection {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .user-book-type-button {
   position: relative;
-
   display: flex;
   align-items: center;
-  gap: 13px;
-
-  min-height: 92px;
-  padding: 16px;
-
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-
-  background: #ffffff;
-
-  color: #0f172a;
-
+  gap: 16px;
+  width: 100%;
+  padding: 20px;
   text-align: left;
-
-  cursor: pointer;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease,
-    background 0.2s ease;
+  color: inherit;
+  background: var(--white);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-1);
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.3s var(--ease);
 }
-
 .user-book-type-button:hover {
-  border-color: #cbd5e1;
-
-  box-shadow:
-    0 8px 20px rgba(15, 23, 42, 0.06);
-
-  transform: translateY(-1px);
+  transform: translateY(-3px);
+  border-color: var(--gold-2);
+  box-shadow: var(--sh-2);
 }
+.user-book-type-button.emergency:hover { border-color: var(--ruby-300); }
 
-
-/* =========================================================
-   TYPE ICON
-========================================================= */
+.user-book-type-button.active {
+  border-color: var(--gold-2);
+  background: linear-gradient(135deg, #fffdf6, #fbf3de);
+  box-shadow: 0 0 0 4px rgba(216, 178, 90, 0.2), var(--sh-1);
+}
+.user-book-type-button.emergency.active {
+  border-color: var(--ruby-600);
+  background: linear-gradient(135deg, #fffafa, var(--ruby-100));
+  box-shadow: 0 0 0 4px rgba(196, 48, 43, 0.14), var(--sh-1);
+}
 
 .user-book-type-icon {
-  flex-shrink: 0;
-
-  width: 42px;
-  height: 42px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 11px;
-
-  background: #f1f5f9;
-
-  font-size: 20px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--pearl-2);
+  font-size: 1.4rem;
 }
+.user-book-type-button.active .user-book-type-icon { background: var(--white); box-shadow: var(--sh-1); }
+.user-book-type-button.emergency .user-book-type-icon { background: var(--ruby-100); }
 
 .user-book-type-content {
   display: flex;
   flex-direction: column;
   gap: 4px;
-
   flex: 1;
+  min-width: 0;
 }
-
 .user-book-type-content strong {
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.user-book-type-content small {
-  color: #64748b;
-
-  font-size: 12px;
-  line-height: 1.45;
-}
-
-
-/* =========================================================
-   CHECK
-========================================================= */
-
-.user-book-type-check {
-  width: 22px;
-  height: 22px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid #cbd5e1;
-  border-radius: 50%;
-
-  color: transparent;
-
-  font-size: 12px;
+  font-size: 1.02rem;
   font-weight: 800;
-
-  transition: all 0.2s ease;
+  color: var(--night-900);
+}
+.user-book-type-content small {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--ink-3);
 }
 
-
-/* =========================================================
-   NORMAL ACTIVE
-========================================================= */
-
-.user-book-type-button.active:not(.emergency) {
-  border-color: #2563eb;
-
-  background: #f8fbff;
-
-  box-shadow:
-    0 8px 24px rgba(37, 99, 235, 0.10);
-}
-
-.user-book-type-button.active:not(.emergency)
-.user-book-type-icon {
-  background: #dbeafe;
-}
-
-.user-book-type-button.active:not(.emergency)
 .user-book-type-check {
-  border-color: #2563eb;
-
-  background: #2563eb;
-
-  color: #ffffff;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--night-950);
+  font-size: 0.8rem;
+  font-weight: 800;
+  transition: all 0.3s var(--ease);
 }
-
+.user-book-type-button.active .user-book-type-check {
+  border-color: transparent;
+  background: var(--gold-grad);
+}
+.user-book-type-button.emergency.active .user-book-type-check {
+  background: var(--ruby-grad);
+  color: var(--white);
+}
 
 /* =========================================================
-   EMERGENCY TYPE
-========================================================= */
+   FORM
+   ========================================================= */
 
-.user-book-type-button.emergency:hover {
-  border-color: #fca5a5;
+.user-book-form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin-top: 32px;
+  animation: ub-rise 0.5s var(--ease) both;
+}
+@keyframes ub-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
 }
 
-.user-book-type-button.emergency.active {
-  border-color: #dc2626;
-
-  background: #fffafa;
-
-  box-shadow:
-    0 8px 24px rgba(220, 38, 38, 0.10);
+.user-book-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-
-.user-book-type-button.emergency.active
-.user-book-type-icon {
-  background: #fee2e2;
+.user-book-form-group label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--night-900);
 }
-
-.user-book-type-button.emergency.active
-.user-book-type-check {
-  border-color: #dc2626;
-
-  background: #dc2626;
-
-  color: #ffffff;
+.user-book-form-group input,
+.user-book-form-group textarea {
+  width: 100%;
+  padding: 0 20px;
+  height: 58px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--pearl);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink);
+  transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s var(--ease);
 }
-
+.user-book-form-group textarea {
+  height: auto;
+  min-height: 130px;
+  padding: 16px 20px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.user-book-form-group input::placeholder,
+.user-book-form-group textarea::placeholder { color: var(--ink-3); }
+.user-book-form-group input:hover,
+.user-book-form-group textarea:hover { border-color: #cfc9b8; }
+.user-book-form-group input:focus,
+.user-book-form-group textarea:focus {
+  outline: 0;
+  background: var(--white);
+  border-color: var(--gold-2);
+  box-shadow: 0 0 0 4px rgba(216, 178, 90, 0.22);
+}
+.user-book-form-card.emergency-mode .user-book-form-group input:focus,
+.user-book-form-card.emergency-mode .user-book-form-group textarea:focus {
+  border-color: var(--ruby-600);
+  box-shadow: 0 0 0 4px rgba(196, 48, 43, 0.14);
+}
+.user-book-help {
+  font-size: 0.82rem;
+  color: var(--ink-3);
+}
 
 /* =========================================================
-   EMERGENCY FORM MODE
-========================================================= */
-
-.user-book-form-card.emergency-mode {
-  border-color: #fecaca;
-
-  box-shadow:
-    0 18px 45px rgba(127, 29, 29, 0.08);
-}
-
-
-/* =========================================================
-   EMERGENCY HEADER
-========================================================= */
+   EMERGENCY PANEL
+   ========================================================= */
 
 .user-book-emergency-info {
-  margin-bottom: 24px;
-
-  padding: 20px;
-
-  border: 1px solid #fecaca;
-  border-radius: 14px;
-
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(242, 163, 157, 0.25);
+  border-radius: var(--r-lg);
   background:
-    linear-gradient(
-      135deg,
-      #fffafa 0%,
-      #fff7ed 100%
-    );
+    radial-gradient(420px 220px at 100% 0%, rgba(196, 48, 43, 0.35), transparent 70%),
+    linear-gradient(165deg, #2a0f17, #120a16 70%);
+  color: var(--white);
+  box-shadow: 0 20px 40px rgba(42, 15, 23, 0.3);
 }
 
 .user-book-emergency-heading {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
-
 .user-book-emergency-icon {
-  width: 44px;
-  height: 44px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 12px;
-
-  background: #fee2e2;
-
-  font-size: 21px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: var(--ruby-grad);
+  font-size: 1.5rem;
+  box-shadow: 0 10px 22px rgba(196, 48, 43, 0.45);
 }
-
 .user-book-emergency-heading span {
-  display: block;
-
-  margin-bottom: 3px;
-
-  color: #b91c1c;
-
-  font-size: 10px;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 0.16em;
+  color: var(--ruby-300);
 }
-
 .user-book-emergency-heading h3 {
-  margin: 0;
-
-  color: #7f1d1d;
-
-  font-size: 18px;
+  margin-top: 4px;
+  font-size: 1.6rem;
+  color: var(--white);
 }
-
 .user-book-emergency-description {
-  margin: 14px 0 16px;
-
-  color: #64748b;
-
-  font-size: 13px;
-  line-height: 1.6;
+  max-width: 56ch;
+  font-size: 0.96rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.72);
 }
-
-
-/* =========================================================
-   FIND LOCATION BUTTON
-========================================================= */
 
 .user-book-emergency-location {
-  width: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 12px 14px;
-
-  border: 1px solid #dc2626;
-  border-radius: 9px;
-
-  background: #dc2626;
-
-  color: #ffffff;
-
-  font-size: 13px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  gap: 16px;
+  width: 100%;
+  padding: 18px 26px;
+  border: 0;
+  border-radius: var(--pill);
+  background: var(--gold-grad);
+  color: var(--night-950);
+  font-size: 1rem;
+  font-weight: 800;
+  box-shadow: 0 12px 26px rgba(168, 128, 47, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
 }
-
 .user-book-emergency-location:hover:not(:disabled) {
-  background: #b91c1c;
-
-  box-shadow:
-    0 8px 18px rgba(220, 38, 38, 0.20);
-
-  transform: translateY(-1px);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 34px rgba(168, 128, 47, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
+.user-book-emergency-location:disabled { opacity: 0.75; cursor: wait; }
+.user-book-location-arrow { transition: transform 0.3s var(--ease); }
+.user-book-emergency-location:hover .user-book-location-arrow { transform: translateX(5px); }
 
-.user-book-emergency-location:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-.user-book-location-arrow {
-  font-size: 18px;
-}
-
-
-/* =========================================================
-   LOCATION SUCCESS
-========================================================= */
-
+/* location success */
 .user-book-location-success {
   display: flex;
   align-items: center;
-  gap: 10px;
-
-  margin-top: 12px;
-  padding: 11px 12px;
-
-  border: 1px solid #bbf7d0;
-  border-radius: 9px;
-
-  background: #f0fdf4;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid rgba(31, 157, 98, 0.45);
+  border-radius: var(--r-md);
+  background: rgba(31, 157, 98, 0.14);
 }
-
 .user-book-location-success-icon {
-  width: 28px;
-  height: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex-shrink: 0;
-
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-
-  background: #16a34a;
-
-  color: #ffffff;
-
-  font-size: 13px;
+  background: var(--green-600);
+  color: var(--white);
   font-weight: 800;
 }
+.user-book-location-success strong { display: block; font-size: 0.98rem; color: var(--white); }
+.user-book-location-success small { display: block; margin-top: 2px; font-size: 0.82rem; color: rgba(255, 255, 255, 0.65); }
 
-.user-book-location-success strong {
-  display: block;
-
-  color: #166534;
-
-  font-size: 13px;
-}
-
-.user-book-location-success small {
-  display: block;
-
-  margin-top: 2px;
-
-  color: #64748b;
-
-  font-size: 11px;
-  line-height: 1.4;
-}
-
-
-/* =========================================================
-   NEARBY PROVIDERS
-========================================================= */
-
+/* nearby providers */
 .user-book-nearby-providers {
-  margin-top: 18px;
-
-  padding-top: 18px;
-
-  border-top: 1px solid #fed7aa;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
-
 .user-book-nearby-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
 }
-
-.user-book-nearby-header > div:first-child > span {
-  color: #c2410c;
-
-  font-size: 10px;
+.user-book-nearby-header span {
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 0.16em;
+  color: var(--gold-1);
 }
-
 .user-book-nearby-header h3 {
-  margin: 3px 0 0;
-
-  color: #0f172a;
-
-  font-size: 17px;
+  margin-top: 4px;
+  font-size: 1.4rem;
+  color: var(--white);
 }
-
 .user-book-provider-count {
-  min-width: 30px;
-  height: 30px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #ffedd5;
-
-  color: #c2410c;
-
-  font-size: 12px;
+  display: grid;
+  place-items: center;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 12px;
+  border-radius: var(--pill);
+  background: var(--gold-grad);
+  color: var(--night-950);
   font-weight: 800;
 }
-
 .user-book-nearby-subtitle {
-  margin: 5px 0 14px;
-
-  color: #64748b;
-
-  font-size: 12px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .user-book-nearby-list {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 12px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 4px;
+  margin: -4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
 }
-
-
-/* =========================================================
-   PROVIDER ROW
-========================================================= */
 
 .user-book-nearby-provider {
   display: flex;
   align-items: center;
-  gap: 11px;
-
-  padding: 11px;
-
-  border: 1px solid #e2e8f0;
-  border-radius: 11px;
-
-  background: #ffffff;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s var(--ease);
 }
-
 .user-book-nearby-provider:hover {
-  border-color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.28);
 }
-
 .user-book-nearby-provider.selected {
-  border-color: #dc2626;
-
-  background: #fffafa;
-
-  box-shadow:
-    0 5px 15px rgba(220, 38, 38, 0.08);
+  border-color: var(--gold-2);
+  background: rgba(216, 178, 90, 0.12);
+  box-shadow: 0 0 0 3px rgba(216, 178, 90, 0.2);
 }
 
 .user-book-provider-avatar {
-  width: 38px;
-  height: 38px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex-shrink: 0;
-
-  border-radius: 10px;
-
-  background: #f1f5f9;
-
-  color: #334155;
-
-  font-size: 14px;
-  font-weight: 800;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--night-700), var(--night-950));
+  color: var(--gold-1);
+  font-family: var(--display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  box-shadow: 0 0 0 2px var(--gold-2);
 }
 
 .user-book-nearby-provider-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   flex: 1;
   min-width: 0;
 }
-
 .user-book-nearby-provider-info strong {
-  display: block;
-
-  color: #0f172a;
-
-  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: var(--white);
 }
-
 .user-book-nearby-provider-info span {
-  display: block;
-
-  margin-top: 3px;
-
-  color: #64748b;
-
-  font-size: 11px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .user-book-provider-select {
-  flex-shrink: 0;
-
-  padding: 8px 11px;
-
-  border: 1px solid #cbd5e1;
-  border-radius: 7px;
-
-  background: #ffffff;
-
-  color: #334155;
-
-  font-size: 11px;
+  flex: none;
+  padding: 10px 20px;
+  border: 1.5px solid var(--gold-2);
+  border-radius: var(--pill);
+  background: transparent;
+  color: var(--gold-1);
+  font-size: 0.85rem;
   font-weight: 700;
-
-  cursor: pointer;
+  transition: all 0.25s var(--ease);
 }
-
-.user-book-nearby-provider.selected
-.user-book-provider-select {
-  border-color: #dc2626;
-
-  background: #dc2626;
-
-  color: #ffffff;
+.user-book-provider-select:hover { background: rgba(216, 178, 90, 0.18); }
+.user-book-nearby-provider.selected .user-book-provider-select {
+  background: var(--gold-grad);
+  border-color: transparent;
+  color: var(--night-950);
 }
-
 
 /* =========================================================
-   SUBMIT BUTTON
-========================================================= */
+   SUBMIT  (the one memorable element)
+   ========================================================= */
 
 .user-book-submit {
-  width: 100%;
-
-  min-height: 48px;
-
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-
-  border: none;
-  border-radius: 10px;
-
-  background: #0f172a;
-
-  color: #ffffff;
-
-  font-size: 14px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+  gap: 12px;
+  width: 100%;
+  margin-top: 6px;
+  padding: 21px 32px;
+  border: 0;
+  border-radius: var(--pill);
+  background: var(--gold-grad);
+  color: var(--night-950);
+  font-size: 1.08rem;
+  font-weight: 800;
+  box-shadow: 0 14px 30px rgba(168, 128, 47, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  overflow: hidden;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), opacity 0.2s;
 }
-
+.user-book-submit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.45) 50%, transparent 65%);
+  transform: translateX(-120%);
+  transition: transform 0.8s var(--ease);
+}
 .user-book-submit:hover:not(:disabled) {
-  background: #020617;
-
-  box-shadow:
-    0 10px 24px rgba(15, 23, 42, 0.18);
-
-  transform: translateY(-1px);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(168, 128, 47, 0.46), inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
-
-.user-book-submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-
-/* =========================================================
-   EMERGENCY SUBMIT
-========================================================= */
+.user-book-submit:hover:not(:disabled)::before { transform: translateX(120%); }
+.user-book-submit:disabled { opacity: 0.65; cursor: wait; }
 
 .user-book-submit.emergency-submit {
-  background: #dc2626;
-
-  box-shadow:
-    0 8px 20px rgba(220, 38, 38, 0.16);
+  background: var(--ruby-grad);
+  color: var(--white);
+  box-shadow: 0 14px 30px rgba(196, 48, 43, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.user-book-submit.emergency-submit:hover:not(:disabled) {
+  box-shadow: 0 20px 40px rgba(196, 48, 43, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-.user-book-submit.emergency-submit:hover:not(:disabled) {
-  background: #b91c1c;
+/* =========================================================
+   NOT FOUND
+   ========================================================= */
 
-  box-shadow:
-    0 12px 26px rgba(220, 38, 38, 0.24);
+.user-book-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 520px;
+  margin: 80px auto 0;
+  padding: 56px 36px;
+  text-align: center;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-2);
+}
+.user-book-not-found h2 { font-size: 1.9rem; color: var(--night-900); }
+.user-book-not-found p { margin-top: 12px; color: var(--ink-2); }
+.user-book-not-found button {
+  margin-top: 28px;
+  padding: 14px 30px;
+  border: 0;
+  border-radius: var(--pill);
+  background: var(--night-900);
+  color: var(--gold-1);
+  font-size: 0.92rem;
+  font-weight: 700;
+  box-shadow: 0 10px 22px rgba(11, 18, 38, 0.25);
+  transition: background 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.user-book-not-found button:hover { background: var(--night-700); transform: translateY(-2px); }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .user-book-layout { grid-template-columns: 1fr; }
+  .user-book-service-card { position: relative; top: 0; }
+  .user-book-service-image { height: 260px; }
+}
+
+@media (max-width: 700px) {
+  .user-book-form-card { padding: 30px 20px 32px; border-radius: var(--r-lg); }
+  .user-book-type-section { padding: 20px 16px; }
+  .user-book-type-selection { grid-template-columns: 1fr; }
+  .user-book-emergency-info { padding: 22px 18px; }
+  .user-book-nearby-provider { flex-wrap: wrap; }
+  .user-book-provider-select { width: 100%; }
+  .user-book-submit { padding: 18px 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .user-book-service-page *,
+  .user-book-service-page *::before,
+  .user-book-service-page *::after { animation: none !important; transition: none !important; }
 }

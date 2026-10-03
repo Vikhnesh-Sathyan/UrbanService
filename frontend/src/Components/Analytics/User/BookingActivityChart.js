@@ -2,8 +2,8 @@ import React from "react";
 
 import {
   ResponsiveContainer,
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -13,59 +13,48 @@ import {
 const BookingActivityChart = ({ data }) => {
 
   // =====================================================
-  // CREATE LAST 7 DAYS
+  // BOOKING STATUS ORDER
+  // Keeps the chart consistent
   // =====================================================
 
-  const today = new Date();
-
-  const lastSevenDays = [];
-
-  for (let i = 6; i >= 0; i--) {
-    const date = new Date(today);
-
-    date.setDate(today.getDate() - i);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    const dateKey = `${year}-${month}-${day}`;
-
-    lastSevenDays.push({
-      dateKey,
-
-      date: date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }),
-
-      bookings: 0,
-    });
-  }
-
+  const statusOrder = [
+    "pending",
+    "accepted",
+    "in_progress",
+    "completed",
+    "cancelled",
+    "rejected",
+  ];
 
   // =====================================================
-  // MATCH BACKEND DATA
+  // CREATE CHART DATA
   // =====================================================
 
-  data.forEach((item) => {
+  const chartData = statusOrder.map((status) => {
 
-    const matchingDay = lastSevenDays.find(
-      (day) => day.dateKey === item._id
+    const matchingStatus = data.find(
+      (item) => item._id === status
     );
 
-    if (matchingDay) {
-      matchingDay.bookings = item.count;
-    }
-  });
+    return {
+      status: status
+        .replace("_", " ")
+        .replace(/\b\w/g, (letter) =>
+          letter.toUpperCase()
+        ),
 
+      count: matchingStatus
+        ? matchingStatus.count
+        : 0,
+    };
+  });
 
   // =====================================================
   // EMPTY STATE
   // =====================================================
 
-  const hasBookings = lastSevenDays.some(
-    (day) => day.bookings > 0
+  const hasBookings = chartData.some(
+    (item) => item.count > 0
   );
 
   if (!hasBookings) {
@@ -73,24 +62,22 @@ const BookingActivityChart = ({ data }) => {
       <div className="user-analytics-panel">
 
         <div className="user-analytics-panel-header">
-
           <div>
-            <h2>Booking Activity</h2>
+            <h2>Booking Status Overview</h2>
 
             <p>
-              Your booking activity over the last 7 days
+              Overview of your current booking statuses
             </p>
           </div>
-
         </div>
-
 
         <div className="user-analytics-empty">
 
-          <h3>No booking activity yet</h3>
+          <h3>No booking data yet</h3>
 
           <p>
-            Your bookings from the last 7 days will appear here.
+            Your booking status will appear here once
+            you make a booking.
           </p>
 
         </div>
@@ -98,7 +85,6 @@ const BookingActivityChart = ({ data }) => {
       </div>
     );
   }
-
 
   // =====================================================
   // CHART
@@ -111,10 +97,12 @@ const BookingActivityChart = ({ data }) => {
 
         <div>
 
-          <h2>Booking Activity</h2>
+          <h2>
+            Booking Status Overview
+          </h2>
 
           <p>
-            Your booking activity over the last 7 days
+            Overview of your current booking statuses
           </p>
 
         </div>
@@ -124,28 +112,43 @@ const BookingActivityChart = ({ data }) => {
 
       <div className="user-booking-activity-chart">
 
-        <ResponsiveContainer width="100%" height={320}>
+        <ResponsiveContainer
+          width="100%"
+          height={320}
+        >
 
-          <LineChart data={lastSevenDays}>
+          <BarChart
+            data={chartData}
+            margin={{
+              top: 10,
+              right: 20,
+              left: 0,
+              bottom: 10,
+            }}
+          >
 
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+            />
 
-            <XAxis dataKey="date" />
+            <XAxis
+              dataKey="status"
+            />
 
-            <YAxis allowDecimals={false} />
+            <YAxis
+              allowDecimals={false}
+            />
 
             <Tooltip />
 
-            <Line
-              type="monotone"
-              dataKey="bookings"
-              stroke="#4f46e5"
-              strokeWidth={3}
-              dot={{ r: 4 }}
-              activeDot={{ r: 6 }}
+            <Bar
+              dataKey="count"
+              name="Bookings"
+              fill="#c9a227"
+              radius={[6, 6, 0, 0]}
             />
 
-          </LineChart>
+          </BarChart>
 
         </ResponsiveContainer>
 

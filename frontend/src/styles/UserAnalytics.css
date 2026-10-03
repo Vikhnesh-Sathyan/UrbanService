@@ -1,793 +1,606 @@
 /* =========================================================
-   USER ANALYTICS PAGE
-========================================================= */
+   USER ANALYTICS PAGE  —  PREMIUM EDITION
+   Midnight navy + champagne gold, ruby for emergency data.
+   Same class names as before, so no JSX changes are needed.
+   ========================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+.user-analytics-page,
+.user-analytics-loading,
+.user-analytics-error {
+  --night-950: #070b18;
+  --night-900: #0b1226;
+  --night-800: #121b38;
+  --night-700: #1c2850;
+  --pearl: #f6f4ef;
+  --pearl-2: #efece4;
+  --white: #ffffff;
+  --line: #e4e0d5;
+  --ink: #0d1324;
+  --ink-2: #4b5368;
+  --ink-3: #8a90a2;
+  --gold-1: #f3dfa2;
+  --gold-2: #d8b25a;
+  --gold-3: #a8802f;
+  --gold-grad: linear-gradient(135deg, #f6e5ae 0%, #d8b25a 45%, #a8802f 100%);
+  --ruby-600: #c4302b;
+  --ruby-100: #fdeceb;
+  --ruby-grad: linear-gradient(90deg, #e0524b, #c4302b 60%, #8f1d1d);
+
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --body: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --r-md: 18px;
+  --r-lg: 28px;
+  --pill: 999px;
+  --ease: cubic-bezier(0.22, 0.8, 0.28, 1);
+
+  --sh-1: 0 1px 2px rgba(13, 19, 36, 0.05), 0 4px 14px rgba(13, 19, 36, 0.05);
+  --sh-2: 0 2px 4px rgba(13, 19, 36, 0.04), 0 12px 28px rgba(13, 19, 36, 0.09), 0 28px 56px rgba(13, 19, 36, 0.06);
+
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+}
 
 .user-analytics-page {
   min-height: 100vh;
-  background: #f8fafc;
-  color: #0f172a;
+  background:
+    radial-gradient(900px 420px at 92% -6%, rgba(216, 178, 90, 0.13), transparent 62%),
+    var(--pearl);
+  color: var(--ink);
+  line-height: 1.6;
 }
 
+.user-analytics-page *,
+.user-analytics-page *::before,
+.user-analytics-page *::after { box-sizing: border-box; }
 
 /* =========================================================
    MAIN CONTENT
-========================================================= */
+   ========================================================= */
 
 .user-analytics-content {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 42px 42px 60px;
-  box-sizing: border-box;
+  padding: 56px 42px 80px;
 }
-
 
 /* =========================================================
    HEADER
-========================================================= */
+   ========================================================= */
 
 .user-analytics-header {
-  margin-bottom: 30px;
+  position: relative;
+  margin-bottom: 44px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+  animation: ua-rise 0.8s var(--ease) both;
+}
+.user-analytics-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 96px;
+  height: 2px;
+  background: var(--gold-grad);
 }
 
 .user-analytics-label {
-  margin: 0 0 8px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.3px;
-  color: #6366f1;
+  display: inline-block;
+  margin: 0 0 18px;
+  padding: 7px 18px;
+  border-radius: var(--pill);
+  background: linear-gradient(#fffaf0, #fbf3de) padding-box, var(--gold-grad) border-box;
+  border: 1px solid transparent;
+  color: var(--gold-3);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
 }
 
 .user-analytics-header h1 {
   margin: 0;
-  font-size: 30px;
-  line-height: 1.2;
-  font-weight: 750;
-  letter-spacing: -0.5px;
-  color: #0f172a;
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  color: var(--night-900);
 }
 
 .user-analytics-header > p:last-child {
-  margin: 8px 0 0;
-  font-size: 14px;
-  color: #64748b;
+  max-width: 54ch;
+  margin: 16px 0 0;
+  font-size: 1.08rem;
+  color: var(--ink-2);
 }
 
-
 /* =========================================================
-   KPI GRID
-========================================================= */
+   KPI GRID + CARD
+   ========================================================= */
 
 .user-analytics-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
+  gap: 22px;
 }
-
-
-/* =========================================================
-   KPI CARD
-========================================================= */
 
 .user-analytics-kpi {
   position: relative;
-  min-height: 145px;
-  padding: 20px;
-  background: #ffffff;
-  border: 1px solid #e7ebf0;
-  border-radius: 15px;
-  box-sizing: border-box;
+  min-height: 176px;
+  padding: 26px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-1);
   overflow: hidden;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+  isolation: isolate;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
 }
 
+/* soft gold glow in the corner */
 .user-analytics-kpi::after {
   content: "";
   position: absolute;
-  right: -28px;
-  bottom: -28px;
-  width: 90px;
-  height: 90px;
+  right: -40px;
+  bottom: -40px;
+  z-index: -1;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  background: #eef2ff;
-  opacity: 0.55;
+  background: radial-gradient(circle, rgba(216, 178, 90, 0.28), transparent 70%);
 }
 
 .user-analytics-kpi:hover {
-  transform: translateY(-3px);
-  border-color: #d9def0;
-  box-shadow:
-    0 12px 28px rgba(15, 23, 42, 0.07),
-    0 3px 8px rgba(15, 23, 42, 0.03);
+  transform: translateY(-5px);
+  border-color: var(--gold-2);
+  box-shadow: var(--sh-2);
 }
-
-
-/* =========================================================
-   KPI ICON
-========================================================= */
 
 .user-analytics-kpi-icon {
   position: relative;
-  z-index: 1;
-
-  width: 38px;
-  height: 38px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  margin-bottom: 17px;
-
-  border-radius: 10px;
-
-  background: #eef2ff;
-  color: #4f46e5;
-
-  font-size: 15px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 22px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, var(--night-700), var(--night-950));
+  color: var(--gold-1);
+  font-size: 1.05rem;
+  box-shadow: 0 8px 18px rgba(11, 18, 38, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
-
-
-/* =========================================================
-   KPI VALUE
-========================================================= */
 
 .user-analytics-kpi h3 {
   position: relative;
-  z-index: 1;
-
   margin: 0;
-
-  font-size: 28px;
+  font-family: var(--display);
+  font-size: clamp(2.1rem, 3vw, 2.7rem);
+  font-weight: 600;
   line-height: 1;
-  font-weight: 750;
-
-  color: #0f172a;
+  letter-spacing: -0.03em;
+  color: var(--night-900);
 }
-
-
-/* =========================================================
-   KPI LABEL
-========================================================= */
 
 .user-analytics-kpi p {
   position: relative;
-  z-index: 1;
-
-  margin: 8px 0 0;
-
-  font-size: 12px;
-  font-weight: 600;
-
-  color: #64748b;
+  margin: 10px 0 0;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ink-3);
 }
 
+/* first card is the featured one: the single bold moment */
+.user-analytics-kpi:first-child {
+  background:
+    radial-gradient(300px 200px at 100% 0%, rgba(216, 178, 90, 0.3), transparent 70%),
+    linear-gradient(160deg, var(--night-800), var(--night-950));
+  border-color: rgba(216, 178, 90, 0.35);
+  box-shadow: 0 18px 38px rgba(11, 18, 38, 0.32);
+}
+.user-analytics-kpi:first-child::after { display: none; }
+.user-analytics-kpi:first-child .user-analytics-kpi-icon {
+  background: var(--gold-grad);
+  color: var(--night-950);
+  box-shadow: 0 8px 18px rgba(168, 128, 47, 0.4);
+}
+.user-analytics-kpi:first-child h3 {
+  background: var(--gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.user-analytics-kpi:first-child p { color: rgba(255, 255, 255, 0.7); }
 
 /* =========================================================
-   LOADING
-========================================================= */
-
-.user-analytics-loading {
-  min-height: 100vh;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: #f8fafc;
-
-  font-size: 14px;
-  font-weight: 600;
-  color: #64748b;
-}
-
-
-/* =========================================================
-   ERROR
-========================================================= */
-
-.user-analytics-error {
-  min-height: 100vh;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 30px;
-
-  box-sizing: border-box;
-
-  background: #f8fafc;
-
-  font-size: 14px;
-  font-weight: 600;
-  color: #dc2626;
-
-  text-align: center;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width: 1100px) {
-  .user-analytics-kpi-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-
-@media (max-width: 900px) {
-  .user-analytics-content {
-    padding: 32px 26px 50px;
-  }
-
-  .user-analytics-header h1 {
-    font-size: 27px;
-  }
-}
-
-
-@media (max-width: 600px) {
-  .user-analytics-content {
-    padding: 26px 18px 40px;
-  }
-
-  .user-analytics-header {
-    margin-bottom: 24px;
-  }
-
-  .user-analytics-header h1 {
-    font-size: 24px;
-  }
-
-  .user-analytics-header > p:last-child {
-    font-size: 13px;
-  }
-
-  .user-analytics-kpi-grid {
-    grid-template-columns: 1fr;
-    gap: 13px;
-  }
-
-  .user-analytics-kpi {
-    min-height: 125px;
-    padding: 17px;
-  }
-
-  .user-analytics-kpi-icon {
-    width: 35px;
-    height: 35px;
-    margin-bottom: 14px;
-    font-size: 14px;
-  }
-
-  .user-analytics-kpi h3 {
-    font-size: 25px;
-  }
-}
-
-/* =========================================================
-   BOOKING ACTIVITY PANEL
-========================================================= */
+   PANEL
+   ========================================================= */
 
 .user-analytics-panel {
+  position: relative;
   width: 100%;
-  margin-top: 22px;
-  padding: 22px;
-
-  background: #ffffff;
-  border: 1px solid #e7ebf0;
-  border-radius: 15px;
-
-  box-sizing: border-box;
-
-  box-shadow:
-    0 4px 14px rgba(15, 23, 42, 0.03);
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  margin-top: 28px;
+  padding: 34px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-1);
+  overflow: hidden;
+  transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
-
+.user-analytics-panel::before {
+  content: "";
+  position: absolute;
+  left: 34px;
+  top: 0;
+  width: 56px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: var(--gold-grad);
+}
 .user-analytics-panel:hover {
-  border-color: #dce1ea;
-
-  box-shadow:
-    0 10px 26px rgba(15, 23, 42, 0.05);
+  border-color: #d8d2c0;
+  box-shadow: var(--sh-2);
 }
-
-
-/* =========================================================
-   PANEL HEADER
-========================================================= */
 
 .user-analytics-panel-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 28px;
 }
-
 .user-analytics-panel-header h2 {
   margin: 0;
-
-  font-size: 17px;
-  line-height: 1.3;
-  font-weight: 700;
-
-  color: #0f172a;
+  font-family: var(--display);
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--night-900);
 }
-
 .user-analytics-panel-header p {
-  margin: 5px 0 0;
-
-  font-size: 12px;
+  margin: 8px 0 0;
+  font-size: 0.92rem;
   line-height: 1.5;
-
-  color: #64748b;
+  color: var(--ink-3);
 }
-
 
 /* =========================================================
    BOOKING ACTIVITY CHART
-========================================================= */
+   ========================================================= */
 
 .user-booking-activity-chart {
   width: 100%;
-  height: 320px;
+  height: 340px;
 }
 
-
-/* =========================================================
-   RECHART TEXT
-========================================================= */
-
-.user-booking-activity-chart
-.recharts-cartesian-axis-tick-value {
-  font-size: 11px;
-  fill: #94a3b8;
+.user-booking-activity-chart .recharts-cartesian-axis-tick-value {
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--ink-3);
 }
-
-.user-booking-activity-chart
-.recharts-cartesian-axis-line {
-  stroke: #e5e7eb;
+.user-booking-activity-chart .recharts-cartesian-axis-line {
+  stroke: var(--line);
 }
-
-.user-booking-activity-chart
-.recharts-cartesian-grid-horizontal line {
-  stroke: #eef1f5;
+.user-booking-activity-chart .recharts-cartesian-grid-horizontal line {
+  stroke: #eeebe2;
+  stroke-dasharray: 4 6;
 }
-
-.user-booking-activity-chart
-.recharts-cartesian-grid-vertical line {
+.user-booking-activity-chart .recharts-cartesian-grid-vertical line {
   stroke: transparent;
 }
 
+/* tooltip */
+.user-booking-activity-chart .recharts-tooltip-wrapper { outline: none; }
 
-/* =========================================================
-   TOOLTIP
-========================================================= */
-
-.user-booking-activity-chart
-.recharts-tooltip-wrapper {
-  outline: none;
+.user-booking-activity-chart .recharts-default-tooltip {
+  padding: 12px 16px !important;
+  background: var(--night-900) !important;
+  border: 1px solid rgba(216, 178, 90, 0.4) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 16px 34px rgba(7, 11, 24, 0.35) !important;
 }
-
-.user-booking-activity-chart
-.recharts-default-tooltip {
-  padding: 10px 12px !important;
-
-  background: #ffffff !important;
-
-  border: 1px solid #e5e7eb !important;
-  border-radius: 10px !important;
-
-  box-shadow:
-    0 8px 22px rgba(15, 23, 42, 0.10) !important;
+.user-booking-activity-chart .recharts-tooltip-label {
+  margin-bottom: 6px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
-
-.user-booking-activity-chart
-.recharts-tooltip-label {
-  margin-bottom: 5px !important;
-
-  font-size: 11px !important;
-  font-weight: 600 !important;
-
-  color: #64748b !important;
+.user-booking-activity-chart .recharts-tooltip-item {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: var(--gold-1) !important;
 }
-
 
 /* =========================================================
    EMPTY STATE
-========================================================= */
+   ========================================================= */
 
 .user-analytics-empty {
-  min-height: 230px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  min-height: 260px;
+  padding: 32px 20px;
   text-align: center;
-
-  border: 1px dashed #dfe4eb;
-  border-radius: 12px;
-
-  background: #fafbfc;
+  border: 1.5px dashed #d9d3c1;
+  border-radius: var(--r-md);
+  background: var(--pearl);
 }
-
 .user-analytics-empty h3 {
   margin: 0;
-
-  font-size: 15px;
-  font-weight: 650;
-
-  color: #334155;
+  font-family: var(--display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--night-900);
 }
-
 .user-analytics-empty p {
-  max-width: 360px;
-
-  margin: 7px 0 0;
-
-  font-size: 12px;
-  line-height: 1.5;
-
-  color: #94a3b8;
+  max-width: 380px;
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ink-3);
 }
-
+.user-analytics-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #fff, var(--pearl-2));
+  border: 1px solid var(--line);
+  box-shadow: var(--sh-1);
+  color: var(--gold-3);
+  font-size: 1.1rem;
+}
 
 /* =========================================================
    SERVICE USAGE
-========================================================= */
+   ========================================================= */
 
 .user-service-usage-list {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 24px;
 }
-
-
-/* =========================================================
-   SERVICE USAGE ITEM
-========================================================= */
-
-.user-service-usage-item {
-  width: 100%;
-}
-
-
-/* =========================================================
-   SERVICE USAGE INFO
-========================================================= */
+.user-service-usage-item { width: 100%; }
 
 .user-service-usage-info {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-
-  margin-bottom: 9px;
+  margin-bottom: 12px;
 }
-
 .user-service-usage-name {
   display: flex;
   align-items: center;
-  gap: 10px;
-
+  gap: 14px;
   min-width: 0;
-
-  font-size: 13px;
-  font-weight: 600;
-  color: #334155;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--night-900);
 }
-
 .user-service-usage-name > span:last-child {
   overflow: hidden;
-
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-
-/* =========================================================
-   SERVICE ICON
-========================================================= */
-
 .user-service-usage-icon {
-  width: 32px;
-  height: 32px;
-
   flex-shrink: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 9px;
-
-  background: #f0fdf4;
-  border: 1px solid #dcfce7;
-
-  color: #16a34a;
-
-  font-size: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  background: #fbf3de;
+  border: 1px solid #f0dfae;
+  color: var(--gold-3);
+  font-size: 0.9rem;
 }
-
-
-/* =========================================================
-   BOOKING COUNT
-========================================================= */
 
 .user-service-usage-info strong {
-  min-width: 28px;
-
-  padding: 4px 8px;
-
-  border-radius: 7px;
-
-  background: #f1f5f9;
-
-  color: #334155;
-
+  min-width: 40px;
+  padding: 6px 14px;
+  border-radius: var(--pill);
+  background: var(--night-900);
+  color: var(--gold-1);
   text-align: center;
-
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 0.82rem;
+  font-weight: 800;
 }
-
-
-/* =========================================================
-   PROGRESS BAR
-========================================================= */
 
 .user-service-usage-bar {
   width: 100%;
-  height: 7px;
-
+  height: 10px;
   overflow: hidden;
-
-  border-radius: 999px;
-
-  background: #eef1f5;
+  border-radius: var(--pill);
+  background: var(--pearl-2);
+  box-shadow: inset 0 0 0 1px var(--line);
 }
-
 .user-service-usage-bar-fill {
   height: 100%;
-
-  min-width: 3px;
-
+  min-width: 4px;
   border-radius: inherit;
-
-  background: linear-gradient(
-    90deg,
-    #4f46e5,
-    #6366f1
-  );
-
-  box-shadow:
-    0 2px 7px rgba(79, 70, 229, 0.18);
-
-  transition: width 0.35s ease;
+  background: var(--gold-grad);
+  box-shadow: 0 2px 8px rgba(168, 128, 47, 0.35);
+  transition: width 0.6s var(--ease);
 }
-
 
 /* =========================================================
-   EMPTY STATE ICON
-========================================================= */
-
-.user-analytics-empty-icon {
-  width: 40px;
-  height: 40px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-bottom: 12px;
-
-  border-radius: 10px;
-
-  background: #eef2ff;
-
-  color: #4f46e5;
-
-  font-size: 15px;
-}
-
-
-/* =========================================================
-   SERVICE USAGE RESPONSIVE
-========================================================= */
-
-@media (max-width: 600px) {
-  .user-service-usage-list {
-    gap: 15px;
-  }
-
-  .user-service-usage-info {
-    gap: 10px;
-  }
-
-  .user-service-usage-name {
-    font-size: 12px;
-  }
-
-  .user-service-usage-icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .user-service-usage-bar {
-    height: 6px;
-  }
-}
-
-/* ================================
-   BOOKING TYPE ANALYTICS
-================================ */
+   BOOKING TYPE
+   ========================================================= */
 
 .user-booking-type-list {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 28px;
 }
-
-.user-booking-type-item {
-  width: 100%;
-}
+.user-booking-type-item { width: 100%; }
 
 .user-booking-type-info {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 9px;
+  margin-bottom: 12px;
 }
-
 .user-booking-type-name {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #334155;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--night-900);
 }
 
 .user-booking-type-icon {
-  width: 32px;
-  height: 32px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9px;
-  font-size: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  font-size: 0.9rem;
 }
-
 .user-booking-type-icon.normal {
-  background: #eef2ff;
-  border: 1px solid #e0e7ff;
-  color: #4f46e5;
+  background: linear-gradient(145deg, var(--night-700), var(--night-950));
+  border: 1px solid transparent;
+  color: var(--gold-1);
 }
-
 .user-booking-type-icon.emergency {
-  background: #fff1f2;
-  border: 1px solid #ffe4e6;
-  color: #e11d48;
+  background: var(--ruby-100);
+  border: 1px solid #f5c9c5;
+  color: var(--ruby-600);
 }
 
 .user-booking-type-info strong {
-  min-width: 28px;
-  padding: 4px 8px;
-  border-radius: 7px;
-  background: #f1f5f9;
-  color: #334155;
+  min-width: 40px;
+  padding: 6px 14px;
+  border-radius: var(--pill);
+  background: var(--pearl-2);
+  border: 1px solid var(--line);
+  color: var(--night-900);
   text-align: center;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 0.82rem;
+  font-weight: 800;
 }
 
 .user-booking-type-bar {
   width: 100%;
-  height: 7px;
+  height: 10px;
   overflow: hidden;
-  border-radius: 999px;
-  background: #eef1f5;
+  border-radius: var(--pill);
+  background: var(--pearl-2);
+  box-shadow: inset 0 0 0 1px var(--line);
 }
-
 .user-booking-type-bar-fill {
   height: 100%;
-  min-width: 3px;
+  min-width: 4px;
   border-radius: inherit;
-  transition: width 0.35s ease;
+  transition: width 0.6s var(--ease);
 }
-
 .user-booking-type-bar-fill.normal {
-  background: linear-gradient(90deg, #4f46e5, #6366f1);
-  box-shadow: 0 2px 7px rgba(79, 70, 229, 0.18);
+  background: linear-gradient(90deg, var(--night-900), var(--night-700));
+  box-shadow: 0 2px 8px rgba(11, 18, 38, 0.3);
 }
-
 .user-booking-type-bar-fill.emergency {
-  background: linear-gradient(90deg, #e11d48, #f43f5e);
-  box-shadow: 0 2px 7px rgba(225, 29, 72, 0.18);
+  background: var(--ruby-grad);
+  box-shadow: 0 2px 8px rgba(196, 48, 43, 0.35);
 }
 
 .user-booking-type-percentage {
   display: block;
-  margin-top: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #94a3b8;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-3);
   text-align: right;
 }
 
-@media (max-width: 600px) {
-  .user-booking-type-list {
-    gap: 18px;
-  }
+/* =========================================================
+   LOADING + ERROR
+   ========================================================= */
 
-  .user-booking-type-info {
-    gap: 10px;
-  }
+.user-analytics-loading,
+.user-analytics-error {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 30px;
+  background: var(--pearl);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+.user-analytics-loading { color: var(--ink-2); }
+.user-analytics-loading::before {
+  content: "";
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--line);
+  border-top-color: var(--gold-2);
+  border-radius: 50%;
+  animation: ua-spin 0.8s linear infinite;
+}
+.user-analytics-error { color: var(--ruby-600); }
 
-  .user-booking-type-name {
-    font-size: 12px;
-  }
-
-  .user-booking-type-icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .user-booking-type-bar {
-    height: 6px;
-  }
+@keyframes ua-spin { to { transform: rotate(360deg); } }
+@keyframes ua-rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
 }
 
 /* =========================================================
    RESPONSIVE
-========================================================= */
+   ========================================================= */
 
-@media (max-width: 700px) {
-  .user-analytics-panel {
-    padding: 18px;
-    margin-top: 18px;
-  }
-
-  .user-analytics-panel-header h2 {
-    font-size: 16px;
-  }
-
-  .user-booking-activity-chart {
-    height: 280px;
-  }
+@media (max-width: 1100px) {
+  .user-analytics-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+@media (max-width: 900px) {
+  .user-analytics-content { padding: 40px 26px 60px; }
+}
+
+@media (max-width: 700px) {
+  .user-analytics-panel { padding: 24px 20px; margin-top: 20px; }
+  .user-analytics-panel::before { left: 20px; }
+  .user-analytics-panel-header h2 { font-size: 1.35rem; }
+  .user-booking-activity-chart { height: 290px; }
+}
+
+@media (max-width: 600px) {
+  .user-analytics-content { padding: 30px 18px 48px; }
+  .user-analytics-header { margin-bottom: 30px; }
+  .user-analytics-kpi-grid { grid-template-columns: 1fr; gap: 14px; }
+  .user-analytics-kpi { min-height: 150px; padding: 22px; }
+  .user-service-usage-list { gap: 20px; }
+  .user-booking-type-list { gap: 22px; }
+}
 
 @media (max-width: 500px) {
-  .user-analytics-panel {
-    padding: 15px;
-    border-radius: 13px;
-  }
+  .user-analytics-panel-header { margin-bottom: 20px; }
+  .user-analytics-panel-header p { font-size: 0.84rem; }
+  .user-booking-activity-chart { height: 260px; }
+}
 
-  .user-analytics-panel-header {
-    margin-bottom: 14px;
-  }
-
-  .user-analytics-panel-header p {
-    font-size: 11px;
-  }
-
-  .user-booking-activity-chart {
-    height: 250px;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .user-analytics-page *,
+  .user-analytics-page *::before,
+  .user-analytics-page *::after { animation: none !important; transition: none !important; }
 }

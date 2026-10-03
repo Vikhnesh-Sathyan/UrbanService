@@ -9,84 +9,90 @@ import {
 
 import {
   getMyUserOverview,
-  getMyUserBookingActivity,
+  getMyUserBookingStatus,
   getMyUserServiceUsage,
   getMyUserBookingType,
 } from "../../../Services/userAnalyticsService";
 
 import BookingActivityChart from "./BookingActivityChart";
-
 import ServiceUsage from "./ServiceUsage";
-
 import BookingTypeChart from "./BookingTypeChart";
 
 import UserNavbar from "../../Dashboard/User/UserNavbar";
 
 import "../../../styles/UserAnalytics.css";
 
-
 const UserAnalytics = () => {
   const [analytics, setAnalytics] = useState(null);
-  const [bookingActivity, setBookingActivity] = useState([]);
+  const [bookingStatus, setBookingStatus] = useState([]);
   const [serviceUsage, setServiceUsage] = useState([]);
   const [bookingType, setBookingType] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-// =====================================================
-// LOAD USER ANALYTICS
-// =====================================================
+  // =====================================================
+  // LOAD USER ANALYTICS
+  // =====================================================
 
-useEffect(() => {
-  const loadAnalytics = async () => {
-    try {
-      setLoading(true);
-      setError("");
+  useEffect(() => {
+    const loadAnalytics = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-      const [
-        overviewResponse,
-        activityResponse,
-        serviceUsageResponse,
-        bookingTypeResponse,
-      ] = await Promise.all([
-        getMyUserOverview(),
-        getMyUserBookingActivity(),
-        getMyUserServiceUsage(),
-        getMyUserBookingType(),
-      ]);
+        const [
+          overviewResponse,
+          bookingStatusResponse,
+          serviceUsageResponse,
+          bookingTypeResponse,
+        ] = await Promise.all([
+          getMyUserOverview(),
+          getMyUserBookingStatus(),
+          getMyUserServiceUsage(),
+          getMyUserBookingType(),
+        ]);
 
-      if (overviewResponse.success) {
-        setAnalytics(overviewResponse.data);
+        if (overviewResponse.success) {
+          setAnalytics(overviewResponse.data);
+        }
+
+        if (bookingStatusResponse.success) {
+          setBookingStatus(
+            bookingStatusResponse.data
+          );
+        }
+
+        if (serviceUsageResponse.success) {
+          setServiceUsage(
+            serviceUsageResponse.data
+          );
+        }
+
+        if (bookingTypeResponse.success) {
+          setBookingType(
+            bookingTypeResponse.data
+          );
+        }
+
+      } catch (error) {
+        console.error(
+          "User analytics error:",
+          error
+        );
+
+        setError(
+          error.response?.data?.message ||
+            "Failed to load user analytics."
+        );
+
+      } finally {
+        setLoading(false);
       }
+    };
 
-      if (activityResponse.success) {
-        setBookingActivity(activityResponse.data);
-      }
-
-      if (serviceUsageResponse.success) {
-        setServiceUsage(serviceUsageResponse.data);
-      }
-
-      if (bookingTypeResponse.success) {
-        setBookingType(bookingTypeResponse.data);
-      }
-    } catch (error) {
-      console.error(
-        "User analytics error:",
-        error
-      );
-
-      setError(
-        error.response?.data?.message ||
-          "Failed to load user analytics."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  loadAnalytics();
-}, []);
+    loadAnalytics();
+  }, []);
 
 
   // =====================================================
@@ -222,21 +228,37 @@ useEffect(() => {
 
         </div>
 
-          {/* =================================================
-            BOOKING ACTIVITY
+
+        {/* =================================================
+            BOOKING STATUS
         ================================================= */}
 
-        <BookingActivityChart data={bookingActivity} />
+        <BookingActivityChart
+          data={bookingStatus}
+        />
 
-        <ServiceUsage data={serviceUsage} />
 
-        <BookingTypeChart data={bookingType} />
-        
+        {/* =================================================
+            SERVICE USAGE
+        ================================================= */}
+
+        <ServiceUsage
+          data={serviceUsage}
+        />
+
+
+        {/* =================================================
+            BOOKING TYPE
+        ================================================= */}
+
+        <BookingTypeChart
+          data={bookingType}
+        />
+
       </main>
 
     </div>
   );
 };
-
 
 export default UserAnalytics;
