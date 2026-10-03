@@ -29,6 +29,7 @@ const {handleStripeWebhook,} = require("./Controllers/StripeWebhookController");
 const materialPreparationRoutes = require("./Routes/materialPreparationRoutes");
 const serviceFollowUpRoutes = require("./Routes/serviceFollowUpRoutes");
 const startServiceFollowUpScheduler = require("./Utils/serviceFollowUpScheduler");
+const mlRoutes = require("./Routes/mlRoutes");
 
 const app = express();
 
@@ -76,6 +77,13 @@ app.use("/api/user-analytics", userAnalyticsRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/material-preparation", materialPreparationRoutes);
 app.use( "/api/service-follow-ups",serviceFollowUpRoutes);
+
+// =====================================================
+// SMART SERVICE ASSISTANT ML API
+// React → Node → Python
+// =====================================================
+
+app.use("/api/ml", mlRoutes);
 
 
 

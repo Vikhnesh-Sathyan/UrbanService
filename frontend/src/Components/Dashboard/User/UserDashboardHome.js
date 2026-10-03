@@ -216,135 +216,170 @@ const UserDashboardHome = () => {
       </div>
 
 
-      {/* ==========================================
-          QUICK ACTIONS
-      ========================================== */}
+{/* ==========================================
+    QUICK ACTIONS
+========================================== */}
 
-      <div className="user-dashboard-section">
+<div className="user-dashboard-section">
 
-        <div className="user-section-heading">
+  <div className="user-section-heading">
 
-          <div>
+    <div>
 
-            <span>
-              QUICK ACTIONS
-            </span>
+      <span>
+        QUICK ACTIONS
+      </span>
 
-            <h3>
-              What would you like to do?
-            </h3>
+      <h3>
+        What would you like to do?
+      </h3>
 
-          </div>
+    </div>
 
-        </div>
-
-
-        <div className="user-action-grid">
-
-          {/* BROWSE SERVICES */}
-
-          <button
-            type="button"
-            className="user-action-card"
-            onClick={() =>
-              navigate("/user/services")
-            }
-          >
-
-            <div className="user-action-icon">
-              ◈
-            </div>
-
-            <div className="user-action-content">
-
-              <h4>
-                Browse Services
-              </h4>
-
-              <p>
-                Discover trusted professionals
-                near you.
-              </p>
-
-            </div>
-
-            <span className="user-action-arrow">
-              →
-            </span>
-
-          </button>
+  </div>
 
 
-          {/* MY BOOKINGS */}
+  <div className="user-action-grid">
 
-          <button
-            type="button"
-            className="user-action-card"
-            onClick={() =>
-              navigate("/user/bookings")
-            }
-          >
+    {/* BROWSE SERVICES */}
 
-            <div className="user-action-icon">
-              ▣
-            </div>
+    <button
+      type="button"
+      className="user-action-card"
+      onClick={() =>
+        navigate("/user/services")
+      }
+    >
 
-            <div className="user-action-content">
+      <div className="user-action-icon">
+        ◈
+      </div>
 
-              <h4>
-                My Bookings
-              </h4>
+      <div className="user-action-content">
 
-              <p>
-                View and manage your
-                service bookings.
-              </p>
+        <h4>
+          Browse Services
+        </h4>
 
-            </div>
-
-            <span className="user-action-arrow">
-              →
-            </span>
-
-          </button>
-
-
-          {/* PROFILE */}
-
-          <button
-            type="button"
-            className="user-action-card"
-            onClick={() =>
-              navigate("/user/profile")
-            }
-          >
-
-            <div className="user-action-icon">
-              ◉
-            </div>
-
-            <div className="user-action-content">
-
-              <h4>
-                My Profile
-              </h4>
-
-              <p>
-                Manage your account
-                information.
-              </p>
-
-            </div>
-
-            <span className="user-action-arrow">
-              →
-            </span>
-
-          </button>
-
-        </div>
+        <p>
+          Discover trusted professionals
+          near you.
+        </p>
 
       </div>
+
+      <span className="user-action-arrow">
+        →
+      </span>
+
+    </button>
+
+
+    {/* MY BOOKINGS */}
+
+    <button
+      type="button"
+      className="user-action-card"
+      onClick={() =>
+        navigate("/user/bookings")
+      }
+    >
+
+      <div className="user-action-icon">
+        ▣
+      </div>
+
+      <div className="user-action-content">
+
+        <h4>
+          My Bookings
+        </h4>
+
+        <p>
+          View and manage your
+          service bookings.
+        </p>
+
+      </div>
+
+      <span className="user-action-arrow">
+        →
+      </span>
+
+    </button>
+
+
+    {/* SMART SERVICE ASSISTANT */}
+
+    <button
+      type="button"
+      className="user-action-card smart-assistant-action-card"
+      onClick={() =>
+        navigate("/user/smart-assistant")
+      }
+    >
+
+      <div className="user-action-icon">
+        🧠
+      </div>
+
+      <div className="user-action-content">
+
+        <h4>
+          Smart Service Assistant
+        </h4>
+
+        <p>
+          Describe your problem and
+          get a smart service recommendation.
+        </p>
+
+      </div>
+
+      <span className="user-action-arrow">
+        →
+      </span>
+
+    </button>
+
+
+    {/* PROFILE */}
+
+    <button
+      type="button"
+      className="user-action-card"
+      onClick={() =>
+        navigate("/user/profile")
+      }
+    >
+
+      <div className="user-action-icon">
+        ◉
+      </div>
+
+      <div className="user-action-content">
+
+        <h4>
+          My Profile
+        </h4>
+
+        <p>
+          Manage your account
+          information.
+        </p>
+
+      </div>
+
+      <span className="user-action-arrow">
+        →
+      </span>
+
+    </button>
+
+  </div>
+
+</div>
+
 
 
       {/* ==========================================

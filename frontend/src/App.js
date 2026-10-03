@@ -69,6 +69,11 @@ import MaterialPreparation from "./Components/MaterialPreparation/MaterialPrepar
 import UserServicesPage from "./Components/Services/User/UserServicePage/UserServicesPage";
 import UserServiceDetails from "./Components/Services/User/UserServiceDetails";
 import UserBookService from "./Components/Services/User/UserBookService";
+// =====================================================
+// SMART SERVICE ASSISTANT
+// =====================================================
+
+import SmartServiceAssistant from "./Components/Services/User/SmartServiceAssistant";
 
 // User Bookings
 import UserBookings from "./Components/Services/User/UserBookings/UserBookings";
@@ -317,6 +322,19 @@ function App() {
           <Route
             path="/user/services/:serviceId"
             element={<UserServiceDetails />}
+          />
+
+          {/* =====================================================
+            SMART SERVICE ASSISTANT
+          ===================================================== */}
+
+          <Route
+            path="/user/smart-assistant"
+            element={
+            <ProtectedRoute>
+            <SmartServiceAssistant />
+            </ProtectedRoute>
+          }
           />
 
           {/* ---------------- Book Service ---------------- */}
