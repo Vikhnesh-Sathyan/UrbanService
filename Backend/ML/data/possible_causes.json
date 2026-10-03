@@ -1,0 +1,102 @@
+{
+  "AC Repair": {
+    "water leakage": [
+      "Drain blockage",
+      "Dirty filter",
+      "Frozen evaporator coil"
+    ],
+    "weak cooling": [
+      "Dirty filter",
+      "Low refrigerant",
+      "Poor airflow"
+    ],
+    "power issue": [
+      "Power supply problem",
+      "Circuit issue"
+    ],
+    "general": [
+      "Dirty filter",
+      "Poor airflow",
+      "Maintenance-related issue"
+    ]
+  },
+
+  "TV Repair": {
+    "no display": [
+      "Display panel issue",
+      "Backlight problem",
+      "Internal connection issue"
+    ],
+    "power issue": [
+      "Power supply problem",
+      "Power board issue"
+    ],
+    "audio issue": [
+      "Speaker problem",
+      "Audio circuit issue"
+    ],
+    "general": [
+      "Internal component issue",
+      "Connection problem"
+    ]
+  },
+
+  "Washing Machine Repair": {
+    "water leakage": [
+      "Loose hose connection",
+      "Drain pipe issue",
+      "Door seal problem"
+    ],
+    "drainage problem": [
+      "Blocked drain filter",
+      "Drain hose blockage",
+      "Drain pump issue"
+    ],
+    "power issue": [
+      "Power supply problem",
+      "Control board issue"
+    ],
+    "general": [
+      "Internal component issue",
+      "Maintenance-related issue"
+    ]
+  },
+
+  "Sofa Cleaning": {
+    "stain removal": [
+      "Food or beverage stain",
+      "Deep-set stain",
+      "Surface contamination"
+    ],
+    "deep cleaning": [
+      "Accumulated dust",
+      "Embedded dirt",
+      "Long-term buildup"
+    ],
+    "odor removal": [
+      "Moisture buildup",
+      "Embedded odor",
+      "Surface contamination"
+    ],
+    "general": [
+      "Dust accumulation",
+      "Surface dirt",
+      "General maintenance"
+    ]
+  },
+
+  "Hair Cut": {
+    "haircut and styling": [
+      "Hair length adjustment",
+      "Styling requirement"
+    ],
+    "hair cutting": [
+      "Hair length adjustment",
+      "Shape and trimming requirement"
+    ],
+    "general": [
+      "Hair length adjustment",
+      "Styling requirement"
+    ]
+  }
+}

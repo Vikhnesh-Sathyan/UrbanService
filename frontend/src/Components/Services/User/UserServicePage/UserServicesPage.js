@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+
 import axios from "axios";
 import { FaSearch, FaSlidersH, FaArrowLeft } from "react-icons/fa";
 
@@ -14,7 +18,8 @@ const CATEGORY_API =
   "http://localhost:5000/api/categories";
 
 const UserServicesPage = () => {
-  const navigate = useNavigate();
+const navigate = useNavigate();
+const location = useLocation();
 
   // ==========================================
   // MARKETPLACE VIEW
@@ -71,6 +76,8 @@ const UserServicesPage = () => {
   // ==========================================
 
   const [search, setSearch] = useState("");
+  const recommendedService =
+  location.state?.recommendedService || "";
   const [debouncedSearch, setDebouncedSearch] =
     useState("");
 
@@ -275,8 +282,13 @@ const handleFilterCategoryChange = (value) => {
 
     setPage(1);
 
-    setSearch("");
-    setDebouncedSearch("");
+    if (recommendedService) {
+  setSearch(recommendedService);
+  setDebouncedSearch(recommendedService);
+} else {
+  setSearch("");
+  setDebouncedSearch("");
+}
 
     setMinPrice("");
     setMaxPrice("");

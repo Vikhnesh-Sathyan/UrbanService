@@ -4,10 +4,11 @@
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
 import joblib
 import os
-
 import pandas as pd
+import json
 
 
 # =====================================================
@@ -19,10 +20,29 @@ CORS(app)
 
 
 # =====================================================
-# 2. Load trained ML models
+# 2. Get base directory
 # =====================================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+# =====================================================
+# 3. Load possible causes knowledge
+# =====================================================
+
+CAUSES_FILE = os.path.join(
+    BASE_DIR,
+    "data",
+    "possible_causes.json"
+)
+
+with open(CAUSES_FILE, "r", encoding="utf-8") as file:
+    possible_causes = json.load(file)
+
+
+# =====================================================
+# 4. Load trained ML models
+# =====================================================
 
 service_model = joblib.load(
     os.path.join(BASE_DIR, "models", "service_model.pkl")
@@ -38,16 +58,24 @@ duration_model = joblib.load(
 
 
 # =====================================================
-# 3. Prediction API
+# 5. Prediction API
 # =====================================================
 
 @app.post("/predict")
 def predict_service():
 
     try:
+
+        # -------------------------------------------------
+        # Get customer problem
+        # -------------------------------------------------
+
         data = request.get_json()
 
-        problem_description = data.get("problem_description", "").strip()
+        problem_description = data.get(
+            "problem_description",
+            ""
+        ).strip()
 
         if not problem_description:
             return jsonify({
@@ -58,6 +86,7 @@ def predict_service():
 
         # -------------------------------------------------
         # Predict recommended service
+        # ML predicts the service from the problem
         # -------------------------------------------------
 
         predicted_service = service_model.predict(
@@ -66,11 +95,81 @@ def predict_service():
 
 
         # -------------------------------------------------
-        # Find issue and complexity from training data
+        # Detect issue from customer problem
+        # Used for possible causes and cost/time prediction
         # -------------------------------------------------
 
-        # Default values used for the first prediction version
+        problem_lower = problem_description.lower()
+
         issue = "General issue"
+
+
+        # AC / appliance related issues
+        if (
+            "leak" in problem_lower
+            or "water" in problem_lower
+        ):
+            issue = "Water leakage"
+
+        elif (
+            "not cooling" in problem_lower
+            or "cooling slowly" in problem_lower
+            or "cooling properly" in problem_lower
+        ):
+            issue = "Weak cooling"
+
+        elif (
+            "not turning on" in problem_lower
+            or "not starting" in problem_lower
+            or "does not start" in problem_lower
+        ):
+            issue = "Power issue"
+
+
+        # TV related issues
+        elif (
+            "no picture" in problem_lower
+            or "black screen" in problem_lower
+        ):
+            issue = "No display"
+
+        elif "no sound" in problem_lower:
+            issue = "Audio issue"
+
+
+        # Washing machine related issues
+        elif "not draining" in problem_lower:
+            issue = "Drainage problem"
+
+
+        # Sofa cleaning related issues
+        elif "stain" in problem_lower:
+            issue = "Stain removal"
+
+        elif "deep cleaning" in problem_lower:
+            issue = "Deep cleaning"
+
+        elif (
+            "bad smell" in problem_lower
+            or "smell" in problem_lower
+            or "odor" in problem_lower
+        ):
+            issue = "Odor removal"
+
+
+        # Haircut related issues
+        elif (
+            "haircut" in problem_lower
+            or "hair cut" in problem_lower
+        ):
+            issue = "Hair cutting"
+
+
+        # -------------------------------------------------
+        # Complexity
+        # Default value for current prediction version
+        # -------------------------------------------------
+
         complexity = "Medium"
 
 
@@ -80,13 +179,12 @@ def predict_service():
         # were trained with named columns.
         # -------------------------------------------------
 
-
         prediction_input = pd.DataFrame([
             {
-            "problem_description": problem_description,
-            "service_name": predicted_service,
-            "issue": issue,
-            "complexity": complexity
+                "problem_description": problem_description,
+                "service_name": predicted_service,
+                "issue": issue,
+                "complexity": complexity
             }
         ])
 
@@ -110,11 +208,22 @@ def predict_service():
 
 
         # -------------------------------------------------
-        # Create a simple estimate range
+        # Create cost estimate range
         # -------------------------------------------------
 
-        cost_min = max(100, round(predicted_cost * 0.85 / 50) * 50)
-        cost_max = round(predicted_cost * 1.15 / 50) * 50
+        cost_min = max(
+            100,
+            round(predicted_cost * 0.85 / 50) * 50
+        )
+
+        cost_max = round(
+            predicted_cost * 1.15 / 50
+        ) * 50
+
+
+        # -------------------------------------------------
+        # Create duration estimate range
+        # -------------------------------------------------
 
         duration_min = max(
             15,
@@ -127,20 +236,52 @@ def predict_service():
 
 
         # -------------------------------------------------
+        # Get possible causes
+        # Controlled knowledge layer
+        # These are possible causes, not confirmed diagnosis
+        # -------------------------------------------------
+
+        service_causes = possible_causes.get(
+            predicted_service,
+            {}
+        )
+
+        causes = (
+            service_causes.get(issue.lower())
+            or service_causes.get("general")
+            or []
+        )
+
+
+        # -------------------------------------------------
         # Return prediction
         # -------------------------------------------------
 
         return jsonify({
+
             "success": True,
+
             "service": predicted_service,
-            "estimatedCost": f"₹{cost_min} - ₹{cost_max}",
-            "estimatedTime": f"{duration_min} - {duration_max} minutes"
+
+            "possibleCauses": causes,
+
+            "estimatedCost": (
+                f"₹{cost_min} - ₹{cost_max}"
+            ),
+
+            "estimatedTime": (
+                f"{duration_min} - {duration_max} minutes"
+            )
+
         })
 
 
     except Exception as error:
 
-        print("Prediction error:", error)
+        print(
+            "Prediction error:",
+            error
+        )
 
         return jsonify({
             "success": False,
@@ -149,7 +290,7 @@ def predict_service():
 
 
 # =====================================================
-# 4. Health check API
+# 6. Health check API
 # =====================================================
 
 @app.get("/")
@@ -162,7 +303,7 @@ def health_check():
 
 
 # =====================================================
-# 5. Start Flask server
+# 7. Start Flask server
 # =====================================================
 
 if __name__ == "__main__":
