@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 // =====================================================
 // ADD SERVICE
 // =====================================================
-
 const addService = async (req, res) => {
   try {
     const {
@@ -15,9 +14,9 @@ const addService = async (req, res) => {
       subCategory,
       detailedDescription,
       tag,
-      
     } = req.body;
 
+    // Cloudinary returns the uploaded image URL in req.file.path
     const image = req.file
       ? req.file.path
       : "";
@@ -42,17 +41,43 @@ const addService = async (req, res) => {
       message: "Service submitted for approval!",
       service: newService,
     });
-
   } catch (error) {
-  console.error("ADD SERVICE ERROR:", error);
-  console.error("ERROR MESSAGE:", error?.message);
-  console.error("ERROR STACK:", error?.stack);
+    console.error(
+      "ADD SERVICE ERROR:",
+      JSON.stringify(
+        error,
+        Object.getOwnPropertyNames(error),
+        2
+      )
+    );
 
-  return res.status(500).json({
-    success: false,
-    message: error?.message || "Failed to add service",
-  });
-}
+    console.error(
+      "ADD SERVICE MESSAGE:",
+      error?.message
+    );
+
+    console.error(
+      "ADD SERVICE RESPONSE:",
+      JSON.stringify(
+        error?.response?.data || {},
+        null,
+        2
+      )
+    );
+
+    console.error(
+      "ADD SERVICE STACK:",
+      error?.stack
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        error?.message ||
+        error?.response?.data?.message ||
+        "Failed to add service",
+    });
+  }
 };
 
 
