@@ -44,12 +44,15 @@ const addService = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Add service error:", error);
+  console.error("ADD SERVICE ERROR:", error);
+  console.error("ERROR MESSAGE:", error?.message);
+  console.error("ERROR STACK:", error?.stack);
 
-    res.status(500).json({
-      message: "Failed to add service",
-    });
-  }
+  return res.status(500).json({
+    success: false,
+    message: error?.message || "Failed to add service",
+  });
+}
 };
 
 
