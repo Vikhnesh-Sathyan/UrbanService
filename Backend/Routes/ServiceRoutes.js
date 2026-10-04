@@ -1,11 +1,15 @@
 const express = require("express");
 
 const cloudinary = require("../config/cloudinary");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+const {
+  CloudinaryStorage,
+} = require("multer-storage-cloudinary");
 
 const multer = require("multer");
 
 const authMiddleware = require("../Middleware/AuthMiddleware");
+
 const roleMiddleware = require("../Middleware/roleMiddleware");
 
 const {
@@ -27,26 +31,70 @@ const {
 
 const router = express.Router();
 
-// ==================== CLOUDINARY STORAGE ====================
+// =====================================================
+// CLOUDINARY STORAGE
+// =====================================================
 
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "urbanservice/services",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    allowed_formats: [
+      "jpg",
+      "jpeg",
+      "png",
+      "webp",
+    ],
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+});
 
-// ==================== PROVIDER ROUTES ====================
+// =====================================================
+// CLOUDINARY IMAGE UPLOAD ERROR HANDLER
+// =====================================================
+
+const uploadServiceImage = (req, res, next) => {
+  upload.single("image")(req, res, (error) => {
+    if (error) {
+      console.error(
+        "SERVICE IMAGE UPLOAD ERROR:",
+        JSON.stringify(
+          error,
+          Object.getOwnPropertyNames(error),
+          2
+        )
+      );
+
+      console.error(
+        "SERVICE IMAGE ERROR MESSAGE:",
+        error?.message
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          error?.message ||
+          "Service image upload failed",
+      });
+    }
+
+    next();
+  });
+};
+
+// =====================================================
+// PROVIDER ROUTES
+// =====================================================
 
 // Provider can add a service
 router.post(
   "/add",
   authMiddleware,
   roleMiddleware("provider"),
-  upload.single("image"),
+  uploadServiceImage,
   addService
 );
 
@@ -63,7 +111,7 @@ router.put(
   "/:id",
   authMiddleware,
   roleMiddleware("provider", "admin"),
-  upload.single("image"),
+  uploadServiceImage,
   updateService
 );
 
@@ -82,7 +130,9 @@ router.patch(
   resubmitService
 );
 
-// ==================== ADMIN ROUTES ====================
+// =====================================================
+// ADMIN ROUTES
+// =====================================================
 
 // Admin can view pending services
 router.get(
@@ -124,18 +174,32 @@ router.patch(
   updateSuggestedMaterials
 );
 
-// ==================== PUBLIC ROUTES ====================
+// =====================================================
+// PUBLIC ROUTES
+// =====================================================
 
 // Anyone can view approved services
-router.get("/", getServices);
+router.get(
+  "/",
+  getServices
+);
 
 // Anyone can view service categories
-router.get("/categories", getServiceCategories);
+router.get(
+  "/categories",
+  getServiceCategories
+);
 
 // Anyone can view service sub-categories
-router.get("/subcategories",getServiceSubCategories);
+router.get(
+  "/subcategories",
+  getServiceSubCategories
+);
 
 // Anyone can view one service
-router.get("/:id", getServiceById);
+router.get(
+  "/:id",
+  getServiceById
+);
 
 module.exports = router;
