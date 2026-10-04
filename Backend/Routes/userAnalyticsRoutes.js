@@ -8,7 +8,7 @@ const {
   getMyUserBookingType,
 } = require("../Controllers/UserAnalyticsController");
 
-const authMiddleware = require("../Middleware/authMiddleware");
+const authMiddleware = require("../Middleware/AuthMiddleware");
 const roleMiddleware = require("../Middleware/roleMiddleware");
 
 router.get(
