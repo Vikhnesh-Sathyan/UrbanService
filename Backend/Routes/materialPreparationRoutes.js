@@ -8,7 +8,7 @@ const {
   updateMaterialItem,
 } = require("../Controllers/MaterialPreparationController");
 
-const authMiddleware = require("../Middleware/authMiddleware");
+const authMiddleware = require("../Middleware/AuthMiddleware");
 const roleMiddleware = require("../Middleware/roleMiddleware");
 
 // =====================================================

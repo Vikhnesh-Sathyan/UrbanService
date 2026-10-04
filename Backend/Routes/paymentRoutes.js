@@ -9,7 +9,7 @@ const {
   getPaymentReceipt,
 } = require("../Controllers/PaymentController");
 
-const authMiddleware = require("../Middleware/authMiddleware");
+const authMiddleware = require("../Middleware/AuthMiddleware");
 const roleMiddleware = require("../Middleware/roleMiddleware");
 
 const router = express.Router();
