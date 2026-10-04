@@ -10,7 +10,7 @@ const {
   getMyComplaints
 } = require("../Controllers/ComplaintController");
 
-const authMiddleware = require("../Middleware/authMiddleware");
+const authMiddleware = require("../Middleware/AuthMiddleware");
 const roleMiddleware = require("../Middleware/roleMiddleware");
 
 // =====================================================
