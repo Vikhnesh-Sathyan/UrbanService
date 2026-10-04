@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
+const fs = require("fs");
 const http = require("http");
 const { Server } = require("socket.io");
 
@@ -32,6 +33,12 @@ const startServiceFollowUpScheduler = require("./Utils/serviceFollowUpScheduler"
 const mlRoutes = require("./Routes/mlRoutes");
 
 const app = express();
+
+const uploadsPath = path.join(__dirname, "uploads");
+
+if (!fs.existsSync(uploadsPath)) {
+  fs.mkdirSync(uploadsPath, { recursive: true });
+}
 
 app.use(cors());
 
