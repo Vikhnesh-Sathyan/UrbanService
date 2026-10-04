@@ -4,6 +4,10 @@ A **MERN Stack hyperlocal service marketplace** built during my internship in 20
 
 ---
 
+## 🚀 Live Demo
+
+👉 **[urban-service-eta.vercel.app](https://urban-service-eta.vercel.app/)**
+
 ## 🚀 Features
 
 ### 🔐 Authentication & Role-Based Access
