@@ -10,7 +10,7 @@ const {
   getMyEmergencyAnalytics,
 } = require("../Controllers/ProviderAnalyticsController");
 
-const authMiddleware = require("../Middleware/authMiddleware");
+const authMiddleware = require("../Middleware/AuthMiddleware");
 const roleMiddleware = require("../Middleware/roleMiddleware");
 
 // =====================================================
