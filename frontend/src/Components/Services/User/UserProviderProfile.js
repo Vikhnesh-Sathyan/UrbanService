@@ -31,7 +31,7 @@ const UserProviderProfile = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `http://localhost:5000/api/users/providers/${providerId}`,
+        `https://urbanservice-backend-x1op.onrender.com/api/users/providers/${providerId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

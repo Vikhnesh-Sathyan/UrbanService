@@ -28,7 +28,7 @@ const AdminHelpRequests = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        "http://localhost:5000/api/help",
+        "https://urbanservice-backend-x1op.onrender.com/api/help",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -106,7 +106,7 @@ const AdminHelpRequests = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.patch(
-        `http://localhost:5000/api/help/${selectedRequest._id}/respond`,
+        `https://urbanservice-backend-x1op.onrender.com/api/help/${selectedRequest._id}/respond`,
         {
           adminResponse: adminResponse.trim(),
         },
@@ -157,7 +157,7 @@ const AdminHelpRequests = () => {
       const token = localStorage.getItem("token");
 
      await axios.patch(
-  `http://localhost:5000/api/users/providers/${providerId}/unblock`,
+ `https://urbanservice-backend-x1op.onrender.com/api/users/providers/${providerId}/unblock`,
         {},
         {
           headers: {

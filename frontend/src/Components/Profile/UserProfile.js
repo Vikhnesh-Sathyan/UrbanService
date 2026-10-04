@@ -52,7 +52,7 @@ const UserProfile = () => {
       }
 
       const response = await axios.get(
-        "http://localhost:5000/api/users/profile",
+        "https://urbanservice-backend-x1op.onrender.com/api/users/profile",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -225,7 +225,7 @@ const UserProfile = () => {
 
       const response = await axios.put(
 
-        "http://localhost:5000/api/users/profile",
+        "https://urbanservice-backend-x1op.onrender.com/api/users/profile",
 
         {
           name: profile.name,

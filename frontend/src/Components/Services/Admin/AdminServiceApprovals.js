@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const API = "http://localhost:5000/api/services";
+const API = "https://urbanservice-backend-x1op.onrender.com/api/services";
 
 const AdminServiceApprovals = () => {
   // ========================================
@@ -482,7 +482,7 @@ const handleSaveSuggestedMaterials = async () => {
               {service.image ? (
 
                 <img
-                  src={`http://localhost:5000/uploads/${service.image}`}
+                  src={`https://urbanservice-backend-x1op.onrender.com/uploads/${service.image}`}
                   alt={service.name}
                   className="admin-service-image"
                 />

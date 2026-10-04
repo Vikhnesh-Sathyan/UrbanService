@@ -16,7 +16,7 @@ const AdminUserDetails = () => {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/users/${userId}`,
+        `https://urbanservice-backend-x1op.onrender.com/api/users/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,7 +43,7 @@ const AdminUserDetails = () => {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-      `http://localhost:5000/api/bookings/admin/user/${userId}`,
+      `https://urbanservice-backend-x1op.onrender.com/api/bookings/admin/user/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -36,7 +36,7 @@ const fetchProvider = async () => {
     const token = localStorage.getItem("token");
 
     const response = await axios.get(
-      `http://localhost:5000/api/users/providers/${providerId}`,
+      `https://urbanservice-backend-x1op.onrender.com/api/users/providers/${providerId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -82,7 +82,7 @@ const handleBlockProvider = async () => {
     const token = localStorage.getItem("token");
 
     const response = await axios.patch(
-      `http://localhost:5000/api/users/providers/${providerId}/block`,
+      `https://urbanservice-backend-x1op.onrender.com/api/users/providers/${providerId}/block`,
       {},
       {
         headers: {
@@ -124,7 +124,7 @@ const handleUnblockProvider = async () => {
     const token = localStorage.getItem("token");
 
     const response = await axios.patch(
-      `http://localhost:5000/api/users/providers/${providerId}/unblock`,
+      `https://urbanservice-backend-x1op.onrender.com/api/users/providers/${providerId}/unblock`,
       {},
       {
         headers: {
