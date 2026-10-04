@@ -19,7 +19,7 @@ const addService = async (req, res) => {
     } = req.body;
 
     const image = req.file
-      ? req.file.filename
+      ? req.file.path
       : "";
 
     const newService = new Service({
@@ -1079,11 +1079,10 @@ const updateService = async (
     };
 
 
-    if (req.file) {
-
-      updateFields.image =
-        req.file.filename;
-    }
+  if (req.file) {
+    
+    updateFields.image = req.file.path;
+  }
 
 
     const updatedService =

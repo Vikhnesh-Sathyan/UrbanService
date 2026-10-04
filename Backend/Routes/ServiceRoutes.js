@@ -1,6 +1,9 @@
 const express = require("express");
+
+const cloudinary = require("../config/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
 const multer = require("multer");
-const path = require("path");
 
 const authMiddleware = require("../Middleware/AuthMiddleware");
 const roleMiddleware = require("../Middleware/roleMiddleware");
@@ -24,15 +27,13 @@ const {
 
 const router = express.Router();
 
-// ==================== MULTER CONFIGURATION ====================
+// ==================== CLOUDINARY STORAGE ====================
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "urbanservice/services",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
 });
 

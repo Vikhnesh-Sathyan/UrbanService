@@ -366,7 +366,11 @@ const UserBookService = () => {
 
             {service.image ? (
               <img
-                src={`https://urbanservice-backend-x1op.onrender.com/uploads/${service.image}`}
+                src={
+  service.image?.startsWith("http")
+    ? service.image
+    : `https://urbanservice-backend-x1op.onrender.com/uploads/${service.image}`
+}
                 alt={service.name}
               />
             ) : (
