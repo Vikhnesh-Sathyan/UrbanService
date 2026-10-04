@@ -16,7 +16,7 @@ function Register() {
     e.preventDefault();
 
     axios
-      .post("http://localhost:5000/api/auth/register", {
+      .post(.post("https://urbanservice-backend-x1op.onrender.com/api/auth/register", {
         name,
         email,
         password,

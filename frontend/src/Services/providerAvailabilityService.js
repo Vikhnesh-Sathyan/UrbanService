@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/api/auth";
-
+const API = "https://urbanservice-backend-x1op.onrender.com/api/auth";
 
 // ==========================================
 // AUTH CONFIG
@@ -17,15 +16,11 @@ const getAuthConfig = () => {
   };
 };
 
-
 // ==========================================
 // UPDATE AVAILABILITY
 // ==========================================
 
-export const updateAvailability = async (
-  availabilityData
-) => {
-
+export const updateAvailability = async (availabilityData) => {
   const response = await axios.put(
     `${API}/availability`,
     availabilityData,
