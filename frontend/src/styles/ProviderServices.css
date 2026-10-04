@@ -1,18 +1,53 @@
 /* =====================================================
-   PROVIDER SERVICES PAGE
+   PROVIDER SERVICES PAGE — LAGOON THEME (v2)
+   Deep lagoon teal + marigold on sea-glass
+   Layout: header band, stacked horizontal service cards,
+   status shown as a coloured edge on each card
 ===================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap");
+
+:root {
+  --lagoon-950: #062a2e;
+  --lagoon-900: #0a3b40;
+  --lagoon-700: #11585e;
+  --lagoon-500: #1d8a8f;
+  --lagoon-100: #d9eceb;
+
+  --marigold-500: #f2a900;
+  --marigold-600: #d89400;
+  --marigold-100: #fff1cc;
+
+  --glass: #edf3f2;
+  --surface: #ffffff;
+  --line: #d6e2e1;
+  --ink: #0f2427;
+  --ink-soft: #587174;
+
+  --green: #12805c;
+  --blue: #2563b8;
+  --rose: #c0324a;
+
+  --radius-lg: 18px;
+  --radius-md: 10px;
+
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", Arial, sans-serif;
+  --font-body: "Figtree", "Segoe UI", Arial, sans-serif;
+}
 
 .provider-services-page {
   min-height: 100vh;
-  padding: 40px;
-  background: #f6f8fc;
-  font-family: Arial, sans-serif;
+  padding: 36px 48px 64px;
+  background: var(--glass);
+  font-family: var(--font-body);
+  color: var(--ink);
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 
 
 /* =====================================================
-   PAGE HEADER
+   PAGE HEADER — dark band
 ===================================================== */
 
 .services-page-header {
@@ -20,20 +55,32 @@
   align-items: center;
   justify-content: space-between;
   gap: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 36px;
+  padding: 38px 44px;
+  border-radius: 24px;
+  background:
+    radial-gradient(420px 220px at 100% 0%, rgba(242, 169, 0, 0.28), transparent 70%),
+    linear-gradient(135deg, var(--lagoon-900), var(--lagoon-950));
+  color: #fff;
+  box-shadow: 0 24px 50px -28px rgba(6, 42, 46, 0.8);
 }
 
 .services-page-header h1 {
   margin: 0 0 8px;
-  font-size: 34px;
+  font-family: var(--font-display);
+  font-size: 40px;
   font-weight: 700;
-  color: #111827;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #fff;
 }
 
 .services-page-header p {
   margin: 0;
-  color: #6b7280;
+  color: #a9c9ca;
   font-size: 15px;
+  line-height: 1.6;
+  max-width: 54ch;
 }
 
 
@@ -45,55 +92,78 @@
 .btn-secondary,
 .btn-success,
 .btn-danger {
-  border: none;
-  border-radius: 10px;
-  padding: 11px 18px;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 11px 20px;
+  font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+    transform 0.18s ease;
 }
 
 .btn-primary {
-  background: #111827;
-  color: white;
+  background: var(--lagoon-900);
+  color: #fff;
 }
 
 .btn-primary:hover {
-  background: #000;
+  background: var(--lagoon-700);
+}
+
+/* header button stands out on the dark band */
+.services-page-header .btn-primary {
+  background: var(--marigold-500);
+  color: var(--lagoon-950);
+  padding: 13px 24px;
+}
+
+.services-page-header .btn-primary:hover {
+  background: #ffbc1f;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background: #e5e7eb;
-  color: #374151;
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--lagoon-900);
 }
 
 .btn-secondary:hover {
-  background: #d1d5db;
+  border-color: var(--lagoon-500);
+  background: var(--lagoon-100);
 }
 
 .btn-success {
-  background: #16a34a;
-  color: white;
+  background: var(--green);
+  color: #fff;
 }
 
 .btn-success:hover {
-  background: #15803d;
+  background: #0d684a;
 }
 
 .btn-danger {
-  background: #fee2e2;
-  color: #dc2626;
+  background: transparent;
+  border-color: #f0c3cb;
+  color: var(--rose);
 }
 
 .btn-danger:hover {
-  background: #fecaca;
+  background: #fdeef0;
+  border-color: var(--rose);
 }
 
 button:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--marigold-500);
+  outline-offset: 2px;
 }
 
 
@@ -103,15 +173,17 @@ button:disabled {
 
 .alert {
   padding: 14px 18px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   margin-bottom: 25px;
   font-size: 14px;
+  line-height: 1.5;
 }
 
 .alert-danger {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #b91c1c;
+  background: #fdeef0;
+  border: 1px solid #f0c3cb;
+  border-left: 5px solid var(--rose);
+  color: #8e1f35;
 }
 
 
@@ -120,38 +192,46 @@ button:disabled {
 ===================================================== */
 
 .service-form-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 28px;
-  margin-bottom: 35px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 34px;
+  margin-bottom: 36px;
+  box-shadow: 0 20px 44px -28px rgba(6, 42, 46, 0.45);
 }
 
 .form-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 26px;
 }
 
 .form-header h2 {
   margin: 0;
-  font-size: 22px;
-  color: #111827;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--lagoon-900);
 }
 
 .btn-close {
   border: none;
-  background: transparent;
-  font-size: 28px;
-  color: #6b7280;
+  background: var(--glass);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 24px;
+  color: var(--ink-soft);
   cursor: pointer;
   line-height: 1;
+  transition: background 0.18s ease, color 0.18s ease;
 }
 
 .btn-close:hover {
-  color: #111827;
+  background: var(--lagoon-900);
+  color: #fff;
 }
 
 
@@ -162,7 +242,7 @@ button:disabled {
 .service-form-card form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
 }
 
 .form-group {
@@ -173,8 +253,8 @@ button:disabled {
 
 .form-group label {
   font-size: 14px;
-  font-weight: 600;
-  color: #374151;
+  font-weight: 700;
+  color: var(--lagoon-900);
 }
 
 .form-group input,
@@ -182,63 +262,90 @@ button:disabled {
 .form-group select {
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-md);
   padding: 12px 14px;
   font-size: 14px;
   font-family: inherit;
-  background: white;
-  color: #111827;
+  background: #f8fbfb;
+  color: var(--ink);
   outline: none;
-  transition: 0.2s ease;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #94aaac;
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: #111827;
-  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+  background: #fff;
+  border-color: var(--lagoon-500);
+  box-shadow: 0 0 0 4px rgba(29, 138, 143, 0.16);
 }
 
 .form-group textarea {
   resize: vertical;
+  line-height: 1.6;
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 5px;
+  margin-top: 6px;
 }
 
 
 /* =====================================================
-   SERVICES LIST
+   SERVICES LIST — one horizontal card per row
 ===================================================== */
 
 .services-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
+  grid-template-columns: 1fr;
+  gap: 20px;
 }
 
 
 /* =====================================================
-   SERVICE CARD
+   SERVICE CARD — image left, details right,
+   coloured edge reflects status
 ===================================================== */
 
 .provider-service-card {
+  --edge: var(--line);
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
   overflow: hidden;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
-  transition: 0.25s ease;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--edge);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 2px rgba(6, 42, 46, 0.04);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.provider-service-card:has(.status-approved) {
+  --edge: var(--green);
+}
+
+.provider-service-card:has(.status-pending) {
+  --edge: var(--marigold-500);
+}
+
+.provider-service-card:has(.status-changes) {
+  --edge: var(--blue);
+}
+
+.provider-service-card:has(.status-rejected) {
+  --edge: var(--rose);
 }
 
 .provider-service-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.09);
+  box-shadow: 0 22px 44px -26px rgba(6, 42, 46, 0.55);
 }
 
 
@@ -249,9 +356,10 @@ button:disabled {
 .service-image {
   display: block;
   width: 100%;
-  height: 210px;
+  height: 100%;
+  min-height: 240px;
   object-fit: cover;
-  background: #f3f4f6;
+  background: linear-gradient(135deg, var(--lagoon-100), var(--marigold-100));
 }
 
 
@@ -260,7 +368,8 @@ button:disabled {
 ===================================================== */
 
 .service-card-content {
-  padding: 22px;
+  padding: 26px 30px;
+  min-width: 0;
 }
 
 .service-card-top {
@@ -268,33 +377,49 @@ button:disabled {
   align-items: flex-start;
   justify-content: space-between;
   gap: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .service-card-top h2 {
-  margin: 0 0 5px;
-  font-size: 21px;
-  color: #111827;
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--lagoon-900);
 }
 
 .service-category {
   margin: 0;
-  font-size: 13px;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--lagoon-100);
+  font-size: 12.5px;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--lagoon-700);
 }
 
 .service-card-content > p {
-  color: #6b7280;
-  font-size: 14px;
-  line-height: 1.6;
-  margin: 15px 0;
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 12px 0;
+  max-width: 64ch;
 }
 
 .service-card-content h3 {
-  margin: 0 0 18px;
-  font-size: 22px;
-  color: #111827;
+  display: inline-block;
+  margin: 0 0 16px;
+  padding-bottom: 4px;
+  border-bottom: 3px solid var(--marigold-500);
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--lagoon-950);
+  font-variant-numeric: tabular-nums;
 }
 
 
@@ -305,37 +430,46 @@ button:disabled {
 .service-status {
   display: inline-flex;
   align-items: center;
-  padding: 6px 11px;
-  border-radius: 999px;
-  font-size: 12px;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
   font-weight: 700;
   text-transform: capitalize;
   white-space: nowrap;
 }
 
+.service-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
 .status-approved {
-  background: #dcfce7;
-  color: #15803d;
+  background: #dcf2ea;
+  color: #0d6b4b;
 }
 
 .status-pending {
-  background: #fef3c7;
-  color: #b45309;
+  background: var(--marigold-100);
+  color: #8a5d00;
 }
 
 .status-changes {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: #dfeafa;
+  color: #1d4f98;
 }
 
 .status-rejected {
-  background: #fee2e2;
-  color: #b91c1c;
+  background: #fbe2e7;
+  color: #a02640;
 }
 
 .status-default {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: #e8eeee;
+  color: #4f6366;
 }
 
 
@@ -345,31 +479,31 @@ button:disabled {
 
 .admin-feedback {
   padding: 14px 16px;
-  border-radius: 10px;
-  margin: 15px 0;
-  font-size: 13px;
+  border-radius: var(--radius-md);
+  margin: 14px 0;
+  font-size: 13.5px;
 }
 
 .admin-feedback strong {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .admin-feedback p {
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .changes-feedback {
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  color: #1e40af;
+  background: #eaf1fb;
+  border: 1px solid #c5d8f2;
+  color: #1d4f98;
 }
 
 .rejection-feedback {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
+  background: #fdeef0;
+  border: 1px solid #f0c3cb;
+  color: #8e1f35;
 }
 
 
@@ -379,13 +513,13 @@ button:disabled {
 
 .service-info {
   padding: 12px 14px;
-  margin: 15px 0;
-  border-radius: 10px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  color: #4b5563;
+  margin: 14px 0;
+  border-radius: var(--radius-md);
+  background: var(--glass);
+  border: 1px dashed #b7cccb;
+  color: var(--lagoon-700);
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 
@@ -397,7 +531,7 @@ button:disabled {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding-top: 5px;
+  padding-top: 4px;
 }
 
 
@@ -413,22 +547,26 @@ button:disabled {
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: white;
-  border: 1px dashed #d1d5db;
-  border-radius: 18px;
+  background: var(--surface);
+  border: 2px dashed #bcd0cf;
+  border-radius: var(--radius-lg);
   padding: 40px;
 }
 
 .empty-state h2 {
   margin: 0 0 10px;
-  color: #111827;
-  font-size: 24px;
+  font-family: var(--font-display);
+  color: var(--lagoon-900);
+  font-size: 28px;
+  font-weight: 700;
 }
 
 .empty-state p {
-  margin: 0 0 20px;
-  color: #6b7280;
-  font-size: 14px;
+  margin: 0 0 22px;
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  max-width: 44ch;
+  line-height: 1.6;
 }
 
 
@@ -437,7 +575,34 @@ button:disabled {
 ===================================================== */
 
 .provider-services-page > p {
-  color: #6b7280;
+  color: var(--ink-soft);
+}
+
+
+/* =====================================================
+   REJECTED SERVICE MESSAGE
+===================================================== */
+
+.service-rejected-message {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: #fdeef0;
+  border: 1px solid #f0c3cb;
+  border-radius: var(--radius-md);
+  color: #8e1f35;
+}
+
+.service-rejected-message strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.service-rejected-message p {
+  margin: 0;
+  color: #8e1f35;
+  font-size: 14px;
+  line-height: 1.55;
 }
 
 
@@ -447,26 +612,45 @@ button:disabled {
 
 @media (max-width: 900px) {
   .provider-services-page {
-    padding: 25px;
+    padding: 24px 22px 48px;
   }
 
-  .services-list {
+  .services-page-header {
+    padding: 30px 28px;
+  }
+
+  .provider-service-card {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .provider-service-card {
     grid-template-columns: 1fr;
+    border-left-width: 1px;
+    border-top: 6px solid var(--edge);
+  }
+
+  .service-image {
+    height: 200px;
+    min-height: 0;
   }
 }
 
 @media (max-width: 600px) {
   .provider-services-page {
-    padding: 18px;
+    padding: 16px 14px 40px;
   }
 
   .services-page-header {
     flex-direction: column;
     align-items: flex-start;
+    padding: 26px 22px;
+    border-radius: 20px;
   }
 
   .services-page-header h1 {
-    font-size: 28px;
+    font-size: 30px;
   }
 
   .services-page-header .btn-primary {
@@ -474,7 +658,11 @@ button:disabled {
   }
 
   .service-form-card {
-    padding: 20px;
+    padding: 22px;
+  }
+
+  .service-card-content {
+    padding: 22px;
   }
 
   .service-card-top {
@@ -494,37 +682,13 @@ button:disabled {
   }
 }
 
-/* ========================================
-   REJECTED SERVICE MESSAGE
-======================================== */
 
-.service-rejected-message {
-  margin-top: 20px;
-  padding: 16px;
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
 
-  background: #fff1f2;
-
-  border: 1px solid #fecdd3;
-
-  border-radius: 10px;
-
-  color: #991b1b;
-}
-
-.service-rejected-message strong {
-  display: block;
-
-  margin-bottom: 6px;
-
-  font-size: 15px;
-}
-
-.service-rejected-message p {
-  margin: 0;
-
-  color: #7f1d1d;
-
-  font-size: 14px;
-
-  line-height: 1.5;
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }
