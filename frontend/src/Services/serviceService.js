@@ -3,10 +3,10 @@
 
 import axios from "axios";
 
-const API = "http://localhost:5000/api/services";
+const API = "https://urbanservice-backend-x1op.onrender.com/api/services";
 
 const CATEGORY_API =
-  "http://localhost:5000/api/categories";
+  "https://urbanservice-backend-x1op.onrender.com/api/categories";
 
 
 // ==========================================

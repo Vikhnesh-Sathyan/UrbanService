@@ -5,8 +5,7 @@ import axios from "axios";
 // Connects React with Node ML API
 // =====================================================
 
-const API = "http://localhost:5000/api/ml";
-
+const API = "https://urbanservice-backend-x1op.onrender.com/api/ml";
 
 // =====================================================
 // Send customer problem for ML prediction

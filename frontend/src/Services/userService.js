@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/api/services";
-
+const API = "https://urbanservice-backend-x1op.onrender.com/api/services";
 // ==========================================
 // AUTH CONFIG
 // ==========================================

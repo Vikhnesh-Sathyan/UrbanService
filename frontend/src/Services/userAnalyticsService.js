@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/api/user-analytics";
-
+const API = "https://urbanservice-backend-x1op.onrender.com/api/user-analytics";
 
 // Get authentication token for the logged-in user
 const getAuthConfig = () => {

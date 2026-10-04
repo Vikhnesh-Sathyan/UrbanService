@@ -2,8 +2,7 @@
 
 import { io } from "socket.io-client";
 
-const SOCKET_URL = "http://localhost:5000";
-
+const SOCKET_URL = "https://urbanservice-backend-x1op.onrender.com";
 let socket = null;
 
 // Store notification listeners that are added

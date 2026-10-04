@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/api/material-preparation";
-
+const API = "https://urbanservice-backend-x1op.onrender.com/api/material-preparation";
 // =====================================================
 // AUTH CONFIG
 // Adds logged-in provider's JWT token

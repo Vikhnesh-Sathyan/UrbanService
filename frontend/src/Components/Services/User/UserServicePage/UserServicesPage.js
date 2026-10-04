@@ -15,7 +15,7 @@ import Pagination from "./Pagination";
 import "../../../../styles/UserServicesPage.css";
 
 const CATEGORY_API =
-  "http://localhost:5000/api/categories";
+  "https://urbanservice-backend-x1op.onrender.com/api/categories";
 
 const UserServicesPage = () => {
 const navigate = useNavigate();
@@ -103,7 +103,7 @@ const location = useLocation();
   const loadProviders = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/users/providers",
+        "https://urbanservice-backend-x1op.onrender.com/api/users/providers",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem(

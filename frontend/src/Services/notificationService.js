@@ -1,7 +1,7 @@
 //This file handles the API communication between the React frontend and the notification backend.
 import axios from "axios";
 
-const API = "http://localhost:5000/api/notifications";
+const API = "https://urbanservice-backend-x1op.onrender.com/api/notifications";
 
 // Get authentication headers
 const getAuthConfig = () => {

@@ -2,8 +2,8 @@
 
 import axios from "axios";
 
-const API =
-  "http://localhost:5000/api/service-follow-ups";
+"https://urbanservice-backend-x1op.onrender.com/api/service-follow-ups";
+
 
 // Get JWT token for authenticated requests
 const getAuthConfig = () => {
