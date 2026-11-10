@@ -40,7 +40,28 @@ if (!fs.existsSync(uploadsPath)) {
   fs.mkdirSync(uploadsPath, { recursive: true });
 }
 
-app.use(cors());
+// ==========================================
+// CORS CONFIGURATION
+// ==========================================
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://urban-service-eta.vercel.app",
+];
+
+const corsOptions = {
+  origin: allowedOrigins,
+  methods: [
+    "GET",
+    "POST",
+    "PATCH",
+    "PUT",
+    "DELETE",
+  ],
+};
+
+app.use(cors(corsOptions));
+
 
 // ==========================================
 // STRIPE WEBHOOK
@@ -113,18 +134,9 @@ mongoose
     const server = http.createServer(app);
 
     // Create Socket.IO server
-    const io = new Server(server, {
-      cors: {
-        origin: "http://localhost:3000",
-        methods: [
-          "GET",
-          "POST",
-          "PATCH",
-          "PUT",
-          "DELETE",
-        ],
-      },
-    });
+   const io = new Server(server, {
+  cors: corsOptions,
+});
 
     // Setup notification socket
     setupNotificationSocket(io);
