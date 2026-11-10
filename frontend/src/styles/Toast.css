@@ -1,0 +1,201 @@
+
+/* =========================================
+   TOAST NOTIFICATION
+========================================= */
+
+.toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  width: max-content;
+  min-width: 320px;
+  max-width: 420px;
+
+  padding: 17px 18px;
+
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid #eaeaea;
+  border-radius: 14px;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.09),
+    0 3px 10px rgba(0, 0, 0, 0.04);
+
+  animation: toastSlideIn 0.35s ease forwards;
+}
+
+/* =========================================
+   STATUS ICON
+========================================= */
+
+.toast-icon {
+  flex-shrink: 0;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.toast-message {
+  flex: 1;
+
+  color: #292929;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   CLOSE BUTTON
+========================================= */
+
+.toast-close {
+  flex-shrink: 0;
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+  color: #999;
+
+  font-size: 22px;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.toast-close:hover {
+  background: #f3f3f3;
+  color: #333;
+}
+
+/* =========================================
+   SUCCESS
+========================================= */
+
+.toast-success {
+  border-left: 4px solid #16a36a;
+}
+
+.toast-success .toast-icon {
+  background: #e6f7ef;
+  color: #16a36a;
+}
+
+/* =========================================
+   ERROR
+========================================= */
+
+.toast-error {
+  border-left: 4px solid #dc4545;
+}
+
+.toast-error .toast-icon {
+  background: #fff0f0;
+  color: #dc4545;
+}
+
+/* =========================================
+   WARNING
+========================================= */
+
+.toast-warning {
+  border-left: 4px solid #e69a24;
+}
+
+.toast-warning .toast-icon {
+  background: #fff6e5;
+  color: #c78312;
+}
+
+/* =========================================
+   INFO
+========================================= */
+
+.toast-info {
+  border-left: 4px solid #4285d4;
+}
+
+.toast-info .toast-icon {
+  background: #edf4ff;
+  color: #4285d4;
+}
+
+/* =========================================
+   ANIMATION
+========================================= */
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(35px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 576px) {
+  .toast {
+    top: 15px;
+    right: 15px;
+    left: 15px;
+
+    width: auto;
+    min-width: unset;
+    max-width: unset;
+
+    padding: 15px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+
+  .toast-close {
+    transition: none;
+  }
+}

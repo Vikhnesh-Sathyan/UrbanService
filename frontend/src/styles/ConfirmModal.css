@@ -1,0 +1,259 @@
+
+/* =========================================
+   MODAL OVERLAY
+========================================= */
+
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  animation: modalFadeIn 0.25s ease;
+}
+
+/* =========================================
+   MODAL CONTAINER
+========================================= */
+
+.confirm-modal {
+  width: 100%;
+  max-width: 430px;
+
+  padding: 32px;
+
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.18),
+    0 5px 15px rgba(0, 0, 0, 0.06);
+
+  text-align: center;
+
+  animation: modalScaleIn 0.28s ease;
+}
+
+/* =========================================
+   STATUS ICON
+========================================= */
+
+.confirm-modal-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 20px;
+
+  border-radius: 18px;
+
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.confirm-modal-icon.danger {
+  background: #fff0ef;
+  color: #dc4545;
+}
+
+.confirm-modal-icon.primary {
+  background: #fff5e9;
+  color: #c8792c;
+}
+
+.confirm-modal-icon.success {
+  background: #e9f8f0;
+  color: #15965c;
+}
+
+/* =========================================
+   TITLE
+========================================= */
+
+.confirm-modal h3 {
+  margin: 0 0 11px;
+
+  color: #242424;
+
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.confirm-modal p {
+  margin: 0 auto;
+
+  max-width: 330px;
+
+  color: #777777;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
+.confirm-modal-actions {
+  display: flex;
+  gap: 12px;
+
+  margin-top: 28px;
+}
+
+.confirm-modal-actions button {
+  flex: 1;
+
+  min-height: 46px;
+  padding: 0 16px;
+
+  border-radius: 11px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Cancel */
+
+.confirm-cancel-btn {
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #555555;
+}
+
+.confirm-cancel-btn:hover:not(:disabled) {
+  background: #f7f7f7;
+  border-color: #d1d5db;
+}
+
+/* Confirm */
+
+.confirm-action-btn {
+  border: none;
+  color: #ffffff;
+}
+
+.confirm-action-btn.danger {
+  background: #dc4545;
+}
+
+.confirm-action-btn.danger:hover:not(:disabled) {
+  background: #c73535;
+  box-shadow: 0 5px 14px rgba(220, 69, 69, 0.2);
+}
+
+.confirm-action-btn.primary {
+  background: #c8792c;
+}
+
+.confirm-action-btn.primary:hover:not(:disabled) {
+  background: #a96020;
+  box-shadow: 0 5px 14px rgba(200, 121, 44, 0.2);
+}
+
+.confirm-action-btn.success {
+  background: #15965c;
+}
+
+.confirm-action-btn.success:hover:not(:disabled) {
+  background: #107849;
+  box-shadow: 0 5px 14px rgba(21, 150, 92, 0.2);
+}
+
+/* Disabled */
+
+.confirm-modal-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 480px) {
+  .confirm-modal {
+    padding: 26px 20px;
+    border-radius: 17px;
+  }
+
+  .confirm-modal h3 {
+    font-size: 19px;
+  }
+
+  .confirm-modal-actions {
+    gap: 9px;
+  }
+
+  .confirm-modal-actions button {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .confirm-modal,
+  .confirm-modal-overlay {
+    animation: none;
+  }
+
+  .confirm-modal-actions button {
+    transition: none;
+  }
+}
