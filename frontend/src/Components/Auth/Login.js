@@ -227,10 +227,6 @@ function Login() {
 
               <label>Password</label>
 
-              <span>
-                Forgot password?
-              </span>
-
             </div>
 
             <div className="input-group">
