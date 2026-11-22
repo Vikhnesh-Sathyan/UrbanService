@@ -12,7 +12,13 @@ import {
 
 import "../../../styles/ProviderServices.css";
 
+import { useToast } from "../../../Context/ToastContext";
+import ConfirmModal from "../../common/modal/ConfirmModal";
+
 const ProviderServicesPage = () => {
+
+  const { showToast } = useToast();
+
   const [services, setServices] = useState([]);
 
   // Categories from admin/database
@@ -45,6 +51,13 @@ const ProviderServicesPage = () => {
   });
 
   const [imageFile, setImageFile] = useState(null);
+
+  // Confirmation modal states
+const [showDeleteModal, setShowDeleteModal] = useState(false);
+const [showResubmitModal, setShowResubmitModal] = useState(false);
+
+const [selectedServiceId, setSelectedServiceId] = useState(null);
+const [confirmLoading, setConfirmLoading] = useState(false);
 
   // ---------------------------------------
   // Fetch provider services
@@ -391,15 +404,14 @@ const ProviderServicesPage = () => {
           data
         );
 
-        alert(
-          "Service updated successfully."
-        );
+       showToast("Service updated successfully.", "success");
       } else {
         await addService(data);
 
-        alert(
-          "Service submitted successfully. Waiting for admin approval."
-        );
+       showToast(
+  "Service submitted successfully. Waiting for admin approval.",
+  "success"
+);
       }
 
       resetForm();
@@ -411,10 +423,11 @@ const ProviderServicesPage = () => {
         err
       );
 
-      setError(
-        err.response?.data?.message ||
-          "Failed to save service."
-      );
+   showToast(
+  err.response?.data?.message ||
+    "Failed to save service.",
+  "error"
+);
     } finally {
       setSubmitting(false);
     }
@@ -424,73 +437,94 @@ const ProviderServicesPage = () => {
   // Delete service
   // ---------------------------------------
 
-  const handleDelete = async (
-    serviceId
-  ) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this service?"
+const openDeleteModal = (serviceId) => {
+  setSelectedServiceId(serviceId);
+  setShowDeleteModal(true);
+};
+
+const closeDeleteModal = () => {
+  if (confirmLoading) return;
+
+  setSelectedServiceId(null);
+  setShowDeleteModal(false);
+};
+
+const handleDelete = async () => {
+  if (!selectedServiceId) return;
+
+  try {
+    setConfirmLoading(true);
+
+    await deleteService(selectedServiceId);
+
+    showToast("Service deleted successfully.", "success");
+
+    setShowDeleteModal(false);
+    setSelectedServiceId(null);
+
+    await loadServices();
+
+  } catch (err) {
+    console.error("Delete service error:", err);
+
+    showToast(
+      err.response?.data?.message ||
+        "Failed to delete service.",
+      "error"
     );
 
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      await deleteService(serviceId);
-
-      alert(
-        "Service deleted successfully."
-      );
-
-      await loadServices();
-    } catch (err) {
-      console.error(
-        "Delete service error:",
-        err
-      );
-
-      alert(
-        err.response?.data?.message ||
-          "Failed to delete service."
-      );
-    }
-  };
+  } finally {
+    setConfirmLoading(false);
+  }
+};
 
   // ---------------------------------------
   // Resubmit service
   // ---------------------------------------
 
-  const handleResubmit = async (
-    serviceId
-  ) => {
-    const confirmed = window.confirm(
-      "Resubmit this service for admin review?"
+ const openResubmitModal = (serviceId) => {
+  setSelectedServiceId(serviceId);
+  setShowResubmitModal(true);
+};
+
+const closeResubmitModal = () => {
+  if (confirmLoading) return;
+
+  setSelectedServiceId(null);
+  setShowResubmitModal(false);
+};
+
+const handleResubmit = async () => {
+  if (!selectedServiceId) return;
+
+  try {
+    setConfirmLoading(true);
+
+    await resubmitService(selectedServiceId);
+
+    showToast(
+      "Service resubmitted successfully. Waiting for admin review.",
+      "success"
     );
 
-    if (!confirmed) {
-      return;
-    }
+    setShowResubmitModal(false);
+    setSelectedServiceId(null);
 
-    try {
-      await resubmitService(serviceId);
+    await loadServices();
 
-      alert(
-        "Service resubmitted successfully. Waiting for admin review."
-      );
+  } catch (err) {
+    console.error("Resubmit service error:", err);
 
-      await loadServices();
-    } catch (err) {
-      console.error(
-        "Resubmit service error:",
-        err
-      );
+    showToast(
+      err.response?.data?.message ||
+        "Failed to resubmit service.",
+      "error"
+    );
 
-      alert(
-        err.response?.data?.message ||
-          "Failed to resubmit service."
-      );
-    }
-  };
+  } finally {
+    setConfirmLoading(false);
+  }
+};
 
   // ---------------------------------------
   // Status badge
@@ -1044,9 +1078,7 @@ const ProviderServicesPage = () => {
                         type="button"
                         className="btn-success"
                         onClick={() =>
-                          handleResubmit(
-                            service._id
-                          )
+                          openResubmitModal(service._id)
                         }
                       >
                         Resubmit
@@ -1080,9 +1112,7 @@ const ProviderServicesPage = () => {
                     type="button"
                     className="btn-danger"
                     onClick={() =>
-                      handleDelete(
-                        service._id
-                      )
+                        openDeleteModal(service._id)
                     }
                   >
                     Delete
@@ -1100,6 +1130,29 @@ const ProviderServicesPage = () => {
 
       </div>
 
+<ConfirmModal
+  isOpen={showDeleteModal}
+  title="Delete Service?"
+  message="Are you sure you want to delete this service? This action cannot be undone."
+  confirmText="Delete Service"
+  cancelText="Cancel"
+  variant="danger"
+  loading={confirmLoading}
+  onConfirm={handleDelete}
+  onClose={closeDeleteModal}
+/>
+
+<ConfirmModal
+  isOpen={showResubmitModal}
+  title="Resubmit Service?"
+  message="Are you sure you want to resubmit this service for admin review?"
+  confirmText="Resubmit Service"
+  cancelText="Cancel"
+  variant="success"
+  loading={confirmLoading}
+  onConfirm={handleResubmit}
+  onClose={closeResubmitModal}
+/>
     </div>
   );
 };

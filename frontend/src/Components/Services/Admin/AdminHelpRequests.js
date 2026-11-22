@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import { useToast } from "../../../Context/ToastContext";
+import ConfirmModal from "../../common/modal/ConfirmModal";
+
 import "../../../styles/AdminHelpRequests.css";
 
 const AdminHelpRequests = () => {
+
+  const { showToast } = useToast();
 
   // ========================================
   // STATE
@@ -15,6 +20,11 @@ const AdminHelpRequests = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [adminResponse, setAdminResponse] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+
+  const [selectedProviderId, setSelectedProviderId] = useState(null);
+  const [showUnblockModal, setShowUnblockModal] = useState(false);
+  const [unblocking, setUnblocking] = useState(false);
 
 
   // ========================================
@@ -93,95 +103,106 @@ const AdminHelpRequests = () => {
   // ========================================
 
   const handleSubmitResponse = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!adminResponse.trim()) {
-      alert("Please enter a response.");
-      return;
-    }
+  if (!adminResponse.trim()) {
+    showToast("Please enter a response.", "warning");
+    return;
+  }
 
-    try {
-      setSubmitting(true);
+  try {
+    setSubmitting(true);
 
-      const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-      const response = await axios.patch(
-        `https://urbanservice-backend-x1op.onrender.com/api/help/${selectedRequest._id}/respond`,
-        {
-          adminResponse: adminResponse.trim(),
+    const response = await axios.patch(
+      `https://urbanservice-backend-x1op.onrender.com/api/help/${selectedRequest._id}/respond`,
+      {
+        adminResponse: adminResponse.trim(),
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      }
+    );
 
-      console.log(
-        "HELP RESPONSE:",
-        response.data
-      );
+    showToast(
+      response.data.message || "Response submitted successfully",
+      "success"
+    );
 
-      alert(
-        response.data.message ||
-        "Response submitted successfully"
-      );
+    handleCloseResponse();
 
-      handleCloseResponse();
+    loadHelpRequests();
 
-      loadHelpRequests();
+  } catch (error) {
+    console.error("Submit help response error:", error);
 
-    } catch (error) {
-      console.error(
-        "Submit help response error:",
-        error
-      );
+    showToast(
+      error.response?.data?.message || "Failed to submit response",
+      "error"
+    );
 
-      alert(
-        error.response?.data?.message ||
-        "Failed to submit response"
-      );
+  } finally {
+    setSubmitting(false);
+  }
+};
 
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
+const handleOpenUnblockModal = (providerId) => {
+  setSelectedProviderId(providerId);
+  setShowUnblockModal(true);
+};
+
+const handleCloseUnblockModal = () => {
+  if (unblocking) return;
+
+  setSelectedProviderId(null);
+  setShowUnblockModal(false);
+};
 
   // ========================================
   // UNBLOCK PROVIDER
   // ========================================
 
-  const handleUnblockProvider = async (providerId) => {
-    try {
-      const token = localStorage.getItem("token");
+const handleUnblockProvider = async () => {
+  if (!selectedProviderId) return;
 
-     await axios.patch(
- `https://urbanservice-backend-x1op.onrender.com/api/users/providers/${providerId}/unblock`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  try {
+    setUnblocking(true);
 
-      alert("Provider unblocked successfully");
+    const token = localStorage.getItem("token");
 
-      loadHelpRequests();
+    await axios.patch(
+      `https://urbanservice-backend-x1op.onrender.com/api/users/providers/${selectedProviderId}/unblock`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    } catch (error) {
-      console.error(
-        "Unblock provider error:",
-        error
-      );
+    showToast("Provider unblocked successfully", "success");
 
-      alert(
-        error.response?.data?.message ||
-        "Failed to unblock provider"
-      );
-    }
-  };
+    setShowUnblockModal(false);
+    setSelectedProviderId(null);
+
+    loadHelpRequests();
+
+  } catch (error) {
+    console.error("Unblock provider error:", error);
+
+    showToast(
+      error.response?.data?.message || "Failed to unblock provider",
+      "error"
+    );
+
+  } finally {
+    setUnblocking(false);
+  }
+};
 
 
   // ========================================
@@ -449,9 +470,7 @@ const AdminHelpRequests = () => {
                       type="button"
                       className="help-unblock-btn"
                       onClick={() =>
-                        handleUnblockProvider(
-                          request.provider._id
-                        )
+                        handleOpenUnblockModal(request.provider._id)
                       }
                     >
                       Unblock Provider
@@ -594,6 +613,18 @@ const AdminHelpRequests = () => {
         </div>
 
       )}
+
+      <ConfirmModal
+  isOpen={showUnblockModal}
+  title="Unblock Provider?"
+  message="Are you sure you want to unblock this provider? They will regain access to their account."
+  confirmText="Unblock Provider"
+  cancelText="Cancel"
+  variant="success"
+  loading={unblocking}
+  onConfirm={handleUnblockProvider}
+  onClose={handleCloseUnblockModal}
+/>
 
     </section>
   );

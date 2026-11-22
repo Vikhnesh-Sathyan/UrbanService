@@ -4,8 +4,12 @@ import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import "../../styles/Register.css";
 import { useNavigate } from "react-router-dom";
 
+import { useToast } from "../../Context/ToastContext";
+
 function Register() {
   const navigate = useNavigate();
+
+  const { showToast } = useToast();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,13 +20,22 @@ function Register() {
     e.preventDefault();
 
     axios
-        .post("https://urbanservice-backend-x1op.onrender.com/api/auth/register", {        name,
-        email,
-        password,
-        role,
-      })
-      .then(() => alert("Registered successfully"))
-      .catch(() => alert("Registration failed"));
+  .post("https://urbanservice-backend-x1op.onrender.com/api/auth/register", {
+    name,
+    email,
+    password,
+    role,
+  })
+  .then(() => {
+    showToast("Registered successfully", "success");
+    navigate("/login");
+  })
+  .catch((error) => {
+    showToast(
+      error.response?.data?.message || "Registration failed",
+      "error"
+    );
+  });
   };
 
   return (

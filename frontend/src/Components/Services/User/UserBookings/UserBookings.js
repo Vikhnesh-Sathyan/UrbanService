@@ -12,12 +12,17 @@ import { getMyComplaints } from "../../../../Services/complaintService";
 import BookingCard from "./BookingCard";
 import RescheduleForm from "./RescheduleForm";
 
+import { useToast } from "../../../../Context/ToastContext";
+import ConfirmModal from "../../../common/modal/ConfirmModal";
+
 import ReviewForm from "./ReviewForm";
 
 import "../../../../styles/UserBookings.css";
 
 
 const UserBookings = () => {
+
+  const { showToast } = useToast();
 
   // ==========================================
   // BOOKINGS
@@ -29,6 +34,16 @@ const UserBookings = () => {
 
   const [actionLoading, setActionLoading] =
     useState(false);
+
+  // ==========================================
+// CANCEL CONFIRMATION
+// ==========================================
+
+const [showCancelModal, setShowCancelModal] =
+  useState(false);
+
+const [selectedBookingId, setSelectedBookingId] =
+  useState(null);
 
 
   // ==========================================
@@ -145,58 +160,58 @@ const getComplaintForBooking = (bookingId) => {
   // CANCEL BOOKING
   // ==========================================
 
-  const handleCancel = async (
-    bookingId
-  ) => {
+  // ==========================================
+// OPEN CANCEL CONFIRMATION
+// ==========================================
 
-    const confirmed =
-      window.confirm(
-        "Are you sure you want to cancel this booking?"
-      );
-
-
-    if (!confirmed) {
-      return;
-    }
+const handleCancel = (bookingId) => {
+  setSelectedBookingId(bookingId);
+  setShowCancelModal(true);
+};
 
 
-    try {
+// ==========================================
+// CLOSE CANCEL CONFIRMATION
+// ==========================================
 
-      setActionLoading(true);
-
-
-      await cancelBooking(
-        bookingId
-      );
-
-
-      alert(
-        "Booking cancelled successfully"
-      );
+const handleCloseCancelModal = () => {
+  setShowCancelModal(false);
+  setSelectedBookingId(null);
+};
 
 
-      await loadBookings();
+// ==========================================
+// CONFIRM BOOKING CANCELLATION
+// ==========================================
 
-    } catch (error) {
+const handleConfirmCancel = async () => {
+  try {
+    setActionLoading(true);
 
-      console.error(
-        "Cancel booking error:",
-        error
-      );
+    await cancelBooking(selectedBookingId);
 
+    showToast(
+      "Booking cancelled successfully",
+      "success"
+    );
 
-      alert(
-        error.response?.data?.message ||
-        "Failed to cancel booking"
-      );
+    handleCloseCancelModal();
 
-    } finally {
+    await loadBookings();
 
-      setActionLoading(false);
+  } catch (error) {
+    console.error("Cancel booking error:", error);
 
-    }
+    showToast(
+      error.response?.data?.message ||
+        "Failed to cancel booking",
+      "error"
+    );
 
-  };
+  } finally {
+    setActionLoading(false);
+  }
+};
 
 
   // ==========================================
@@ -265,7 +280,7 @@ const handleSubmitReview = async (e) => {
   e.preventDefault();
 
   if (!rating) {
-    alert("Please select a rating");
+    showToast("Please select a rating", "warning");
     return;
   }
 
@@ -278,7 +293,7 @@ const handleSubmitReview = async (e) => {
       review
     );
 
-    alert("Review submitted successfully");
+    showToast("Review submitted successfully", "success");
 
     handleCloseReview();
 
@@ -290,10 +305,11 @@ const handleSubmitReview = async (e) => {
       error
     );
 
-    alert(
-      error.response?.data?.message ||
-      "Failed to submit review"
-    );
+   showToast(
+  error.response?.data?.message ||
+    "Failed to submit review",
+  "error"
+);
 
   } finally {
     setActionLoading(false);
@@ -311,9 +327,7 @@ const handleSubmitReview = async (e) => {
 
     if (!newDate || !newTime) {
 
-      alert(
-        "Please select date and time"
-      );
+     showToast("Please select date and time", "warning");
 
       return;
     }
@@ -331,9 +345,7 @@ const handleSubmitReview = async (e) => {
       );
 
 
-      alert(
-        "Booking rescheduled successfully"
-      );
+     showToast("Booking rescheduled successfully", "success");
 
 
       handleCloseReschedule();
@@ -349,10 +361,11 @@ const handleSubmitReview = async (e) => {
       );
 
 
-      alert(
-        error.response?.data?.message ||
-        "Failed to reschedule booking"
-      );
+     showToast(
+  error.response?.data?.message ||
+    "Failed to reschedule booking",
+  "error"
+);
 
     } finally {
 
@@ -523,6 +536,23 @@ const handleSubmitReview = async (e) => {
            onClose={handleCloseReview}
          />
       )}
+
+
+    {/* ======================================
+    CANCEL BOOKING CONFIRMATION
+====================================== */}
+
+<ConfirmModal
+  isOpen={showCancelModal}
+  title="Cancel Booking?"
+  message="Are you sure you want to cancel this booking? This action cannot be undone."
+  confirmText="Yes, Cancel Booking"
+  cancelText="Keep Booking"
+  variant="danger"
+  loading={actionLoading}
+  onConfirm={handleConfirmCancel}
+  onClose={handleCloseCancelModal}
+/>
 
     </div>
 

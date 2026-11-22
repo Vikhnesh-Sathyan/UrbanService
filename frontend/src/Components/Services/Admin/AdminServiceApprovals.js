@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import { useToast } from "../../../Context/ToastContext";
+import ConfirmModal from "../../common/modal/ConfirmModal";
+
 const API = "https://urbanservice-backend-x1op.onrender.com/api/services";
 
 const AdminServiceApprovals = () => {
+
+  const { showToast } = useToast();
+
   // ========================================
   // STATE
   // ========================================
@@ -20,6 +26,11 @@ const AdminServiceApprovals = () => {
 const [materialServiceId, setMaterialServiceId] = useState(null);
 const [suggestedMaterials, setSuggestedMaterials] = useState([]);
 const [savingMaterials, setSavingMaterials] = useState(false);
+
+
+const [showApproveModal, setShowApproveModal] = useState(false);
+const [selectedServiceId, setSelectedServiceId] = useState(null);
+const [approving, setApproving] = useState(false);
 
   // ========================================
   // AUTH CONFIG
@@ -78,36 +89,56 @@ const [savingMaterials, setSavingMaterials] = useState(false);
     loadPendingServices();
   }, []);
 
+
+
+
+  const openApproveModal = (serviceId) => {
+  setSelectedServiceId(serviceId);
+  setShowApproveModal(true);
+}; 
+
+const closeApproveModal = () => {
+  if (approving) return;
+
+  setSelectedServiceId(null);
+  setShowApproveModal(false);
+};
   // ========================================
   // APPROVE SERVICE
   // ========================================
 
-  const handleApprove = async (serviceId) => {
-    try {
-      await axios.patch(
-        `${API}/${serviceId}/approve`,
-        {},
-        authConfig
-      );
+const handleApprove = async () => {
+  if (!selectedServiceId) return;
 
-      alert(
-        "Service approved successfully."
-      );
+  try {
+    setApproving(true);
 
-      await loadPendingServices();
+    await axios.patch(
+      `${API}/${selectedServiceId}/approve`,
+      {},
+      authConfig
+    );
 
-    } catch (error) {
-      console.error(
-        "Approve service error:",
-        error
-      );
+    showToast("Service approved successfully.", "success");
 
-      alert(
-        error.response?.data?.message ||
-          "Failed to approve service."
-      );
-    }
-  };
+    setShowApproveModal(false);
+    setSelectedServiceId(null);
+
+    await loadPendingServices();
+
+  } catch (error) {
+    console.error("Approve service error:", error);
+
+    showToast(
+      error.response?.data?.message ||
+        "Failed to approve service.",
+      "error"
+    );
+
+  } finally {
+    setApproving(false);
+  }
+};
 
   // ========================================
   // OPEN REJECT FORM
@@ -218,9 +249,10 @@ const handleSaveSuggestedMaterials = async () => {
       );
 
     if (invalidMaterial) {
-      alert(
-        "Please enter valid details for every material."
-      );
+     showToast(
+  "Please enter valid details for every material.",
+  "warning"
+);
 
       return;
     }
@@ -233,9 +265,7 @@ const handleSaveSuggestedMaterials = async () => {
       authConfig
     );
 
-    alert(
-      "Suggested materials saved successfully."
-    );
+   showToast("Suggested materials saved successfully.", "success");
 
     closeMaterialConfiguration();
 
@@ -247,10 +277,11 @@ const handleSaveSuggestedMaterials = async () => {
       error
     );
 
-    alert(
-      error.response?.data?.message ||
-        "Failed to save suggested materials."
-    );
+  showToast(
+  error.response?.data?.message ||
+    "Failed to save suggested materials.",
+  "error"
+);
 
   } finally {
     setSavingMaterials(false);
@@ -265,9 +296,7 @@ const handleSaveSuggestedMaterials = async () => {
 
     // Validate reason
     if (!rejectionReason.trim()) {
-      alert(
-        "Please enter a rejection reason."
-      );
+     showToast("Please enter a rejection reason.", "warning");
       return;
     }
 
@@ -281,9 +310,7 @@ const handleSaveSuggestedMaterials = async () => {
   authConfig
 );
 
-      alert(
-        "Service rejected successfully."
-      );
+     showToast("Service rejected successfully.", "success");
 
       // Close form
       closeRejectForm();
@@ -298,10 +325,11 @@ const handleSaveSuggestedMaterials = async () => {
         error
       );
 
-      alert(
-        error.response?.data?.message ||
-          "Failed to reject service."
-      );
+      showToast(
+  error.response?.data?.message ||
+    "Failed to reject service.",
+  "error"
+);
     }
   };
 
@@ -628,9 +656,7 @@ const handleSaveSuggestedMaterials = async () => {
                     type="button"
                     className="admin-approve-btn"
                     onClick={() =>
-                      handleApprove(
-                        service._id
-                      )
+                      openApproveModal(service._id)
                     }
                   >
                     ✓ Approve
@@ -822,6 +848,18 @@ const handleSaveSuggestedMaterials = async () => {
   </div>
 
 )}
+
+<ConfirmModal
+  isOpen={showApproveModal}
+  title="Approve Service?"
+  message="Are you sure you want to approve this service? It will become available according to your existing service approval workflow."
+  confirmText="Approve Service"
+  cancelText="Cancel"
+  variant="success"
+  loading={approving}
+  onConfirm={handleApprove}
+  onClose={closeApproveModal}
+/>
 
     </div>
   );

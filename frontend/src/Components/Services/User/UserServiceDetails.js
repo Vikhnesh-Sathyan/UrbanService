@@ -11,11 +11,16 @@ import {
 
 import "../../../styles/UserServiceDetails.css";
 
+import { useToast } from "../../../Context/ToastContext";
+
 import {
   getServiceById,
 } from "../../../Services/serviceService";
 
 const UserServiceDetails = () => {
+
+  const { showToast } = useToast();
+
   const { serviceId } = useParams();
 
   const location = useLocation();
@@ -163,9 +168,10 @@ const UserServiceDetails = () => {
     // ========================================
 
     if (!token) {
-      alert(
-        "Please login to book this service."
-      );
+     showToast(
+  "Please login to book this service.",
+  "warning"
+);
 
       navigate("/login");
 
@@ -191,9 +197,10 @@ const UserServiceDetails = () => {
         );
         localStorage.removeItem("user");
 
-        alert(
-          "Your session has expired. Please login again."
-        );
+      showToast(
+  "Your session has expired. Please login again.",
+  "warning"
+);
 
         navigate("/login");
 
@@ -212,9 +219,10 @@ const UserServiceDetails = () => {
           user.role &&
           user.role !== "user"
         ) {
-          alert(
-            "Only customers can book services."
-          );
+         showToast(
+  "Only customers can book services.",
+  "warning"
+);
 
           return;
         }
@@ -244,9 +252,10 @@ const UserServiceDetails = () => {
       );
       localStorage.removeItem("user");
 
-      alert(
-        "Please login to book this service."
-      );
+      showToast(
+  "Please login to book this service.",
+  "warning"
+);
 
       navigate("/login");
     }

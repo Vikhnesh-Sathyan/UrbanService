@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { useToast } from "../../../Context/ToastContext";
+
 import {
   createBooking,
   createEmergencyBooking,
@@ -10,6 +12,9 @@ import {
 import "../../../styles/UserBookService.css";
 
 const UserBookService = () => {
+
+  const { showToast } = useToast();
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -101,7 +106,7 @@ const UserBookService = () => {
 
     // Check provider available day
     if (!availableDays.includes(selectedDay)) {
-      alert(`Provider is not available on ${selectedDay}`);
+      showToast(`Provider is not available on ${selectedDay}`, "warning");
 
       setDate("");
 
@@ -120,9 +125,10 @@ const UserBookService = () => {
       selectedTime < startTime ||
       selectedTime > endTime
     ) {
-      alert(
-        `Please select a time between ${startTime} and ${endTime}`
-      );
+     showToast(
+  `Please select a time between ${startTime} and ${endTime}`,
+  "warning"
+);
 
       setTime("");
 
@@ -139,7 +145,7 @@ const UserBookService = () => {
 
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
+      showToast("Geolocation is not supported by your browser.", "warning");
       return;
     }
 
@@ -184,10 +190,7 @@ const UserBookService = () => {
             error
           );
 
-          alert(
-            error.response?.data?.message ||
-              "Failed to find nearby providers"
-          );
+showToast("Failed to find nearby providers. Please try again.", "error");
         } finally {
           setLocationLoading(false);
         }
@@ -201,9 +204,10 @@ const UserBookService = () => {
 
         setLocationLoading(false);
 
-        alert(
-          "Unable to get your location. Please allow location permission."
-        );
+     showToast(
+  "Unable to access your location. Please allow location permission and try again.",
+  "error"
+);
       }
     );
   };
@@ -212,107 +216,102 @@ const UserBookService = () => {
   // SUBMIT BOOKING
   // ==========================================
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ 
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // Safety check
-    if (!bookingType) {
-      return;
-    }
+  // Safety check
+  if (!bookingType) {
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      // ==========================================
-      // EMERGENCY BOOKING
-      // ==========================================
+  try {
+    // ==========================================
+    // EMERGENCY BOOKING
+    // ==========================================
 
-      if (bookingType === "emergency") {
-        if (!customerLocation) {
-          alert(
-            "Please detect your current location first."
-          );
-
-          setLoading(false);
-
-          return;
-        }
-
-        if (!selectedProvider) {
-          alert(
-            "Please select a nearby provider."
-          );
-
-          setLoading(false);
-
-          return;
-        }
-
-        const data =
-          await createEmergencyBooking({
-            service: service._id,
-            phone,
-            provider: selectedProvider._id,
-
-            customerLocation: {
-              latitude:
-                customerLocation.latitude,
-              longitude:
-                customerLocation.longitude,
-            },
-
-            notes,
-          });
-
-        console.log(
-          "EMERGENCY BOOKING CREATED:",
-          data
+    if (bookingType === "emergency") {
+      if (!customerLocation) {
+        showToast(
+          "Please get your current location before booking.",
+          "warning"
         );
 
-        alert(
-          "🚨 Emergency booking request sent successfully!\n\n" +
-            "Your request has been sent to the selected provider."
-        );
-
-        navigate("/user/bookings");
-
+        setLoading(false);
         return;
       }
 
-      // ==========================================
-      // NORMAL BOOKING
-      // ==========================================
+      if (!selectedProvider) {
+        showToast(
+          "Please select an emergency provider.",
+          "warning"
+        );
 
-      const data = await createBooking({
+        setLoading(false);
+        return;
+      }
+
+      const data = await createEmergencyBooking({
         service: service._id,
         phone,
-        date,
-        time,
+        provider: selectedProvider._id,
+
+        customerLocation: {
+          latitude: customerLocation.latitude,
+          longitude: customerLocation.longitude,
+        },
+
         notes,
       });
 
-      console.log(
-        "NORMAL BOOKING CREATED:",
-        data
-      );
+      console.log("EMERGENCY BOOKING CREATED:", data);
 
-      alert("Booking created successfully.");
+      showToast(
+        "Emergency booking request sent successfully!",
+        "success"
+      );
 
       navigate("/user/bookings");
-    } catch (error) {
-      console.error(
-        "Booking error:",
-        error
-      );
-
-      alert(
-        error.response?.data?.message ||
-          "Failed to create booking"
-      );
-    } finally {
-      setLoading(false);
+      return;
     }
-  };
+
+    // ==========================================
+    // NORMAL BOOKING
+    // ==========================================
+
+    const data = await createBooking({
+      service: service._id,
+      phone,
+      date,
+      time,
+      notes,
+    });
+
+    console.log("NORMAL BOOKING CREATED:", data);
+
+    showToast(
+      "Booking created successfully!",
+      "success"
+    );
+
+    navigate("/user/bookings");
+
+  } catch (error) {
+    console.error("Booking error:", error);
+
+    showToast(
+      error.response?.data?.message ||
+        "Failed to create booking",
+      "error"
+    );
+
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   // ==========================================
   // TODAY

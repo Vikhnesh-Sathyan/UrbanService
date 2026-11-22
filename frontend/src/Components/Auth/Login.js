@@ -3,12 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import "../../styles/Login.css";
 
+import { useToast } from "../../Context/ToastContext";
+
 import {
   connectNotificationSocket,
 } from "../../Services/notificationSocket";
 
 function Login() {
   const navigate = useNavigate();
+
+  const { showToast } = useToast();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,7 +45,7 @@ function Login() {
       console.log("LOGIN RESPONSE:", data);
 
       if (response.ok) {
-        alert("Login successful");
+        showToast("Login successful", "success")
 
         localStorage.setItem("token", data.token);
         localStorage.setItem(
@@ -80,7 +84,7 @@ function Login() {
         // ========================================
 
         if (data.code === "PROVIDER_BLOCKED") {
-          alert(data.message);
+          showToast(data.message, "error");
 
           // Show Need Help option
           setShowHelp(true);
@@ -88,14 +92,14 @@ function Login() {
           return;
         }
 
-        alert(data.message);
+        showToast(data.message, "error");
       }
 
     } catch (error) {
 
       console.error("Login error:", error);
 
-      alert("Unable to connect to server");
+      showToast("Unable to connect to server", "error");
     }
   };
 
@@ -108,7 +112,7 @@ function Login() {
     e.preventDefault();
 
     if (!helpMessage.trim()) {
-      alert("Please enter your message");
+      showToast("Please enter your message", "warning");
       return;
     }
 
@@ -133,18 +137,18 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-
-        alert(
-          "Help request submitted successfully"
-        );
+      showToast("Help request submitted successfully", "success");
 
         setHelpMessage("");
         setShowHelp(false);
 
-      } else {
+     } else {
 
-        alert(data.message);
-      }
+  showToast(
+    data.message || "Unable to submit help request",
+    "error"
+  );
+}
 
     } catch (error) {
 
@@ -153,7 +157,7 @@ function Login() {
         error
       );
 
-      alert("Unable to submit help request");
+      showToast("Unable to submit help request", "error");
 
     } finally {
 

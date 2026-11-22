@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { updateAvailability } from "../../../Services/providerAvailabilityService";
 
+import { useToast } from "../../../Context/ToastContext";
+
 import "../../../styles/ProviderAvailability.css";
 
 const ProviderAvailability = () => {
+
+  const { showToast } = useToast();
 
   // ==========================================
   // DAYS
@@ -75,16 +79,15 @@ const ProviderAvailability = () => {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+if (days.length === 0) {
+  showToast("Please select at least one day.", "warning");
+  return;
+}
 
-    if (days.length === 0) {
-      alert("Please select at least one day");
-      return;
-    }
-
-    if (startTime >= endTime) {
-      alert("Start time must be before end time");
-      return;
-    }
+if (startTime >= endTime) {
+  showToast("Start time must be before end time.", "warning");
+  return;
+}
 
     try {
 
@@ -101,9 +104,10 @@ const ProviderAvailability = () => {
         data
       );
 
-      alert(
-        "Availability updated successfully!"
-      );
+     showToast(
+  "Availability updated successfully!",
+  "success"
+);
 
     } catch (error) {
 
@@ -112,10 +116,11 @@ const ProviderAvailability = () => {
         error
       );
 
-      alert(
-        error.response?.data?.message ||
-        "Failed to update availability"
-      );
+    showToast(
+  error.response?.data?.message ||
+    "Failed to update availability",
+  "error"
+);
 
     } finally {
 
